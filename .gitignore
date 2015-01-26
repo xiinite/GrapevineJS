@@ -7,5 +7,5 @@ tmp/
 
 # Files #
 #########
-npm-debug.txt
+npm-debug.log
 config/configuration.js
