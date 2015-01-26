@@ -67,18 +67,56 @@
                 <div class="row">
                     <div class="col-md-12 voffset3">
                         <div class="col-md-4">
-                            <div><b>Clan:</b> {{ character.clan }}</div>
-                            <div><b>Sect:</b> {{ character.sect }}</div>
-                            <div><b>Coterie:</b> {{ character.coterie }}</div>
+                            <div class="form-group row">
+                                <label class="col-md-6"><b>Clan:</b></label>
+                                <select data-field="clan" class="nopadding col-md-6"
+                                        ng-options="c as c for c in clans"
+                                        ng-model="character.clan">
+                                    <option style="display:none" value="">Select a Clan</option>
+                                </select>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-6"><b>Sect:</b></label>
+                                <select data-field="sect" class="nopadding col-md-6"
+                                        ng-options="s as s for s in sects"
+                                        ng-model="character.sect">
+                                    <option style="display:none" value="">Select a Sect</option>
+                                </select>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-6"><b>Coterie:</b></label>
+                                <input type="text" class="col-md-6 nopadding" ng-model="character.coterie"
+                                       data-field="coterie"/>
+                            </div>
                         </div>
                         <div class="col-md-4">
-                            <div><b>Generation:</b> {{ character.generation }}</div>
-                            <div><b>Title:</b> {{ character.title }}</div>
-                            <div><b>Sire:</b> {{ character.sire }}</div>
+                            <div class="form-group row">
+                                <label class="col-md-6"><b>Generation:</b></label>
+                                <input type="number" class="col-md-6 nopadding" ng-model="character.generation"
+                                       data-field="generation"/>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-6"><b>Title:</b></label>
+                                <input type="text" class="col-md-6 nopadding" ng-model="character.title"
+                                       data-field="title"/>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-6"><b>Sire:</b></label>
+                                <input type="text" class="col-md-6 nopadding" ng-model="character.sire"
+                                       data-field="sire"/>
+                            </div>
                         </div>
                         <div class="col-md-4">
-                            <div><b>Nature:</b> {{ character.nature }}</div>
-                            <div><b>Demeanor:</b> {{ character.demeanor }}</div>
+                            <div class="form-group row">
+                                <label class="col-md-6"><b>Nature:</b></label>
+                                <input type="text" class="col-md-6 nopadding" ng-model="character.nature"
+                                       data-field="nature"/>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-6"><b>Demeanor:</b></label>
+                                <input type="text" class="col-md-6 nopadding" ng-model="character.demeanor"
+                                       data-field="demeanor"/>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -86,7 +124,7 @@
                     <div class="col-md-12 voffset3">
                         <div class="col-md-4">
                             <div><b>Blood:</b> {{ character.bloodpool.total }}</div>
-                            <div><b>Willpower (total):</b> {{ character.willpower.total }}
+                            <div><b>Willpower (total):</b> {{ character.willpower.current }}
                                 ({{ character.willpower.total }})
                             </div>
                         </div>

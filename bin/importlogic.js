@@ -57,11 +57,17 @@ module.exports = {
                     experience: {},
                     attributes: {
                         physical: [],
+                        tphysical: 0,
                         social: [],
+                        tsocial: 0,
                         mental: [],
+                        tmental: 0,
                         negativephysical: [],
+                        tnegativephysical: 0,
                         negativesocial: [],
-                        negativemental: []
+                        tnegativesocial: 0,
+                        negativemental: [],
+                        tnegativemental: 0
                     },
                     abilities: [],
                     disciplines: [],
@@ -99,40 +105,70 @@ module.exports = {
                     var tl = vampire.traitlist[i];
                     switch (tl.$.name) {
                         case 'Physical':
+                            var total = 0;
                             for (var y in tl.trait) {
                                 var t = tl.trait[y];
-                                character.attributes.physical.push(t.$.name);
+                                var tval = 1;
+                                if(t.$.val){ tval = t.$.val; }
+                                character.attributes.physical.push({ name: t.$.name, val: tval});
+                                total += parseInt(tval);
                             }
+                            character.attributes.tphysical = total;
                             break;
                         case 'Social':
+                            var total = 0;
                             for (var y in tl.trait) {
                                 var t = tl.trait[y];
-                                character.attributes.social.push(t.$.name);
+                                var tval = 1;
+                                if(t.$.val){ tval = t.$.val; }
+                                character.attributes.social.push({ name: t.$.name, val: tval});
+                                total += parseInt(tval);
                             }
+                            character.attributes.tsocial = total;
                             break;
                         case 'Mental':
+                            var total = 0;
                             for (var y in tl.trait) {
                                 var t = tl.trait[y];
-                                character.attributes.mental.push(t.$.name);
+                                var tval = 1;
+                                if(t.$.val){ tval = t.$.val; }
+                                character.attributes.mental.push({ name: t.$.name, val: tval});
+                                total += parseInt(tval);
                             }
+                            character.attributes.tmental = total;
                             break;
                         case "Negative Physical":
+                            var total = 0;
                             for (var y in tl.trait) {
                                 var t = tl.trait[y];
-                                character.attributes.negativephysical.push(t.$.name);
+                                var tval = 1;
+                                if(t.$.val){ tval = t.$.val; }
+                                character.attributes.negativephysical.push({ name: t.$.name, val: tval});
+                                total += parseInt(tval);
                             }
+                            character.attributes.tnegativephysical = total;
                             break;
                         case "Negative Social":
+                            var total = 0;
                             for (var y in tl.trait) {
                                 var t = tl.trait[y];
-                                character.attributes.negativesocial.push(t.$.name);
+                                var tval = 1;
+                                if(t.$.val){ tval = t.$.val; }
+                                character.attributes.negativesocial.push({ name: t.$.name, val: tval});
+                                total += parseInt(tval);
                             }
+                            character.attributes.tnegativesocial = total;
                             break;
                         case "Negative Mental":
+                            var total = 0;
                             for (var y in tl.trait) {
                                 var t = tl.trait[y];
-                                character.attributes.negativemental.push(t.$.name);
+                                var tval = 1;
+                                if(t.$.val){ tval = t.$.val; }
+                                character.attributes.negativemental.push({ name: t.$.name, val: tval});
+                                total += parseInt(tval);
                             }
+                            character.attributes.tnegativemental = total;
                             break;
                         case "Abilities":
                             for (var y in tl.trait) {

@@ -134,11 +134,11 @@
                     <div class="col-md-12">
                         <div class="col-md-4">
                             <div class="label-default"><b>Physical:</b> <span
-                                        class='pull-right'><%= character.attributes.physical.length %></span></div>
+                                        class='pull-right'><%= character.attributes.tphysical %></span></div>
                             <div><b>Social:</b> <span
-                                        class='pull-right'><%= character.attributes.social.length %></span></div>
+                                        class='pull-right'><%= character.attributes.tsocial %></span></div>
                             <div class="label-default"><b>Mental:</b> <span
-                                        class='pull-right'><%= character.attributes.mental.length %></span></div>
+                                        class='pull-right'><%= character.attributes.tmental %></span></div>
                         </div>
                         <div class="col-md-4">
                             <div><b><%= character.conscience.type %>:</b> <span
@@ -249,31 +249,46 @@
                     <div class="col-md-12">
                         <div class="col-md-4">
                             <ul class="list-group">
-                                <li class="list-group-item active"><%= character.attributes.physical.length %> Physical
+                                <li class="list-group-item active"><%= character.attributes.tphysical %> Physical
                                     Traits
                                 </li>
                                 <% for(var i = 0; i < character.attributes.physical.length; i++) { %>
-                                <li class="list-group-item trait"><%= character.attributes.physical[i] %></li>
+                                <li class="list-group-item trait">
+                                    <%= character.attributes.physical[i].name %>
+                                    <% if(character.attributes.physical[i].val > 1){ %>
+                                    (<%= character.attributes.physical[i].val %>)
+                                    <%}%>
+                                </li>
                                 <% } %>
                             </ul>
                         </div>
                         <div class="col-md-4">
                             <ul class="list-group">
-                                <li class="list-group-item active"><%= character.attributes.social.length %> Social
+                                <li class="list-group-item active"><%= character.attributes.tsocial %> Social
                                     Traits
                                 </li>
                                 <% for(var i = 0; i < character.attributes.social.length; i++) { %>
-                                <li class="list-group-item trait"><%= character.attributes.social[i] %></li>
+                                <li class="list-group-item trait">
+                                    <%= character.attributes.social[i].name %>
+                                    <% if(character.attributes.social[i].val > 1){ %>
+                                    (<%= character.attributes.social[i].val %>)
+                                    <%}%>
+                                </li>
                                 <% } %>
                             </ul>
                         </div>
                         <div class="col-md-4">
                             <ul class="list-group">
-                                <li class="list-group-item active"><%= character.attributes.mental.length %> Mental
+                                <li class="list-group-item active"><%= character.attributes.tmental %> Mental
                                     Traits
                                 </li>
                                 <% for(var i = 0; i < character.attributes.mental.length; i++) { %>
-                                <li class="list-group-item trait"><%= character.attributes.mental[i] %></li>
+                                <li class="list-group-item trait">
+                                    <%= character.attributes.mental[i].name %>
+                                    <% if(character.attributes.mental[i].val > 1){ %>
+                                    (<%= character.attributes.mental[i].val %>)
+                                    <%}%>
+                                </li>
                                 <% } %>
                             </ul>
                         </div>
@@ -283,31 +298,46 @@
                     <div class="col-md-12">
                         <div class="col-md-4">
                             <ul class="list-group">
-                                <li class="list-group-item active"><%= character.attributes.negativephysical.length %>
+                                <li class="list-group-item active"><%= character.attributes.tnegativephysical %>
                                     Negative Physical Traits
                                 </li>
                                 <% for(var i = 0; i < character.attributes.negativephysical.length; i++) { %>
-                                <li class="list-group-item"><%= character.attributes.negativephysical[i] %></li>
+                                <li class="list-group-item">
+                                    <%= character.attributes.negativephysical[i].name %>
+                                    <% if(character.attributes.negativephysical[i].val > 1){ %>
+                                    (<%= character.attributes.negativephysical[i].val %>)
+                                    <%}%>
+                                </li>
                                 <% } %>
                             </ul>
                         </div>
                         <div class="col-md-4">
                             <ul class="list-group">
-                                <li class="list-group-item active"><%= character.attributes.negativesocial.length %>
+                                <li class="list-group-item active"><%= character.attributes.tnegativesocial %>
                                     Negative Social Traits
                                 </li>
                                 <% for(var i = 0; i < character.attributes.negativesocial.length; i++) { %>
-                                <li class="list-group-item"><%= character.attributes.negativesocial[i] %></li>
+                                <li class="list-group-item">
+                                    <%= character.attributes.tnegativesocial[i].name %>
+                                    <% if(character.attributes.tnegativesocial[i].val > 1){ %>
+                                    (<%= character.attributes.tnegativesocial[i].val %>)
+                                    <%}%>
+                                </li>
                                 <% } %>
                             </ul>
                         </div>
                         <div class="col-md-4">
                             <ul class="list-group">
-                                <li class="list-group-item active"><%= character.attributes.negativemental.length %>
+                                <li class="list-group-item active"><%= character.attributes.tnegativemental %>
                                     Negative Mental Traits
                                 </li>
                                 <% for(var i = 0; i < character.attributes.negativemental.length; i++) { %>
-                                <li class="list-group-item"><%= character.attributes.negativemental[i] %></li>
+                                <li class="list-group-item">
+                                    <%= character.attributes.tnegativemental[i].name %>
+                                    <% if(character.attributes.tnegativemental[i].val > 1){ %>
+                                    (<%= character.attributes.tnegativemental[i].val %>)
+                                    <%}%>
+                                </li>
                                 <% } %>
                             </ul>
                         </div>

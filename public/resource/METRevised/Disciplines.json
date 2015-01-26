@@ -1,0 +1,15 @@
+[
+  {
+    "name": "Celerity",
+    "traits": [
+      "Alacrity (basic)",
+      "Swiftness (basic)"
+    ]
+  },
+  {
+    "name": "Potence",
+    "traits": [
+      "Prowess (basic)"
+    ]
+  }
+]
