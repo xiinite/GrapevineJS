@@ -1,0 +1,70 @@
+<% layout("../layout.ejs") %>
+
+<script type='text/javascript'>
+    $(document).ready(function () {
+        $('#btnPromote').click(function () {
+            var originalMessage = $('#btnPromote').html();
+
+            $('#btnPromote').removeClass("btn-warning").addClass("btn-info").html('Resetting users...');
+            $.when(
+                    $.get('../toggleSuperAdmin/<%= profile.googleId %>')
+            ).then(function () {
+                        var newMessage = 'Demote to regular user';
+                        if (originalMessage == 'Demote to regular user') {
+                            newMessage = 'Promote to SuperAdmin';
+                        }
+                        $('#btnPromote').removeClass("btn-info").addClass("btn-success").html('updated.');
+                        setTimeout(function () {
+                            $('#btnPromote').removeClass("btn-success").addClass("btn-warning").html(newMessage);
+                        }, 2500);
+                    }, function (err) {
+                        $('#btnPromote').removeClass("btn-info").addClass("btn-danger").html('ERROR!: ' + err.status + ': ' + err.statusText);
+
+                        setTimeout(function () {
+                            $('#btnPromote').removeClass("btn-danger").addClass("btn-warning").html(originalMessage);
+                        }, 2500);
+                    });
+        })
+    });
+</script>
+<div id="content" class="container">
+    <div id='pnlAbout' class="panel panel-default">
+        <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseAbout">
+            <h4 id="hdrAbout" class="panel-title">
+                <%- profile.displayName %>
+            </h4>
+        </div>
+        <div id="collapseAbout" class="panel-collapse collapse in">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <div>Provider: <%= profile.provider %></div>
+                        </div>
+                        <div class="col-md-4">
+                            <div>E-mail:
+                                <% for(i=0; i< profile.emails.length; i++){%>
+                                <a href="mailto:<%= profile.emails[i].value%>"><%= profile.emails[i].value%></a>
+                                <%}%>
+                            </div>
+                        </div>
+                        <% if(user.googleId !== profile.googleId || user.isSuperAdmin) { %>
+                        <div class="col-md-4">
+                            <% if(profile.isSuperAdmin) { %>
+                            <div>
+                                <button class='btn btn-warning btn-block' id='btnPromote'>Demote to regular user
+                                </button>
+                            </div>
+                            <% } else { %>
+                            <div>
+                                <button class='btn btn-warning btn-block' id='btnPromote'>Promote to SuperAdmin</button>
+                            </div>
+                            <% } %>
+                        </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

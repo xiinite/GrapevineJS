@@ -1,0 +1,72 @@
+<% layout("../layout.ejs") %>
+<script type="text/javascript" src="/js/controllers/characterwizardController.js"></script>
+<div class="container">
+    <div class='col-xs-12 col-lg-6 col-sm-6'>
+        <div ng-controller="CharacterWizardController">
+
+            <script id="wizard.html" type="text/ng-template">
+                <div class="wizard">
+
+                    <h1> AngularJS Wizard Demo </h1>
+
+
+                    <div ng-transclude></div>
+
+                    <div class="buttons">
+                        <a ng-click="showPreviousStep()" ng-show="hasPrevious()">Previous</a>
+                        <a ng-click="showNextStep()" ng-show="hasNext()">Next</a>
+                    </div>
+
+                </div>
+            </script>
+
+            <wizard on-before-step-change="log(event)" on-step-changing="log(event)" on-after-step-change="log(event)">
+
+                <step title="Step 1: Name">
+                    <strong>Name:</strong> <input type="text" ng-model="user.name"/>
+                </step>
+
+                <step title="Step 2: Email">
+                    <strong>Name:</strong> {{user.name}}
+                    <br>
+                    <strong>Email:</strong> <input type="text" ng-model="user.email"/>
+                </step>
+
+                <step title="Step 3: Address">
+                    <strong>Name:</strong> {{user.name}}
+                    <br>
+                    <strong>Email:</strong> {{user.email}}
+                    <br>
+                    Address: <input type="text" ng-model="user.address"/>
+                </step>
+
+                <step title="Step 4: Color">
+                    <strong>Name:</strong> {{user.name}}
+                    <br>
+                    <strong>Email:</strong> {{user.email}}
+                    <br>
+                    <strong>Address:</strong> {{user.address}}
+                    <br>
+                    <strong>Favorite Color:</strong> <select ng-model="user.color">
+                        <option>Red</option>
+                        <option>Green</option>
+                        <option>Orange</option>
+                        <option>Other</option>
+                    </select>
+                </step>
+
+                <step title="Summary">
+                    <strong>Name:</strong> {{user.name}}
+                    <br>
+                    <strong>Email:</strong> {{user.email}}
+                    <br>
+                    <strong>Address:</strong> {{user.address}}
+                    <br>
+                    <strong>Favorite Color:</strong> {{user.color}}
+                </step>
+
+            </wizard>
+
+        </div>
+    </div>
+</div>

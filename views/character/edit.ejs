@@ -1,0 +1,126 @@
+<% layout("../layout.ejs") %>
+<script type="text/javascript" src="/js/controllers/characterEditController.js"></script>
+
+<div id="content" class="container" ng-controller="CharacterEditController" ng-init="init('<%= characterid %>')"
+     ng-form="characterForm">
+    <h1 class="page-header">{{character.name}}
+        <div class='btn-toolbar pull-right hidden-print'>
+            <button type='button' class='btn btn-info' ng-click="save()"><span class="glyphicon glyphicon-save"></span>
+                Save
+            </button>
+        </div>
+    </h1>
+    <div id='pnlAbout' class="panel panel-default">
+        <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseAbout">
+            <h4 id="hdrAbout" class="panel-title">
+                About
+            </h4>
+        </div>
+
+        <div id="collapseAbout" class="panel-collapse collapse in">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-3 form-horizontal">
+                            <div class="form-group row">
+                                <label class="col-md-6"><b>Player:</b></label>
+                                <select data-field="googleId" class="nopadding col-md-6"
+                                        ng-options="player.googleId as display(player) for player in players"
+                                        ng-model="character.player.googleId">
+                                    <option style="display:none" value="">Select a player</option>
+                                </select>
+                            </div>
+                            <div class="form-group row"><b class="col-md-6">Chronicle:</b><span
+                                        class=" col-md-6 nopadding">{{character.chronicle.name}}</span></div>
+                            <div class="form-group row"><b class="col-md-6">Status:</b>
+                                <select data-field="state" class="nopadding col-md-6"
+                                        ng-options="status as status for status in statusses"
+                                        ng-model="character.state">
+                                    <option style="display:none" value="">Select a status</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group row">
+                                <label class="col-md-6"><b>Experience unspent:</b></label>
+                                <input type="number" class="col-md-6 nopadding" ng-model="character.experience.unspent"
+                                       data-field="experience.unspent"/>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-6"><b>Total experience earned:</b></label>
+                                <input type="number" class="col-md-6 nopadding" ng-model="character.experience.total"
+                                       data-field="experience.total"/>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group row">
+                                <span class="col-md-6"><b>Created on</b></span>
+                                <span class="col-md-6">{{character.created | date:"dd/MM/yyyy"}}</span>
+                            </div>
+                            <div class="form-group row">
+                                <span class="col-md-6"><b>Last modified:</b></span>
+                                <span class="col-md-6">{{character.modified | date:"dd/MM/yyyy"}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 voffset3">
+                        <div class="col-md-4">
+                            <div><b>Clan:</b> {{ character.clan }}</div>
+                            <div><b>Sect:</b> {{ character.sect }}</div>
+                            <div><b>Coterie:</b> {{ character.coterie }}</div>
+                        </div>
+                        <div class="col-md-4">
+                            <div><b>Generation:</b> {{ character.generation }}</div>
+                            <div><b>Title:</b> {{ character.title }}</div>
+                            <div><b>Sire:</b> {{ character.sire }}</div>
+                        </div>
+                        <div class="col-md-4">
+                            <div><b>Nature:</b> {{ character.nature }}</div>
+                            <div><b>Demeanor:</b> {{ character.demeanor }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 voffset3">
+                        <div class="col-md-4">
+                            <div><b>Blood:</b> {{ character.bloodpool.total }}</div>
+                            <div><b>Willpower (total):</b> {{ character.willpower.total }}
+                                ({{ character.willpower.total }})
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div><b>Morality Path:</b> {{ character.path.type }}</div>
+                            <div><b>Morality Traits:</b> {{ character.path.rating }}</div>
+                            <div><b>{{ character.conscience.type }}:</b> {{ character.conscience.rating }}</div>
+                        </div>
+                        <div class="col-md-4">
+                            <div><b>Aura:</b> {{ character.aura }}</div>
+                            <div><b>{{ character.selfcontrol.type }}:</b> {{ character.selfcontrol.rating }}</div>
+                            <div><b>{{ character.courage.type }}:</b> {{ character.courage.rating }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseEditHistory">
+            <h4 id="hdrAbout" class="panel-title">
+                About
+            </h4>
+        </div>
+
+        <div id="collapseEditHistory" class="panel-collapse collapse in">
+            <div class="panel-body">
+                <div class="row" ng-repeat="item in character.modificationhistory">
+                    <div class="col-md-2">{{item.date | date:"dd/MM/yyyy"}}</div>
+                    <div class="col-md-2">{{item.user.name}}</div>
+                    <div class="col-md-8">{{item.fields}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

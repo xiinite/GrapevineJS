@@ -1,0 +1,86 @@
+<% layout("../layout.ejs") %>
+<script type="text/javascript" src="/js/controllers/chronicleController.js"></script>
+
+<div class="container" ng-controller="ChronicleController">
+    <h1 class="page-header hidden-xs hidden-sm">Chronicles</h1>
+
+    <div class="row">
+        <div class=" col-lg-12 col-sm-12 col-md-12">
+            <div data-ng-init="init()">
+                <div class="animate-repeat" ng-repeat="c in chronicles">
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+
+                        <a href="/chronicle/show/{{c.id}}" class="noline">
+                            <div class="panel clickable panel-default">
+                                <div class="panel-heading">
+                                    <h4>
+                                        {{c.name}}
+
+                                    </h4>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-12 text-preview">
+                                            {{c.description}}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <hr />
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-5">
+                                            Characters:
+                                        </div>
+                                        <div class="col-sm-7">
+                                            {{c.characters.length}}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-5">
+                                            Players:
+                                        </div>
+                                        <div class="col-sm-7">
+                                            {{c.players.length}}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-5">
+                                            Administrators:
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <ul class="list-group">
+                                                <li ng-repeat="a in c.administrators" class="list-group-item">
+                                                    {{a.displayName}}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row voffset1">
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            <button class="btn btn-primary" data-toggle="collapse" data-target="#frmAddNew">Add new chronicle
+            </button>
+            <fieldset class="form collapse voffset1" id="frmAddNew">
+                <div class="form-group ">
+                    <label for="txtName">Name: </label>
+                    <input class="form-control" id="txtName" type="text" ng-model="name" placeholder="Name">
+                </div>
+                <div class="form-group">
+                    <label for="txtDescription">Description: </label>
+                    <textarea class="form-control" id="txtDescription" ng-model="description"
+                              placeholder="Description"></textarea>
+                </div>
+                <button class="btn btn-primary voffset1" type="button" ng-click="addChronicle()" data-toggle="collapse"
+                        data-target="#frmAddNew">Add
+                </button>
+            </fieldset>
+        </div>
+    </div>
+</div>

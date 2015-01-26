@@ -1,0 +1,101 @@
+<% layout("../layout.ejs") %>
+<script type="text/javascript" src="/js/controllers/chronicleEditController.js"></script>
+
+<div id="content" class="container" ng-controller="ChronicleEditController" data-ng-init="init('<%= chronicle.id %>')">
+    <div id='pnlAbout' class="panel panel-default">
+        <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseAbout">
+            <h4 id="hdrAbout" class="panel-title">
+                {{chronicle.name}}
+            </h4>
+        </div>
+        <div id="collapseAbout" class="panel-collapse collapse in">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="txtDescription">Description: </label>
+                        <section ng-show="noteditting(1)">
+                            <div class="text-preview clickable" ng-click="edit(1)">{{chronicle.description}}</div>
+                            <button class="btn btn-primary" ng-show="chronicle.description.length == 0"
+                                    ng-click="edit(1)">Add description
+                            </button>
+                        </section>
+                        <section ng-show="editting(1)">
+                            <textarea id="txtDescription" class="col-md-12 vertical" rows="4"
+                                      ng-model="chronicle.description"></textarea>
+                            <button class="btn btn-primary" ng-click="saveDescription()">Save</button>
+                            <button class="btn btn-default" ng-click="cancelEdit()">Cancel</button>
+                        </section>
+                    </div>
+                </div>
+                <div class="row voffset3">
+                    <div class="col-md-4">
+                        <ul class="list-group">
+                            <li class="list-group-item active">Administrators</li>
+                            <li class="list-group-item" ng-repeat="a in chronicle.administrators">
+                                {{a.displayName}}
+                                <span class="glyphicon glyphicon-info-sign" title="{{a.provider}}, {{a.emails[0].value}}"></span>
+                                <button ng-click="removeAdmin(a.googleId)" class="btn btn-warning badge pull-right"><span class="glyphicon glyphicon-trash" title="remove"></span></button></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <ul class="list-group">
+                            <li class="list-group-item active">Players</li>
+                            <li class="list-group-item" ng-repeat="p in chronicle.playerDocs">
+                                {{p.displayName}}
+                                <span class="glyphicon glyphicon-info-sign" title="{{p.provider}}, {{p.emails[0].value}}"></span>
+                                <button ng-click="removePlayer(p.googleId)" class="btn btn-warning badge pull-right"><span class="glyphicon glyphicon-trash" title="remove"></span></button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <div>Characters: {{chronicle.characters.length}}</div>
+                        <div>Players: {{chronicle.players.length}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseAddPlayer">
+            <h4 id="hdrAddAdmin" class="panel-title">
+                Add players
+            </h4>
+        </div>
+        <div id="collapseAddPlayer" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <select id="slcPlayer" ng-model="playerid">
+                            <option ng-repeat="u in users" value="{{u.googleId}}">{{u.displayName}} ({{u.provider}},
+                                {{u.emails[0].value}})
+                            </option>
+                        </select>
+                        <button ng-click="addPlayer()" class="btn btn-primary">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id='pnlAddAdmin' class="panel panel-default">
+        <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseAddAdmin">
+            <h4 id="hdrAddAdmin" class="panel-title">
+                Add administrators
+            </h4>
+        </div>
+        <div id="collapseAddAdmin" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <select id="slcUser" ng-model="userid">
+                            <option ng-repeat="u in users" value="{{u.googleId}}">
+                                {{u.displayName}} ({{u.provider}}, {{u.emails[0].value}})
+                            </option>
+                        </select>
+                        <button id="btnAddAdmin" ng-click="addAdmin()" class="btn btn-primary">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

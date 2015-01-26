@@ -1,0 +1,82 @@
+<%- layout("../layout.ejs") %>
+<script type='text/javascript'>
+    $(document).ready(function () {
+        $('#btnClearDb').click(function () {
+            $('#btnClearDb').removeClass("btn-warning").addClass("btn-info").html('Clearing db...');
+            $.when(
+                    $.get('../character/clear'),
+                    $.get('../chronicle/clear')
+            ).then(function () {
+                        $('#btnClearDb').removeClass("btn-info").addClass("btn-success").html('Database cleared');
+                        setTimeout(function () {
+                            $('#btnClearDb').removeClass("btn-success").addClass("btn-warning").html('Clear database');
+                        }, 2500);
+                    }, function (err) {
+                        $('#btnClearDb').removeClass("btn-info").addClass("btn-danger").html('ERROR!' + err.status + ': ' + err.statusText);
+
+                        setTimeout(function () {
+                            $('#btnClearDb').removeClass("btn-danger").addClass("btn-warning").html('Clear database');
+                        }, 2500);
+                    });
+        });
+
+        $('#btnPopulateDb').click(function () {
+            $('#btnPopulateDb').removeClass("btn-warning").addClass("btn-info").html('Populating db...');
+            $.when(
+                    $.get('../character/populate'),
+                    $.get('../chronicle/populate')
+            ).then(function () {
+                        $('#btnPopulateDb').removeClass("btn-info").addClass("btn-success").html('All tables populated!');
+                        setTimeout(function () {
+                            $('#btnPopulateDb').removeClass("btn-success").addClass("btn-warning").html('Populate database');
+                        }, 2500);
+                    }, function (err) {
+                        $('#btnPopulateDb').removeClass("btn-info").addClass("btn-danger").html('ERROR!: ' + err.status + ': ' + err.statusText);
+
+                        setTimeout(function () {
+                            $('#btnPopulateDb').removeClass("btn-danger").addClass("btn-warning").html('Populate database');
+                        }, 2500);
+                    });
+        });
+
+        $('#btnResetUsers').click(function () {
+            $('#btnResetUsers').removeClass("btn-warning").addClass("btn-info").html('Resetting users...');
+            $.when(
+                    $.get('../user/populate')
+            ).then(function () {
+                        $('#btnResetUsers').removeClass("btn-info").addClass("btn-success").html('Only superadmin remains.');
+                        setTimeout(function () {
+                            $('#btnResetUsers').removeClass("btn-success").addClass("btn-warning").html('Reset users');
+                        }, 2500);
+                    }, function (err) {
+                        $('#btnResetUsers').removeClass("btn-info").addClass("btn-danger").html('ERROR!: ' + err.status + ': ' + err.statusText);
+
+                        setTimeout(function () {
+                            $('#btnResetUsers').removeClass("btn-danger").addClass("btn-warning").html('Reset users');
+                        }, 2500);
+                    });
+        });
+    });
+</script>
+<div class="container">
+    <div class='col-xs-12 col-lg-6 col-sm-6'>
+        <div class="panel panel-info">
+            <div class='panel-heading'>
+                Database management
+            </div>
+            <div class='panel-body'>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <button class='btn btn-warning btn-block' id='btnClearDb'>Clear database</button>
+                    </li>
+                    <li class="list-group-item">
+                        <button class='btn btn-warning btn-block' id='btnPopulateDb'>Populate database</button>
+                    </li>
+                    <li class="list-group-item">
+                        <button class='btn btn-warning btn-block' id='btnResetUsers'>Reset users</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="TrinteJS! - Javascript MVC Framework">
+    <meta name="author" content="Joey Daemen">
+    <meta name="description" content="Mind&#39;s Eye Theatre Chronicle manager">
+    <meta name="keywords" content="grapevine, trinte, trintejs">
+    <title>grapevine</title>
+    <link type="text/css" href="/css/bootstrap.min.css" rel="stylesheet"/>
+    <link type="text/css" href="/css/font-awesome.min.css" rel="stylesheet"/>
+    <link type="text/css" href="/css/style.css" rel="stylesheet"/>
+    <link type="text/css" href="/css/dataTables.bootstrap.css" rel="stylesheet"/>
+
+    <script type="text/javascript" charset="utf-8" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/js/jquery.datatables.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/js/dataTables.bootstrap.js"></script>
+    <meta name="x-csrf-param" content="_csrf">
+</head>
+<body>
+<!-- header -->
+<%- partial('./_headerNoAuth') %>
+<!-- messages -->
+<!-- content -->
+<div class="container">
+    <div class='messages row'>
+        <div class='col-md-12'>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-offset-3 col-md-offset-3 col-sm-offset-2 col-lg-6 col-sm-8 col-md-6"
+             style="margin-top:100px">
+            <form class="form" role="form" method="GET" action='/auth/local/dummy/dummy'>
+                <div class="login-header">
+                    <h2 style="color:#333333;"><i class="fa fa-unlock-alt"></i> grapevine</h2>
+                </div>
+                <div class="col-xs-12 col-lg-6 col-sm-6" style="text-align:center">
+                    <a class="btn btn-md btn-block btn-primary"' href='/auth/google/'><i class="fa fa-sign-in"></i> Sign
+                    in with google</a>
+                    <a class="btn btn-md btn-block btn-primary"' href='/auth/facebook/'><i class="fa fa-sign-in"></i>
+                    Sign in with facebook</a>
+
+                    <!-- <button class="btn btn-md btn-block btn-default" type="clear"><i class="fa fa-times"></i> Clear</button> -->
+                </div>
+            </form>
+            <div class="clearfix"><br/></div>
+        </div>
+    </div>
+</div>
+<div class="row" style="margin-top: 150px">
+    <footer id="footer">
+        <p style="text-align: center;font-size: 10px;color: #ccc">
+            Created by Joey Daemen
+        </p>
+    </footer>
+</div>
+
+<!-- footer -->
+<%- partial('./_footer') %>
+</body>
+</html>

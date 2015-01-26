@@ -1,0 +1,68 @@
+<% layout("../layout.ejs") %>
+<script type="text/javascript" charset="utf-8">
+    var rowids = [];
+    var dataLoaded = function (data) {
+        var aaData = [];
+
+        for (var i = 0; i < data.length; i++) {
+            var row = data[i];
+            var dataTableRow = [];
+            dataTableRow.push(row.displayName);
+            dataTableRow.push(row.googleId);
+            rowids.push(row.googleId);
+
+            aaData.push(dataTableRow);
+        }
+
+        //var datatable = $('#tblItems').DataTable(dataTableObj);
+        var datatable = $('#tblItems').DataTable(
+                {
+                    data: aaData,
+                    columns: [{'title': 'name', "sClass": "clickable"}, {'title': 'id'}],
+                    "columnDefs": [{
+                        "targets": 1,
+                        "visible": false
+                    }]
+                }
+        );
+        $('#tblItems tbody').on('dblclick', 'tr', function () {
+            window.location = window.location + "/show/" + datatable.row($(this)).data()[1];
+        });
+
+        $('#tblItems tr').hammer().bind('tap', function(e) {
+            window.location = window.location + "/show/" + datatable.row($(this)).data()[1];
+        });
+
+        $('#tblItems').on( 'draw.dt', function () {
+            $('#tblItems tr').hammer().bind('tap', function(e) {
+                window.location = window.location + "/show/" + datatable.row($(this)).data()[1];
+            });
+        } );
+    }
+
+    $(document).ready(function () {
+        $.get('../user/all').done(dataLoaded);
+
+    });
+
+</script>
+<div id="content" class="container">
+    <h1 class="page-header hidden-xs hidden-sm">Characters</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered table-striped table-hover" id='tblItems'>
+                <thead>
+                <tr>
+                    <td>Name</td>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+                <tfoot>
+
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>

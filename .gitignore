@@ -1,0 +1,11 @@
+# Folders #
+###########
+.idea/
+node_modules/
+node_modules/*.*
+tmp/
+
+# Files #
+#########
+npm-debug.txt
+config/configuration.js

@@ -1,0 +1,77 @@
+var mongoose = require('mongoose');
+
+module.exports = {
+    'Character': mongoose.model('character',{
+        id: {unique: true, type: String},
+        type: {type: String},
+        name: {type: String},
+        googleId: {type: String},
+        player: {type: JSON},
+        chronicle: {type: JSON},
+        state: {type: String},
+        experience: {type: JSON},
+        started: {type: Date},
+        created: {type: Date},
+        modified: {type: Date},
+        clan: {type: String},
+        sect: {type: String},
+        coterie: {type: String},
+        generation: {type: Number},
+        title: {type: String},
+        sire: {type: String},
+        nature: {type: String},
+        demeanor: {type: String},
+        bloodpool: {type: JSON},
+        willpower: {type: JSON},
+        path: {type: JSON},
+        conscience: {type: JSON},
+        selfcontrol: {type: JSON},
+        courage: {type: JSON},
+        aura: {type: Number},
+        attributes: {type: JSON},
+        abilities: {type: Array},
+        disciplines: {type: Array},
+        rituals: {type: Array},
+        status: {type: Array},
+        backgrounds: {type: Array},
+        influences: {type: Array},
+        misc: {type: Array},
+        derangements: {type: Array},
+        bloodbonds: {type: Array},
+        boons: {type: Array},
+        merits: {type: Array},
+        flaws: {type: Array},
+        healthlevels: {type: JSON},
+        equipment: {type: Array},
+        notes: {type: Array},
+        experiencehistory: {type: Array},
+        modificationhistory: {type: Array}
+    }),
+    'Chronicle': mongoose.model('chronicle',{
+        id: {type: String},
+        name: {type: String},
+        description: {type: String},
+        admins: {type: Array},
+        players: {type: Array},
+        playerDocs: {type: Array},
+        administrators: {type: Array},
+        characters: {type: Array}
+    }),
+    'User': mongoose.model('user',{
+        provider: {type: String},
+        displayName: {type: String},
+        name: {type: JSON},
+        emails: {type: Array},
+        _raw: {type: String},
+        _json: {type: JSON},
+        googleId: {type: String},
+        isSuperAdmin: {type: Boolean},
+        isAdmin: {type: Boolean},
+        chronicles: {type: Array}
+    }),
+    'Downtime': mongoose.model('downtime',{
+        id: {unique: true, type: String},
+        actions: {type: JSON}
+    })
+
+}

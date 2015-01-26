@@ -1,0 +1,230 @@
+<% layout("../layout.ejs") %>
+<script type='text/javascript' charset="utf-8" src="/js/jquery.fileupload.js"></script>
+<script type="text/javascript" charset="utf-8">
+    var rowids = [];
+    var datatable = null;
+    var uploadUrl;
+    var dataLoaded = function (data) {
+        var aaData = [];
+
+        for (var i = 0; i < data.length; i++) {
+            var row = data[i];
+            var dataTableRow = [];
+            dataTableRow.push(row.name);
+            dataTableRow.push(row.id);
+            (row.player) ? dataTableRow.push(row.player.displayName) : dataTableRow.push("");
+
+            dataTableRow.push(row.chronicle.name);
+            rowids.push(row.id);
+
+            aaData.push(dataTableRow);
+        }
+
+        if (datatable === null) {
+            datatable = $('#tblItems').DataTable(
+                    {
+                        data: aaData,
+                        "dom": '<"top">t<"bottom">pf<"clear">',
+                        "pagingType": "simple",
+                        columns: [{
+                            title: 'name',
+                            "sClass": "clickable"
+                        }, {title: 'id'}, {title: 'player'}, {title: 'chronicle'}],
+                        "columnDefs": [{
+                            "targets": 1,
+                            "visible": false
+                        }, {
+                            "targets": 2,
+                            "visible": false
+                        }, {
+                            "targets": 3,
+                            "visible": false
+                        }]
+                    }
+            );
+        }
+        else {
+            var dataTable = $('#tblItems').dataTable();
+            dataTable.fnClearTable();
+
+            dataTable.fnAddData(aaData);
+        }
+        $('#tblItems tbody').on('dblclick', 'tr', function () {
+            window.location = window.location + "/show/" + datatable.row($(this)).data()[1];
+        });
+
+        $('#tblItems tr').hammer().bind('tap', function (e) {
+            window.location = window.location + "/show/" + datatable.row($(this)).data()[1];
+        });
+
+        $('#tblItems').on('draw.dt', function () {
+            $('#tblItems tr').hammer().bind('tap', function (e) {
+                window.location = window.location + "/show/" + datatable.row($(this)).data()[1];
+            });
+        });
+
+    }
+
+    var configureUpload = function () {
+        var uploadButton = $('<button/>')
+                        .addClass('btn btn-primary')
+                        .prop('disabled', true)
+                        .text('Processing...')
+                        .on('click', function () {
+                            var $this = $(this),
+                                    data = $this.data();
+                            $this
+                                    .off('click')
+                                    .text('Abort')
+                                    .on('click', function () {
+                                        $this.remove();
+                                        data.abort();
+                                    });
+                            data.submit().always(function () {
+                                $this.remove();
+                            });
+                        });
+        $('#fileupload').fileupload({
+            dataType: 'json',
+            autoUpload: true,
+            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+            // Enable image resizing, except for Android and Opera,
+            // which actually support image resizing, but fail to
+            // send Blob objects via XHR requests:
+            disableImageResize: /Android(?!.*Chrome)|Opera/
+                    .test(window.navigator.userAgent),
+            previewMaxWidth: 100,
+            previewMaxHeight: 100,
+            previewCrop: true
+        }).on('fileuploadadd', function (e, data) {
+            data.url = "../character/import/" + $('#slcChronicle').val();
+            data.context = $('<div/>').appendTo('#files');
+            $.each(data.files, function (index, file) {
+                var node = $('<p/>')
+                        .append($('<span/>').text(file.name));
+                if (!index) {
+                    node
+                            .append('<br>')
+                            .append(uploadButton.clone(true).data(data));
+                }
+                node.appendTo(data.context);
+            });
+        }).on('fileuploadprocessalways', function (e, data) {
+            var index = data.index,
+                    file = data.files[index],
+                    node = $(data.context.children()[index]);
+            if (file.preview) {
+                node
+                        .prepend('<br>')
+                        .prepend(file.preview);
+            }
+            if (file.error) {
+                node
+                        .append('<br>')
+                        .append($('<span class="text-danger"/>').text(file.error));
+            }
+            if (index + 1 === data.files.length) {
+                data.context.find('button')
+                        .text('Upload')
+                        .prop('disabled', !!data.files.error);
+            }
+        }).on('fileuploadprogressall', function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#progress .progress-bar').css(
+                    'width',
+                    progress + '%'
+            );
+        }).on('fileuploaddone', function (e, data) {
+            $(data.context.children()).remove();
+            dataLoaded(data.result);
+        }).on('fileuploadfail', function (e, data) {
+            $.each(data.files, function (index, file) {
+                var error = $('<span class="text-danger"/>').text('File upload failed.');
+                $(data.context.children()[index])
+                        .append('<br>')
+                        .append(error);
+            });
+        }).prop('disabled', !$.support.fileInput)
+                .parent().addClass($.support.fileInput ? undefined : 'disabled');
+    };
+
+    var chroniclesLoaded = function (data) {
+        $('#slcChronicle').empty();
+
+        for (var i = 0; i < data.length; i++) {
+            var item = data[i];
+            $('<option value="' + item.id + '" >' + item.name + '</option>').appendTo($('#slcChronicle'));
+        }
+
+    }
+
+    $(document).ready(function () {
+        $.get('../chronicle/list').done(chroniclesLoaded);
+        $.get('../character/all').done(dataLoaded);
+        configureUpload();
+    });
+
+</script>
+<div id="content" class="container">
+    <h1 class="page-header hidden-xs hidden-sm">Characters</h1>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered table-striped table-hover" id='tblItems'>
+                <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Id</td>
+                    <td>Player</td>
+                    <td>Chronicle</td>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+                <tfoot>
+
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <div id='pnlAdvantages' class="panel panel-default hidden-xs hidden-sm">
+        <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseUpload">
+            <h4 id="hdrUpload" class="panel-title">
+                Upload new
+            </h4>
+        </div>
+        <div id="collapseUpload" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class='row'>
+                    <div class="col-md-3">
+                        <fieldset class="form-inline">
+                            <div class="form-group">
+                                <label for="exampleInputName2">Chronicle: </label>
+                                <select id="slcChronicle">
+                                </select>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-md-9">
+                        <span class="btn btn-success fileinput-button">
+                            <i class="glyphicon glyphicon-plus"></i>
+                            <span>Add files...</span>
+                            <!-- The file input field used as target for the file upload widget -->
+                            <input id="fileupload" type="file" name="files[]" multiple>
+                        </span>
+                    </div>
+                </div>
+                <div class="row voffset1">
+                    <div class="col-md-12">
+                        <div id="progress" class="progress">
+                            <div class="progress-bar progress-bar-success"></div>
+                        </div>
+                        <div id="files" class="files"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

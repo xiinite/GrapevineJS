@@ -1,0 +1,509 @@
+<% layout("../layout.ejs") %>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //collapsible menu
+        $('#tabFAQ a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
+        $(".navbar-nav li a").click(function (event) {
+            $(".navbar-collapse").collapse('hide');
+            $($(this).data('target')).collapse('show');
+        });
+        $('#btnPrint').click(function () {
+            if ($(document).find('div.panel-collapse:not(.in)').length > 0) {
+                $('div.panel-collapse').on("shown.bs.collapse", print);
+                $(document).find('div.panel-collapse').collapse('show');
+            }
+            else {
+                window.print();
+            }
+            //window.print();
+        });
+
+        var print = function () {
+            $('div.panel-collapse').unbind("shown.bs.collapse", print);
+            window.print();
+        }
+
+        $('.trait').click(function () {
+            if ($(this).find('del').length > 0) return;
+            var trait = $(this);
+            var btnConfirm = $('<button class="btn btn-xs btn-warning pull-right">expend</button>');
+            var btnCancel = $('<button class="btn btn-xs pull-right">cancel</button>');
+
+            if ($(this).find('button').length > 0) return;
+            trait.append(btnCancel);
+            trait.append(btnConfirm);
+            btnConfirm.click(function () {
+                trait.addClass("expendedTrait").removeClass('trait');
+                trait.find('button').remove();
+                trait.html("<del>" + trait.html() + "</del>");
+            });
+
+            btnCancel.click(function () {
+                trait.find('button').remove();
+                event.stopPropagation();
+            });
+        });
+
+        $('.expandcollapse').click(function () {
+
+            var newstate = $(this).attr('state') ^ 1,
+                    icon = newstate ? "minus" : "plus",
+                    text = newstate ? "Collapse" : "Expand";
+
+            // if state=0, show all the accordion divs within the same block (in this case, within the same section)
+            if ($(this).attr('state') === "0") {
+                console.log('1');
+                $(document).find('div.panel-collapse:not(.in)').collapse('show');
+            }
+            // otherwise, collapse all the divs
+            else {
+                console.log('2');
+                $(document).find('div.panel-collapse.in').collapse('hide');
+            }
+
+            $(this).html("<i class=\"icon-white icon-" + icon + "-sign\"></i> " + text + " All");
+
+            $(this).attr('state', newstate);
+
+        });
+
+        $('a[data-toggle="tab"]').on('shown', function (e) {
+
+            var myState = $(this).attr('state'),
+                    state = $('.expandcollapse').attr('state');
+
+            if (myState != state) {
+                toggleTab($(this).prop('hash'));
+                $(this).attr('state', state);
+            }
+
+        });
+
+        function toggleTab(id) {
+
+            $(id).find('.collapse').each(function () {
+                $(this).collapse('toggle');
+            });
+        }
+    });
+</script>
+<div id="content" class="container">
+    <header class="page-header navbar navbar-default navbar-fixed-bottom hidden-print" role="banner">
+        <nav class="collapse navbar-collapse tr-navbar-collapse " role="navigation">
+            <ul class="nav navbar-nav">
+                <li><a href="#pnlGlance" data-target="#collapseGlance">Glance</a></li>
+                <li><a href="#pnlAbout" data-target="#collapseAbout">About</a></li>
+                <li><a href="#pnlAttributes" data-target="#collapseAttributes">Attributes</a></li>
+                <li><a href="#pnlAdvantages" data-target="#collapseAdvantages">Advantages</a></li>
+                <% if(character.notes.length !== 0) { %>
+                <li><a href="#pnlNotes" data-target="#collapseNotes">Notes</a></li>
+                <% } %>
+                <li><a href="#pnlExperience" data-target="#collapseExperience">Experience history</a></li>
+                <li><a href="#jf2_" class="expandcollapse" state="0"><i class="icon-white icon-plus-sign"></i> Expand
+                        All</a></li>
+            </ul>
+        </nav>
+    </header>
+    <h1 class="page-header"><%= character.name %>
+        <div class='btn-toolbar pull-right hidden-print'>
+            <div class='btn-group'>
+                <button id="btnPrint" type='button' class='btn btn-info'><span class="glyphicon glyphicon-print"></span>
+                    Print
+                </button>
+                <%if(user.isSuperAdmin){%>
+                <a href="/character/edit/<%= character.id %>" class="btn btn-info"><span class="glyphicon glyphicon-edit"></span>
+                    Edit
+                </a>
+                <%}%>
+            </div>
+        </div>
+    </h1>
+
+    <div id="pnlGlance" class="panel panel-default hidden-print">
+        <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseGlance">
+            <h4 id="hdrGlance" class="panel-title">
+                Glance
+            </h4>
+        </div>
+        <div id="collapseGlance" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <div class="label-default"><b>Physical:</b> <span
+                                        class='pull-right'><%= character.attributes.physical.length %></span></div>
+                            <div><b>Social:</b> <span
+                                        class='pull-right'><%= character.attributes.social.length %></span></div>
+                            <div class="label-default"><b>Mental:</b> <span
+                                        class='pull-right'><%= character.attributes.mental.length %></span></div>
+                        </div>
+                        <div class="col-md-4">
+                            <div><b><%= character.conscience.type %>:</b> <span
+                                        class='pull-right'><%= character.conscience.rating %></span></div>
+                            <div class="label-default"><b><%= character.selfcontrol.type %>:</b> <span
+                                        class='pull-right'><%= character.selfcontrol.rating %></span></div>
+                            <div><b><%= character.courage.type %>:</b> <span
+                                        class='pull-right'><%= character.courage.rating %></span></div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="label-default"><b>Willpower (total):</b> <span
+                                        class='pull-right'><%= character.willpower.total %>
+                                    (<%= character.willpower.total %>)</span></div>
+                            <div><b>Morality Traits:</b> <span class='pull-right'><%= character.path.rating %></span>
+                            </div>
+                            <div class="label-default"><b>Status:</b> <span
+                                        class='pull-right'><%= character.status.length %></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id='pnlAbout' class="panel panel-default">
+        <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseAbout">
+            <h4 id="hdrAbout" class="panel-title">
+                About
+            </h4>
+        </div>
+        <div id="collapseAbout" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <div><b>Player:</b> <%= character.player.displayName %> <input type='hidden' id='playerid'
+                                                                                           value='<%= character.player.googleId %>'/>
+                            </div>
+                            <div><b>Chronicle:</b> <%= character.chronicle.name %></div>
+                            <div><b>Status:</b> <%= character.state %></div>
+                        </div>
+                        <div class="col-md-4">
+                            <div><b>Experience
+                                    Unspent:</b> <%= character.experience.unspent %></div>
+                            <div><b>Total experience earned:</b> <%= character.experience.total %></div>
+                        </div>
+                        <div class="col-md-4">
+                            <div><b>Created
+                                    on:</b> <%= character.created.getDate() + "/" + character.created.getMonth() + "/" + character.created.getFullYear() %>
+                            </div>
+                            <div><b>Last modified
+                                    on:</b> <%= character.modified.getDate() + "/" + character.modified.getMonth() + "/" + character.modified.getFullYear() %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 voffset3">
+                        <div class="col-md-4">
+                            <div><b>Clan:</b> <%= character.clan %></div>
+                            <div><b>Sect:</b> <%= character.sect %></div>
+                            <div><b>Coterie:</b> <%= character.coterie %></div>
+                        </div>
+                        <div class="col-md-4">
+                            <div><b>Generation:</b> <%= character.generation %></div>
+                            <div><b>Title:</b> <%= character.title %></div>
+                            <div><b>Sire:</b> <%= character.sire %></div>
+                        </div>
+                        <div class="col-md-4">
+                            <div><b>Nature:</b> <%= character.nature %></div>
+                            <div><b>Demeanor:</b> <%= character.demeanor %></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 voffset3">
+                        <div class="col-md-4">
+                            <div><b>Blood:</b> <%= character.bloodpool.total %></div>
+                            <div><b>Willpower (total):</b> <%= character.willpower.total %>
+                                (<%= character.willpower.total %>)
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div><b>Morality Path:</b> <%= character.path.type %></div>
+                            <div><b>Morality Traits:</b> <%= character.path.rating %></div>
+                            <div><b><%= character.conscience.type %>:</b> <%= character.conscience.rating %></div>
+                        </div>
+                        <div class="col-md-4">
+                            <div><b>Aura:</b> <%= character.aura %></div>
+                            <div><b><%= character.selfcontrol.type %>:</b> <%= character.selfcontrol.rating %></div>
+                            <div><b><%= character.courage.type %>:</b> <%= character.courage.rating %></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id='pnlAttributes' class="panel panel-default">
+        <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseAttributes">
+            <h4 id="hdrAttributes" class="panel-title">
+                Attributes
+            </h4>
+        </div>
+        <div id="collapseAttributes" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.attributes.physical.length %> Physical
+                                    Traits
+                                </li>
+                                <% for(var i = 0; i < character.attributes.physical.length; i++) { %>
+                                <li class="list-group-item trait"><%= character.attributes.physical[i] %></li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.attributes.social.length %> Social
+                                    Traits
+                                </li>
+                                <% for(var i = 0; i < character.attributes.social.length; i++) { %>
+                                <li class="list-group-item trait"><%= character.attributes.social[i] %></li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.attributes.mental.length %> Mental
+                                    Traits
+                                </li>
+                                <% for(var i = 0; i < character.attributes.mental.length; i++) { %>
+                                <li class="list-group-item trait"><%= character.attributes.mental[i] %></li>
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.attributes.negativephysical.length %>
+                                    Negative Physical Traits
+                                </li>
+                                <% for(var i = 0; i < character.attributes.negativephysical.length; i++) { %>
+                                <li class="list-group-item"><%= character.attributes.negativephysical[i] %></li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.attributes.negativesocial.length %>
+                                    Negative Social Traits
+                                </li>
+                                <% for(var i = 0; i < character.attributes.negativesocial.length; i++) { %>
+                                <li class="list-group-item"><%= character.attributes.negativesocial[i] %></li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.attributes.negativemental.length %>
+                                    Negative Mental Traits
+                                </li>
+                                <% for(var i = 0; i < character.attributes.negativemental.length; i++) { %>
+                                <li class="list-group-item"><%= character.attributes.negativemental[i] %></li>
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id='pnlAdvantages' class="panel panel-default">
+        <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseAdvantages">
+            <h4 id="hdrAdvantages" class="panel-title">
+                Advantages
+            </h4>
+        </div>
+        <div id="collapseAdvantages" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.abilities.length %> Abilities</li>
+                                <% for(var i = 1; i < character.abilities.length; i++) { %>
+                                <li class="list-group-item">
+                                    <%= character.abilities[i].name + ": " + character.abilities[i].rating %>
+                                    <% if(character.abilities[i].note.length > 0) { %>
+                                    ( <%= character.abilities[i].note %> )
+                                    <% } %>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.disciplines.length %> Disciplines</li>
+                                <% for(var i = 0; i < character.disciplines.length; i++) { %>
+                                <li class="list-group-item">
+                                    <%= character.disciplines[i].path + ": " + character.disciplines[i].name + " (" + character.disciplines[i].level + ")" %>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.rituals.length %> Rituals</li>
+                                <% for(var i = 0; i < character.rituals.length; i++) { %>
+                                <li class="list-group-item">
+                                    <%= character.rituals[i].name + " (" + character.rituals[i].level + ")" %>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.backgrounds.length %> Backgrounds</li>
+                                <% for(var i = 0; i < character.backgrounds.length; i++) { %>
+                                <li class="list-group-item trait">
+                                    <%= character.backgrounds[i].name + ": " + character.backgrounds[i].rating %>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.influences.length %> Influences</li>
+                                <% for(var i = 0; i < character.influences.length; i++) { %>
+                                <li class="list-group-item trait">
+                                    <%= character.influences[i].name + ": " + character.influences[i].rating %>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.misc.length %> Miscelaneous Traits</li>
+                                <% for(var i = 0; i < character.misc.length; i++) { %>
+                                <li class="list-group-item">
+                                    <%= character.misc[i].name %>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.status.length %> Status</li>
+                                <% for(var i = 0; i < character.status.length; i++) { %>
+                                <li class="list-group-item">
+                                    <%= character.status[i].name %>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.merits.length %> Merits</li>
+                                <% for(var i = 0; i < character.merits.length; i++) { %>
+                                <li class="list-group-item trait">
+                                    <%= character.merits[i].name + " (" + character.merits[i].cost + ")" %>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.flaws.length %> Flaws</li>
+                                <% for(var i = 0; i < character.flaws.length; i++) { %>
+                                <li class="list-group-item">
+                                    <%= character.flaws[i].name + " (" + character.flaws[i].cost + ")" %>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">Health Levels</li>
+                                <% for(var hl in character.healthlevels) { %>
+                                <li class="list-group-item">
+                                    <%= hl + " (" + character.healthlevels[hl] + ")" %>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-8">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.equipment.length %> Equipment</li>
+                                <% for(var i = 0; i < character.equipment.length; i++) { %>
+                                <li class="list-group-item">
+                                    <%= character.equipment[i].name %>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <% if(character.notes.length !== 0) { %>
+    <div id='pnlNotes' class="panel panel-default ">
+        <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseNotes">
+            <h4 id="hdrNotes" class="panel-title">
+                Notes
+            </h4>
+        </div>
+        <div id="collapseNotes" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="list-group">
+                            <% for(var i = 0; i < character.notes.length; i++) { %>
+                            <li class="list-group-item">
+                                <%= character.notes[i].value %>
+                            </li>
+                            <% } %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
+    <div id='pnlExperience' class="panel panel-default hidden-print">
+        <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseExperience">
+            <h4 id="hdrExperience" class="panel-title">
+                Experience History
+            </h4>
+        </div>
+        <div id="collapseExperience" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="list-group">
+                            <% for(var i = 0; i < character.experiencehistory.length; i++) { %>
+                            <li class="list-group-item">
+                                <%= new Date(character.experiencehistory[i].date).getMonth() + "/" + new Date(character.experiencehistory[i].date).getFullYear() + " Experience: " + character.experiencehistory[i].change + ", Reason: " + character.experiencehistory[i].reason %>
+                            </li>
+                            <% } %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
