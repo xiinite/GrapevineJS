@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+<html lang="en">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -21,7 +21,11 @@
     <meta name="x-csrf-param" content="_csrf">
 </head>
 <body>
-<!-- header -->
+<!-- header --><a href="https://github.com/xiinite/GrapevineJS" target="_blank"><img
+            style="position: absolute; top: 0; right: 0; border: 0; z-index: 3000;"
+            src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
+            alt="Fork me on GitHub"
+            data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
 <%- partial('./_headerNoAuth') %>
 <!-- messages -->
 <!-- content -->
@@ -36,19 +40,17 @@
     <div class="row">
         <div class="col-lg-offset-3 col-md-offset-3 col-sm-offset-2 col-lg-6 col-sm-8 col-md-6"
              style="margin-top:100px">
-            <form class="form" role="form" method="GET" action='/auth/local/dummy/dummy'>
-                <div class="login-header">
-                    <h2 style="color:#333333;"><i class="fa fa-unlock-alt"></i> grapevine</h2>
-                </div>
-                <div class="col-xs-12 col-lg-6 col-sm-6" style="text-align:center">
-                    <a class="btn btn-md btn-block btn-primary"' href='/auth/google/'><i class="fa fa-sign-in"></i> Sign
-                    in with google</a>
-                    <a class="btn btn-md btn-block btn-primary"' href='/auth/facebook/'><i class="fa fa-sign-in"></i>
-                    Sign in with facebook</a>
+            <div class="login-header">
+                <h2 style="color:#333333;"><i class="fa fa-unlock-alt"></i> grapevine</h2>
+            </div>
+            <div class="col-xs-12 col-lg-6 col-sm-6" style="text-align:center">
+                <a class="btn btn-md btn-block btn-primary" href='/auth/google/'><i class="fa fa-sign-in"></i> Sign in
+                    with google</a>
+                <a class="btn btn-md btn-block btn-primary" href='/auth/facebook/'><i class="fa fa-sign-in"></i>Sign in
+                    with facebook</a>
 
-                    <!-- <button class="btn btn-md btn-block btn-default" type="clear"><i class="fa fa-times"></i> Clear</button> -->
-                </div>
-            </form>
+                <!-- <button class="btn btn-md btn-block btn-default" type="clear"><i class="fa fa-times"></i> Clear</button> -->
+            </div>
             <div class="clearfix"><br/></div>
         </div>
     </div>
