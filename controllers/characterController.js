@@ -7,6 +7,20 @@ var importer = require('../bin/importlogic.js');
 
 var ViewTemplatePath = 'character';
 var tmpDir = 'tmp';
+
+var findByDate = function(collection, _date, cb){
+    var coll = collection.slice( 0 ); // create a clone
+
+    (function _loop( data ) {
+        if( data.date.toUTCString() === _date ) {
+            cb.apply( null, [ data ] );
+        }
+        else if( coll.length ) {
+            setTimeout( _loop.bind( null, coll.shift() ), 25 );
+        }
+    }( coll.shift() ));
+};
+
 module.exports = {
     'index': function (req, res, next) {
         if (!req.user.isSuperAdmin && !req.user.isAdmin) {
@@ -18,32 +32,31 @@ module.exports = {
     },
     'all': function (req, res, next) {
         var where = {};
-        if (! req.user.isSuperAdmin) {
+        if (!req.user.isSuperAdmin) {
             var chronicleIds = [];
-            for(var i = 0; i < req.user.chronicles.length; i++)
-            {
+            for (var i = 0; i < req.user.chronicles.length; i++) {
                 chronicleIds.push(req.user.chronicles[i].id)
             }
             where =
             {
                 chronicle: {"$in": chronicleIds}
             };
-            model.find(where, function(err, result){
+            model.find(where, function (err, result) {
                 res.json(result);
             })
         }
-        else{
+        else {
             model.all(function (err, result) {
                 res.json(result);
             });
         }
         /*if (!req.user.isSuperAdmin) {
-            res.json("forbidden");
-            return;
-        }
-        model.all(function (err, result) {
-            res.json(result);
-        });*/
+         res.json("forbidden");
+         return;
+         }
+         model.all(function (err, result) {
+         res.json(result);
+         });*/
     },
     'show': function (req, res, next) {
         if (req.params.id) {
@@ -60,7 +73,7 @@ module.exports = {
             });
         }
     },
-    'edit': function(req, res, next){
+    'edit': function (req, res, next) {
         if (req.params.id) {
             var out = {
                 user: req.user,
@@ -69,51 +82,82 @@ module.exports = {
             res.render(ViewTemplatePath + "/edit", out);
         }
     },
-    'update': function(req, res, next){
-        if(req.body.id){
+    'update': function (req, res, next) {
+        if (req.body.id) {
             model.find({"id": req.body.id}, function (err, result) {
                 var user = req.user || {displayName: "Anonymous"};
-                if(req.user.isSuperAdmin || result[0].chronicle.admins.indexOf(user.googleId) > -1)
-                {
+                if (req.user.isSuperAdmin || result[0].chronicle.admins.indexOf(user.googleId) > -1) {
+                    var previousversion = JSON.parse(JSON.stringify(result[0]));
                     var modHistory = [];
-                    for(var i=0;i<result[0].modificationhistory.length;i++){
+                    for (var i = 0; i < result[0].modificationhistory.length; i++) {
                         modHistory.push(result[0].modificationhistory[i]);
                     }
-                    var fields = {};
-                    for (var key in req.body.fields) {
-                        var obj = req.body.fields[key];
-                        fields[key] = obj;
+                    var clone = JSON.parse(JSON.stringify(req.body.fields));
+                    for (var prop in clone) {
+                        // important check that this is objects own property
+                        // not from prototype prop inherited
+                        if(clone.hasOwnProperty(prop)){
+                            console.log(result[0][prop]);
+                        }
                     }
-                    modHistory.push({fields: fields, date: new Date(), user: {googleId: req.user.googleId, name: req.user.displayName}});
+                    modHistory.push({
+                        fields: clone,
+                        date: new Date(),
+                        user: {googleId: req.user.googleId, name: req.user.displayName},
+                        previousVersion: previousversion
+                    });
                     req.body.fields.modificationhistory = modHistory;
                     req.body.fields.modified = new Date();
-                    model.update(req.body.id, req.body.fields, function(err){
-                        if(err) {
+                    model.update(req.body.id, req.body.fields, function (err) {
+                        if (err) {
                             res.json(err);
                         }
-                        else
-                        {
+                        else {
                             res.json("ok");
                         }
                     });
                 }
-                else
-                {
+                else {
                     res.json("forbidden");
                 }
             });
         }
     },
-    'find': function(req, res, next){
+    'find': function (req, res, next) {
         if (req.params.id) {
             model.find({
                 "id": req.params.id
             }, function (err, result) {
-                var character = result[0];
 
-                res.json(character);
+                if (req.user.isSuperAdmin || result[0].chronicle.admins.indexOf(user.googleId) > -1) {
+
+                    var character = result[0];
+
+                    res.json(character);
+                }
+                else {
+                    res.json("forbidden");
+                }
             });
         }
+    },
+    'revert': function (req, res, next){
+        if (req.body.id && req.body.date) {
+            model.find({"id": req.body.id}, function (err, result) {
+                findByDate(result[0].modificationhistory, new Date(req.body.date).toUTCString(), function( data ) {
+                    var oldVersion = JSON.parse(JSON.stringify(data.previousVersion));
+                    delete oldVersion._id;
+                    model.update(req.body.id, oldVersion, function (err) {
+                        if (err) {
+                            res.json(err);
+                        }
+                        else {
+                            res.json("ok");
+                        }
+                    });
+                });
+            });
+        };
     },
     'clear': function (req, res, next) {
         if (!req.user.isSuperAdmin) {
@@ -134,7 +178,7 @@ module.exports = {
             var parser = new xml2js.Parser();
 
             parser.addListener('end', function (result) {
-                importer.importgrapevine(result, req.params.chronicleId, function(err, result){
+                importer.importgrapevine(result, req.params.chronicleId, function (err, result) {
                     if (err) {
                         res.json(err);
                         return;
@@ -148,7 +192,7 @@ module.exports = {
             });
         }
     },
-    'wizard': function(req, res, next){
+    'wizard': function (req, res, next) {
         var out = {user: req.user};
         res.render(ViewTemplatePath + "/wizard", out);
     },

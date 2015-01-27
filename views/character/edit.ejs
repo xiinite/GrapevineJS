@@ -299,9 +299,9 @@
                                 <li class="list-group-item active">{{ character.abilities.length }} Abilities</li>
                                 <li ng-repeat="a in character.abilities" class="list-group-item">
                                     {{ a.name + ": " + a.rating }}
-                                    <span ng-show="a.note.length > 0)">
+                                    <span ng-show="a.note.length > 0">
                                     ( {{ a.note }} )
-                                    </span
+                                    </span>
                                 </li>
                             </ul>
                         </div>
@@ -413,10 +413,11 @@
 
         <div id="collapseEditHistory" class="panel-collapse collapse in">
             <div class="panel-body">
-                <div class="row" ng-repeat="item in character.modificationhistory">
-                    <div class="col-md-2">{{item.date | date:"dd/MM/yyyy"}}</div>
+                <div class="row" ng-class-odd="'warning'" ng-class-even="''" ng-repeat="item in character.modificationhistory">
+                    <div class="col-md-2"><button class="btn btn-xs btn-danger" ng-confirm-click="Are you sure?" ng-click="revert(item.date)">Revert to this version</button></div>
+                    <div class="col-md-1">{{item.date | date:"dd/MM/yyyy"}}</div>
                     <div class="col-md-2">{{item.user.name}}</div>
-                    <div class="col-md-8">{{item.fields}}</div>
+                    <div class="col-md-7">{{item.fields}}</div>
                 </div>
             </div>
         </div>

@@ -19,7 +19,7 @@ angular.module('grapevinejs.JSON', ['ngResource'])
             influences: $resource('/resource/METRevised/Influences.json', {}, {
                 get: {method: 'GET', params: {}, isArray: true}
             }),
-            mental: $resource('/resource/METRevised/mental.json', {}, {
+            mental: $resource('/resource/METRevised/Mental.json', {}, {
                 get: {method: 'GET', params: {}, isArray: true}
             }),
             merits: $resource('/resource/METRevised/Merits.json', {}, {
@@ -46,7 +46,7 @@ angular.module('grapevinejs.JSON', ['ngResource'])
             sects: $resource('/resource/METRevised/Sects.json', {}, {
                 get: {method: 'GET', params: {}, isArray: true}
             }),
-            social: $resource('/resource/METRevised/social.json', {}, {
+            social: $resource('/resource/METRevised/Social.json', {}, {
                 get: {method: 'GET', params: {}, isArray: true}
             })
         };
@@ -64,4 +64,22 @@ angular.module('grapevinejs.services', [])
     };
 });
 
-var app = angular.module('grapevinejs', ['grapevinejs.services', 'grapevinejs.JSON']);
+angular.module('grapevinejs.directives', []).directive('ngConfirmClick', [
+    function(){
+        return {
+            priority: -1,
+            restrict: 'A',
+            link: function(scope, element, attrs){
+                element.bind('click', function(e){
+                    var message = attrs.ngConfirmClick;
+                    if(message && !confirm(message)){
+                        e.stopImmediatePropagation();
+                        e.preventDefault();
+                    }
+                });
+            }
+        }
+    }
+]);
+
+var app = angular.module('grapevinejs', ['grapevinejs.services', 'grapevinejs.JSON', 'grapevinejs.directives']);

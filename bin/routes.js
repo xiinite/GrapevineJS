@@ -15,6 +15,7 @@ module.exports = {
         app.use('/', home);
 
         router.post(app, 'character', 'import', ':chronicleId');
+        router.post(app, 'character', 'revert');
 
         router.post(app, 'chronicle', 'insert');
         router.post(app, 'chronicle', 'addadmin');

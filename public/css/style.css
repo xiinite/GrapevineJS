@@ -117,6 +117,11 @@ textarea.vertical{
 div.ng-dirty{
     background-color: #ffffff;
 }
+
+.row.warning{
+    background-color:#76A0D3;
+}
+
 @media print {
     body {
         margin: 0;
@@ -407,7 +412,7 @@ div.ng-dirty{
     }
 
     .voffset1 {
-        margin-top: 50;
+        margin-top: 0;
     }
 
     .voffset2 {

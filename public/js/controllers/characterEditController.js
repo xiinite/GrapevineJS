@@ -48,6 +48,13 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
             return player.displayName + " (" + player.provider + ")";
         }
     }
+
+    $scope.revert = function(date){
+        $http.post("/character/revert", {id: $scope.character.id, date: date}).then(function(response){
+            $scope.init($scope.character.id);
+        });
+    }
+
     $scope.init = function (id) {
         loading.show();
         var root = $scope;
