@@ -27,7 +27,9 @@ var findByDate = function(collection, _date, cb){
         }
     }( coll.shift() ));
 };
-
+function CleanJSONQuotesOnKeys(json) {
+    return json.replace(/"(\w+)"\s*:/g, '$1:');
+}
 module.exports = {
     'index': function (req, res, next) {
         if (!req.user.isSuperAdmin && !req.user.isAdmin) {
@@ -99,23 +101,18 @@ module.exports = {
                     for (var i = 0; i < result[0].modificationhistory.length; i++) {
                         modHistory.push(result[0].modificationhistory[i]);
                     }
-                    var clone = JSON.parse(JSON.stringify(req.body.fields));
-                    for (var prop in clone) {
-                        // important check that this is objects own property
-                        // not from prototype prop inherited
-                        if(clone.hasOwnProperty(prop)){
-                            console.log(result[0][prop]);
-                        }
-                    }
+                    var fields = JSON.parse(req.body.fields);
+
+                    var clone = JSON.parse(JSON.stringify(fields));
                     modHistory.push({
                         fields: clone,
                         date: new Date(),
                         user: {googleId: req.user.googleId, name: req.user.displayName},
                         previousVersion: previousversion
                     });
-                    req.body.fields.modificationhistory = modHistory;
-                    req.body.fields.modified = new Date();
-                    model.update(req.body.id, req.body.fields, function (err) {
+                    fields.modificationhistory = modHistory;
+                    fields.modified = new Date();
+                    model.update(req.body.id, fields, function (err) {
                         if (err) {
                             res.json(err);
                         }

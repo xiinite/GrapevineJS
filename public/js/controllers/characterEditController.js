@@ -34,7 +34,7 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
                 fields[$(this).data("field")] = angular.element(this).data('$ngModelController').$modelValue;
             }
         })
-        $http.post("/character/update", {id: $scope.character.id, fields: fields}).then(function(response){
+        $http.post("/character/update", {id: $scope.character.id, fields: JSON.stringify(fields)}).then(function(response){
             $scope.init($scope.character.id);
         });
         $scope.editId = 0;

@@ -35,8 +35,8 @@ app.use(sess(
 app.use(favicon('./public/img/favicon.ico', function (err, favicon_url) {
 
 }));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.json({}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(multer({dest: './tmp/'}));
 app.use(express.static(path.join(__dirname, 'public')));
 auth.init(app);
