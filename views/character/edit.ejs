@@ -123,20 +123,280 @@
                 <div class="row">
                     <div class="col-md-12 voffset3">
                         <div class="col-md-4">
-                            <div><b>Blood:</b> {{ character.bloodpool.total }}</div>
-                            <div><b>Willpower (total):</b> {{ character.willpower.current }}
-                                ({{ character.willpower.total }})
+                            <div class="form-group row">
+                                <label class="col-md-6"><b>Blood (max: {{ character.bloodpool.max }}):</b></label>
+                                <input type="text" class="col-md-6 nopadding" ng-model="character.bloodpool.current"
+                                       data-field="bloodpool.current"/>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-6"><b>Willpower (max: {{ character.willpower.max }}):</b></label>
+                                <input type="text" class="col-md-6 nopadding" ng-model="character.willpower.current"
+                                       data-field="willpower.current"/>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div><b>Morality Path:</b> {{ character.path.type }}</div>
-                            <div><b>Morality Traits:</b> {{ character.path.rating }}</div>
-                            <div><b>{{ character.conscience.type }}:</b> {{ character.conscience.rating }}</div>
+                            <div class="form-group row">
+                                <label class="col-md-6"><b>Path:</b></label>
+                                <select data-field="path.type" class="nopadding col-md-6"
+                                        ng-options="c.name as c.name for c in paths"
+                                        ng-model="character.path.type">
+                                    <option style="display:none" value="">Select path</option>
+                                </select>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-6"><b>Morality Traits:</b></label>
+                                <input type="text" class="col-md-6 nopadding" ng-model="character.path.rating"
+                                       data-field="path.rating"/>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-6"><b>Aura:</b></label>
+                                <input type="text" class="col-md-6 nopadding" ng-model="character.aura"
+                                       data-field="aura"/>
+                            </div>
                         </div>
                         <div class="col-md-4">
-                            <div><b>Aura:</b> {{ character.aura }}</div>
-                            <div><b>{{ character.selfcontrol.type }}:</b> {{ character.selfcontrol.rating }}</div>
-                            <div><b>{{ character.courage.type }}:</b> {{ character.courage.rating }}</div>
+                            <div class="form-group row">
+                                <select data-field="conscience.type" class="nopadding col-md-6"
+                                        ng-options="c as c for c in conscienceTypes"
+                                        ng-model="character.conscience.type">
+                                    <option style="display:none" value="">Select conscience/conviction</option>
+                                </select>
+                                <input type="text" class="col-md-6 nopadding" ng-model="character.conscience.rating"
+                                       data-field="conscience.rating"/>
+                            </div>
+                            <div class="form-group row">
+                                <select data-field="selfcontrol.type" class="nopadding col-md-6"
+                                        ng-options="c as c for c in selfcontrolTypes"
+                                        ng-model="character.selfcontrol.type">
+                                    <option style="display:none" value="">Select self-control/instinc</option>
+                                </select>
+                                <input type="text" class="col-md-6 nopadding" ng-model="character.selfcontrol.rating"
+                                       data-field="selfcontrol.rating"/>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-6"><b>{{character.courage.type}}:</b></label>
+                                <input type="text" class="col-md-6 nopadding" ng-model="character.courage.rating"
+                                       data-field="courage.rating"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id='pnlAttributes' class="panel panel-default">
+        <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseAttributes">
+            <h4 id="hdrAttributes" class="panel-title">
+                Attributes
+            </h4>
+        </div>
+        <div id="collapseAttributes" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">{{ character.attributes.tphysical }} Physical
+                                    Traits
+                                </li>
+                                <li ng-repeat='t in character.attributes.physical' class="list-group-item trait">
+                                    {{ t.name }}
+									<span ng-show="t.val > 1">
+										({{ t.val }})
+									</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">{{ character.attributes.tsocial }} Social
+                                    Traits
+                                </li>
+                                <li ng-repeat='t in character.attributes.social' class="list-group-item trait">
+                                    {{ t.name }}
+									<span ng-show="t.val > 1">
+										({{ t.val }})
+									</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">{{ character.attributes.tmental }} Mental
+                                    Traits
+                                </li>
+                                <li ng-repeat='t in character.attributes.mental' class="list-group-item trait">
+                                    {{ t.name }}
+									<span ng-show="t.val > 1">
+										({{ t.val }})
+									</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">{{ character.attributes.tnegativephysical }}
+                                    Negative Physical Traits
+                                </li>
+                                <li ng-repeat='t in character.attributes.negativephysical'
+                                    class="list-group-item trait">
+                                    {{ t.name }}
+									<span ng-show="t.val > 1">
+										({{ t.val }})
+									</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">{{ character.attributes.tnegativesocial }}
+                                    Negative Social Traits
+                                </li>
+                                <li ng-repeat='t in character.attributes.negativesocial' class="list-group-item trait">
+                                    {{ t.name }}
+									<span ng-show="t.val > 1">
+										({{ t.val }})
+									</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">{{ character.attributes.tnegativemental }}
+                                    Negative Mental Traits
+                                </li>
+                                <li ng-repeat='t in character.attributes.negativemental' class="list-group-item trait">
+                                    {{ t.name }}
+									<span ng-show="t.val > 1">
+										({{ t.val }})
+									</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id='pnlAdvantages' class="panel panel-default">
+        <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseAdvantages">
+            <h4 id="hdrAdvantages" class="panel-title">
+                Advantages
+            </h4>
+        </div>
+        <div id="collapseAdvantages" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">{{ character.abilities.length }} Abilities</li>
+                                <li ng-repeat="a in character.abilities" class="list-group-item">
+                                    {{ a.name + ": " + a.rating }}
+                                    <span ng-show="a.note.length > 0)">
+                                    ( {{ a.note }} )
+                                    </span
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">{{ character.disciplines.length }} Disciplines</li>
+                                <li ng-repeat="d in character.disciplines" class="list-group-item">
+                                    {{ d.path + ": " + d.name + " (" + d.level + ")" }}
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">{{ character.rituals.length }} Rituals</li>
+                                <li ng-repeat="r in character.rituals" class="list-group-item">
+                                    {{ r.name + " (" + r.level + ")" }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">{{ character.backgrounds.length }} Backgrounds</li>
+                                <li ng-repeat="b in character.backgrounds" class="list-group-item trait">
+                                    {{ b.name + ": " + b.rating }}
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">{{ character.influences.length }} Influences</li>
+                                <li ng-repeat="i in character.influences" class="list-group-item trait">
+                                    {{ i.name + ": " + character.influences[i].rating }}
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">{{ character.misc.length }} Miscelaneous Traits</li>
+                                <li ng-repeat="m in character.misc" class="list-group-item">
+                                    {{ m.name }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">{{ character.status.length }} Status</li>
+                                <li ng-repeat="s in character.status" class="list-group-item">
+                                    {{ s.name }}
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">{{ character.merits.length }} Merits</li>
+                                <li ng-repeat="m in character.merits" class="list-group-item trait">
+                                    {{ m.name + " (" + m.cost + ")" }}
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">{{ character.flaws.length }} Flaws</li>
+                                <li ng-repeat="f in character.flaws" class="list-group-item">
+                                    {{ f.name + " (" + f.cost + ")" }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">Health Levels</li>
+                                <li ng-repeat="(key,val) in character.healthlevels" class="list-group-item">
+                                    {{ key + " (" + val + ")" }}
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-8">
+                            <ul class="list-group">
+                                <li class="list-group-item active">{{ character.equipment.length }} Equipment</li>
+                                <li ng-repeat="e in character.equipment" class="list-group-item">
+                                    {{ e.name }}
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>

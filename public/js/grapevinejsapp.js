@@ -34,6 +34,9 @@ angular.module('grapevinejs.JSON', ['ngResource'])
             negativesocial: $resource('/resource/METRevised/NegativeSocial.json', {}, {
                 get: {method: 'GET', params: {}, isArray: true}
             }),
+            paths: $resource('/resource/METRevised/Paths.json', {}, {
+                get: {method: 'GET', params: {}, isArray: true}
+            }),
             physical: $resource('/resource/METRevised/Physical.json', {}, {
                 get: {method: 'GET', params: {}, isArray: true}
             }),

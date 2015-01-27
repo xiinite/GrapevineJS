@@ -2,6 +2,8 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
     $scope.log = function (event) {
         console.log(event);
     }
+    $scope.conscienceTypes = ["Conscience", "Conviction"];
+    $scope.selfcontrolTypes = ["Self-Control", "Instinct"];
     $scope.resourcesLoaded = false;
     $scope.abilities = [];
     $scope.backgrounds = [];
@@ -14,6 +16,7 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
     $scope.negativemental = [];
     $scope.negativephysical = [];
     $scope.negativesocial = [];
+    $scope.paths = [];
     $scope.physical = [];
     $scope.rituals = [];
     $scope.sects = [];
@@ -82,6 +85,9 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
             });
             resources.negativesocial.get(function(data){
                 root.negativesocial = data;
+            });
+            resources.paths.get(function(data){
+                root.paths = data;
             });
             resources.physical.get(function(data){
                 root.physical = data;

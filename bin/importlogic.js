@@ -30,7 +30,7 @@ module.exports = {
                     nature: vampire.$.nature || "",
                     demeanor: vampire.$.demeanor || "",
                     bloodpool: {
-                        total: vl.calculateBloodpool(vampire.$.generation),
+                        max: vl.calculateBloodpool(parseInt(vampire.$.generation)),
                         current: vampire.$.blood
                     },
                     path: {
@@ -51,7 +51,7 @@ module.exports = {
                     },
                     aura: 0,
                     willpower: {
-                        total: vampire.$.willpower,
+                        max: vl.calculateWillpower(parseInt(vampire.$.generation)),
                         current: vampire.$.willpower
                     },
                     experience: {},

@@ -113,7 +113,7 @@
                 <button id="btnPrint" type='button' class='btn btn-info'><span class="glyphicon glyphicon-print"></span>
                     Print
                 </button>
-                <%if(user.isSuperAdmin){%>
+                <%if(user.isSuperAdmin || character.chronicle.admins.indexOf(user.googleId) > 0){%>
                 <a href="/character/edit/<%= character.id %>" class="btn btn-info"><span class="glyphicon glyphicon-edit"></span>
                     Edit
                 </a>
@@ -150,8 +150,8 @@
                         </div>
                         <div class="col-md-4">
                             <div class="label-default"><b>Willpower (total):</b> <span
-                                        class='pull-right'><%= character.willpower.total %>
-                                    (<%= character.willpower.total %>)</span></div>
+                                        class='pull-right'><%= character.willpower.max %>
+                                    (<%= character.willpower.max %>)</span></div>
                             <div><b>Morality Traits:</b> <span class='pull-right'><%= character.path.rating %></span>
                             </div>
                             <div class="label-default"><b>Status:</b> <span
@@ -216,9 +216,9 @@
                 <div class="row">
                     <div class="col-md-12 voffset3">
                         <div class="col-md-4">
-                            <div><b>Blood:</b> <%= character.bloodpool.total %></div>
-                            <div><b>Willpower (total):</b> <%= character.willpower.total %>
-                                (<%= character.willpower.total %>)
+                            <div><b>Blood (max):</b> <%= character.bloodpool.current %> (<%= character.bloodpool.max %>)</div>
+                            <div><b>Willpower (total):</b> <%= character.willpower.current %>
+                                (<%= character.willpower.max %>)
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -318,9 +318,9 @@
                                 </li>
                                 <% for(var i = 0; i < character.attributes.negativesocial.length; i++) { %>
                                 <li class="list-group-item">
-                                    <%= character.attributes.tnegativesocial[i].name %>
-                                    <% if(character.attributes.tnegativesocial[i].val > 1){ %>
-                                    (<%= character.attributes.tnegativesocial[i].val %>)
+                                    <%= character.attributes.negativesocial[i].name %>
+                                    <% if(character.attributes.negativesocial[i].val > 1){ %>
+                                    (<%= character.attributes.negativesocial[i].val %>)
                                     <%}%>
                                 </li>
                                 <% } %>
@@ -333,9 +333,9 @@
                                 </li>
                                 <% for(var i = 0; i < character.attributes.negativemental.length; i++) { %>
                                 <li class="list-group-item">
-                                    <%= character.attributes.tnegativemental[i].name %>
-                                    <% if(character.attributes.tnegativemental[i].val > 1){ %>
-                                    (<%= character.attributes.tnegativemental[i].val %>)
+                                    <%= character.attributes.negativemental[i].name %>
+                                    <% if(character.attributes.negativemental[i].val > 1){ %>
+                                    (<%= character.attributes.negativemental[i].val %>)
                                     <%}%>
                                 </li>
                                 <% } %>
