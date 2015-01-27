@@ -12,7 +12,14 @@ var findByDate = function(collection, _date, cb){
     var coll = collection.slice( 0 ); // create a clone
 
     (function _loop( data ) {
-        if( data.date.toUTCString() === _date ) {
+        var date;
+        if (typeof data.date == 'string' || data.date instanceof String){
+            date = new Date(data.date);
+        }else
+        {
+            date = data.date;
+        }
+        if( date.toUTCString() === _date ) {
             cb.apply( null, [ data ] );
         }
         else if( coll.length ) {
