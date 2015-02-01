@@ -21,7 +21,7 @@ module.exports = {
         });
     },
     'list': function(where, callback){
-        model.find(where, callback);
+        model.find(where, 'id name chronicle googleId', callback);
     },
     'clear': function (callback) {
         model.find().remove(callback);

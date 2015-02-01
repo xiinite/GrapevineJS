@@ -22,6 +22,7 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
     $scope.sects = [];
     $scope.social = [];
 
+    $scope.chronicle = null;
     $scope.character = [];
     $scope.players = [];
     $scope.statusses = [
@@ -29,12 +30,15 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
     ];
     $scope.save = function(){
         var fields = {};
+        fields;
         $(".ng-dirty").each(function(){
             if($(this).data("field") !== undefined){
-                fields[$(this).data("field")] = angular.element(this).data('$ngModelController').$modelValue;
+
+                    fields[$(this).data("field")] = angular.element(this).data('$ngModelController').$modelValue;
+                
             }
         })
-        $http.post("/character/update", {id: $scope.character.id, fields: JSON.stringify(fields)}).then(function(response){
+        $http.post("/character/update", {id: $scope.character.id, fields: fields}).then(function(response){
             $scope.init($scope.character.id);
         });
         $scope.editId = 0;
@@ -60,6 +64,7 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
         var root = $scope;
         if(!$scope.resourcesLoaded)
         {
+            $scope.resourcesLoaded = true;
             resources.abilities.get(function(data){
                 root.abilities = data;
             });
@@ -113,11 +118,20 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
             root.character = response.data;
             root.character.experience.unspent = parseInt(root.character.experience.unspent);
             root.character.experience.total = parseInt(root.character.experience.total);
-            $http.get("/chronicle/find/" + root.character.chronicle.id).then(function (response) {
-                $scope.players = response.data.playerDocs;
+            if(root.chronicle === null)
+            {
+                root.chronicle = root.character.chronicle;
+                $http.get("/chronicle/find/" + root.chronicle.id).then(function (response) {
+                    $scope.players = response.data.playerDocs;
+                    $scope.characterForm.$setPristine();
+                    loading.hide();
+                });
+            }
+            else
+            {
                 $scope.characterForm.$setPristine();
                 loading.hide();
-            });
+            }
         });
     };
 }]);

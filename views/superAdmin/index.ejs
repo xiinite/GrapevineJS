@@ -19,6 +19,23 @@
                         }, 2500);
                     });
         });
+        $('#btnClearChars').click(function () {
+            $('#btnClearChars').removeClass("btn-warning").addClass("btn-info").html('Clearing characters...');
+            $.when(
+                    $.get('../character/clear')
+            ).then(function () {
+                        $('#btnClearChars').removeClass("btn-info").addClass("btn-success").html('Database cleared');
+                        setTimeout(function () {
+                            $('#btnClearChars').removeClass("btn-success").addClass("btn-warning").html('Clear characters');
+                        }, 2500);
+                    }, function (err) {
+                        $('#btnClearChars').removeClass("btn-info").addClass("btn-danger").html('ERROR!' + err.status + ': ' + err.statusText);
+
+                        setTimeout(function () {
+                            $('#btnClearChars').removeClass("btn-danger").addClass("btn-warning").html('Clear characters');
+                        }, 2500);
+                    });
+        });
 
         $('#btnPopulateDb').click(function () {
             $('#btnPopulateDb').removeClass("btn-warning").addClass("btn-info").html('Populating db...');
@@ -68,6 +85,9 @@
                 <ul class="list-group">
                     <li class="list-group-item">
                         <button class='btn btn-warning btn-block' id='btnClearDb'>Clear database</button>
+                    </li>
+                    <li class="list-group-item">
+                        <button class='btn btn-warning btn-block' id='btnClearChars'>Clear characters</button>
                     </li>
                     <li class="list-group-item">
                         <button class='btn btn-warning btn-block' id='btnPopulateDb'>Populate database</button>

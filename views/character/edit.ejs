@@ -125,12 +125,12 @@
                         <div class="col-md-4">
                             <div class="form-group row">
                                 <label class="col-md-6"><b>Blood (max: {{ character.bloodpool.max }}):</b></label>
-                                <input type="text" class="col-md-6 nopadding" ng-model="character.bloodpool.current"
+                                <input type="number" class="col-md-6 nopadding" ng-model="character.bloodpool.current"
                                        data-field="bloodpool.current"/>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-6"><b>Willpower (max: {{ character.willpower.max }}):</b></label>
-                                <input type="text" class="col-md-6 nopadding" ng-model="character.willpower.current"
+                                <input type="number" class="col-md-6 nopadding" ng-model="character.willpower.current"
                                        data-field="willpower.current"/>
                             </div>
                         </div>
@@ -139,18 +139,18 @@
                                 <label class="col-md-6"><b>Path:</b></label>
                                 <select data-field="path.type" class="nopadding col-md-6"
                                         ng-options="c.name as c.name for c in paths"
-                                        ng-model="character.path.type">
+                                        ng-model="character.path.name">
                                     <option style="display:none" value="">Select path</option>
                                 </select>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-6"><b>Morality Traits:</b></label>
-                                <input type="text" class="col-md-6 nopadding" ng-model="character.path.rating"
+                                <input type="number" class="col-md-6 nopadding" ng-model="character.path.rating"
                                        data-field="path.rating"/>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-6"><b>Aura:</b></label>
-                                <input type="text" class="col-md-6 nopadding" ng-model="character.aura"
+                                <input type="number" class="col-md-6 nopadding" ng-model="character.aura"
                                        data-field="aura"/>
                             </div>
                         </div>
@@ -158,24 +158,24 @@
                             <div class="form-group row">
                                 <select data-field="conscience.type" class="nopadding col-md-6"
                                         ng-options="c as c for c in conscienceTypes"
-                                        ng-model="character.conscience.type">
+                                        ng-model="character.conscience.name">
                                     <option style="display:none" value="">Select conscience/conviction</option>
                                 </select>
-                                <input type="text" class="col-md-6 nopadding" ng-model="character.conscience.rating"
+                                <input type="number" class="col-md-6 nopadding" ng-model="character.conscience.rating"
                                        data-field="conscience.rating"/>
                             </div>
                             <div class="form-group row">
                                 <select data-field="selfcontrol.type" class="nopadding col-md-6"
                                         ng-options="c as c for c in selfcontrolTypes"
-                                        ng-model="character.selfcontrol.type">
+                                        ng-model="character.selfcontrol.name">
                                     <option style="display:none" value="">Select self-control/instinc</option>
                                 </select>
-                                <input type="text" class="col-md-6 nopadding" ng-model="character.selfcontrol.rating"
+                                <input type="number" class="col-md-6 nopadding" ng-model="character.selfcontrol.rating"
                                        data-field="selfcontrol.rating"/>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-6"><b>{{character.courage.type}}:</b></label>
-                                <input type="text" class="col-md-6 nopadding" ng-model="character.courage.rating"
+                                <label class="col-md-6"><b>{{character.courage.name}}:</b></label>
+                                <input type="number" class="col-md-6 nopadding" ng-model="character.courage.rating"
                                        data-field="courage.rating"/>
                             </div>
                         </div>

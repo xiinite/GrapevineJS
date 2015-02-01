@@ -12,9 +12,9 @@
             var dataTableRow = [];
             dataTableRow.push(row.name);
             dataTableRow.push(row.id);
-            (row.player) ? dataTableRow.push(row.player.displayName) : dataTableRow.push("");
+            (row.googleId) ? dataTableRow.push(row.googleId) : dataTableRow.push("");
 
-            dataTableRow.push(row.chronicle.name);
+            dataTableRow.push(row.chronicle);
             rowids.push(row.id);
 
             aaData.push(dataTableRow);

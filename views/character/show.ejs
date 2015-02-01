@@ -141,16 +141,16 @@
                                         class='pull-right'><%= character.attributes.tmental %></span></div>
                         </div>
                         <div class="col-md-4">
-                            <div><b><%= character.conscience.type %>:</b> <span
+                            <div><b><%= character.conscience.name %>:</b> <span
                                         class='pull-right'><%= character.conscience.rating %></span></div>
-                            <div class="label-default"><b><%= character.selfcontrol.type %>:</b> <span
+                            <div class="label-default"><b><%= character.selfcontrol.name %>:</b> <span
                                         class='pull-right'><%= character.selfcontrol.rating %></span></div>
-                            <div><b><%= character.courage.type %>:</b> <span
+                            <div><b><%= character.courage.name %>:</b> <span
                                         class='pull-right'><%= character.courage.rating %></span></div>
                         </div>
                         <div class="col-md-4">
                             <div class="label-default"><b>Willpower (total):</b> <span
-                                        class='pull-right'><%= character.willpower.max %>
+                                        class='pull-right'><%= character.willpower.current %>
                                     (<%= character.willpower.max %>)</span></div>
                             <div><b>Morality Traits:</b> <span class='pull-right'><%= character.path.rating %></span>
                             </div>
@@ -222,14 +222,14 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div><b>Morality Path:</b> <%= character.path.type %></div>
+                            <div><b>Morality Path:</b> <%= character.path.name %></div>
                             <div><b>Morality Traits:</b> <%= character.path.rating %></div>
-                            <div><b><%= character.conscience.type %>:</b> <%= character.conscience.rating %></div>
+                            <div><b>Aura:</b> <%= character.aura %></div>
                         </div>
                         <div class="col-md-4">
-                            <div><b>Aura:</b> <%= character.aura %></div>
-                            <div><b><%= character.selfcontrol.type %>:</b> <%= character.selfcontrol.rating %></div>
-                            <div><b><%= character.courage.type %>:</b> <%= character.courage.rating %></div>
+                            <div><b><%= character.conscience.name %>:</b> <%= character.conscience.rating %></div>
+                            <div><b><%= character.selfcontrol.name %>:</b> <%= character.selfcontrol.rating %></div>
+                            <div><b><%= character.courage.name %>:</b> <%= character.courage.rating %></div>
                         </div>
                     </div>
                 </div>

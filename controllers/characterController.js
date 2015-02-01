@@ -50,12 +50,12 @@ module.exports = {
             {
                 chronicle: {"$in": chronicleIds}
             };
-            model.find(where, function (err, result) {
+            model.list(where, function (err, result) {
                 res.json(result);
             })
         }
         else {
-            model.all(function (err, result) {
+            model.list({}, function (err, result) {
                 res.json(result);
             });
         }
@@ -94,6 +94,7 @@ module.exports = {
     'update': function (req, res, next) {
         if (req.body.id) {
             model.find({"id": req.body.id}, function (err, result) {
+                var char = result[0];
                 var user = req.user || {displayName: "Anonymous"};
                 if (req.user.isSuperAdmin || result[0].chronicle.admins.indexOf(user.googleId) > -1) {
                     var previousversion = JSON.parse(JSON.stringify(result[0]));
@@ -101,9 +102,8 @@ module.exports = {
                     for (var i = 0; i < result[0].modificationhistory.length; i++) {
                         modHistory.push(result[0].modificationhistory[i]);
                     }
-                    var fields = JSON.parse(req.body.fields);
-
-                    var clone = JSON.parse(JSON.stringify(fields));
+                    var fields = req.body.fields;
+                    var clone = JSON.stringify(fields);
                     modHistory.push({
                         fields: clone,
                         date: new Date(),
@@ -112,6 +112,22 @@ module.exports = {
                     });
                     fields.modificationhistory = modHistory;
                     fields.modified = new Date();
+                    /*for(var key in fields)
+                    {
+                        char[key] = fields[key];
+                        console.log(key + ": " + char[key]);
+                        char.markModified(key);
+                    }
+                    char.save(function(err)
+                    {
+                        if (err) {
+                            res.json(err);
+                        }
+                        else {
+                            res.json("ok");
+                        }                        
+                    });*/
+                    
                     model.update(req.body.id, fields, function (err) {
                         if (err) {
                             res.json(err);

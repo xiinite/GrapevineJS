@@ -1,15 +1,36 @@
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+var Mixed = mongoose.Schema.Types.Mixed;
+
+var attr = new Schema({ name: String, val: Number });
+var ability = new Schema({name: String, note: String, rating: Number});
+var discipline = new Schema({path: String, name: String, level: String, number: Number});
+var ritual = new Schema({name: String, level: String});
+var status = new Schema({name: String, type: String});
+var background = new Schema({name: String, note: String, rating: Number});
+var misc = new Schema({name: String, note: String, rating: Number});
+var derangement = new Schema({name: String, note: String, rating: Number});
+var bloodbond = new Schema({level: String, character: String});
+var boon = new Schema({level: String, character: String});
+var merit = new Schema({name: String, cost: Number});
+var flaw = new Schema({name: String, cost: Number});
+var equipment = new Schema({name: String, note: String, rating: Number});
+var note = new Schema({note: String});
+var xphistory = new Schema({date: Date, change: Number, reason: String});
 
 module.exports = {
     'Character': mongoose.model('character',{
         id: {unique: true, type: String},
-        type: {type: String},
+        charactertype: {type: String},
         name: {type: String},
         googleId: {type: String},
-        player: {type: JSON},
-        chronicle: {type: JSON},
+        player: {type: Mixed},
+        chronicle: {type: Mixed},
         state: {type: String},
-        experience: {type: JSON},
+        experience: {
+            unspent: String,
+            total: String
+            },
         started: {type: Date},
         created: {type: Date},
         modified: {type: Date},
@@ -21,30 +42,61 @@ module.exports = {
         sire: {type: String},
         nature: {type: String},
         demeanor: {type: String},
-        bloodpool: {type: JSON},
-        willpower: {type: JSON},
-        path: {type: JSON},
-        conscience: {type: JSON},
-        selfcontrol: {type: JSON},
-        courage: {type: JSON},
+        bloodpool: {
+            max: Number,
+            current: Number
+        },
+        willpower: {
+            max: Number,
+            current: Number
+        },
+        path: {
+            name: String,
+            rating: Number
+        },
+        conscience: {
+            name: String,
+            rating: Number
+        },
+        selfcontrol: {
+            name: String,
+            rating: Number
+        },
+        courage: {
+            name: String,
+            rating: Number
+        },
         aura: {type: Number},
-        attributes: {type: JSON},
-        abilities: {type: Array},
-        disciplines: {type: Array},
-        rituals: {type: Array},
-        status: {type: Array},
-        backgrounds: {type: Array},
-        influences: {type: Array},
-        misc: {type: Array},
-        derangements: {type: Array},
-        bloodbonds: {type: Array},
-        boons: {type: Array},
-        merits: {type: Array},
-        flaws: {type: Array},
-        healthlevels: {type: JSON},
-        equipment: {type: Array},
-        notes: {type: Array},
-        experiencehistory: {type: Array},
+        attributes: {
+            physical: [attr],
+            tphysical: Number,
+            social: [attr],
+            tsocial: Number,
+            mental: [attr],
+            tmental: Number,
+            negativephysical: [attr],
+            tnegativephysical: Number,
+            negativesocial: [attr],
+            tnegativesocial: Number,
+            negativemental: [attr],
+            tnegativemental: Number
+        },
+        abilities: {type: [ability]},
+        disciplines: {type: [discipline]},
+        rituals: {type: [ritual]},
+        status: {type: [status]},
+        backgrounds: {type: [background]},
+        influences: {type: [background]},
+        misc: {type: [misc]},
+        derangements: {type: [derangement]},
+        bloodbonds: {type: [bloodbond]},
+        boons: {type: [boon]},
+        merits: {type: [merit]},
+        flaws: {type: [flaw]},
+        healthlevels: {type: Mixed},
+        equipment: {type: [equipment]},
+        notes: {type: [note]},
+        experiencehistory: {type: [xphistory]},
         modificationhistory: {type: Array}
     }),
     'Chronicle': mongoose.model('chronicle',{

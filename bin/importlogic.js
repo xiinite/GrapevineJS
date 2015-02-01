@@ -16,6 +16,7 @@ module.exports = {
                 var character = {
                     id: uuid.v4(),
                     name: vampire.$.name.toString("utf8"),
+                    charactertype: 'vampire',
                     googleId: '',
                     chronicle: chronicleId,
                     state: vampire.$.status,
@@ -34,19 +35,19 @@ module.exports = {
                         current: vampire.$.blood
                     },
                     path: {
-                        type: vampire.$.path,
+                        name: vampire.$.path,
                         rating: vampire.$.pathtraits
                     },
                     conscience: {
-                        type: "Conscience",
+                        name: "Conscience",
                         rating: vampire.$.conscience
                     },
                     selfcontrol: {
-                        type: 'Self-Control',
+                        name: 'Self-Control',
                         rating: vampire.$.selfcontrol
                     },
                     courage: {
-                        type: "Courage",
+                        name: "Courage",
                         rating: vampire.$.courage
                     },
                     aura: 0,
@@ -236,7 +237,7 @@ module.exports = {
                             for (var y in tl.trait) {
                                 var t = tl.trait[y];
                                 var name = t.$.name;
-                                character.status.push({name: name});
+                                character.status.push({name: name, type: "fleeting"});
                             }
                             break;
                         case "Rituals":
@@ -252,6 +253,7 @@ module.exports = {
                                 var t = tl.trait[y];
                                 var _rating = 1;
                                 if (t.$.val) _rating = t.$.val;
+                                if (isNaN(_rating)) { _rating = 1 };
                                 character.merits.push({name: t.$.name, cost: _rating});
                             }
                             break;
@@ -259,6 +261,7 @@ module.exports = {
                             for (var y in tl.trait) {
                                 var t = tl.trait[y];
                                 if (t.$.val) _rating = t.$.val;
+                                if (isNaN(_rating)) { _rating = 1 };
                                 character.flaws.push({name: t.$.name, cost: _rating});
                             }
                             break;
