@@ -8,24 +8,23 @@ var importer = require('../bin/importlogic.js');
 var ViewTemplatePath = 'character';
 var tmpDir = 'tmp';
 
-var findByDate = function(collection, _date, cb){
-    var coll = collection.slice( 0 ); // create a clone
+var findByDate = function (collection, _date, cb) {
+    var coll = collection.slice(0); // create a clone
 
-    (function _loop( data ) {
+    (function _loop(data) {
         var date;
-        if (typeof data.date == 'string' || data.date instanceof String){
+        if (typeof data.date == 'string' || data.date instanceof String) {
             date = new Date(data.date);
-        }else
-        {
+        } else {
             date = data.date;
         }
-        if( date.toUTCString() === _date ) {
-            cb.apply( null, [ data ] );
+        if (date.toUTCString() === _date) {
+            cb.apply(null, [data]);
         }
-        else if( coll.length ) {
-            setTimeout( _loop.bind( null, coll.shift() ), 25 );
+        else if (coll.length) {
+            setTimeout(_loop.bind(null, coll.shift()), 25);
         }
-    }( coll.shift() ));
+    }(coll.shift()));
 };
 function CleanJSONQuotesOnKeys(json) {
     return json.replace(/"(\w+)"\s*:/g, '$1:');
@@ -98,6 +97,7 @@ module.exports = {
                 var user = req.user || {displayName: "Anonymous"};
                 if (req.user.isSuperAdmin || result[0].chronicle.admins.indexOf(user.googleId) > -1) {
                     var previousversion = JSON.parse(JSON.stringify(result[0]));
+                    previousversion.modificationhistory = [];
                     var modHistory = [];
                     for (var i = 0; i < result[0].modificationhistory.length; i++) {
                         modHistory.push(result[0].modificationhistory[i]);
@@ -112,22 +112,7 @@ module.exports = {
                     });
                     fields.modificationhistory = modHistory;
                     fields.modified = new Date();
-                    /*for(var key in fields)
-                    {
-                        char[key] = fields[key];
-                        console.log(key + ": " + char[key]);
-                        char.markModified(key);
-                    }
-                    char.save(function(err)
-                    {
-                        if (err) {
-                            res.json(err);
-                        }
-                        else {
-                            res.json("ok");
-                        }                        
-                    });*/
-                    
+
                     model.update(req.body.id, fields, function (err) {
                         if (err) {
                             res.json(err);
@@ -161,23 +146,42 @@ module.exports = {
             });
         }
     },
-    'revert': function (req, res, next){
+    'revert': function (req, res, next) {
         if (req.body.id && req.body.date) {
             model.find({"id": req.body.id}, function (err, result) {
-                findByDate(result[0].modificationhistory, new Date(req.body.date).toUTCString(), function( data ) {
-                    var oldVersion = JSON.parse(JSON.stringify(data.previousVersion));
-                    delete oldVersion._id;
-                    model.update(req.body.id, oldVersion, function (err) {
-                        if (err) {
-                            res.json(err);
+                    findByDate(result[0].modificationhistory, new Date(req.body.date).toUTCString(), function (data) {
+                            var currentversion = JSON.parse(JSON.stringify(result[0]));
+                            var oldVersion = JSON.parse(JSON.stringify(data.previousVersion));
+                            oldVersion.modificationhistory = result[0].modificationhistory;
+                            currentversion.modificationhistory = [];
+                            oldVersion.modificationhistory.push({
+                                fields: {
+                                    reversiondate: req.body.date
+                                },
+                                date: new Date(),
+                                user: {
+                                    googleId: req.user.googleId, name: req.user.displayName
+                                }
+                                ,
+                                previousVersion: currentversion
+                            });
+                            delete oldVersion._id;
+                            model.update(req.body.id, oldVersion, function (err) {
+                                if (err) {
+                                    res.json(err);
+                                }
+                                else {
+                                    res.json("ok");
+                                }
+                            });
                         }
-                        else {
-                            res.json("ok");
-                        }
-                    });
-                });
-            });
-        };
+                    )
+                    ;
+                }
+            )
+            ;
+        }
+        ;
     },
     'clear': function (req, res, next) {
         if (!req.user.isSuperAdmin) {
@@ -187,7 +191,8 @@ module.exports = {
         model.clear(function () {
             res.json('ok');
         });
-    },
+    }
+    ,
     'import': function (req, res, next) {
         if (!req.user.isSuperAdmin) {
             res.json("forbidden");
@@ -211,11 +216,13 @@ module.exports = {
                 parser.parseString(data.toString("binary"));
             });
         }
-    },
+    }
+    ,
     'wizard': function (req, res, next) {
         var out = {user: req.user};
         res.render(ViewTemplatePath + "/wizard", out);
-    },
+    }
+    ,
     'export': function (req, res, next) {
         if (!req.user.isSuperAdmin) {
             res.json("forbidden");
@@ -321,7 +328,8 @@ module.exports = {
                 res.download('.\\tmp\\export.gv3');
             });
         });
-    },
+    }
+    ,
     'populate': function (req, res, next) {
         if (!req.user.isSuperAdmin) {
             res.json("forbidden");
@@ -540,4 +548,5 @@ module.exports = {
             });
         });
     }
-};
+}
+;

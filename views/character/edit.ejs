@@ -191,7 +191,7 @@
                 Attributes
             </h4>
         </div>
-        <div id="collapseAttributes" class="panel-collapse collapse">
+        <div id="collapseAttributes" class="panel-collapse collapse in">
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-12">
@@ -200,11 +200,21 @@
                                 <li class="list-group-item active">{{ character.attributes.tphysical }} Physical
                                     Traits
                                 </li>
-                                <li ng-repeat='t in character.attributes.physical' class="list-group-item trait">
+                                <li ng-repeat='t in character.attributes.physical | orderBy:"name":false' class="list-group-item trait">
                                     {{ t.name }}
 									<span ng-show="t.val > 1">
 										({{ t.val }})
 									</span>
+                                    <button ng-click="removeTrait(t.name, character.attributes.physical, 'tphysical')" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-minus"></span></button>
+                                    <button ng-click="addTrait(t.name, character.attributes.physical, 'tphysical')" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span></button>
+                                </li>
+                                <li>
+                                    <select id="slc-physical" class=" col-md-9"
+                                            ng-options="attr for attr in physical"
+                                            ng-model="sphysical">
+                                        <option style="display:none" value="">Select a trait</option>
+                                    </select>
+                                    <button ng-click="addTrait(sphysical, character.attributes.physical, 'tphysical', 'physical')" class="btn btn-default btn-sm pull-right">Add</button>
                                 </li>
                             </ul>
                         </div>
@@ -218,6 +228,16 @@
 									<span ng-show="t.val > 1">
 										({{ t.val }})
 									</span>
+                                    <button ng-click="removeTrait(t.name, character.attributes.social, 'tsocial')" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-minus"></span></button>
+                                    <button ng-click="addTrait(t.name, character.attributes.social, 'tsocial')" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span></button>
+                                </li>
+                                <li>
+                                    <select id="slc-social" class=" col-md-9"
+                                            ng-options="attr for attr in social"
+                                            ng-model="ssocial">
+                                        <option style="display:none" value="">Select a trait</option>
+                                    </select>
+                                    <button ng-click="addTrait(ssocial, character.attributes.social, 'tsocial', 'social')" class="btn btn-default btn-sm pull-right">Add</button>
                                 </li>
                             </ul>
                         </div>
@@ -231,6 +251,16 @@
 									<span ng-show="t.val > 1">
 										({{ t.val }})
 									</span>
+                                    <button ng-click="removeTrait(t.name, character.attributes.mental, 'tmental')" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-minus"></span></button>
+                                    <button ng-click="addTrait(t.name, character.attributes.mental, 'tmental')" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span></button>
+                                </li>
+                                <li>
+                                    <select id="slc-mental" class=" col-md-9"
+                                            ng-options="attr for attr in mental"
+                                            ng-model="smental">
+                                        <option style="display:none" value="">Select a trait</option>
+                                    </select>
+                                    <button ng-click="addTrait(smental, character.attributes.mental, 'tmental', 'mental')" class="btn btn-default btn-sm pull-right">Add</button>
                                 </li>
                             </ul>
                         </div>
@@ -249,6 +279,16 @@
 									<span ng-show="t.val > 1">
 										({{ t.val }})
 									</span>
+                                    <button ng-click="removeTrait(t.name, character.attributes.negativephysical, 'tnegativephysical')" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-minus"></span></button>
+                                    <button ng-click="addTrait(t.name, character.attributes.negativephysical, 'tnegativephysical')" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span></button>
+                                </li>
+                                <li>
+                                    <select id="slc-negativephysical" class=" col-md-9"
+                                            ng-options="attr for attr in negativephysical"
+                                            ng-model="snegativephysical">
+                                        <option style="display:none" value="">Select a trait</option>
+                                    </select>
+                                    <button ng-click="addTrait(snegativephysical, character.attributes.negativephysical, 'tnegativephysical', 'negativephysical')" class="btn btn-default btn-sm pull-right">Add</button>
                                 </li>
                             </ul>
                         </div>
@@ -262,6 +302,16 @@
 									<span ng-show="t.val > 1">
 										({{ t.val }})
 									</span>
+                                    <button ng-click="removeTrait(t.name, character.attributes.negativesocial, 'tnegativesocial')" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-minus"></span></button>
+                                    <button ng-click="addTrait(t.name, character.attributes.negativesocial, 'tnegativesocial')" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span></button>
+                                </li>
+                                <li>
+                                    <select id="slc-negativesocial" class=" col-md-9"
+                                            ng-options="attr for attr in negativesocial"
+                                            ng-model="snegativesocial">
+                                        <option style="display:none" value="">Select a trait</option>
+                                    </select>
+                                    <button ng-click="addTrait(snegativesocial, character.attributes.negativesocial, 'tnegativesocial', 'negativesocial')" class="btn btn-default btn-sm pull-right">Add</button>
                                 </li>
                             </ul>
                         </div>
@@ -275,6 +325,16 @@
 									<span ng-show="t.val > 1">
 										({{ t.val }})
 									</span>
+                                    <button ng-click="removeTrait(t.name, character.attributes.negativemental, 'tnegativemental')" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-minus"></span></button>
+                                    <button ng-click="addTrait(t.name, character.attributes.negativemental, 'tnegativemental')" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span></button>
+                                </li>
+                                <li>
+                                    <select id="slc-negativemental" class=" col-md-9"
+                                            ng-options="attr for attr in negativemental"
+                                            ng-model="snegativemental">
+                                        <option style="display:none" value="">Select a trait</option>
+                                    </select>
+                                    <button ng-click="addTrait(snegativemental, character.attributes.negativemental, 'tnegativemental', 'negativemental')" class="btn btn-default btn-sm pull-right">Add</button>
                                 </li>
                             </ul>
                         </div>

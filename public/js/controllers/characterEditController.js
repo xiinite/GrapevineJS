@@ -1,7 +1,9 @@
-app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resources', function ($scope, $http, loading, resources) {
+app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resources', '$filter', function ($scope, $http, loading, resources, $filter) {
     $scope.log = function (event) {
         console.log(event);
     }
+    var orderBy = $filter('orderBy');
+
     $scope.conscienceTypes = ["Conscience", "Conviction"];
     $scope.selfcontrolTypes = ["Self-Control", "Instinct"];
     $scope.resourcesLoaded = false;
@@ -12,15 +14,21 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
     $scope.flaws = [];
     $scope.influences = [];
     $scope.mental = [];
+    $scope.smental = [];
     $scope.merits = [];
     $scope.negativemental = [];
+    $scope.snegativemental = [];
     $scope.negativephysical = [];
+    $scope.snegativephysical = [];
     $scope.negativesocial = [];
+    $scope.snegativesocial = [];
     $scope.paths = [];
     $scope.physical = [];
+    $scope.sphysical = {};
     $scope.rituals = [];
     $scope.sects = [];
     $scope.social = [];
+    $scope.ssocial = [];
 
     $scope.chronicle = null;
     $scope.character = [];
@@ -28,6 +36,87 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
     $scope.statusses = [
         "Active", "Stopped", "Deceased"
     ];
+
+    $scope.dirtylists = [];
+
+    $scope.addTrait = function(value, list, total, select){
+        if(value.length === undefined) return;
+        var result = $.grep(list, function(e){ return e.name == value; });
+        if(result.length === 0) {
+            list.push({name: value, val: 1});
+            list = orderBy(list, 'name', false);
+        }else{
+            result[0].val++;
+        }
+
+        if(total.length !== undefined)
+        {
+            var t = 0;
+            $.each(list, function(index, item){
+                t +=  item.val;
+            });
+            $scope.character.attributes[total] = t;
+            $scope.setItemDirty("attributes." + total, t);
+        }
+
+        value = {};
+        if(select !== undefined)
+        {
+            $("#slc-" + select).removeClass("ng-dirty");
+            $("#slc-" + select).val(null);
+        }
+        $scope.setItemDirty(list);
+    };
+
+    $scope.removeTrait = function(value, list, total){
+        var result = $.grep(list, function(e){ return e.name == value; });
+        var attr = result[0];
+
+        if(attr.val == 1){
+            list.splice($.inArray(attr, list),1);
+        }else{
+            attr.val--;
+        }
+        if(total.length !== undefined)
+        {
+            var t = 0;
+            $.each(list, function(index, item){
+                t +=  item.val;
+            });
+            $scope.character.attributes[total] = t;
+            $scope.setItemDirty("attributes." + total, t);
+        }
+        $scope.setItemDirty(list);
+    };
+
+    $scope.setItemDirty = function(list, value)
+    {
+        if (typeof list == 'string' || list instanceof String)
+        {
+            $scope.dirtylists.push({key: list, value: value});
+        }else{
+            for(key in $scope.character)
+            {
+                if($scope.character[key] === list)
+                {
+                    $scope.dirtylists.push({key: key, value: $scope.character[key]});
+                }
+
+                if(key == 'attributes')
+                {
+                    for(akey in $scope.character[key])
+                    {
+                        if($scope.character[key][akey] === list){
+                            $scope.dirtylists.push({key: key + "." + akey, value: $scope.character[key][akey]});
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
     $scope.save = function(){
         var fields = {};
         fields;
@@ -37,11 +126,18 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
                     fields[$(this).data("field")] = angular.element(this).data('$ngModelController').$modelValue;
                 
             }
-        })
+        });
+        $.each($scope.dirtylists, function(index, item){
+            $.each(item.value, function(i, m){
+                delete m._id;
+            });
+            fields[item.key] = item.value;
+        });
         $http.post("/character/update", {id: $scope.character.id, fields: fields}).then(function(response){
             $scope.init($scope.character.id);
         });
         $scope.editId = 0;
+        $scope.dirtylists = [];
     }
 
     $scope.display = function(player){
