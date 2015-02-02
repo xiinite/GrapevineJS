@@ -56,11 +56,9 @@ angular.module('grapevinejs.services', [])
     .service('loading', function () {
     this.show = function () {
         $('#veil').show();
-        $('#feedloading').show();
     };
     this.hide = function () {
-        $('#veil').fadeOut(500);
-        $('#feedloading').fadeOut(500);
+        $('#veil').fadeOut(200);
     };
 });
 

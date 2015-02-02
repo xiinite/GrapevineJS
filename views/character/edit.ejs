@@ -223,7 +223,7 @@
                                 <li class="list-group-item active">{{ character.attributes.tsocial }} Social
                                     Traits
                                 </li>
-                                <li ng-repeat='t in character.attributes.social' class="list-group-item trait">
+                                <li ng-repeat='t in character.attributes.social | orderBy:"name":false' class="list-group-item trait">
                                     {{ t.name }}
 									<span ng-show="t.val > 1">
 										({{ t.val }})
@@ -246,7 +246,7 @@
                                 <li class="list-group-item active">{{ character.attributes.tmental }} Mental
                                     Traits
                                 </li>
-                                <li ng-repeat='t in character.attributes.mental' class="list-group-item trait">
+                                <li ng-repeat='t in character.attributes.mental | orderBy:"name":false' class="list-group-item trait">
                                     {{ t.name }}
 									<span ng-show="t.val > 1">
 										({{ t.val }})
@@ -273,8 +273,7 @@
                                 <li class="list-group-item active">{{ character.attributes.tnegativephysical }}
                                     Negative Physical Traits
                                 </li>
-                                <li ng-repeat='t in character.attributes.negativephysical'
-                                    class="list-group-item trait">
+                                <li ng-repeat='t in character.attributes.negativephysical | orderBy:"name":false' class="list-group-item trait">
                                     {{ t.name }}
 									<span ng-show="t.val > 1">
 										({{ t.val }})
@@ -297,7 +296,7 @@
                                 <li class="list-group-item active">{{ character.attributes.tnegativesocial }}
                                     Negative Social Traits
                                 </li>
-                                <li ng-repeat='t in character.attributes.negativesocial' class="list-group-item trait">
+                                <li ng-repeat='t in character.attributes.negativesocial | orderBy:"name":false' class="list-group-item trait">
                                     {{ t.name }}
 									<span ng-show="t.val > 1">
 										({{ t.val }})
@@ -320,7 +319,7 @@
                                 <li class="list-group-item active">{{ character.attributes.tnegativemental }}
                                     Negative Mental Traits
                                 </li>
-                                <li ng-repeat='t in character.attributes.negativemental' class="list-group-item trait">
+                                <li ng-repeat='t in character.attributes.negativemental | orderBy:"name":false' class="list-group-item trait">
                                     {{ t.name }}
 									<span ng-show="t.val > 1">
 										({{ t.val }})
@@ -350,18 +349,29 @@
                 Advantages
             </h4>
         </div>
-        <div id="collapseAdvantages" class="panel-collapse collapse">
+        <div id="collapseAdvantages" class="panel-collapse collapse in">
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="col-md-4">
                             <ul class="list-group">
                                 <li class="list-group-item active">{{ character.abilities.length }} Abilities</li>
-                                <li ng-repeat="a in character.abilities" class="list-group-item">
+                                <li ng-repeat="a in character.abilities | orderBy:'name':false" class="list-group-item">
                                     {{ a.name + ": " + a.rating }}
                                     <span ng-show="a.note.length > 0">
                                     ( {{ a.note }} )
-                                    </span>
+                                    </span>                                 
+                                    <button ng-click="removeAdvantage(a.name, a.note, character.abilities)" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-minus"></span></button>
+                                    <button ng-click="addAdvantage(a.name, a.note, character.abilities)" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span></button>
+                                    <button ng-click="addNoteDialog(a, character.abilities)"  class="btn btn-xs pull-right"><span class="glyphicon glyphicon-pencil"></span></button>   
+                                </li>
+                                <li>
+                                    <select id="slc-abilities" class=" col-md-9"
+                                            ng-options="adv for adv in abilities"
+                                            ng-model="sability">
+                                        <option style="display:none" value="">Select an ability</option>
+                                    </select>
+                                    <button ng-click="addAdvantage(sability, '', character.abilities, 'abilities')" class="btn btn-default btn-sm pull-right">Add</button>
                                 </li>
                             </ul>
                         </div>
@@ -391,6 +401,20 @@
                                 <li class="list-group-item active">{{ character.backgrounds.length }} Backgrounds</li>
                                 <li ng-repeat="b in character.backgrounds" class="list-group-item trait">
                                     {{ b.name + ": " + b.rating }}
+                                    <span ng-show="b.note.length > 0">
+                                    ( {{ b.note }} )
+                                    </span>                                 
+                                    <button ng-click="removeAdvantage(b.name, b.note, character.backgrounds)" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-minus"></span></button>
+                                    <button ng-click="addAdvantage(b.name, b.note, character.backgrounds)" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span></button>
+                                    <button ng-click="addNoteDialog(b, character.backgrounds)"  class="btn btn-xs pull-right"><span class="glyphicon glyphicon-pencil"></span></button>   
+                                </li>
+                                <li>
+                                    <select id="slc-backgrounds" class=" col-md-9"
+                                            ng-options="adv for adv in backgrounds"
+                                            ng-model="sbackground">
+                                        <option style="display:none" value="">Select a background</option>
+                                    </select>
+                                    <button ng-click="addAdvantage(sbackground, '', character.backgrounds, 'backgrounds')" class="btn btn-default btn-sm pull-right">Add</button>
                                 </li>
                             </ul>
                         </div>
@@ -398,7 +422,21 @@
                             <ul class="list-group">
                                 <li class="list-group-item active">{{ character.influences.length }} Influences</li>
                                 <li ng-repeat="i in character.influences" class="list-group-item trait">
-                                    {{ i.name + ": " + character.influences[i].rating }}
+                                    {{ i.name + ": " + i.rating }}
+                                    <span ng-show="i.note.length > 0">
+                                    ( {{ i.note }} )
+                                    </span>                                 
+                                    <button ng-click="removeAdvantage(i.name, i.note, character.influences)" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-minus"></span></button>
+                                    <button ng-click="addAdvantage(i.name, i.note, character.influences)" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span></button>
+                                    <button ng-click="addNoteDialog(i, character.influences)"  class="btn btn-xs pull-right"><span class="glyphicon glyphicon-pencil"></span></button>   
+                                </li>
+                                <li>
+                                    <select id="slc-influences" class=" col-md-9"
+                                            ng-options="adv for adv in influences"
+                                            ng-model="sinfluence">
+                                        <option style="display:none" value="">Select an influence</option>
+                                    </select>
+                                    <button ng-click="addAdvantage(sinfluence, '', character.influences, 'influences')" class="btn btn-default btn-sm pull-right">Add</button>
                                 </li>
                             </ul>
                         </div>
@@ -406,7 +444,18 @@
                             <ul class="list-group">
                                 <li class="list-group-item active">{{ character.misc.length }} Miscelaneous Traits</li>
                                 <li ng-repeat="m in character.misc" class="list-group-item">
-                                    {{ m.name }}
+                                    {{ m.name + ": " + m.rating }}
+                                    <span ng-show="m.note.length > 0">
+                                    ( {{ m.note }} )
+                                    </span>                                 
+                                    <button ng-click="removeAdvantage(m.name, m.note, character.misc)" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-minus"></span></button>
+                                    <button ng-click="addAdvantage(m.name, m.note, character.misc)" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span></button>
+                                    <button ng-click="addNoteDialog(m, character.misc)"  class="btn btn-xs pull-right"><span class="glyphicon glyphicon-pencil"></span></button>   
+                                </li>
+                                <li>
+                                    <input type='text' id="slc-misc" class=" col-md-9" placeholder="Misc character trait"
+                                            ng-model="smisc" />
+                                    <button ng-click="addAdvantage(smisc, '', character.misc, 'misc')" class="btn btn-default btn-sm pull-right">Add</button>
                                 </li>
                             </ul>
                         </div>
@@ -454,7 +503,21 @@
                             <ul class="list-group">
                                 <li class="list-group-item active">{{ character.equipment.length }} Equipment</li>
                                 <li ng-repeat="e in character.equipment" class="list-group-item">
-                                    {{ e.name }}
+                                    {{ e.name + ": " + e.rating }}
+                                    <span ng-show="e.note.length > 0">
+                                    ( {{ e.note }} )
+                                    </span>                                 
+                                    <button ng-click="removeAdvantage(e.name, e.note, character.equipment)" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-minus"></span></button>
+                                    <button ng-click="addAdvantage(e.name, e.note, character.equipment)" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span></button>
+                                    <button ng-click="addNoteDialog(e, character.equipment)"  class="btn btn-xs pull-right"><span class="glyphicon glyphicon-pencil"></span></button>   
+                                </li>
+                                <li>
+                                    <select id="slc-equipment" class=" col-md-9"
+                                            ng-options="adv for adv in equipment"
+                                            ng-model="sequipment">
+                                        <option style="display:none" value="">Select equipment</option>
+                                    </select>
+                                    <button ng-click="addAdvantage(sequipment, '', character.equipment, 'equipment')" class="btn btn-default btn-sm pull-right">Add</button>
                                 </li>
                             </ul>
                         </div>
@@ -466,8 +529,8 @@
 
     <div class="panel panel-default">
         <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseEditHistory">
-            <h4 id="hdrAbout" class="panel-title">
-                About
+            <h4 class="panel-title">
+                Modification History
             </h4>
         </div>
 
@@ -488,4 +551,22 @@
             </div>
         </div>
     </div>
+    
+<div id="advNoteModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Edit note for {{noteItem.name}} ({{noteItem.rating}})</h4>
+      </div>
+      <div class="modal-body">
+        Note: <input type="text" ng-model="noteItem.note" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="revertNoteItem()" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" ng-click="saveNoteItem()" data-dismiss="modal">Ok</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 </div>

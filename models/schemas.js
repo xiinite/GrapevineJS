@@ -3,20 +3,25 @@ var Schema = mongoose.Schema;
 var Mixed = mongoose.Schema.Types.Mixed;
 
 var attr = new Schema({ name: String, val: Number });
-var ability = new Schema({name: String, note: String, rating: Number});
+
 var discipline = new Schema({path: String, name: String, level: String, number: Number});
 var ritual = new Schema({name: String, level: String});
-var status = new Schema({name: String, type: String});
+
+var ability = new Schema({name: String, note: String, rating: Number});
 var background = new Schema({name: String, note: String, rating: Number});
+var equipment = new Schema({name: String, note: String, rating: Number});
 var misc = new Schema({name: String, note: String, rating: Number});
 var derangement = new Schema({name: String, note: String, rating: Number});
+
 var bloodbond = new Schema({level: String, character: String});
-var boon = new Schema({level: String, character: String});
+var boon = new Schema({level: String, character: String, reason: String});
+
 var merit = new Schema({name: String, cost: Number});
 var flaw = new Schema({name: String, cost: Number});
-var equipment = new Schema({name: String, note: String, rating: Number});
-var note = new Schema({note: String});
+
 var xphistory = new Schema({date: Date, change: Number, reason: String});
+var note = new Schema({note: String});
+var status = new Schema({name: String, statustype: String});
 
 module.exports = {
     'Character': mongoose.model('character',{

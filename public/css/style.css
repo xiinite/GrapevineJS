@@ -92,28 +92,26 @@ textarea.vertical{
     height:100%;
     width:100%;
     cursor: not-allowed;
-    filter: alpha(opacity=60);
-    opacity: 0.6;
+    filter: alpha(opacity=85);
+    opacity: 0.85;
+    background-color: #fff;
     display: none;
+    z-index: 5000;
 }
-#feedLoading {
-    position: absolute;
-    top:200px;
-    width:100%;
-    text-align: center;
-    font-size: 4em;
-    color:white;
-    text-shadow: 2px 2px 2px #021124;
-    display: none;
+#imgLoading {
+    position:absolute;
+    top:0;
+    bottom:0;
+    margin:auto;
+    margin-left: 50%;
+    margin-right: 50%;
 }
+
 
 .nopadding {
     padding: 0;
 }
 
-.ng-dirty {
-    background-color: red;
-}
 div.ng-dirty{
     background-color: #ffffff;
 }
