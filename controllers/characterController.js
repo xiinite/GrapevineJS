@@ -58,13 +58,6 @@ module.exports = {
                 res.json(result);
             });
         }
-        /*if (!req.user.isSuperAdmin) {
-         res.json("forbidden");
-         return;
-         }
-         model.all(function (err, result) {
-         res.json(result);
-         });*/
     },
     'show': function (req, res, next) {
         if (req.params.id) {
@@ -191,8 +184,7 @@ module.exports = {
         model.clear(function () {
             res.json('ok');
         });
-    }
-    ,
+    },
     'import': function (req, res, next) {
         if (!req.user.isSuperAdmin) {
             res.json("forbidden");
@@ -206,9 +198,21 @@ module.exports = {
                 importer.importgrapevine(result, req.params.chronicleId, function (err, result) {
                     if (err) {
                         res.json(err);
+                        fs.unlink(tmpDir + '/' + file.name, function (err) {
+                            if (err) {
+                            }
+                        });
                         return;
                     }
-                    if (!err) res.json(result);
+                    if (!err){
+                        fs.unlink(tmpDir + '/' + file.name, function (err) {
+                            if (err) {
+                                res.json(err);
+                            }else{
+                                res.json(result);
+                            };
+                        });
+                    }
                 });
             });
 
@@ -216,13 +220,11 @@ module.exports = {
                 parser.parseString(data.toString("binary"));
             });
         }
-    }
-    ,
+    },
     'wizard': function (req, res, next) {
         var out = {user: req.user};
         res.render(ViewTemplatePath + "/wizard", out);
-    }
-    ,
+    },
     'export': function (req, res, next) {
         if (!req.user.isSuperAdmin) {
             res.json("forbidden");
@@ -328,8 +330,7 @@ module.exports = {
                 res.download('.\\tmp\\export.gv3');
             });
         });
-    }
-    ,
+    },
     'populate': function (req, res, next) {
         if (!req.user.isSuperAdmin) {
             res.json("forbidden");
