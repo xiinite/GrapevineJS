@@ -126,10 +126,6 @@ textarea.vertical{
     padding: 0;
 }
 
-div.ng-dirty{
-    background-color: #ffffff;
-}
-
 .row.warning{
     background-color:#76A0D3;
 }
