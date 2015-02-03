@@ -25,6 +25,8 @@ module.exports = {
         router.get(app, 'chronicle', 'find', ":id");
 
         router.get(app, 'user', 'toggleSuperAdmin', ':id');
+        router.get(app, 'user', 'find', ':id');
+        router.post(app, 'user', 'updateStylesheet');
 
         router.register(app, 'character');
         router.register(app, 'chronicle');

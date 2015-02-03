@@ -12,6 +12,10 @@ module.exports = {
         var out = {user: req.user};
         res.render(ViewTemplatePath + "/index", out);
     },
+    'profile': function (req, res, next) {
+        var out = {user: req.user};
+        res.render(ViewTemplatePath + "/profile", out);
+    },
     'all': function (req, res, next) {
         if (req.user.isSuperAdmin) {
             model.all(function (err, result) {
@@ -31,12 +35,29 @@ module.exports = {
             res.json("forbidden");
             return;
         }
-        //if(!req.user.isSuperAdmin) {res.json("forbidden"); return;}
         if (req.params.id) {
             model.find({"googleId": req.params.id}, function (err, result) {
                 var out = {user: req.user, profile: result[0]};
 
                 res.render(ViewTemplatePath + "/show", out);
+            });
+        }
+    },
+    'find': function (req, res, next){
+        if(!req.user.isSuperAdmin && req.params.id != req.user.googleId){
+            res.json("forbidden");
+            return;}
+
+        if (req.params.id) {
+            model.find({"googleId": req.params.id}, function (err, result) {
+                if(err)
+                {
+                    res.err(err);
+                }else
+                {
+                    res.json(result[0]);
+                }
+
             });
         }
     },
@@ -47,6 +68,16 @@ module.exports = {
         }
         model.clear(function () {
             res.json('ok')
+        });
+    },
+    'updateStylesheet': function(req, res, next){
+        model.update(req.user.googleId, {stylesheet: req.body.stylesheet}, function (err) {
+            if (err) {
+                res.json(err);
+            }
+            else {
+                res.json("ok");
+            }
         });
     },
     'toggleSuperAdmin': function (req, res, next) {

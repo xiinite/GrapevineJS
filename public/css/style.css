@@ -42,6 +42,26 @@ ul.typeahead {
     margin-top: 150px;
 }
 
+#logo {
+    background-image: url(/img/logo-default.png);
+    background-repeat: no-repeat;
+    background-position: center right;
+    display: block;
+    float: left;
+    padding: 18px;
+    margin: 11px 10px 11px 0;
+    width: 24px;
+    height: 25px
+}
+
+.navbar-inverse #logo {
+    background-image: url(/img/logo-inverse.png)
+}
+
+.navbar-default #logo {
+    background-image: url(/img/logo-inverse.png)
+}
+
 .panel-heading a:after:not(.badge) {
     content: "\f151";
     float: right;
@@ -66,13 +86,7 @@ div.clickable:hover{
 a.noline{
     text-decoration: none;
 }
-.paginate_button {
-    color: white;
-    margin: 2px;
-    padding: 2px;
-    background-color: #18bc9c;
-    border-radius: 5px;
-}
+
 .text-preview {
     overflow: hidden;
     text-overflow: ellipsis;

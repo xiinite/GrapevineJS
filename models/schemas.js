@@ -124,7 +124,8 @@ module.exports = {
         googleId: {type: String},
         isSuperAdmin: {type: Boolean},
         isAdmin: {type: Boolean},
-        chronicles: {type: Array}
+        chronicles: {type: Array},
+        stylesheet: {type: String}
     }),
     'Downtime': mongoose.model('downtime',{
         id: {unique: true, type: String},

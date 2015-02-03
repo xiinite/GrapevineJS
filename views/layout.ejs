@@ -8,20 +8,23 @@
     <meta name="description" content="Mind&#39;s Eye Theatre Chronicle manager">
     <meta name="keywords" content="grapevine">
     <title>grapevine</title>
+    <% if (!user.stylesheet || user.stylesheet == undefined || user.stylesheet == "" || user.stylesheet.length == 0){ %>
     <link type="text/css" href="/css/bootstrap.min.css" rel="stylesheet"/>
+    <%} else {%>
+    <link type="text/css" href="/css/bootstrap-<%= user.stylesheet %>.min.css" rel="stylesheet"/>
+    <%}%>
     <link type="text/css" href="/css/font-awesome.min.css" rel="stylesheet"/>
-    <link type="text/css" href="/css/dataTables.bootstrap.css" rel="stylesheet"/>
     <link type="text/css" href="/css/style.css" rel="stylesheet"/>
 
     <script type="text/javascript" charset="utf-8" src="/js/jquery.min.js"></script>
     <script type='text/javascript' charset='utf-8' src="/js/jquery.widget.js"></script>
     <script type="text/javascript" charset="utf-8" src="/js/bootstrap.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="/js/jquery.datatables.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="/js/dataTables.bootstrap.js"></script>
     <script type="text/javascript" charset="utf-8" src="/js/hammer.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="/js/jquery.hammer.js"></script>
     <script type="text/javascript" charset="utf-8" src="/js/angular.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="/js/angular-resource.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/js/angular-route.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/js/angular-touch.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="/js/grapevinejsapp.js"></script>
 
     <meta name="x-csrf-param" content="_csrf">

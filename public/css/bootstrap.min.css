@@ -6934,26 +6934,6 @@ th.visible-print, td.visible-print {
     color: #18BC9C
 }
 
-#logo {
-    background-image: url(/img/logo-default.png);
-    background-repeat: no-repeat;
-    background-position: center right;
-    display: block;
-    float: left;
-    padding: 18px;
-    margin: 11px 10px 11px 0;
-    width: 24px;
-    height: 25px
-}
-
-.navbar-inverse #logo {
-    background-image: url(/img/logo-inverse.png)
-}
-
-.navbar-default #logo {
-    background-image: url(/img/logo-inverse.png)
-}
-
 .login-header {
     text-align: center;
     text-transform: uppercase;

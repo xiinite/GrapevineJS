@@ -1,67 +1,49 @@
 <% layout("../layout.ejs") %>
-<script type="text/javascript" charset="utf-8">
-    var rowids = [];
-    var dataLoaded = function (data) {
-        var aaData = [];
-
-        for (var i = 0; i < data.length; i++) {
-            var row = data[i];
-            var dataTableRow = [];
-            dataTableRow.push(row.displayName);
-            dataTableRow.push(row.googleId);
-            rowids.push(row.googleId);
-
-            aaData.push(dataTableRow);
-        }
-
-        //var datatable = $('#tblItems').DataTable(dataTableObj);
-        var datatable = $('#tblItems').DataTable(
-                {
-                    data: aaData,
-                    columns: [{'title': 'name', "sClass": "clickable"}, {'title': 'id'}],
-                    "columnDefs": [{
-                        "targets": 1,
-                        "visible": false
-                    }]
-                }
-        );
-        $('#tblItems tbody').on('dblclick', 'tr', function () {
-            window.location = window.location + "/show/" + datatable.row($(this)).data()[1];
-        });
-
-        $('#tblItems tr').hammer().bind('tap', function(e) {
-            window.location = window.location + "/show/" + datatable.row($(this)).data()[1];
-        });
-
-        $('#tblItems').on( 'draw.dt', function () {
-            $('#tblItems tr').hammer().bind('tap', function(e) {
-                window.location = window.location + "/show/" + datatable.row($(this)).data()[1];
-            });
-        } );
-    }
-
-    $(document).ready(function () {
-        $.get('../user/all').done(dataLoaded);
-
-    });
-
-</script>
-<div id="content" class="container">
-    <h1 class="page-header hidden-xs hidden-sm">Characters</h1>
+<script type='text/javascript' charset="utf-8" src="/js/controllers/userController.js"></script>
+<div id="content" class="container" ng-controller="UserController" ng-init="init()">
+    <h1 class="page-header hidden-xs hidden-sm">Users</h1>
     <div class="row">
         <div class="col-md-12">
-            <table class="table table-bordered table-striped table-hover" id='tblItems'>
+            <span class="col-md-6 text-right">
+                Search:
+            </span>
+            <span class="col-md-6">
+                <input class=" form-control" type="text" ng-model="query" ng-change="search()"/>
+            </span>
+            <table class="table table-striped table-condensed table-hover">
                 <thead>
                 <tr>
-                    <td>Name</td>
+                    <th class="name" custom-sort order="'name'" sort="sort">Name&nbsp;</th>
                 </tr>
                 </thead>
-                <tbody>
-
-                </tbody>
                 <tfoot>
-
+                <td>
+                    <nav class="col-md-6">
+                        <ul class="pagination">
+                            <li ng-class="{disabled: currentPage == 0}">
+                                <a href ng-click="prevPage()" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li ng-repeat="n in range(pagedItems.length, currentPage, currentPage + gap) "
+                                ng-class="{active: n == currentPage}"
+                                ng-click="setPage()">
+                                <a href ng-bind="n + 1">1</a>
+                            </li>
+                            <li ng-class="{disabled: (currentPage) == pagedItems.length - 1}">
+                                <a href ng-click="nextPage()">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </td>
                 </tfoot>
+                <tbody>
+                <tr ng-repeat="item in pagedItems[currentPage] | orderBy:sort.sortingOrder:sort.reverse">
+                    <td class="clickable" ng-click="openItem(item.googleId)">{{item.displayName}}</td>
+                </tr>
+                </tbody>
             </table>
         </div>
     </div>

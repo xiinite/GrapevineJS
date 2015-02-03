@@ -1,0 +1,30 @@
+<% layout("../layout.ejs") %>
+<script type="text/javascript" src="/js/controllers/profileController.js"></script>
+<div id="content" class="container" ng-controller="ProfileController" ng-init="init('<%= user.googleId %>')">
+    <h1 class="page-header">{{ profile.displayName }}
+    </h1>
+    <div id='pnlAbout' class="panel panel-default">
+        <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseAbout">
+            <h4 id="hdrAbout" class="panel-title">
+                Settings
+            </h4>
+        </div>
+        <div id="collapseAbout" class="panel-collapse collapse in">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <div>Stylesheet:</div>
+
+                            <select class="form-control col-md-9"
+                                    ng-options="opt for opt in styles"
+                                    ng-model="profile.stylesheet" ng-change="saveStyle()">
+                                <option style="display:none" value="">Select a stylesheet</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
