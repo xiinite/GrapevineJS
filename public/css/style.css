@@ -108,7 +108,7 @@ textarea.vertical{
     cursor: not-allowed;
     filter: alpha(opacity=85);
     opacity: 0.85;
-    background-color: #fff;
+    background-color: #292E37;
     display: none;
     z-index: 5000;
 }
