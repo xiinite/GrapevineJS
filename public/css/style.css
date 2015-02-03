@@ -459,3 +459,47 @@ div.ng-dirty{
         margin-top: 0;
     }
 }
+
+@media (min-width: 768px) and (max-width: 991px) {
+    #logo {
+        margin-left: 0
+    }
+
+    .login-header {
+        padding-top: 20px
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    #logo {
+        margin-left: 0
+    }
+}
+
+@media (min-width: 1200px) {
+    #logo {
+        margin-left: 0
+    }
+}
+
+@media (max-width: 767px) {
+    #logo {
+        margin-left: 15px
+    }
+
+    .navbar-brand {
+        margin-left: -15px
+    }
+
+    .login-header {
+        padding-top: 20px
+    }
+}
+.login-header {
+     text-align: center;
+     text-transform: uppercase;
+ }
+
+.messages {
+    margin-top: 60px;
+}

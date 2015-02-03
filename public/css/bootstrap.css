@@ -7761,15 +7761,6 @@ input[type="color"]:focus,
     background-image: url('/img/logo-inverse.png');
 }
 
-.login-header {
-    text-align: center;
-    text-transform: uppercase;
-    color: #ffffff;
-}
-
-.messages {
-    margin-top: 60px;
-}
 
 input.ajax-loading {
     background-image: url('/img/ajax-small.gif');
