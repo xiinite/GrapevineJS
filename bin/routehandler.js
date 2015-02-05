@@ -23,7 +23,10 @@ module.exports = {
                     break;
                 case "update":
                     router.post('/' + m, require(controller)[m]);
-                    break
+                    break;
+                case "delete":
+                    router.post('/' + m, require(controller)[m]);
+                    break;
                 default:
                     router.get('/' + m, require(controller)[m]);
                     break;

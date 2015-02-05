@@ -37,6 +37,9 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
     $scope.social = [];
     $scope.ssocial = {};
 
+    $scope.sstatus = "";
+    $scope.sstatustype = "";
+
     $scope.chronicle = null;
     $scope.character = [];
     $scope.players = [];
@@ -130,6 +133,32 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
         }
         $scope.setItemDirty(list);
     };
+    
+    $scope.addMF = function(value, list, select){
+        if(value === undefined) return;
+        var result = $.grep(list, function(e){ return e.name == value.name && e.cost == value.cost; });
+        if(result.length === 0) {
+            list.push({name: value.name, cost: value.cost});
+            list = orderBy(list, 'name', false);
+        }
+        
+        value = {};
+        if(select !== undefined)
+        {
+            $("#slc-" + select).removeClass("ng-dirty");
+            $("#slc-" + select).val(null);
+        }
+        
+        $scope.setItemDirty(list);
+    };
+    
+    $scope.removeMF = function(value, list){
+        var result = $.grep(list, function(e){ return e.name == value.name && e.cost == value.cost; });
+        var adv = result[0];
+        list.splice($.inArray(adv, list),1);
+
+        $scope.setItemDirty(list);
+    };
 
     $scope.updateAdvantageNote = function(value, notevalue, list)
     {
@@ -138,6 +167,91 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
         
         adv.note = notevalue;
         $scope.setItemDirty(list);
+    };
+    
+    $scope.addDiscipline = function()
+    {
+        var result = $.grep($scope.character.disciplines, function(e){ return (e.path == $scope.sdiscipline.selected.path
+        && e.name == $scope.sdiscipline.selected.name 
+        && e.level == $scope.sdiscipline.selected.level); });
+        if(result.length === 0) {
+            $scope.character.disciplines.push($scope.sdiscipline.selected);
+            $scope.character.disciplines = orderBy($scope.character.disciplines, ['path', 'level', 'name'], false);
+        }
+
+        $scope.sdiscipline.selected = undefined;
+
+        $scope.setItemDirty("disciplines", $scope.character.disciplines);
+    };
+    
+    $scope.removeDiscipline = function(disc)
+    {
+        $scope.character.disciplines.splice($.inArray(disc, $scope.character.disciplines),1);
+        $scope.setItemDirty("disciplines", $scope.character.disciplines);
+    };
+    
+    $scope.addRitual = function()
+    {
+        var result = $.grep($scope.character.rituals, function(e){ return (e.path == $scope.sritual.selected.path
+        && e.name == $scope.sritual.selected.name 
+        && e.level == $scope.sritual.selected.level); });
+        if(result.length === 0) {
+            $scope.character.rituals.push($scope.sritual.selected);
+            $scope.character.rituals = orderBy($scope.character.rituals, ['path', 'level', 'name'], false);
+        }
+        
+        $scope.sritual.selected = undefined;
+
+        $scope.setItemDirty("rituals", $scope.character.rituals);
+    };
+    
+    $scope.removeRitual = function(rit)
+    {
+        $scope.character.rituals.splice($.inArray(rit, $scope.character.rituals),1);
+        $scope.setItemDirty("rituals", $scope.character.rituals);
+    };
+    
+    $scope.addStatus = function(stat)
+    {
+        if(stat)
+        {
+            $scope.sstatus = stat.name;
+            $scope.sstatustype = stat.statustype;
+        }
+        var result = $.grep($scope.character.status, function(e){ return (e.name == $scope.sstatus
+            && e.statustype == $scope.sstatustype); });
+        if(result.length === 0) {
+            $scope.character.status.push({name: $scope.sstatus, statustype: $scope.sstatustype, rating: 1});
+            $scope.character.status = orderBy($scope.character.status, 'name', false);
+        }
+        else{
+            result[0].rating++;
+        }
+
+        $("#slc-status").removeClass("ng-dirty");
+        $("#slc-status").val(null);
+        $("#slc-statustype").removeClass("ng-dirty");
+        $("#slc-statustype").val(null);
+
+        $scope.setItemDirty("status", $scope.character.status);
+    };
+    
+    $scope.removeStatus = function(stat)
+    {
+        
+        if(stat.rating == 1){
+            $scope.character.status.splice($.inArray(stat, $scope.character.status),1);
+
+        }else{
+            stat.rating--;
+        }
+        $scope.setItemDirty("status", $scope.character.status);
+        
+    };
+    
+    $scope.showDiscipline = function(disc)
+    {
+        return disc.path + ": " + disc.name + " (" + disc.level + ")";
     };
     
     $scope.previousNoteValue = {};
@@ -161,6 +275,7 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
         $scope.noteItem = {};
         $scope.selectedList = {};
     }
+    
     $scope.setItemDirty = function(list, value)
     {
         if (typeof list == 'string' || list instanceof String)

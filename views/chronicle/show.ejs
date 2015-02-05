@@ -66,11 +66,18 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <select id="slcPlayer" ng-model="playerid">
-                            <option ng-repeat="u in users" value="{{u.googleId}}">{{u.displayName}} ({{u.provider}},
-                                {{u.emails[0].value}})
-                            </option>
-                        </select>
+
+                    <ui-select ng-model="player.selected" theme="bootstrap" ng-disabled="disabled" class="col-md-9">
+                        <ui-select-match placeholder="Select a person in the list or search his e-mail...">{{$select.selected.displayName}}</ui-select-match>
+                        <ui-select-choices repeat="person in users | propsFilter: {displayName: $select.search, emails: $select.search}">
+                          <div ng-bind-html="person.displayName | highlight: $select.search"></div>
+                          <small>
+                            email: {{person.emails[0].value}} ||
+                            {{person.provider}} account
+                          </small>
+                        </ui-select-choices>
+                    </ui-select>
+                      
                         <button ng-click="addPlayer()" class="btn btn-primary">Add</button>
                     </div>
                 </div>
@@ -87,11 +94,17 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <select id="slcUser" ng-model="userid">
-                            <option ng-repeat="u in users" value="{{u.googleId}}">
-                                {{u.displayName}} ({{u.provider}}, {{u.emails[0].value}})
-                            </option>
-                        </select>
+                    
+                    <ui-select ng-model="user.selected" theme="bootstrap" ng-disabled="disabled" class="col-md-9">
+                        <ui-select-match placeholder="Select a person in the list or search his e-mail...">{{$select.selected.displayName}}</ui-select-match>
+                        <ui-select-choices repeat="person in users | propsFilter: {displayName: $select.search, emails: $select.search}">
+                          <div ng-bind-html="person.displayName | highlight: $select.search"></div>
+                          <small>
+                            email: {{person.emails[0].value}} ||
+                            {{person.provider}} account
+                          </small>
+                        </ui-select-choices>
+                    </ui-select>
                         <button id="btnAddAdmin" ng-click="addAdmin()" class="btn btn-primary">Add</button>
                     </div>
                 </div>

@@ -1,13 +1,27 @@
 app.controller('ChronicleEditController', ['$scope', '$filter', '$http', 'loading', function ($scope, $filter, $http, loading) {
     var orderBy = $filter('orderBy');
-
+    
+    $scope.disabled = undefined;
+    
+    $scope.enable = function() {
+        $scope.disabled = false;
+    };
+    
+    $scope.disable = function() {
+        $scope.disabled = true;
+    };
+    
+    $scope.clear = function() {
+        $scope.userid = undefined;
+    };
+  
     $scope.log = function (event) {
         console.log(event);
     }
 
     $scope.id = "";
-    $scope.userid = "";
-    $scope.playerid = "";
+    $scope.user = {};
+    $scope.player = {};
     $scope.chronicle = [];
     $scope.users = [];
 
@@ -33,13 +47,15 @@ app.controller('ChronicleEditController', ['$scope', '$filter', '$http', 'loadin
         $scope.editId = 0;
     }
     $scope.addAdmin = function(){
-        $http.post("/chronicle/addadmin", {id: $scope.id, userId: $scope.userid}).then(function(response){
+        $http.post("/chronicle/addadmin", {id: $scope.id, userId: $scope.user.selected.googleId}).then(function(response){
+            $scope.user = {};
             $scope.init($scope.id);
         });
     };
 
     $scope.addPlayer = function(){
-        $http.post("/chronicle/addplayer", {id: $scope.id, userId: $scope.playerid}).then(function(response){
+        $http.post("/chronicle/addplayer", {id: $scope.id, userId: $scope.player.selected.googleId}).then(function(response){
+            $scope.player = {};
             $scope.init($scope.id);
         });
     }

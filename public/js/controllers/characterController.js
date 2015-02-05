@@ -3,7 +3,7 @@ app.controller('CharacterController', ['$scope', '$http', 'loading', '$filter', 
         sortingOrder : 'name',
         reverse : false
     };
-
+    $scope.loaded = false;
     $scope.gap = 5;
     $scope.itemsPerPage = 10;
 
@@ -13,30 +13,66 @@ app.controller('CharacterController', ['$scope', '$http', 'loading', '$filter', 
     $scope.currentPage = 0;
     $scope.items = [];
 
+    $scope.chronicles = [];
+    $scope.selectedchronicle = [];
+    $scope.selected = {};
+    
     $scope.init = function(){
         loading.show();
         var root = $scope;
+        if($scope.loaded === false){
+            $http.get("/chronicle/list").then(function(resp){
+                root.chronicles = resp.data;
+                if(root.chronicles.length > 0){
+                    root.selectedchronicle = root.chronicles[0];
+                    $scope.loaded = true;
+                }
+            });
+        }
+        
         $http.get("/character/all").then(function (response) {
             root.items = response.data;
 
             $scope.search();
             loading.hide();
-        });
+        }); 
     };
 
+
+    $scope.CreateNew = function(){
+        location = "/character/new/" + $scope.selectedchronicle.id;
+    }
+
+    $scope.DeleteSelected = function(){
+        var ids = [];
+        for(var key in $scope.selected){
+            if($scope.selected[key] === true){
+                ids.push(key);
+            }
+        }
+        $scope.selected = {};
+        if(ids.length > 0){
+            loading.show();
+            $http.post("/character/delete", {ids: ids}).then(function(){
+                $scope.init();
+            });
+        }
+    }
+    
     var searchMatch = function (haystack, needle) {
         if (!needle) {
             return true;
         }
-        return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
+        return haystack.toString().toLowerCase().indexOf(needle.toLowerCase()) !== -1;
     };
-
     // init the filtered items
     $scope.search = function () {
         $scope.filteredItems = $filter('filter')($scope.items, function (item) {
             for(var attr in item) {
-                if (searchMatch(item[attr], $scope.query))
+                if (searchMatch(item[attr], $scope.query) && item.chronicle == $scope.selectedchronicle.id)
+                {
                     return true;
+                }
             }
             return false;
         });

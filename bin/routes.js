@@ -14,6 +14,7 @@ module.exports = {
     'config': function (app) {
         app.use('/', home);
 
+        router.get(app, 'character', 'new', ':id');
         router.post(app, 'character', 'import', ':chronicleId');
         router.post(app, 'character', 'revert');
 

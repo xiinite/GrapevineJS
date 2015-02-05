@@ -4,6 +4,7 @@ var fs = require('fs');
 var xml2js = require('xml2js');
 var dt = require('../bin/datetime.js');
 var importer = require('../bin/importlogic.js');
+var vl = require('../bin/vampireLogic.js');
 
 var ViewTemplatePath = 'character';
 var tmpDir = 'tmp';
@@ -72,6 +73,38 @@ module.exports = {
                 };
                 res.render(ViewTemplatePath + "/show", out);
             });
+        }
+    },
+    'new': function (req, res, next) {
+        if(req.params.id){
+            var char = vl.emptyCharacter(req.params.id);
+            model.insert(char, function (err) {
+                if (err) {
+                    res.json(err);
+                }
+                else
+                {
+                    var out = {
+                    user: req.user,
+                    characterid: char.id
+                };
+                res.render(ViewTemplatePath + "/edit", out);
+                }
+            });
+        }
+    },
+    'delete': function(req, res, next){
+        if(req.body.ids){
+            if(req.user.isSuperAdmin || req.user.isAdmin){
+                model.remove({id: req.body.ids}, function(err){
+                   if(err)
+                   {
+                       res.json(err);
+                   }else{
+                       res.json("ok");
+                   }
+                });
+            }
         }
     },
     'edit': function (req, res, next) {

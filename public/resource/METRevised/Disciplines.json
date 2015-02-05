@@ -1,15 +1,17 @@
 [
   {
-    "name": "Celerity",
-    "traits": [
-      "Alacrity (basic)",
-      "Swiftness (basic)"
-    ]
+    "path": "Celerity",
+    "name": "Alacrity",
+    "level": "basic"
   },
   {
-    "name": "Potence",
-    "traits": [
-      "Prowess (basic)"
-    ]
+    "path": "Celerity",
+    "name": "Swiftness",
+    "level": "basic"
+  },
+  {
+    "path": "Potence",
+    "name": "Prowess",
+    "level": "basic"
   }
 ]

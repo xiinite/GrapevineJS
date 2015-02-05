@@ -130,6 +130,15 @@ textarea.vertical{
     background-color:#76A0D3;
 }
 
+.btn.btn-default.btn-block.ui-select-toggle{
+    color: #000;
+    background-color: #fff;
+    padding: 0;
+}
+
+.ui-select-placeholder{
+    color: #000;
+}
 @media print {
     body {
         margin: 0;

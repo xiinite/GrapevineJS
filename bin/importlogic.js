@@ -234,13 +234,15 @@ module.exports = {
                             }
                             break;
                         case "Status":
+                            //todo: fix status
                             for (var y in tl.trait) {
                                 var t = tl.trait[y];
                                 var name = t.$.name;
-                                character.status.push({name: name, type: "fleeting"});
+                                character.status.push({name: name, statustype: "fleeting", rating: 1});
                             }
                             break;
                         case "Rituals":
+                            //todo: properly import rituals with correct path
                             for (var y in tl.trait) {
                                 var t = tl.trait[y];
                                 var level = t.$.name.split(':').slice()[0].toLowerCase();

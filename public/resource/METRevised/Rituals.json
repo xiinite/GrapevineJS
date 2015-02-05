@@ -1,8 +1,7 @@
 [
   {
-    "name": "Path of Bones",
-    "traits": [
-      "Dummy ritual (basic)"
-    ]
+    "path": "Necromancy: Path of Bones",
+    "name": "Dummy ritual",
+    "level": "basic"
   }
 ]

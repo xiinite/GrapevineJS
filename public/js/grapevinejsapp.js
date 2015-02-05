@@ -1,4 +1,4 @@
-angular.module('grapevinejs.JSON', ['ngResource', 'ngRoute', 'ngTouch'])
+angular.module('grapevinejs.JSON', ['ngResource', 'ngRoute', 'ngTouch', 'ngSanitize', 'ui.select'])
     .factory("resources", function($resource) {
         return {
             abilities: $resource('/resource/METRevised/Abilities.json', {}, {
@@ -81,3 +81,46 @@ angular.module('grapevinejs.directives', []).directive('ngConfirmClick', [
 ]);
 
 var app = angular.module('grapevinejs', ['grapevinejs.services', 'grapevinejs.JSON', 'grapevinejs.directives']);
+
+
+app.filter('propsFilter', function() {
+  return function(items, props) {
+    var out = [];
+
+    if (angular.isArray(items)) {
+      items.forEach(function(item) {
+        var itemMatches = false;
+
+        var keys = Object.keys(props);
+        for (var i = 0; i < keys.length; i++) {
+          var prop = keys[i];
+          var text = props[prop].toLowerCase();
+          if(angular.isArray(item[prop])){
+            item[prop].forEach(function ShowResults(value, index, ar) {
+                if (value.value.toString().toLowerCase().indexOf(text) !== -1) {
+                    itemMatches = true;
+              }
+            });
+          }else{
+              if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
+                itemMatches = true;
+              }
+          }
+          
+          if(itemMatches === true){
+                break;
+          }
+        }
+
+        if (itemMatches) {
+          out.push(item);
+        }
+      });
+    } else {
+      // Let the output be the input untouched
+      out = items;
+    }
+
+    return out;
+  }
+});
