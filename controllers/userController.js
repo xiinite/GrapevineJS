@@ -15,9 +15,6 @@ module.exports = {
         res.render(ViewTemplatePath + "/profile", out);
     },
     'all': function (req, res, next) {
-        if (!sec.checkSU(req, next)) {
-            return;
-        }
         model.list({}, function(err, result){
             res.json(result);
         });
