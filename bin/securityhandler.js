@@ -3,7 +3,7 @@
  */
 module.exports = {
     'checkSU': function(req, next){
-        if(req.user.isSuperAdmin){
+        if(!req.user.isSuperAdmin){
             return next(new Error("forbidden"));
         }
         else
