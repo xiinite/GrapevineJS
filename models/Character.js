@@ -20,6 +20,9 @@ module.exports = {
             loadNext(result, 0, aggregated, callback);
         });
     },
+    findPlain: function(where, callback){
+        model.find(where, callback);
+    },
     'list': function(where, callback){
         model.find(where, 'id name chronicle googleId', callback);
     },

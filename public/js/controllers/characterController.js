@@ -14,9 +14,13 @@ app.controller('CharacterController', ['$scope', '$http', 'loading', '$filter', 
     $scope.items = [];
 
     $scope.chronicles = [];
-    $scope.selectedchronicle = [];
+    $scope.selectedchronicle = {};
+    $scope.selectedexportchronicle = undefined;
     $scope.selected = {};
-    
+
+    $scope.exporttypes = [{name: 'grapevinejs json', ext: "json"}, {name: 'classic grapevine gv3', ext: "gv3"}];
+    $scope.exporttype = undefined;
+
     $scope.init = function(){
         loading.show();
         var root = $scope;
@@ -38,6 +42,9 @@ app.controller('CharacterController', ['$scope', '$http', 'loading', '$filter', 
         }); 
     };
 
+    $scope.exportvisible = function(){
+        return ($scope.selectedexportchronicle === undefined || $scope.exporttype === undefined);
+    }
 
     $scope.CreateNew = function(){
         location = "/character/new/" + $scope.selectedchronicle.id;
@@ -53,12 +60,17 @@ app.controller('CharacterController', ['$scope', '$http', 'loading', '$filter', 
         $scope.selected = {};
         if(ids.length > 0){
             loading.show();
-            $http.post("/character/delete", {ids: ids}).then(function(){
+            $http.post("/character/delete", {ids: ids, chronicleid: $scope.selectedchronicle}).then(function(){
                 $scope.init();
             });
         }
     }
-    
+
+    $scope.openItem = function(itemid)
+    {
+        location = "/character/show/" + itemid;
+    }
+
     var searchMatch = function (haystack, needle) {
         if (!needle) {
             return true;
@@ -129,10 +141,6 @@ app.controller('CharacterController', ['$scope', '$http', 'loading', '$filter', 
         $scope.currentPage = this.n;
     };
 
-    $scope.openItem = function(itemid)
-    {
-        window.location = window.location + "/show/" + itemid;
-    }
 }]);
 
 app.directive("customSort", function() {

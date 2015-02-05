@@ -6,6 +6,7 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
 
     $scope.conscienceTypes = ["Conscience", "Conviction"];
     $scope.selfcontrolTypes = ["Self-Control", "Instinct"];
+    $scope.bloodbondlevels = ["1", "2", "3"]
     $scope.resourcesLoaded = false;
     $scope.abilities = [];
     $scope.sability = {};
@@ -36,6 +37,8 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
     $scope.sects = [];
     $scope.social = [];
     $scope.ssocial = {};
+
+    $scope.sbloodbond = {};
 
     $scope.sstatus = "";
     $scope.sstatustype = "";
@@ -168,7 +171,7 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
         adv.note = notevalue;
         $scope.setItemDirty(list);
     };
-    
+
     $scope.addDiscipline = function()
     {
         var result = $.grep($scope.character.disciplines, function(e){ return (e.path == $scope.sdiscipline.selected.path
@@ -189,26 +192,56 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
         $scope.character.disciplines.splice($.inArray(disc, $scope.character.disciplines),1);
         $scope.setItemDirty("disciplines", $scope.character.disciplines);
     };
-    
+
     $scope.addRitual = function()
     {
         var result = $.grep($scope.character.rituals, function(e){ return (e.path == $scope.sritual.selected.path
-        && e.name == $scope.sritual.selected.name 
+        && e.name == $scope.sritual.selected.name
         && e.level == $scope.sritual.selected.level); });
         if(result.length === 0) {
             $scope.character.rituals.push($scope.sritual.selected);
             $scope.character.rituals = orderBy($scope.character.rituals, ['path', 'level', 'name'], false);
         }
-        
+
         $scope.sritual.selected = undefined;
 
         $scope.setItemDirty("rituals", $scope.character.rituals);
     };
-    
+
     $scope.removeRitual = function(rit)
     {
         $scope.character.rituals.splice($.inArray(rit, $scope.character.rituals),1);
         $scope.setItemDirty("rituals", $scope.character.rituals);
+    };
+
+    $scope.addBloodbond = function(bond)
+    {
+        if(bond !== undefined){
+            $scope.sbloodbond = bond;
+        }
+        var result = $.grep($scope.character.bloodbonds, function(e){ return (e.character == $scope.sbloodbond.character); });
+        if(result.length === 0) {
+            $scope.character.bloodbonds.push($scope.sbloodbond);
+            $scope.character.bloodbonds = orderBy($scope.character.bloodbonds, ['character'], false);
+        }else
+        {
+            result[0].level ++;
+        }
+
+        $scope.sbloodbond = {};
+
+        $scope.setItemDirty("bloodbonds", $scope.character.bloodbonds);
+    };
+
+    $scope.removeBloodbond = function(bb)
+    {
+        var result = $.grep($scope.character.bloodbonds, function(e){ return (e == bb); });
+        if(result[0].level == 1){
+            $scope.character.bloodbonds.splice($.inArray(bb, $scope.character.bloodbonds),1);
+        }else{
+            result[0].level --;
+        }
+        $scope.setItemDirty("bloodbonds", $scope.character.bloodbonds);
     };
     
     $scope.addStatus = function(stat)
@@ -247,11 +280,6 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
         }
         $scope.setItemDirty("status", $scope.character.status);
         
-    };
-    
-    $scope.showDiscipline = function(disc)
-    {
-        return disc.path + ": " + disc.name + " (" + disc.level + ")";
     };
     
     $scope.previousNoteValue = {};

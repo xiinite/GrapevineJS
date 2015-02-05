@@ -1,15 +1,52 @@
 var uuid = require('node-uuid');
 var async = require('async');
 var dt = require('../bin/datetime.js');
-var vl = require('../bin/vampireLogic.js');
+var vl = require('../bin/vampirelogic.js');
 var model = require('../models/Character.js');
 
 module.exports = {
-    importgrapevine: function(json, chronicleId, callback){
+    importjson: function(json, chronicleId, callback){
+        var toBeInsert = [];
+        var calls = [];
+        json.forEach(function(char, index){
+            calls.push(function (callback) {
+                //var char = json[i];
+                delete char._id;
+                char.chronicle = chronicleId;
+                model.find({name: char.name, chronicle: char.chronicle}, function (err, result) {
+                    if (!err && result.length > 0) {
+                        char.id = result[0].id;
+                        model.update(result[0].id, char, function (err) {
+                            if (err) {
+                                callback(err)
+                                return;;
+                            }
+                        });
+                    }
+                    else {
+
+                        toBeInsert.id = uuid.v4();
+                        toBeInsert.push(char);
+                    }
+                    callback();
+                });
+            })
+        });
+
+        async.parallel(calls, function () {
+            model.insert(toBeInsert, function (err) {
+                if (err) {
+                    callback(err);
+                }
+                model.all(callback);
+            });
+        });
+    },
+    importgrapevine: function(xml, chronicleId, callback){
         try{
             var characterList = [];
-            for (var index in json.grapevine.vampire) {
-                var vampire = json.grapevine.vampire[index];
+            for (var index in xml.grapevine.vampire) {
+                var vampire = xml.grapevine.vampire[index];
                 //var startDate = var split = enddate.split('/');
                 var sParts = vampire.$.startdate.split(' ')[0].split('/');
                 var lParts = vampire.$.lastmodified.split(' ')[0].split('/');
@@ -25,7 +62,7 @@ module.exports = {
                     clan: vampire.$.clan || "",
                     sect: vampire.$.sect || "",
                     coterie: vampire.$.coterie || "",
-                    generation: parseInt(vampire.$.generation),
+                    generation: parseInt(vampire.$.generation || "0"),
                     title: vampire.$.title || "",
                     sire: vampire.$.sire || "",
                     nature: vampire.$.nature || "",
@@ -35,8 +72,8 @@ module.exports = {
                         current: vampire.$.blood
                     },
                     path: {
-                        name: vampire.$.path,
-                        rating: vampire.$.pathtraits
+                        name: vampire.$.path || "",
+                        rating: vampire.$.pathtraits || 0
                     },
                     conscience: {
                         name: "Conscience",
@@ -234,20 +271,21 @@ module.exports = {
                             }
                             break;
                         case "Status":
-                            //todo: fix status
                             for (var y in tl.trait) {
                                 var t = tl.trait[y];
                                 var name = t.$.name;
-                                character.status.push({name: name, statustype: "fleeting", rating: 1});
+                                var _rating = 1;
+                                if (t.$.val) _rating = t.$.val;
+                                character.status.push({name: name, statustype: "fleeting", rating: _rating});
                             }
                             break;
                         case "Rituals":
-                            //todo: properly import rituals with correct path
                             for (var y in tl.trait) {
                                 var t = tl.trait[y];
                                 var level = t.$.name.split(':').slice()[0].toLowerCase();
                                 var name = t.$.name.split(':').slice(1).join(':').replace(/^\s+|\s+$/g, '');
-                                character.rituals.push({name: name, level: level})
+                                var path = "Unknown";
+                                character.rituals.push({path: path, name: name, level: level})
                             }
                             break;
                         case "Merits":
@@ -302,9 +340,9 @@ module.exports = {
                             char.id = result[0].id;
                             model.update(result[0].id, char, function (err) {
                                 if (err) {
-                                    res.json(err);
+                                    callback(err);
                                 }
-                            })
+                            });
                         }
                         else {
                             toBeInsert.push(char);
@@ -317,6 +355,7 @@ module.exports = {
                 model.insert(toBeInsert, function (err) {
                     if (err) {
                         callback(err);
+                        return;
                     }
                     model.all(callback);
                 });

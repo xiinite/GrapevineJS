@@ -74,7 +74,7 @@
             );
         }).on('fileuploaddone', function (e, data) {
             $(data.context.children()).remove();
-            dataLoaded(data.result);
+            angular.element('#content').scope().init();
         }).on('fileuploadfail', function (e, data) {
             $.each(data.files, function (index, file) {
                 var error = $('<span class="text-danger"/>').text('File upload failed.');
@@ -104,14 +104,18 @@
 </script>
 <div id="content" class="container" ng-controller="CharacterController" ng-init="init()">
     <h1 class="page-header hidden-xs hidden-sm">Characters</h1>
-    
+
     <div class="row">
         <div class="col-md-12">
             <div class="col-md-2 col-xs-6">
-                <button class="btn btn-default" ng-confirm-click="are you sure?" ng-click="DeleteSelected()"><span class="glyphicon glyphicon-trash"></span> Delete selected</button>
+                <button class="btn btn-default" ng-confirm-click="are you sure?" ng-click="DeleteSelected()"><span
+                            class="glyphicon glyphicon-trash"></span> Delete selected
+                </button>
             </div>
             <div class="col-md-2 col-xs-6">
-                <button class="btn btn-default" ng-click="CreateNew()"><span class="glyphicon glyphicon-pencil"></span> New character</button>
+                <button class="btn btn-default" ng-click="CreateNew()"><span class="glyphicon glyphicon-pencil"></span>
+                    New character
+                </button>
             </div>
             <div class="col-md-4 col-xs-12">
                 <select class="form-control"
@@ -186,7 +190,7 @@
                         </fieldset>
                     </div>
                     <div class="col-md-9">
-                        <span class="btn btn-success fileinput-button">
+                        <span class="btn btn-default fileinput-button">
                             <i class="glyphicon glyphicon-plus"></i>
                             <span>Add files...</span>
                             <!-- The file input field used as target for the file upload widget -->
@@ -200,6 +204,50 @@
                             <div class="progress-bar progress-bar-success"></div>
                         </div>
                         <div id="files" class="files"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default hidden-xs hidden-sm">
+        <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseExport">
+            <h4 class="panel-title">
+                Export
+            </h4>
+        </div>
+        <div id="collapseExport" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class='row'>
+                    <div class="col-md-4">
+                        <fieldset class="form-inline">
+                            <div class="form-group">
+                                <label for="exampleInputName2">Chronicle: </label>
+
+                                <select
+                                        ng-change="search()"
+                                        ng-options="c as c.name for c in chronicles"
+                                        ng-model="selectedexportchronicle">
+                                </select>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-md-4">
+                        <fieldset class="form-inline">
+                            <div class="form-group">
+                                <label for="exampleInputName2">Type: </label>
+
+                                <select
+                                        ng-change="search()"
+                                        ng-options="c.name for c in exporttypes"
+                                        ng-model="exporttype">
+                                </select>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-md-4">
+                        <a ng-hide="exportvisible()" class="btn btn-default" ng-href='/character/export/{{selectedexportchronicle.id}}/{{exporttype.ext}}'><span class="glyphicon glyphicon-export"></span>Export
+                        </a>
                     </div>
                 </div>
             </div>

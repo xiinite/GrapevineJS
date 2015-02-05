@@ -1,12 +1,10 @@
 var model = require('../models/User.js');
-var uuid = require('node-uuid');
-var json2html = require('json2html');
+var sec = require('../bin/securityhandler.js');
 
 var ViewTemplatePath = 'user';
 module.exports = {
     'index': function (req, res, next) {
-        if (!req.user.isSuperAdmin) {
-            res.json("forbidden");
+        if (!sec.checkSU(req, next)) {
             return;
         }
         var out = {user: req.user};
@@ -17,22 +15,15 @@ module.exports = {
         res.render(ViewTemplatePath + "/profile", out);
     },
     'all': function (req, res, next) {
-        if (req.user.isSuperAdmin) {
-            model.all(function (err, result) {
-                res.json(result);
-            })
-        } else if(req.user.isAdmin)
-        {
-            model.list({}, function(err, result){
-                res.json(result);
-            });
-        } else {
-            res.json("forbidden");
+        if (!sec.checkSU(req, next)) {
+            return;
         }
+        model.list({}, function(err, result){
+            res.json(result);
+        });
     },
     'show': function (req, res, next) {
-        if (!req.user.isSuperAdmin) {
-            res.json("forbidden");
+        if (!sec.checkSU(req, next)) {
             return;
         }
         if (req.params.id) {
@@ -62,8 +53,7 @@ module.exports = {
         }
     },
     'clear': function (req, res, next) {
-        if (!req.user.isSuperAdmin) {
-            res.json("forbidden");
+        if (!sec.checkSU(req, next)) {
             return;
         }
         model.clear(function () {
@@ -81,7 +71,9 @@ module.exports = {
         });
     },
     'toggleSuperAdmin': function (req, res, next) {
-        if (!req.user.isSuperAdmin) { res.json("forbidden"); return;}
+        if (!sec.checkSU(req, next)) {
+            return;
+        }
         model.find({"googleId": req.params.id}, function (err, result) {
             if (result[0]._doc.isSuperAdmin) {
                 model.update(req.params.id, {'isSuperAdmin': false}, function (err2, numAffected) {
@@ -104,8 +96,7 @@ module.exports = {
         });
     },
     'populate': function (req, res, next) {
-        if (!req.user.isSuperAdmin) {
-            res.json("forbidden");
+        if (!sec.checkSU(req, next)) {
             return;
         }
         model.clear(function () {

@@ -1,5 +1,6 @@
 var model = require('../models/Chronicle.js');
 var uuid = require('node-uuid');
+var sec = require('../bin/securityhandler.js');
 
 var ViewTemplatePath = 'chronicle';
 module.exports = {
@@ -9,51 +10,47 @@ module.exports = {
     },
     'all': function (req, res, next) {
         var where = {};
-        if (! req.user.isSuperAdmin) {
+        if (!req.user.isSuperAdmin) {
             var userId = req.user.googleId;
             where =
             {
                 admins: {$in: [userId]}
             };
-            model.find(where, function(err, result){
+            model.find(where, function (err, result) {
                 res.json(result);
             })
         }
-        else{
+        else {
             model.all(function (err, result) {
                 res.json(result);
             });
         }
     },
-    'list': function(req, res, next){
+    'list': function (req, res, next) {
         var where = {};
-        if(!req.user.isSuperAdmin){
+        if (!req.user.isSuperAdmin) {
             var userId = req.user.googleId;
             where =
             {
                 admins: {$in: [userId]}
             };
-            model.find(where, function(err, result){
+            model.find(where, function (err, result) {
                 res.json(result);
             })
-        }else{
+        } else {
             model.listAll(function (err, result) {
-               res.json(result);
+                res.json(result);
             });
         }
     },
-    'find': function (req, res, next){
+    'find': function (req, res, next) {
         if (req.params.id) {
             model.find({"id": req.params.id}, function (err, result) {
                 var user = req.user || {displayName: "Anonymous"};
-                if(req.user.isSuperAdmin || result[0].admins.indexOf(user.googleId) > -1)
-                {
-                    res.json(result[0]);
+                if (!sec.checkAdmin(req, next, result[0].id)) {
+                    return;
                 }
-                else
-                {
-                    res.json("forbidden");
-                }
+                res.json(result[0]);
             });
         }
     },
@@ -62,149 +59,123 @@ module.exports = {
             model.find({"id": req.params.id}, function (err, result) {
                 var user = req.user || {displayName: "Anonymous"};
                 var out = {user: user, chronicle: result[0]};
-                if(req.user.isSuperAdmin || result[0].admins.indexOf(user.googleId) > -1)
-                {
-                    res.render(ViewTemplatePath + "/show", out);
+                if (!sec.checkAdmin(req, next, result[0].id)) {
+                    return;
                 }
-                else
-                {
-                    res.json("forbidden");
-                }
+                res.render(ViewTemplatePath + "/show", out);
             });
         }
     },
-    'update': function(req, res, next){
-        if(req.body.id){
-            model.find({"id": req.body.id}, function (err, result) {
-                var user = req.user || {displayName: "Anonymous"};
-                if(req.user.isSuperAdmin || result[0].admins.indexOf(user.googleId) > -1)
-                {
-                    var field = req.body.field;
-                    var data = req.body.data;
-                    var updateValues = {};
-                    updateValues[field] = data;
-                    model.update(req.body.id, updateValues, function(err){
-                        if(err) {
-                            res.json(err);
-                            return;
-                        }
-                        res.json("ok");
-                    });
-                }
-                else
-                {
-                    res.json("forbidden");
-                }
-            });
-        }
-    },
-    'addadmin': function(req, res, next){
+    'update': function (req, res, next) {
         if (req.body.id) {
             model.find({"id": req.body.id}, function (err, result) {
                 var user = req.user || {displayName: "Anonymous"};
-                if(req.user.isSuperAdmin || result[0].admins.indexOf(user.googleId) > -1)
-                {
-                    if(result[0].admins.indexOf(req.body.userId) == -1)
-                    {
-                        result[0].admins.push(req.body.userId);
+                if (!sec.checkAdmin(req, next, result[0].id)) {
+                    return;
+                }
+                var field = req.body.field;
+                var data = req.body.data;
+                var updateValues = {};
+                updateValues[field] = data;
+                model.update(req.body.id, updateValues, function (err) {
+                    if (err) {
+                        res.json(err);
+                        return;
                     }
-                    model.update(req.body.id, {'admins': result[0].admins}, function(err){
-                        if(err) {
-                            res.json(err);
-                            return;
-                        }
-                        res.json("ok");
-                    });
-                }
-                else
-                {
-                    res.json("forbidden");
-                }
+                    res.json("ok");
+                });
             });
         }
     },
-    'removeadmin': function(req, res, next){
+    'addadmin': function (req, res, next) {
         if (req.body.id) {
             model.find({"id": req.body.id}, function (err, result) {
                 var user = req.user || {displayName: "Anonymous"};
-                if((req.user.isSuperAdmin || result[0].admins.indexOf(user.googleId) > -1) && req.user.googleId != req.body.userId)
-                {
-                    if(result[0].admins.indexOf(req.body.userId) > -1)
-                    {
-                        result[0].admins.splice(result[0].admins.indexOf(req.body.userId), 1);
+                if (!sec.checkAdmin(req, next, result[0].id)) {
+                    return;
+                }
+                if (result[0].admins.indexOf(req.body.userId) == -1) {
+                    result[0].admins.push(req.body.userId);
+                }
+                model.update(req.body.id, {'admins': result[0].admins}, function (err) {
+                    if (err) {
+                        res.json(err);
+                        return;
                     }
-                    model.update(req.body.id, {'admins': result[0].admins}, function(err){
-                        if(err) {
-                            res.json(err);
-                            return;
-                        }
-                        res.json("ok");
-                    });
-                }
-                else
-                {
-                    res.json("forbidden");
-                }
+                    res.json("ok");
+                });
             });
         }
     },
-    'addplayer': function(req, res, next){
+    'removeadmin': function (req, res, next) {
         if (req.body.id) {
             model.find({"id": req.body.id}, function (err, result) {
                 var user = req.user || {displayName: "Anonymous"};
-                if(req.user.isSuperAdmin || result[0].admins.indexOf(user.googleId) > -1)
-                {
-                    if(result[0].players.indexOf(req.body.userId) == -1)
-                    {
-                        result[0].players.push(req.body.userId);
+                if (!sec.checkAdmin(req, next, result[0].id)) {
+                    return;
+                }
+                if (result[0].admins.indexOf(req.body.userId) > -1) {
+                    result[0].admins.splice(result[0].admins.indexOf(req.body.userId), 1);
+                }
+                model.update(req.body.id, {'admins': result[0].admins}, function (err) {
+                    if (err) {
+                        res.json(err);
+                        return;
                     }
-                    model.update(req.body.id, {'players': result[0].players}, function(err){
-                        if(err) {
-                            res.json(err);
-                            return;
-                        }
-                        res.json("ok");
-                    });
-                }
-                else
-                {
-                    res.json("forbidden");
-                }
+                    res.json("ok");
+                });
             });
         }
     },
-    'removeplayer': function(req, res, next){
+    'addplayer': function (req, res, next) {
         if (req.body.id) {
             model.find({"id": req.body.id}, function (err, result) {
                 var user = req.user || {displayName: "Anonymous"};
-                if(req.user.isSuperAdmin || result[0].admins.indexOf(user.googleId) > -1)
-                {
-                    if(result[0].players.indexOf(req.body.userId) > -1)
-                    {
-                        result[0].players.splice(result[0].players.indexOf(req.body.userId), 1);
+                if (!sec.checkAdmin(req, next, result[0].id)) {
+                    return;
+                }
+                if (result[0].players.indexOf(req.body.userId) == -1) {
+                    result[0].players.push(req.body.userId);
+                }
+                model.update(req.body.id, {'players': result[0].players}, function (err) {
+                    if (err) {
+                        res.json(err);
+                        return;
                     }
-                    model.update(req.body.id, {'players': result[0].players}, function(err){
-                        if(err) {
-                            res.json(err);
-                            return;
-                        }
-                        res.json("ok");
-                    });
+                    res.json("ok");
+                });
+            });
+        }
+    },
+    'removeplayer': function (req, res, next) {
+        if (req.body.id) {
+            model.find({"id": req.body.id}, function (err, result) {
+                var user = req.user || {displayName: "Anonymous"};
+                if (!sec.checkAdmin(req, next, result[0].id)) {
+                    return;
                 }
-                else
-                {
-                    res.json("forbidden");
+                if (result[0].players.indexOf(req.body.userId) > -1) {
+                    result[0].players.splice(result[0].players.indexOf(req.body.userId), 1);
                 }
+                model.update(req.body.id, {'players': result[0].players}, function (err) {
+                    if (err) {
+                        res.json(err);
+                        return;
+                    }
+                    res.json("ok");
+                });
             });
         }
     },
     'clear': function (req, res, next) {
-        if(! req.user.isSuperAdmin) return res.json('forbidden');
+        if (!sec.checkSU(req, next)) {
+            return;
+        }
         model.clear(function () {
             res.json('ok')
         });
     },
-    'insert': function(req, res, next){
+    'insert': function (req, res, next) {
         var chronicle = {
             id: uuid.v4(),
             name: req.body.name,
@@ -213,7 +184,7 @@ module.exports = {
             administrators: [],
             characters: []
         };
-        model.insert(chronicle, function(err){
+        model.insert(chronicle, function (err) {
             if (err) {
                 res.json(err);
                 return;
@@ -222,7 +193,9 @@ module.exports = {
         })
     },
     'populate': function (req, res, next) {
-        if(! req.user.isSuperAdmin) return res.json('forbidden');
+        if (!sec.checkSU(req, next)) {
+            return;
+        }
         var c1 = {
             id: "67abf1a1-d331-4e18-8739-93895c7a639d",
             name: 'Nachtkronieken',

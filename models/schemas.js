@@ -13,7 +13,7 @@ var equipment = new Schema({name: String, note: String, rating: Number});
 var misc = new Schema({name: String, note: String, rating: Number});
 var derangement = new Schema({name: String, note: String, rating: Number});
 
-var bloodbond = new Schema({level: String, character: String});
+var bloodbond = new Schema({level: String, character: String, note: String});
 
 var merit = new Schema({name: String, cost: Number});
 var flaw = new Schema({name: String, cost: Number});
@@ -129,5 +129,4 @@ module.exports = {
         id: {unique: true, type: String},
         actions: {type: JSON}
     })
-
-}
+};

@@ -48,7 +48,12 @@ module.exports = {
         app.post('/' + path, require(controller)[handler]);
     },
     get: function (app, controller, handler, variables) {
-        var path = controller + '/' + handler + '/' + variables;
+        var path = controller + '/' + handler;
+        for(var v in variables){
+           var va = variables[v];
+
+            path += '/' + va;
+        }
         controller = '../controllers/' + controller + 'Controller.js';
 
         app.get('/' + path, require(controller)[handler]);
