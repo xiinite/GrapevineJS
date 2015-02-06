@@ -1,0 +1,32 @@
+<% layout("../layout.ejs") %>
+<script type="text/javascript">
+
+</script>
+<div id="content" class="container">
+    <h1 class="page-header"><%= character.name %>
+        <div class='btn-toolbar pull-right hidden-print'>
+            <div class='btn-group'>
+                <a class='btn btn-info' href="/character/show/<%= character.id %>"><span class="glyphicon glyphicon-pawn"></span>
+                    Back
+                </a>
+            </div>
+        </div>
+    </h1>
+    <div class="row">
+        <div class="col-lg-2 col-xs-12">
+            <ul class="nav nav-pills nav-stacked">
+                <% for(var i = 0; i < lores.length; i++){%>
+                <li role="presentation"<%if(i==0){%>class="active"<%}%>><a href="#<%= lores[i].tabname %>" aria-controls="<%= lores[i].tabname %>" role="tab" data-toggle="tab"><%= lores[i].name %></a></li>
+                <% }%>
+            </ul>
+        </div>
+
+        <div class="col-lg-10 col-xs-12">
+            <div class="tab-content">
+                <% for(var i = 0; i < lores.length; i++){%>
+                <div role="tabpanel" class="tab-pane <%if(i==0){%>active<%}%>" id="<%= lores[i].tabname %>"><%- lores[i].html %></div>
+                <% }%>
+            </div>
+        </div>
+    </div>
+</div>

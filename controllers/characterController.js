@@ -75,6 +75,42 @@ module.exports = {
             });
         }
     },
+    'lores': function(req, res, next){
+        if (req.params.id) {
+            model.find({
+                "id": req.params.id
+            }, function (err, result) {
+                var character = result[0];
+
+                var lores = [];
+
+                character.abilities.forEach(function(ab, i){
+                    if(ab.name.indexOf("Lore: ") > -1){
+                        var filename = ab.name.replace("Lore: ", "").replace("Clan: ", "") + " " + ab.rating + ".html";
+                        if(fs.existsSync("server-resources/METRevised/lores/" + filename))
+                        {
+                            var data = fs.readFileSync("server-resources/METRevised/lores/" + filename, {});
+
+                            var lore =
+                            {
+                                name: ab.name.replace("Lore: ", ""),
+                                tabname: ab.name.replace("Lore: ", "").replace(":", "_").replace(" ", "_"),
+                                html: data.toString("binary")
+                            }
+
+                            lores.push(lore);
+                        }
+                    }
+                })
+                var out = {
+                    user: req.user,
+                    character: character,
+                    lores: lores
+                };
+                res.render(ViewTemplatePath + "/lores", out);
+            });
+        }
+    },
     'new': function (req, res, next) {
         if (req.params.id) {
             if (!sec.checkAdmin(req, next, req.params.id)) {

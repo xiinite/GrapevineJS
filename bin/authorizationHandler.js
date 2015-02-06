@@ -136,7 +136,7 @@ module.exports = {
 
         app.all('*', function (req, res, next) {
             var path = url.parse(req.url).pathname;
-            if (path === '/login' || path.indexOf('/character/show/') === 0)
+            if (path === '/login')
                 next();
             else
                 ensureAuthenticated(req, res, next);

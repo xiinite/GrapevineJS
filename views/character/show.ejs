@@ -113,8 +113,12 @@
                 <button id="btnPrint" type='button' class='btn btn-info'><span class="glyphicon glyphicon-print"></span>
                     Print
                 </button>
+                <a href="/character/lores/<%= character.id %>" class="btn btn-default"><span
+                            class="glyphicon glyphicon-education"></span>
+                    Lores
+                </a>
                 <% if(user.isSuperAdmin || character.chronicle.admins.indexOf(user.googleId) > 0){ %>
-                <a href="/character/edit/<%= character.id %>" class="btn btn-info"><span
+                <a href="/character/edit/<%= character.id %>" class="btn btn-default"><span
                             class="glyphicon glyphicon-edit"></span>
                     Edit
                 </a>

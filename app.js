@@ -11,6 +11,7 @@ var routes = require('./bin/routes.js');
 var app = express();
 var multer = require('multer');
 var mongoose = require('mongoose');
+var compression = require('compression');
 
 // database setup
 mongoose.connect(config.db.connectionString);
@@ -20,6 +21,7 @@ app.engine('ejs', locals);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.use(compression());
 app.use(cookieParser('grapevinecookie'));
 app.use(sess(
     {

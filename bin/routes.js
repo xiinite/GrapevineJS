@@ -12,6 +12,7 @@ module.exports = {
         app.use('/', home);
 
         router.get(app, 'character', 'new', [':id']);
+        router.get(app, 'character', 'lores', [':id']);
         router.get(app, 'character', 'export', [":chronicleid", ":exporttype"]);
         router.post(app, 'character', 'import', [':chronicleId']);
         router.post(app, 'character', 'revert');
