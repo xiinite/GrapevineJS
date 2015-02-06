@@ -1,13 +1,10 @@
 var express = require('express');
 var router = require('../bin/routehandler.js');
+var homeController = require('../controllers/homeController.js')
 var home = express.Router();
-home.get('/', function (req, res) {
-    res.render('index', {user: req.user});
-});
 
-home.get('/login', function (req, res) {
-    res.render('login', {layout: '_layoutNoAuth'});
-});
+home.get('/', homeController.home);
+home.get('/login', homeController.login);
 
 
 module.exports = {

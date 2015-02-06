@@ -126,6 +126,14 @@ textarea.vertical{
     padding: 0;
 }
 
+.padding5 {
+    padding-top: 5px;
+}
+
+.margin5{
+    margin-left: 20px;
+    right: 20px;
+}
 .row.warning{
     background-color:#76A0D3;
 }
@@ -139,6 +147,29 @@ textarea.vertical{
 .ui-select-placeholder{
     color: #000;
 }
+
+.tile{
+    width: 100%;
+}
+.dynamicTile .col-sm-2.col-xs-4{
+    padding:5px;
+}
+
+.dynamicTile .col-sm-4.col-xs-8{
+    padding:5px;
+}
+
+.tilecaption{
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    margin:0!important;
+    text-align: center;
+    color:white;
+    font-family: Segoe UI;
+    font-weight: lighter;
+}
+
 @media print {
     body {
         margin: 0;

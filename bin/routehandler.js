@@ -57,5 +57,8 @@ module.exports = {
         controller = '../controllers/' + controller + 'Controller.js';
 
         app.get('/' + path, require(controller)[handler]);
+    },
+    home: function(app){
+
     }
 };
