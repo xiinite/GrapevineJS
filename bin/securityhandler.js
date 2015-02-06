@@ -19,12 +19,12 @@ module.exports = {
             }
         }
 
-        if(!allowed && req.user.isSuperAdmin){
-            return next(new Error("forbidden"));
+        if(allowed || req.user.isSuperAdmin){
+            return true;
         }
         else
         {
-            return true
+            return next(new Error("forbidden"));
         }
     }
 }

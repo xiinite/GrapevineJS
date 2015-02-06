@@ -23,7 +23,7 @@
 
         var print = function () {
             $('div.panel-collapse').unbind("shown.bs.collapse", print);
-            window.print();
+            setTimeout(window.print, 500);
         }
 
         $('.trait').click(function () {
@@ -113,11 +113,12 @@
                 <button id="btnPrint" type='button' class='btn btn-info'><span class="glyphicon glyphicon-print"></span>
                     Print
                 </button>
-                <%if(user.isSuperAdmin || character.chronicle.admins.indexOf(user.googleId) > 0){%>
-                <a href="/character/edit/<%= character.id %>" class="btn btn-info"><span class="glyphicon glyphicon-edit"></span>
+                <% if(user.isSuperAdmin || character.chronicle.admins.indexOf(user.googleId) > 0){ %>
+                <a href="/character/edit/<%= character.id %>" class="btn btn-info"><span
+                            class="glyphicon glyphicon-edit"></span>
                     Edit
                 </a>
-                <%}%>
+                <% } %>
             </div>
         </div>
     </h1>
@@ -216,7 +217,8 @@
                 <div class="row">
                     <div class="col-md-12 voffset3">
                         <div class="col-md-4">
-                            <div><b>Blood (max):</b> <%= character.bloodpool.current %> (<%= character.bloodpool.max %>)</div>
+                            <div><b>Blood (max):</b> <%= character.bloodpool.current %> (<%= character.bloodpool.max %>)
+                            </div>
                             <div><b>Willpower (total):</b> <%= character.willpower.current %>
                                 (<%= character.willpower.max %>)
                             </div>
@@ -257,7 +259,7 @@
                                     <%= character.attributes.physical[i].name %>
                                     <% if(character.attributes.physical[i].val > 1){ %>
                                     (<%= character.attributes.physical[i].val %>)
-                                    <%}%>
+                                    <% } %>
                                 </li>
                                 <% } %>
                             </ul>
@@ -272,7 +274,7 @@
                                     <%= character.attributes.social[i].name %>
                                     <% if(character.attributes.social[i].val > 1){ %>
                                     (<%= character.attributes.social[i].val %>)
-                                    <%}%>
+                                    <% } %>
                                 </li>
                                 <% } %>
                             </ul>
@@ -287,7 +289,7 @@
                                     <%= character.attributes.mental[i].name %>
                                     <% if(character.attributes.mental[i].val > 1){ %>
                                     (<%= character.attributes.mental[i].val %>)
-                                    <%}%>
+                                    <% } %>
                                 </li>
                                 <% } %>
                             </ul>
@@ -306,7 +308,7 @@
                                     <%= character.attributes.negativephysical[i].name %>
                                     <% if(character.attributes.negativephysical[i].val > 1){ %>
                                     (<%= character.attributes.negativephysical[i].val %>)
-                                    <%}%>
+                                    <% } %>
                                 </li>
                                 <% } %>
                             </ul>
@@ -321,7 +323,7 @@
                                     <%= character.attributes.negativesocial[i].name %>
                                     <% if(character.attributes.negativesocial[i].val > 1){ %>
                                     (<%= character.attributes.negativesocial[i].val %>)
-                                    <%}%>
+                                    <% } %>
                                 </li>
                                 <% } %>
                             </ul>
@@ -336,7 +338,7 @@
                                     <%= character.attributes.negativemental[i].name %>
                                     <% if(character.attributes.negativemental[i].val > 1){ %>
                                     (<%= character.attributes.negativemental[i].val %>)
-                                    <%}%>
+                                    <% } %>
                                 </li>
                                 <% } %>
                             </ul>
@@ -473,7 +475,31 @@
                                 <% } %>
                             </ul>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.derangements.length %> Derangements</li>
+                                <% for(var i = 0; i < character.derangements.length; i++) { %>
+                                <li class="list-group-item">
+                                    <%= character.derangements[i].name %>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.bloodbonds.length %> Blood Bonds</li>
+                                <% for(var i = 0; i < character.bloodbonds.length; i++) { %>
+                                <li class="list-group-item">
+                                    <%= character.bloodbonds[i].name %>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-12">
                             <ul class="list-group">
                                 <li class="list-group-item active"><%= character.equipment.length %> Equipment</li>
                                 <% for(var i = 0; i < character.equipment.length; i++) { %>

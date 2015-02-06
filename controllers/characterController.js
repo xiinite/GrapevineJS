@@ -124,8 +124,6 @@ module.exports = {
                 if (!sec.checkAdmin(req, next, result[0].chronicle.id)) {
                     return;
                 }
-                var char = result[0];
-                var user = req.user || {displayName: "Anonymous"};
                 var previousversion = JSON.parse(JSON.stringify(result[0]));
                 previousversion.modificationhistory = [];
                 var modHistory = [];
@@ -163,7 +161,7 @@ module.exports = {
                     return;
                 }
 
-                res.json("forbidden");
+                res.json(result[0]);
             });
         }
     },

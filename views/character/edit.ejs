@@ -408,13 +408,13 @@
                                     <span ng-show="a.note.length > 0">
                                     ( {{ a.note }} )
                                     </span>
-                                    <button ng-click="removeAdvantage(a.name, a.note, character.abilities)"
+                                    <button ng-click="removeAdvantage(a.name, a.note, character.abilities, 'abilities')"
                                             class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-minus"></span></button>
-                                    <button ng-click="addAdvantage(a.name, a.note, character.abilities)"
+                                    <button ng-click="addAdvantage(a.name, a.note, character.abilities, 'abilities')"
                                             class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span>
                                     </button>
-                                    <button ng-click="addNoteDialog(a, character.abilities)"
+                                    <button ng-click="addNoteDialog(a, character.abilities, 'abilities')"
                                             class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-pencil"></span></button>
                                 </li>
@@ -424,7 +424,7 @@
                                             ng-model="sability">
                                         <option style="display:none" value="">Select an ability</option>
                                     </select>
-                                    <button ng-click="addAdvantage(sability, '', character.abilities, 'abilities')"
+                                    <button ng-click="addAdvantage(sability, '', character.abilities, 'abilities', 'abilities')"
                                             class="btn btn-default btn-sm pull-right">Add
                                     </button>
                                 </li>
@@ -501,13 +501,13 @@
                                     <span ng-show="b.note.length > 0">
                                     ( {{ b.note }} )
                                     </span>
-                                    <button ng-click="removeAdvantage(b.name, b.note, character.backgrounds)"
+                                    <button ng-click="removeAdvantage(b.name, b.note, character.backgrounds, 'backgrounds')"
                                             class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-minus"></span></button>
-                                    <button ng-click="addAdvantage(b.name, b.note, character.backgrounds)"
+                                    <button ng-click="addAdvantage(b.name, b.note , character.backgrounds,'backgrounds')"
                                             class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span>
                                     </button>
-                                    <button ng-click="addNoteDialog(b, character.backgrounds)"
+                                    <button ng-click="addNoteDialog(b, character.backgrounds, 'backgrounds')"
                                             class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-pencil"></span></button>
                                 </li>
@@ -517,7 +517,7 @@
                                             ng-model="sbackground">
                                         <option style="display:none" value="">Select a background</option>
                                     </select>
-                                    <button ng-click="addAdvantage(sbackground, '', character.backgrounds, 'backgrounds')"
+                                    <button ng-click="addAdvantage(sbackground, '', character.backgrounds, 'backgrounds', 'backgrounds')"
                                             class="btn btn-default btn-sm pull-right">Add
                                     </button>
                                 </li>
@@ -531,13 +531,13 @@
                                     <span ng-show="i.note.length > 0">
                                     ( {{ i.note }} )
                                     </span>
-                                    <button ng-click="removeAdvantage(i.name, i.note, character.influences)"
+                                    <button ng-click="removeAdvantage(i.name, i.note, character.influences, 'influences')"
                                             class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-minus"></span></button>
-                                    <button ng-click="addAdvantage(i.name, i.note, character.influences)"
+                                    <button ng-click="addAdvantage(i.name, i.note, character.influences, 'influences')"
                                             class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span>
                                     </button>
-                                    <button ng-click="addNoteDialog(i, character.influences)"
+                                    <button ng-click="addNoteDialog(i, character.influences, 'influences')"
                                             class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-pencil"></span></button>
                                 </li>
@@ -547,7 +547,7 @@
                                             ng-model="sinfluence">
                                         <option style="display:none" value="">Select an influence</option>
                                     </select>
-                                    <button ng-click="addAdvantage(sinfluence, '', character.influences, 'influences')"
+                                    <button ng-click="addAdvantage(sinfluence, '', character.influences, 'influences', 'influences')"
                                             class="btn btn-default btn-sm pull-right">Add
                                     </button>
                                 </li>
@@ -561,20 +561,20 @@
                                     <span ng-show="m.note.length > 0">
                                     ( {{ m.note }} )
                                     </span>
-                                    <button ng-click="removeAdvantage(m.name, m.note, character.misc)"
+                                    <button ng-click="removeAdvantage(m.name, m.note, character.misc, 'misc')"
                                             class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-minus"></span></button>
-                                    <button ng-click="addAdvantage(m.name, m.note, character.misc)"
+                                    <button ng-click="addAdvantage(m.name, m.note, character.misc, 'misc')"
                                             class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span>
                                     </button>
-                                    <button ng-click="addNoteDialog(m, character.misc)" class="btn btn-xs pull-right">
+                                    <button ng-click="addNoteDialog(m, character.misc, 'misc')" class="btn btn-xs pull-right">
                                         <span class="glyphicon glyphicon-pencil"></span></button>
                                 </li>
                                 <li>
                                     <input type='text' id="slc-misc" class=" col-md-9"
                                            placeholder="Misc character trait"
                                            ng-model="smisc"/>
-                                    <button ng-click="addAdvantage(smisc, '', character.misc, 'misc')"
+                                    <button ng-click="addAdvantage(smisc, '', character.misc, 'misc', 'misc')"
                                             class="btn btn-default btn-sm pull-right">Add
                                     </button>
                                 </li>
@@ -617,7 +617,7 @@
                                 <li class="list-group-item active">{{ character.merits.length }} Merits</li>
                                 <li ng-repeat="m in character.merits" class="list-group-item trait">
                                     {{ m.name + " (" + m.cost + ")" }}
-                                    <button ng-click="removeMF(m, character.merits)" class="btn btn-xs pull-right"><span
+                                    <button ng-click="removeMF(m, character.merits, 'merits')" class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-minus"></span></button>
                                 </li>
                                 <li>
@@ -626,7 +626,7 @@
                                             ng-model="smerit">
                                         <option style="display:none" value="">Select a merit</option>
                                     </select>
-                                    <button ng-click="addMF(smerit, character.merits, 'merits')"
+                                    <button ng-click="addMF(smerit, character.merits, 'merits', 'merits')"
                                             class="btn btn-default btn-sm pull-right">Add
                                     </button>
                                 </li>
@@ -637,7 +637,7 @@
                                 <li class="list-group-item active">{{ character.flaws.length }} Flaws</li>
                                 <li ng-repeat="f in character.flaws" class="list-group-item">
                                     {{ f.name + " (" + f.cost + ")" }}
-                                    <button ng-click="removeMF(f, character.flaws)" class="btn btn-xs pull-right"><span
+                                    <button ng-click="removeMF(f, character.flaws, 'flaws')" class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-minus"></span></button>
                                 </li>
                                 <li>
@@ -646,7 +646,7 @@
                                             ng-model="sflaw">
                                         <option style="display:none" value="">Select a flaw</option>
                                     </select>
-                                    <button ng-click="addMF(sflaw, character.flaws, 'flaws')"
+                                    <button ng-click="addMF(sflaw, character.flaws, 'flaws', 'flaws')"
                                             class="btn btn-default btn-sm pull-right">Add
                                     </button>
                                 </li>
@@ -664,31 +664,30 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="col-md-4">
-                            <ul class="list-group">
-                                <li class="list-group-item active">{{ character.equipment.length }} Equipment</li>
-                                <li ng-repeat="e in character.equipment" class="list-group-item">
-                                    {{ e.name + ": " + e.rating }}
-                                    <span ng-show="e.note.length > 0">
-                                    ( {{ e.note }} )
+                        <div class="col-md-4"> <ul class="list-group">
+                                <li class="list-group-item active">{{ character.derangements.length }} Derangements</li>
+                                <li ng-repeat="a in character.derangements | orderBy:'name':false" class="list-group-item">
+                                    {{ a.name + ": " + a.rating }}
+                                    <span ng-show="a.note.length > 0">
+                                    ( {{ a.note }} )
                                     </span>
-                                    <button ng-click="removeAdvantage(e.name, e.note, character.equipment)"
+                                    <button ng-click="removeAdvantage(a.name, a.note, character.derangements, 'derangements')"
                                             class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-minus"></span></button>
-                                    <button ng-click="addAdvantage(e.name, e.note, character.equipment)"
+                                    <button ng-click="addAdvantage(a.name, a.note, character.derangements, 'derangements')"
                                             class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span>
                                     </button>
-                                    <button ng-click="addNoteDialog(e, character.equipment)"
+                                    <button ng-click="addNoteDialog(a, character.derangements, 'derangements')"
                                             class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-pencil"></span></button>
                                 </li>
-                                <li>
-                                    <select id="slc-equipment" class=" col-md-9"
-                                            ng-options="adv for adv in equipment"
-                                            ng-model="sequipment">
-                                        <option style="display:none" value="">Select equipment</option>
+                                <li class="list-group-item">
+                                    <select id="slc-abilities" class=" col-md-9"
+                                            ng-options="adv for adv in derangements"
+                                            ng-model="sderangement">
+                                        <option style="display:none" value="">Select a derangement</option>
                                     </select>
-                                    <button ng-click="addAdvantage(sequipment, '', character.equipment, 'equipment')"
+                                    <button ng-click="addAdvantage(sderangement, '', character.derangements, 'derangements', 'derangements')"
                                             class="btn btn-default btn-sm pull-right">Add
                                     </button>
                                 </li>
@@ -706,7 +705,7 @@
                                                 class="glyphicon glyphicon-minus"></span></button>
                                     <button ng-click="addBloodbond(e)" class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-plus"></span></button>
-                                    <button ng-click="addNoteDialog(e, character.bloodbonds)"
+                                    <button ng-click="addNoteDialog(e, character.bloodbonds, 'bloodbonds')"
                                             class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-pencil"></span></button>
                                 </li>
@@ -725,6 +724,40 @@
                                 </li>
                             </ul>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <ul class="list-group">
+                            <li class="list-group-item active">{{ character.equipment.length }} Equipment</li>
+                            <li ng-repeat="e in character.equipment" class="list-group-item">
+                                {{ e.name + ": " + e.rating }}
+                                    <span ng-show="e.note.length > 0">
+                                    ( {{ e.note }} )
+                                    </span>
+                                <button ng-click="removeAdvantage(e.name, e.note, character.equipment, 'equipment')"
+                                        class="btn btn-xs pull-right"><span
+                                            class="glyphicon glyphicon-minus"></span></button>
+                                <button ng-click="addAdvantage(e.name, e.note, character.equipment, 'equipment')"
+                                        class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                                <button ng-click="addNoteDialog(e, character.equipment, 'equipment)"
+                                        class="btn btn-xs pull-right"><span
+                                            class="glyphicon glyphicon-pencil"></span></button>
+                            </li>
+                            <li>
+                                <select id="slc-equipment" class=" col-md-9"
+                                        ng-options="adv for adv in equipment"
+                                        ng-model="sequipment">
+                                    <option style="display:none" value="">Select equipment</option>
+                                </select>
+                                <button ng-click="addAdvantage(sequipment, '', character.equipment, 'equiptment', 'equipment')"
+                                        class="btn btn-default btn-sm pull-right">Add
+                                </button>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>

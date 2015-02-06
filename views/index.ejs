@@ -12,10 +12,10 @@
                 <a class="btn btn-md btn-block btn-primary" href="/character/">Characters</a>
                 <a class="btn btn-md btn-block btn-primary" href="/user/">Users</a>
                 <% } %>
+                <% if(user.isAdmin) { %>
+                    <% %>
+                <% } %>
             </div>
-            <% if(user.isAdmin) { %>
-
-            <% } %>
             <div class="clearfix"><br/></div>
         </div>
     </div>

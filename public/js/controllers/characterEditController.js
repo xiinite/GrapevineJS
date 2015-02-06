@@ -15,6 +15,8 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
     $scope.clans = [];
     $scope.disciplines = [];
     $scope.sdiscipline = {};
+    $scope.derangements = [];
+    $scope.sderangement = {};
     $scope.flaws = [];
     $scope.sflaw = {};
     $scope.influences = [];
@@ -81,7 +83,7 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
             $("#slc-" + select).removeClass("ng-dirty");
             $("#slc-" + select).val(null);
         }
-        $scope.setItemDirty(list);
+        $scope.setItemDirty("attributes." + total.slice(1), list);
     };
 
     $scope.removeTrait = function(value, list, total){
@@ -102,10 +104,10 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
             $scope.character.attributes[total] = t;
             $scope.setItemDirty("attributes." + total, t);
         }
-        $scope.setItemDirty(list);
+        $scope.setItemDirty("attributes." + total.slice(1), list);
     };
 
-    $scope.addAdvantage = function(value, notevalue, list, select){
+    $scope.addAdvantage = function(value, notevalue, list, listname, select){
         if(value.length === undefined) return;
         var result = $.grep(list, function(e){ return e.name == value; });
         if(result.length === 0) {
@@ -122,10 +124,10 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
             $("#slc-" + select).val(null);
         }
         
-        $scope.setItemDirty(list);
+        $scope.setItemDirty(listname, list);
     };
     
-    $scope.removeAdvantage = function(value, notevalue, list){
+    $scope.removeAdvantage = function(value, notevalue, list, listname){
         var result = $.grep(list, function(e){ return e.name == value; });
         var adv = result[0];
 
@@ -134,10 +136,10 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
         }else{
             adv.rating--;
         }
-        $scope.setItemDirty(list);
+        $scope.setItemDirty(listname, list);
     };
     
-    $scope.addMF = function(value, list, select){
+    $scope.addMF = function(value, list, listname,  select){
         if(value === undefined) return;
         var result = $.grep(list, function(e){ return e.name == value.name && e.cost == value.cost; });
         if(result.length === 0) {
@@ -152,24 +154,24 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
             $("#slc-" + select).val(null);
         }
         
-        $scope.setItemDirty(list);
+        $scope.setItemDirty(listname, list);
     };
     
-    $scope.removeMF = function(value, list){
+    $scope.removeMF = function(value, list, listname){
         var result = $.grep(list, function(e){ return e.name == value.name && e.cost == value.cost; });
         var adv = result[0];
         list.splice($.inArray(adv, list),1);
 
-        $scope.setItemDirty(list);
+        $scope.setItemDirty(listname, list);
     };
 
-    $scope.updateAdvantageNote = function(value, notevalue, list)
+    $scope.updateAdvantageNote = function(value, notevalue, list, listname)
     {
         var result = $.grep(list, function(e){ return e.name == value; });
         var adv = result[0];
         
         adv.note = notevalue;
-        $scope.setItemDirty(list);
+        $scope.setItemDirty(listname, list);
     };
 
     $scope.addDiscipline = function()
@@ -283,11 +285,12 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
     };
     
     $scope.previousNoteValue = {};
-    $scope.addNoteDialog = function(adv, list)
+    $scope.addNoteDialog = function(adv, list, listname)
     {
         angular.copy(adv, $scope.previousNoteValue);
         $scope.noteItem = adv;
         $scope.selectedList = list;
+        $scope.selectedListName = listname;
         $("#advNoteModal").modal();           
     };
 
@@ -295,54 +298,27 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
         angular.copy($scope.previousNoteValue, $scope.noteItem);
         $scope.noteItem = {};
         $scope.selectedList = {};
+        $scope.selectedListName = '';
     };
     
     $scope.saveNoteItem = function(){
-        $scope.setItemDirty($scope.selectedList);
+        $scope.setItemDirty($scope.selectedListName);
         
         $scope.noteItem = {};
         $scope.selectedList = {};
+        $scope.selectedListName = '';
     }
     
     $scope.setItemDirty = function(list, value)
     {
-        if (typeof list == 'string' || list instanceof String)
-        {
-            if($scope.dirtylists.indexOf({key: list, value: value}) > -1){
-                $scope.dirtylists.splice($.inArray({key: list, value: value}, $scope.dirtylists),1);
-            }
-            $scope.dirtylists.push({key: list, value: value});
-        }else{
-            for(var key in $scope.character)
-            {
-                if($scope.character[key] === list)
-                {
-                    if($scope.dirtylists.indexOf({key: key, value: $scope.character[key]}) > -1){
-                        $scope.dirtylists.splice($.inArray({key: key, value: $scope.character[key]}, $scope.dirtylists),1);
-                    }
-                    $scope.dirtylists.push({key: key, value: $scope.character[key]});
-                }
-
-                if(key == 'attributes')
-                {
-                    for(var akey in $scope.character[key])
-                    {
-                        
-                        if($scope.dirtylists.indexOf({key: key + "." + akey, value: $scope.character[key][akey]}) > -1){
-                            $scope.dirtylists.splice($.inArray({key: key + "." + akey, value: $scope.character[key][akey]}, $scope.dirtylists),1);
-                        }
-                        if($scope.character[key][akey] === list){
-                            $scope.dirtylists.push({key: key + "." + akey, value: $scope.character[key][akey]});
-                        }
-                    }
-                }
-            }
+        if($scope.dirtylists.indexOf({key: list, value: value}) > -1){
+            $scope.dirtylists.splice($.inArray({key: list, value: value}, $scope.dirtylists),1);
         }
+        $scope.dirtylists.push({key: list, value: value});
     };
 
     $scope.save = function(){
         var fields = {};
-        fields;
         $(".ng-dirty").each(function(index, item){
             if($(item).data("field") !== undefined){
 
@@ -395,6 +371,9 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
             });
             resources.clans.get(function(data){
                 root.clans = data;
+            });
+            resources.derangements.get(function(data){
+                root.derangements = data;
             });
             resources.disciplines.get(function(data){
                 root.disciplines = data;
