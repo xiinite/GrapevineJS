@@ -30,6 +30,8 @@ module.exports = {
         googleId: {type: String},
         player: {type: Mixed},
         chronicle: {type: Mixed},
+        concept: {type: String},
+        background: {type: String},
         state: {type: String},
         experience: {
             unspent: String,

@@ -49,7 +49,7 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
     $scope.character = [];
     $scope.players = [];
     $scope.statusses = [
-        "Active", "Stopped", "Deceased"
+        "Concept", "Approved", "Background Approved", "Active", "Retired", "Deceased"
     ];
 
     $scope.noteItem = {};

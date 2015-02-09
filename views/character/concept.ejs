@@ -1,0 +1,59 @@
+<% layout("../layout.ejs") %>
+<script type="text/javascript" src="/js/controllers/conceptController.js"></script>
+<div class="container" ng-controller="ConceptController" ng-init="init()">
+    <h1 class="page-header hidden-xs hidden-sm">New concept</h1>
+
+    <div class="col-lg-12">
+        <div class="row" ng-show="showForm()">
+            <form class="form-horizontal" name="conceptForm">
+                <div class="form-group ">
+                    <label class="col-sm-2 control-label">Chronicle:</label>
+
+                    <div class="col-sm-10">
+                        <select class="form-control"
+                                ng-required="true"
+                                ng-options="c as c.name for c in chronicles"
+                                ng-model="schronicle">
+                            <option style="display:none" value="">Select a chronicle</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Name:</label>
+
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" ng-model="name" ng-required="true" />
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <label class="col-sm-2 control-label">Clan:</label>
+
+                    <div class="col-sm-10">
+                        <select class="form-control"
+                                ng-required="true"
+                                ng-options="c as c for c in clans"
+                                ng-model="sclan">
+                            <option style="display:none" value="">Select a clan</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Description:</label>
+
+                    <div class="col-sm-10">
+                        <textarea class="form-control" ng-model="concept" ng-required="true"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary form-control" ng-click="submitForm()">Submit for review</button>
+                </div>
+            </form>
+        </div>
+        <div class="row" ng-show="showNoChrons()">
+            You are not part of any chronicles. Ask your Storyteller to add you.
+        </div>
+        <div class="row" ng-show="showSubmitted()">
+            <a class="btn btn-default" href="/">Submitted, return to home!</a>
+            </div>
+    </div>
+</div>

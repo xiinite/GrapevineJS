@@ -17,8 +17,11 @@
             $(".item").height($("#tile0").width());
         });
 
-        $(".tile").click(function(){
-           window.location = window.location + "character/show/" + $(this).data("charid");
+        $(".chartile").click(function () {
+            window.location = window.location + "character/show/" + $(this).data("charid");
+        });
+        $(".concepttile").click(function () {
+            window.location = window.location + "character/concept/";
         });
     });
 </script>
@@ -28,108 +31,145 @@
             <div class="col-xs-12 col-lg-3 col-sm-3">
                 <h2><img class="img-circle" src="img/Masks.png"> grapevine</h2>
             </div>
-            <% if(characters.length > 0) { %>
-            <div class="col-xs-12 col-lg-6 col-sm-6 dynamicTile">
-                <div class="row">
+            <div class="col-xs-12 col-lg-6 col-sm-6 ">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3>My characters</h3>
+                    </div>
+                    <div class="panel-body dynamicTile">
+                        <div class="row">
+                            <% for(var i = 0; i < characters.length; i++) { %>
+                            <div class="col-xs-6 col-lg-4 col-sm-4">
+                                <div id="tile<%= i %>" class="tile chartile panel panel-default panel-body clickable"
+                                     data-charid="<%= characters[i].id %>">
 
-                    <% for(var i = 0; i < characters.length; i++) { %>
+                                    <div class="carousel slide" data-ride="carousel">
+                                        <div class="carousel-inner">
+                                            <div class="item active">
+                                                <div class="row">
+                                                    <div class="text-center">
+                                                        <span class="glyphicon glyphicon-pawn"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="text-center col-lg-12"><%= characters[i].name %></div>
+                                                </div>
+                                                <div class="row voffset1">
+                                                    <div class="text-center col-lg-12"><%= characters[i].chronicle.name %></div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="text-center col-lg-12"><%= characters[i].clan %></div>
+                                                </div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="row">
+                                                    <div class="text-center">
+                                                        <span class="glyphicon glyphicon-king"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="text-center col-lg-12"><%= characters[i].name %></div>
+                                                </div>
+                                                <div class="row voffset1">
+                                                    <div class="text-center col-lg-12"><%= characters[i].sect %></div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="text-center">
+                                                        <% if(characters[i].title.length > 0){ %>
+                                                        <div class="text-center col-lg-12"><%= characters[i].title %></div>
+                                                        <% } else { %>
+                                                        <div class="text-center col-lg-12">No title</div>
+                                                        <% } %>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="text-center">
+                                                        <%= characters[i].status.length %> Status
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="row">
+                                                    <div class="text-center">
+                                                        <span class="glyphicon glyphicon-knight"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="text-center col-lg-12"><%= characters[i].name %></div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="text-center col-lg-12"><%= characters[i].attributes.tphysical %>
+                                                        physical
+                                                    </div>
+                                                </div>
+                                                <div class="row voffset1">
+                                                    <div class="text-center col-lg-12"><%= characters[i].attributes.tsocial %>
+                                                        social
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="text-center col-lg-12"><%= characters[i].attributes.tmental %>
+                                                        mental
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="item">
+                                                <div class="row">
+                                                    <div class="text-center">
+                                                        <span class="glyphicon glyphicon-bishop"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="text-center col-lg-12"><%= characters[i].name %></div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="text-center col-lg-12"><%= characters[i].abilities.length %>
+                                                        abilities
+                                                    </div>
+                                                </div>
+                                                <div class="row voffset1">
+                                                    <div class="text-center col-lg-12"><%= characters[i].disciplines.length %>
+                                                        social
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="text-center col-lg-12"><%= characters[i].rituals.length %>
+                                                        mental
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
 
-                    <div class="col-xs-6 col-lg-4 col-sm-4">
-                        <div id="tile<%= i %>" class="tile panel panel-default panel-body clickable" data-charid="<%= characters[i].id %>">
-
-                            <div class="carousel slide" data-ride="carousel">
-                                <div class="carousel-inner">
+                            <div class="col-xs-6 col-lg-4 col-sm-4">
+                                <div id="tile<%= characters.length %>"
+                                     class="tile concepttile panel panel-default panel-body clickable">
                                     <div class="item active">
                                         <div class="row">
                                             <div class="text-center">
-                                                <span class="glyphicon glyphicon-pawn"></span>
+                                                <span class="glyphicon glyphicon-large glyphicon-pencil"></span>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="text-center col-lg-12"><%= characters[i].name %></div>
-                                        </div>
-                                        <div class="row voffset1">
-                                            <div class="text-center col-lg-12"><%= characters[i].chronicle.name %></div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="text-center col-lg-12"><%= characters[i].clan %></div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="row">
-                                            <div class="text-center">
-                                                <span class="glyphicon glyphicon-king"></span>
+                                            <div class="text-center col-lg-12">
+                                                New Concept
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="text-center col-lg-12"><%= characters[i].name %></div>
-                                        </div>
-                                        <div class="row voffset1">
-                                            <div class="text-center col-lg-12"><%= characters[i].sect %></div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="text-center">
-                                                <% if(characters[i].title.length > 0){ %>
-                                                <div class="text-center col-lg-12"><%= characters[i].title %></div>
-                                                <% } else { %>
-                                                <div class="text-center col-lg-12">No title</div>
-                                                <% } %>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="text-center">
-                                                <%= characters[i].status.length %> Status
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="row">
-                                            <div class="text-center">
-                                                <span class="glyphicon glyphicon-knight"></span>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="text-center col-lg-12"><%= characters[i].name %></div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="text-center col-lg-12"><%= characters[i].attributes.tphysical %> physical</div>
-                                        </div>
-                                        <div class="row voffset1">
-                                            <div class="text-center col-lg-12"><%= characters[i].attributes.tsocial %> social</div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="text-center col-lg-12"><%= characters[i].attributes.tmental %> mental</div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="row">
-                                            <div class="text-center">
-                                                <span class="glyphicon glyphicon-bishop"></span>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="text-center col-lg-12"><%= characters[i].name %></div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="text-center col-lg-12"><%= characters[i].abilities.length %> abilities</div>
-                                        </div>
-                                        <div class="row voffset1">
-                                            <div class="text-center col-lg-12"><%= characters[i].disciplines.length %> social</div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="text-center col-lg-12"><%= characters[i].rituals.length %> mental</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <% } %>
                 </div>
             </div>
-            <% } %>
             <div class="col-xs-12 col-lg-3 col-sm-3" style="text-align:center">
-                <div class="panel">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3>Admin</h3>
+                    </div>
                     <div class="panel-body">
                         <a class="btn btn-md btn-block btn-primary" href="/chronicle/">Chronicles</a>
                         <% if(user.isSuperAdmin) { %>

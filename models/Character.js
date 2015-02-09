@@ -24,7 +24,7 @@ module.exports = {
         model.find(where, callback);
     },
     'list': function(where, callback){
-        model.find(where, 'id name chronicle googleId', callback);
+        model.find(where, 'id name chronicle googleId state', callback);
     },
     'clear': function (callback) {
         model.find().remove(callback);

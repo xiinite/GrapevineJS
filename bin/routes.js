@@ -13,9 +13,11 @@ module.exports = {
 
         router.get(app, 'character', 'new', [':id']);
         router.get(app, 'character', 'lores', [':id']);
+        router.get(app, 'character', 'background', [':id']);
         router.get(app, 'character', 'export', [":chronicleid", ":exporttype"]);
         router.post(app, 'character', 'import', [':chronicleId']);
         router.post(app, 'character', 'revert');
+        router.post(app, 'character', 'submitconcept');
 
         router.post(app, 'chronicle', 'insert');
         router.post(app, 'chronicle', 'addadmin');

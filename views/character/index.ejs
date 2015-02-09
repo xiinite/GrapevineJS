@@ -117,11 +117,18 @@
                     New character
                 </button>
             </div>
-            <div class="col-md-4 col-xs-12">
+            <div class="col-md-2 col-xs-6">
                 <select class="form-control"
                         ng-change="search()"
                         ng-options="c as c.name for c in chronicles"
                         ng-model="selectedchronicle">
+                </select>
+            </div>
+            <div class="col-md-2 col-xs-6">
+                <select class="form-control"
+                        ng-change="search()"
+                        ng-options="c for c in statusses"
+                        ng-model="selectedstatus">
                 </select>
             </div>
             <div class="col-md-4 col-xs-12">
@@ -171,7 +178,7 @@
         </div>
     </div>
 
-    <div id='pnlAdvantages' class="panel panel-default hidden-xs hidden-sm">
+    <div id='pnlUpload' class="panel panel-default hidden-xs hidden-sm">
         <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseUpload">
             <h4 id="hdrUpload" class="panel-title">
                 Upload new

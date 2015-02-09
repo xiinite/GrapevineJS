@@ -59,6 +59,8 @@ module.exports = {
                     charactertype: 'vampire',
                     googleId: '',
                     chronicle: chronicleid,
+                    concept: "",
+                    background: "",
                     state: "",
                     created: new Date(),
                     modified: new Date(),

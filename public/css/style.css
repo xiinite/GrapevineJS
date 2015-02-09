@@ -170,6 +170,9 @@ textarea.vertical{
     font-weight: lighter;
 }
 
+.glyphicon-large{
+    font-size: 2em;
+}
 @media print {
     body {
         margin: 0;

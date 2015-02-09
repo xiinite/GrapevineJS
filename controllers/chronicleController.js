@@ -4,11 +4,11 @@ var sec = require('../bin/securityhandler.js');
 
 var ViewTemplatePath = 'chronicle';
 module.exports = {
-    'index': function (req, res, next) {
+    'index': function (req, res) {
         var out = {user: req.user};
         res.render(ViewTemplatePath + "/index", out);
     },
-    'all': function (req, res, next) {
+    'all': function (req, res) {
         var where = {};
         if (!req.user.isSuperAdmin) {
             var userId = req.user.googleId;
@@ -26,7 +26,7 @@ module.exports = {
             });
         }
     },
-    'list': function (req, res, next) {
+    'list': function (req, res) {
         var where = {};
         if (!req.user.isSuperAdmin) {
             var userId = req.user.googleId;
@@ -43,10 +43,14 @@ module.exports = {
             });
         }
     },
+    'listByPlayer': function(req, res){
+        model.list({players: req.user.googleId}, function (err, result) {
+            res.json(result);
+        });
+    },
     'find': function (req, res, next) {
         if (req.params.id) {
             model.find({"id": req.params.id}, function (err, result) {
-                var user = req.user || {displayName: "Anonymous"};
                 if (!sec.checkAdmin(req, next, result[0].id)) {
                     return;
                 }

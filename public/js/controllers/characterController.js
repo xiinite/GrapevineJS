@@ -21,25 +21,39 @@ app.controller('CharacterController', ['$scope', '$http', 'loading', '$filter', 
     $scope.exporttypes = [{name: 'grapevinejs json', ext: "json"}, {name: 'classic grapevine gv3', ext: "gv3"}];
     $scope.exporttype = undefined;
 
+    $scope.statusses = [
+        "Concept", "Approved", "Background Approved", "Active", "Retired", "Deceased"
+    ];
+    $scope.selectedstatus = "Active";
+
     $scope.init = function(){
         loading.show();
         var root = $scope;
         if($scope.loaded === false){
+            
             $http.get("/chronicle/list").then(function(resp){
                 root.chronicles = resp.data;
                 if(root.chronicles.length > 0){
                     root.selectedchronicle = root.chronicles[0];
                     $scope.loaded = true;
                 }
+                
+            $http.get("/character/all").then(function (response) {
+                root.items = response.data;
+    
+                $scope.search();
+                loading.hide();
+            }); 
             });
         }
-        
-        $http.get("/character/all").then(function (response) {
-            root.items = response.data;
-
-            $scope.search();
-            loading.hide();
-        }); 
+        else{
+            $http.get("/character/all").then(function (response) {
+                root.items = response.data;
+    
+                $scope.search();
+                loading.hide();
+            }); 
+        }
     };
 
     $scope.exportvisible = function(){
@@ -81,7 +95,7 @@ app.controller('CharacterController', ['$scope', '$http', 'loading', '$filter', 
     $scope.search = function () {
         $scope.filteredItems = $filter('filter')($scope.items, function (item) {
             for(var attr in item) {
-                if (searchMatch(item[attr], $scope.query) && item.chronicle == $scope.selectedchronicle.id)
+                if (searchMatch(item[attr], $scope.query) && item.chronicle == $scope.selectedchronicle.id && item.state == $scope.selectedstatus)
                 {
                     return true;
                 }

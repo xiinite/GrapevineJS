@@ -31,7 +31,7 @@ var findByDate = function (collection, _date, cb) {
     }(coll.shift()));
 };
 module.exports = {
-    'index': function (req, res, next) {
+    'index': function (req, res) {
         if (!req.user.isSuperAdmin && !req.user.isAdmin) {
             res.json("forbidden");
             return;
@@ -39,7 +39,7 @@ module.exports = {
         var out = {user: req.user};
         res.render(ViewTemplatePath + "/index", out);
     },
-    'all': function (req, res, next) {
+    'all': function (req, res) {
         var where = {};
         if (!req.user.isSuperAdmin) {
             var chronicleIds = [];
@@ -60,7 +60,7 @@ module.exports = {
             });
         }
     },
-    'show': function (req, res, next) {
+    'show': function (req, res) {
         if (req.params.id) {
             model.find({
                 "id": req.params.id
@@ -75,7 +75,7 @@ module.exports = {
             });
         }
     },
-    'lores': function(req, res, next){
+    'lores': function (req, res) {
         if (req.params.id) {
             model.find({
                 "id": req.params.id
@@ -84,30 +84,71 @@ module.exports = {
 
                 var lores = [];
 
-                character.abilities.forEach(function(ab, i){
-                    if(ab.name.indexOf("Lore: ") > -1){
-                        var filename = ab.name.replace("Lore: ", "").replace("Clan: ", "") + " " + ab.rating + ".html";
-                        if(fs.existsSync("server-resources/METRevised/lores/" + filename))
-                        {
-                            var data = fs.readFileSync("server-resources/METRevised/lores/" + filename, {});
+                character.abilities.forEach(function (ab, i) {
+                    if (ab.name.indexOf("Lore: ") > -1) {
 
-                            var lore =
-                            {
-                                name: ab.name.replace("Lore: ", ""),
-                                tabname: ab.name.replace("Lore: ", "").replace(":", "_").replace(" ", "_"),
-                                html: data.toString("binary")
+                        var lore = {
+                            name: ab.name.replace("Lore: ", ""),
+                            tabname: ab.name.replace("Lore: ", "").replace(":", "_").replace(" ", "_"),
+                            html: ""
+                        }
+                        for (var ratingcount = 1; ratingcount <= ab.rating; ratingcount++) {
+                            var filename = ab.name.replace("Lore: ", "").replace("Clan: ", "") + " " + ratingcount + ".html";
+                            if (fs.existsSync("server-resources/METRevised/lores/" + filename)) {
+                                var data = fs.readFileSync("server-resources/METRevised/lores/" + filename, {});
+                                lore.html += data.toString("binary") + "\n";
+
                             }
 
-                            lores.push(lore);
                         }
+                        lores.push(lore);
                     }
-                })
+                });
                 var out = {
                     user: req.user,
                     character: character,
                     lores: lores
                 };
                 res.render(ViewTemplatePath + "/lores", out);
+            });
+        }
+    },
+    'concept': function (req, res) {
+        var out = {
+            user: req.user
+        };
+        res.render(ViewTemplatePath + "/concept", out);
+    },
+    'submitconcept': function (req, res){
+        var char = vl.emptyCharacter(req.body.chronicle);
+        char.googleId = req.user.googleId;
+        char.name = req.body.name;
+        char.clan = req.body.clan;
+        char.concept = req.body.concept;
+        char.state = "Concept"
+        model.insert(char, function (err) {
+            if (err) {
+                res.json(err);
+            }
+            else {
+                res.json("ok");
+            }
+        });
+    },
+    'submitbackground': function (req, res) {
+        var out = {
+            user: req.user
+        };
+        res.render(ViewTemplatePath + "/concept", out);
+    },
+    'background': function (req, res) {
+        if (req.params.id) {
+            model.find({"id": req.params.id}, function (err, result) {
+                var out = {
+                    user: req.user,
+                    background: result[0].background
+                };
+                res.render(ViewTemplatePath + "/background", out);
             });
         }
     },
