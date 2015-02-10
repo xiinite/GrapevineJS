@@ -1,0 +1,26 @@
+<%- layout("../layout.ejs") %>
+<script type="text/javascript" src="/js/controllers/approveController.js"></script>
+<div class="container" ng-controller="ApproveController" ng-init="init()">
+    <div class="col-lg-12" ng-show="showList()">
+        <ul class="list-group">
+            <li class="list-group-item" ng-repeat="char in characters">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        {{char.name}}
+                    </div>
+                    <div class="panel-body">
+                        {{char.concept}}
+                    </div>
+                    <div class="panel-footer">
+                        <button class="btn btn-primary" ng-click="approve(char.id)">Approve</button>
+                        <button class="btn btn-default" ng-click="reject(char.id)">Reject</button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col-lg-12" ng-hide="showList()">
+        No concepts left for approval
+    </div>
+</div>

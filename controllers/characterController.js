@@ -1,4 +1,5 @@
 var model = require('../models/Character.js');
+var cmodel = require('../models/Chronicle.js');
 var uuid = require('node-uuid');
 var fs = require('fs');
 var path = require('path');
@@ -8,6 +9,7 @@ var importer = require('../bin/importlogic.js');
 var exporter = require('../bin/exportlogic.js');
 var vl = require('../bin/vampirelogic.js');
 var sec = require('../bin/securityhandler.js');
+var mail = require('../bin/emailhandler.js');
 
 var ViewTemplatePath = 'character';
 var tmpDir = 'tmp';
@@ -113,13 +115,53 @@ module.exports = {
             });
         }
     },
+    'approve': function (req, res) {
+        var out = {user: req.user};
+        res.render(ViewTemplatePath + "/approve", out);
+    },
+    'approvelist': function (req, res, next) {
+
+        model.find({
+            state: {$in: ["Concept", "Draft"]}, chronicle: {
+                $in: req.user.chronicles.map(function (c) {
+                    return c.id;
+                })
+            }
+        }, function (err, result) {
+            if (err) {
+                next(err);
+            } else {
+                res.json(result);
+            }
+        });
+    },
+    'approveconcept': function (req, res, next) {
+        model.find({id: req.body.id}, function (err, result) {
+            if (!sec.checkAdmin(req, next, result[0].chronicle.id)) {
+                return;
+            }
+
+            model.update(req.body.id, {state: req.body.state}, function (err) {
+                if (err) {
+                    res.json(err);
+                }
+                else {
+                if (result[0].player.emails.length > 0) {
+                    mail.sendmail(result[0].player.emails[0].value, "Concept approved: " + result[0].name, "Your concept has been approved by storyteller " + req.user.displayName + ": "
+                    + "\nName:" + result[0].name
+                    + "\nClan: " + result[0].clan
+                    +"\n" + result[0].concept);
+                }
+                return res.json("ok");
+                }
+            });
+        });
+    },
     'concept': function (req, res) {
-        var out = {
-            user: req.user
-        };
+        var out = {user: req.user};
         res.render(ViewTemplatePath + "/concept", out);
     },
-    'submitconcept': function (req, res){
+    'submitconcept': function (req, res) {
         var char = vl.emptyCharacter(req.body.chronicle);
         char.googleId = req.user.googleId;
         char.name = req.body.name;
@@ -131,6 +173,22 @@ module.exports = {
                 res.json(err);
             }
             else {
+                if (req.user.emails.length > 0) {
+                    mail.sendmail(req.user.emails[0].value, "Concept submitted: " + char.name, "Your concept has been submitted for approval: "
+                    + "\nName:" + char.name
+                    + "\nClan: " + char.clan
+                    +"\n" + char.concept);
+                }
+                cmodel.find({id: req.body.chronicle}, function (err, result) {
+                    var c = result[0];
+                    if (c.email.length > 0) {
+                        mail.sendmail(c.email, "Concept submitted: " + char.name, "A new concept is waiting for your approval: " +
+                        "\nName:" + char.name
+                        + "\nClan: " + char.clan
+                        + "\nUser: " + req.user.displayName
+                        +"\n" + char.concept);
+                    }
+                });
                 res.json("ok");
             }
         });
@@ -177,7 +235,7 @@ module.exports = {
             return;
         }
         if (req.body.ids) {
-            model.remove({id: req.body.ids}, function (err) {
+            model.remove({id: {$in: req.body.ids}}, function (err) {
                 if (err) {
                     res.json(err);
                 } else {

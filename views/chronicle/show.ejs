@@ -15,7 +15,7 @@
                         <label for="txtDescription">Description: </label>
                         <section ng-show="noteditting(1)">
                             <div class="text-preview clickable" ng-click="edit(1)">{{chronicle.description}}</div>
-                            <button class="btn btn-primary" ng-show="chronicle.description.length == 0"
+                            <button class="btn btn-primary" ng-show="descriptionNull()"
                                     ng-click="edit(1)">Add description
                             </button>
                         </section>
@@ -23,6 +23,23 @@
                             <textarea id="txtDescription" class="col-md-12 vertical" rows="4"
                                       ng-model="chronicle.description"></textarea>
                             <button class="btn btn-primary" ng-click="saveDescription()">Save</button>
+                            <button class="btn btn-default" ng-click="cancelEdit()">Cancel</button>
+                        </section>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="txtDescription">E-mail: </label>
+                        <section ng-show="noteditting(2)">
+                            <div class="text-preview clickable" ng-click="edit(2)">{{chronicle.email}}</div>
+                            <button class="btn btn-primary" ng-show="emailNull()"
+                                    ng-click="edit(2)">Add E-mail
+                            </button>
+                        </section>
+                        <section ng-show="editting(2)">
+                            <textarea id="txtDescription" class="col-md-12 vertical" rows="1"
+                                      ng-model="chronicle.email"></textarea>
+                            <button class="btn btn-primary" ng-click="saveEmail()">Save</button>
                             <button class="btn btn-default" ng-click="cancelEdit()">Cancel</button>
                         </section>
                     </div>

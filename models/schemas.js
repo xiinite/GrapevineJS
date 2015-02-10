@@ -112,7 +112,8 @@ module.exports = {
         players: {type: Array},
         playerDocs: {type: Array},
         administrators: {type: Array},
-        characters: {type: Array}
+        characters: {type: Array},
+        email: {type: String}
     }),
     'User': mongoose.model('user',{
         provider: {type: String},

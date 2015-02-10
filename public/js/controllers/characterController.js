@@ -22,7 +22,7 @@ app.controller('CharacterController', ['$scope', '$http', 'loading', '$filter', 
     $scope.exporttype = undefined;
 
     $scope.statusses = [
-        "Concept", "Approved", "Background Approved", "Active", "Retired", "Deceased"
+        "Concept", "Draft", "Approved", "Rejected", "Background Approved", "Background Rejected", "Active", "Retired", "Deceased"
     ];
     $scope.selectedstatus = "Active";
 

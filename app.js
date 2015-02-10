@@ -12,6 +12,7 @@ var app = express();
 var multer = require('multer');
 var mongoose = require('mongoose');
 var compression = require('compression');
+var MongoStore = require('connect-mongostore')(sess);
 
 // database setup
 mongoose.connect(config.db.connectionString);
@@ -30,7 +31,8 @@ app.use(sess(
         saveUninitialized: false,
         cookie: {secure: false, maxAge: 1000*60*60*24},
         maxAge: new Date(Date.now() + 1000*60*60*24),
-        expires : new Date(Date.now() + 1000*60*60*24)
+        expires : new Date(Date.now() + 1000*60*60*24),
+        store: new MongoStore({'db': 'sessions', mongooseConnection: mongoose.connection})
     }
 ));
 

@@ -46,6 +46,32 @@ app.controller('ChronicleEditController', ['$scope', '$filter', '$http', 'loadin
         });
         $scope.editId = 0;
     }
+    $scope.saveEmail = function(){
+        $http.post("/chronicle/update", {id: $scope.id, field: 'email', data: $scope.chronicle.email}).then(function(response){
+            $scope.init($scope.id);
+        });
+        $scope.editId = 0;
+    }
+    $scope.descriptionNull = function(){
+        if($scope.chronicle.description === Undefined)
+        {
+            return true;
+        }
+        if($scope.chronicle.description.length == 0){
+            return true;
+        }
+        return false;
+    }
+    $scope.emailNull = function(){
+        if($scope.chronicle.email === Undefined)
+        {
+            return true;
+        }
+        if($scope.chronicle.email.length == 0){
+            return true;
+        }
+        return false;
+    }
     $scope.addAdmin = function(){
         $http.post("/chronicle/addadmin", {id: $scope.id, userId: $scope.user.selected.googleId}).then(function(response){
             $scope.user = {};

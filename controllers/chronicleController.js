@@ -73,7 +73,6 @@ module.exports = {
     'update': function (req, res, next) {
         if (req.body.id) {
             model.find({"id": req.body.id}, function (err, result) {
-                var user = req.user || {displayName: "Anonymous"};
                 if (!sec.checkAdmin(req, next, result[0].id)) {
                     return;
                 }

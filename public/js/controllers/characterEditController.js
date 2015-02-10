@@ -49,7 +49,7 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
     $scope.character = [];
     $scope.players = [];
     $scope.statusses = [
-        "Concept", "Approved", "Background Approved", "Active", "Retired", "Deceased"
+        "Concept", "Draft", "Approved", "Rejected", "Background Approved", "Background Rejected", "Active", "Retired", "Deceased"
     ];
 
     $scope.noteItem = {};
@@ -332,7 +332,7 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
             });
             fields[item.key] = item.value;
         });
-        $http.post("/character/update", {id: $scope.character.id, fields: fields}).then(function(response){
+        $http.post("/character/update", {id: $scope.character.id, fields: fields}).then(function(){
             $scope.init($scope.character.id);
         });
         $scope.editId = 0;
