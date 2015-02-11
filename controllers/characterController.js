@@ -147,10 +147,22 @@ module.exports = {
                 }
                 else {
                 if (result[0].player.emails.length > 0) {
-                    mail.sendmail(result[0].player.emails[0].value, "Concept approved: " + result[0].name, "Your concept has been approved by storyteller " + req.user.displayName + ": "
-                    + "\nName:" + result[0].name
-                    + "\nClan: " + result[0].clan
-                    +"\n" + result[0].concept);
+                    if(req.body.state == "Approved"){
+                        mail.sendmail(result[0].player.emails[0].value, "Concept approved: " + result[0].name, "Your concept has been approved by storyteller " + req.user.displayName + ": "
+                        + "\nName:" + result[0].name
+                        + "\nClan: " + result[0].clan
+                        + "\n" + result[0].concept);
+                    }else if(req.body.state == "Rejected"){
+                        var reason = "";
+                        if(req.body.reason.length > 0){
+                            reason = "\nReason: " + req.body.reason.toString();
+                        }
+                        mail.sendmail(result[0].player.emails[0].value, "Concept rejected: " + result[0].name, "Your concept has been rejected by storyteller " + req.user.displayName.toString() + ": "
+                        + reason.toString() +
+                        + "\nName:" + result[0].name.toString()
+                        + "\nClan: " + result[0].clan.toString()
+                        + "\n" + result[0].concept.toString());
+                    }
                 }
                 return res.json("ok");
                 }

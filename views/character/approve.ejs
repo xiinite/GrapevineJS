@@ -6,14 +6,25 @@
             <li class="list-group-item" ng-repeat="char in characters">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        {{char.name}}
+                        {{char.name}} ({{char.clan}})
                     </div>
                     <div class="panel-body">
                         {{char.concept}}
                     </div>
                     <div class="panel-footer">
-                        <button class="btn btn-primary" ng-click="approve(char.id)">Approve</button>
-                        <button class="btn btn-default" ng-click="reject(char.id)">Reject</button>
+
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <button class="btn btn-primary form-control" ng-click="approve(char.id)">Approve</button>
+                                <button class="btn btn-default form-control" ng-click="reject(char.id, char.rejectionreason)">Reject</button>
+                            </div>
+                        </div>
+                        <div class="form-horizontal margin5">
+                            <div class="form-group">
+                                <label class="label" >Rejection reason (optional):</label>
+                                <textarea ng-model="char.rejectionreason" class="form-control col-lg-6" rows="1"></textarea>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </li>
