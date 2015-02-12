@@ -14,8 +14,20 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="col-md-4">
-                            <div>Stylesheet:</div>
-
+                            <div><b>Mail: </b></div>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="email" class="form-control" ng-repeat="email in profile.emails" ng-model="email.value" />
+                            <button class="btn btn-primary pull-right">Save</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row voffset1">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <div><b>Stylesheet:</b></div>
+                        </div>
+                        <div class="col-md-4">
                             <select class="form-control col-md-9"
                                     ng-options="opt for opt in styles"
                                     ng-model="profile.stylesheet" ng-change="saveStyle()">
