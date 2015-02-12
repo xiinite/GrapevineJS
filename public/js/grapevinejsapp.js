@@ -1,4 +1,4 @@
-angular.module('grapevinejs.JSON', ['ngResource', 'ngRoute', 'ngTouch', 'ngSanitize', 'ui.select'])
+angular.module('grapevinejs.JSON', ['ngResource', 'ngRoute', 'ngTouch', 'ngSanitize', 'ui.select', 'ngAnimate'])
     .factory("resources", function($resource) {
         return {
             abilities: $resource('/resource/METRevised/Abilities.json', {}, {

@@ -28,10 +28,10 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12 ">
-            <div class="col-md-3 hidden-sm hidden-xs">
-                <h2><img class="img-circle" src="img/Masks.png"> grapevine</h2>
+            <div class="col-md-1 hidden-sm hidden-xs">
+                <h2><img class="img-circle" src="img/Masks.png"></h2>
             </div>
-            <div class="col-md-3 col-sm-12 col-sm-push-0 col-md-push-6">
+            <div class="col-md-3 col-sm-12 col-sm-push-0 col-md-push-8">
                 <div class="text-center">
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -41,7 +41,11 @@
                             <a class="btn btn-md btn-block btn-primary" href="/chronicle/">Chronicles</a>
                             <% if(user.isAdmin) { %>
                             <a class="btn btn-md btn-block btn-primary" href="/character/">Characters</a>
-                            <a class="btn btn-md btn-block btn-primary" href="/character/approve/">Approval</a>
+                            <a class="btn btn-md btn-block btn-primary" href="/character/approve/">Approval
+                                <% if(approvals > 0) { %>
+                                <div class="badge pull-right"><%= approvals %></div>
+                                <% } %>
+                            </a>
                             <% } %>
                             <% if(user.isSuperAdmin) { %>
                             <a class="btn btn-md btn-block btn-primary" href="/user/">Users</a>
@@ -50,7 +54,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-sm-12 col-sm-pull-0 col-md-pull-3">
+            <div class="col-md-8 col-sm-12 col-sm-pull-0 col-md-pull-3">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3>My characters</h3>
@@ -58,20 +62,21 @@
                     <div class="panel-body dynamicTile">
                         <div class="row">
                             <% for(var i = 0; i < characters.length; i++) { %>
-                            <div class="col-xs-6 col-lg-4 col-sm-4">
-                                <div id="tile<%= i %>" class="tile chartile panel panel-default panel-body clickable"
+                            <div class="col-xs-6 col-lg-3 col-sm-4">
+                                <div id="tile<%= i %>"
+                                     class="tile chartile panel panel-default panel-body clickable noleftrightpadding"
                                      data-charid="<%= characters[i].id %>">
 
                                     <div class="carousel slide" data-ride="carousel">
                                         <div class="carousel-inner">
-                                            <% if([ "Concept", "Draft", "Approved", "Background Approved"].indexOf(characters[i].state) > -1 ){ %>
+                                            <% if(["Concept", "Draft", "Approved", "Background Approved"].indexOf(characters[i].state) > -1 ){ %>
                                             <div class="item active">
                                                 <div class="row">
-                                                    <div class="text-center">
+                                                    <div class="text-center label-info">
                                                         <span class="glyphicon glyphicon-pawn"></span>
                                                     </div>
                                                 </div>
-                                                <div class="row">
+                                                <div class="row voffset1">
                                                     <div class="text-center col-lg-12">
                                                         <%= characters[i].name %>
                                                         <span class="label label-info"><%= characters[i].state %></span>
@@ -85,14 +90,14 @@
                                                 </div>
                                             </div>
                                             <% } %>
-                                            <% if([ "Rejected", "Background Rejected", "Retired", "Deceased"].indexOf(characters[i].state) > -1 ){ %>
+                                            <% if(["Rejected", "Background Rejected", "Retired", "Deceased"].indexOf(characters[i].state) > -1 ){ %>
                                             <div class="item active">
                                                 <div class="row">
-                                                    <div class="text-center">
+                                                    <div class="text-center label-danger">
                                                         <span class="glyphicon glyphicon-pawn"></span>
                                                     </div>
                                                 </div>
-                                                <div class="row">
+                                                <div class="row voffset1">
                                                     <div class="text-center col-lg-12">
                                                         <%= characters[i].name %>
                                                         <span class="label label-danger"><%= characters[i].state %></span>
@@ -109,11 +114,11 @@
                                             <% if(characters[i].state === 'Active'){ %>
                                             <div class="item active">
                                                 <div class="row">
-                                                    <div class="text-center">
+                                                    <div class="text-center label-default">
                                                         <span class="glyphicon glyphicon-pawn"></span>
                                                     </div>
                                                 </div>
-                                                <div class="row">
+                                                <div class="row voffset1">
                                                     <div class="text-center col-lg-12"><%= characters[i].name %></div>
                                                 </div>
                                                 <div class="row voffset1">
@@ -125,11 +130,11 @@
                                             </div>
                                             <div class="item">
                                                 <div class="row">
-                                                    <div class="text-center">
+                                                    <div class="text-center label-default">
                                                         <span class="glyphicon glyphicon-king"></span>
                                                     </div>
                                                 </div>
-                                                <div class="row">
+                                                <div class="row voffset1">
                                                     <div class="text-center col-lg-12"><%= characters[i].name %></div>
                                                 </div>
                                                 <div class="row voffset1">
@@ -152,11 +157,11 @@
                                             </div>
                                             <div class="item">
                                                 <div class="row">
-                                                    <div class="text-center">
+                                                    <div class="text-center label-default">
                                                         <span class="glyphicon glyphicon-knight"></span>
                                                     </div>
                                                 </div>
-                                                <div class="row">
+                                                <div class="row voffset1">
                                                     <div class="text-center col-lg-12"><%= characters[i].name %></div>
                                                 </div>
                                                 <div class="row">
@@ -177,11 +182,11 @@
                                             </div>
                                             <div class="item">
                                                 <div class="row">
-                                                    <div class="text-center">
+                                                    <div class="text-center label-default">
                                                         <span class="glyphicon glyphicon-bishop"></span>
                                                     </div>
                                                 </div>
-                                                <div class="row">
+                                                <div class="row voffset1">
                                                     <div class="text-center col-lg-12"><%= characters[i].name %></div>
                                                 </div>
                                                 <div class="row">
@@ -191,12 +196,12 @@
                                                 </div>
                                                 <div class="row voffset1">
                                                     <div class="text-center col-lg-12"><%= characters[i].disciplines.length %>
-                                                        social
+                                                        disciplines
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="text-center col-lg-12"><%= characters[i].rituals.length %>
-                                                        mental
+                                                        rituals
                                                     </div>
                                                 </div>
                                             </div>
@@ -207,18 +212,25 @@
                             </div>
                             <% } %>
 
-                            <div class="col-xs-6 col-lg-4 col-sm-4">
+                            <div class="col-xs-6 col-lg-3 col-sm-4">
                                 <div id="tile<%= characters.length %>"
                                      class="tile concepttile panel panel-default panel-body clickable">
                                     <div class="item active">
                                         <div class="row">
-                                            <div class="text-center">
-                                                <span class="glyphicon glyphicon-large glyphicon-pencil"></span>
+                                            <div class="text-center label-primary">
+                                                <span class="glyphicon glyphicon-file"></span>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row voffset3">
                                             <div class="text-center col-lg-12">
                                                 New Concept
+                                            </div>
+                                        </div>
+                                        <div class="row voffset3">
+                                            <div class="text-center ">
+                                                <div class="btn btn-circle btn-lg btn-default">
+                                                    <i class="glyphicon glyphicon-pencil"></i>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

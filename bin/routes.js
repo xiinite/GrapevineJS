@@ -14,6 +14,8 @@ module.exports = {
         router.get(app, 'character', 'new', [':id']);
         router.get(app, 'character', 'lores', [':id']);
         router.get(app, 'character', 'background', [':id']);
+        router.get(app, 'character', 'trash', [':id']);
+        router.get(app, 'character', 'wizard', [':id']);
         router.get(app, 'character', 'export', [":chronicleid", ":exporttype"]);
         router.post(app, 'character', 'import', [':chronicleId']);
         router.post(app, 'character', 'revert');

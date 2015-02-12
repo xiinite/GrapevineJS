@@ -2,6 +2,8 @@ app.controller('ConceptController', ['$scope', '$http', 'loading', 'resources', 
     $scope.chronicles = [];
     $scope.schronicle = undefined;
 
+    $scope.characterid = "";
+
     $scope.clans = [];
     $scope.sclan = undefined;
 
@@ -23,7 +25,8 @@ app.controller('ConceptController', ['$scope', '$http', 'loading', 'resources', 
         if($scope.schronicle !== undefined && $scope.sclan !== undefined && $scope.concept != "" && $scope.name != ""){
             loading.show();
             $http.post("/character/submitconcept", {chronicle: $scope.schronicle.id, clan: $scope.sclan, concept: $scope.concept, name: $scope.name}).then(function(response){
-                if(response.data == "ok"){
+                if(response.data.id !== undefined){
+                    $scope.characterid = response.data.id;
                     $scope.submitted = true;
                 }else
                 {

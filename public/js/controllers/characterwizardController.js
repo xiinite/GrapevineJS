@@ -1,4 +1,4 @@
-app.controller('CharacterWizardController', ['$scope', 'loading', function ($scope, loading) {
+app.controller('CharacterWizardController', ['$scope', function ($scope) {
     $scope.log = function (event) {
         console.log(event);
     }
@@ -6,7 +6,7 @@ app.controller('CharacterWizardController', ['$scope', 'loading', function ($sco
     $scope.user = {};
 }]);
 
-app.directive('wizard', function () {
+app.directive('wizard', function ($timeout) {
 
     return {
         restrict: 'E',
@@ -15,7 +15,7 @@ app.directive('wizard', function () {
         scope: {
             onBeforeStepChange: '&',
             onStepChanging: '&',
-            onAfterStepChange: '&',
+            onAfterStepChange: '&'
         },
 
         templateUrl: 'wizard.html',
@@ -45,12 +45,15 @@ app.directive('wizard', function () {
                 if ($scope.onStepChanging) {
                     $scope.onStepChanging(event);
                 }
-                $scope.currentStepIndex = showIndex;
+                $timeout(function(){
+                    $scope.currentStepIndex = showIndex;
+                    $scope.steps[$scope.currentStepIndex].currentStep = true;
 
-                $scope.steps[$scope.currentStepIndex].currentStep = true;
-                if ($scope.onAfterStepChange) {
-                    $scope.onAfterStepChange(event);
-                }
+                    if ($scope.onAfterStepChange) {
+                        $scope.onAfterStepChange(event);
+                    }
+                }, 250);
+
             }
 
             $scope.showNextStep = function () {
@@ -83,7 +86,7 @@ app.directive('step', function () {
         scope: {
             title: '@'
         },
-        template: '<div class="step" ng-show="currentStep"><h2>{{title}}</h2> <div ng-transclude></div> </div>',
+        template: '<div class="step panel panel-default slide-right" ng-class="animation" ng-show="currentStep"><div class="panel-heading"><h3>{{title}}</h3></div> <div class="panel-body" ng-transclude></div> </div></div></div>',
         replace: true,
 
         link: function (scope, element, attrs, wizardController) {

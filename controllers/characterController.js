@@ -73,7 +73,11 @@ module.exports = {
                     user: req.user,
                     character: character
                 };
-                res.render(ViewTemplatePath + "/show", out);
+                if(["Rejected", "Concept"].indexOf(character.state) > -1 ){
+                    res.render(ViewTemplatePath + "/viewconcept", out);
+                }else{
+                    res.render(ViewTemplatePath + "/show", out);
+                }
             });
         }
     },
@@ -154,7 +158,7 @@ module.exports = {
                         + "\n" + result[0].concept);
                     }else if(req.body.state == "Rejected"){
                         var reason = "";
-                        if(req.body.reason.length > 0){
+                        if(req.body.reason !== undefined){
                             reason = "\nReason: " + req.body.reason.toString();
                         }
                         mail.sendmail(result[0].player.emails[0].value, "Concept rejected: " + result[0].name, "Your concept has been rejected by storyteller " + req.user.displayName.toString() + ": "
@@ -201,7 +205,7 @@ module.exports = {
                         +"\n" + char.concept);
                     }
                 });
-                res.json("ok");
+                res.json({id: char.id});
             }
         });
     },
@@ -210,6 +214,27 @@ module.exports = {
             user: req.user
         };
         res.render(ViewTemplatePath + "/concept", out);
+    },
+    'trash': function(req, res, next){
+        model.find({id: req.params.id}, function (err, result) {
+            if(err){ next(new Error(err))} else {
+                if(result[0].player.googleId == req.user.googleId){
+                    var character = result[0];
+                    var previousversion = JSON.parse(JSON.stringify(character));
+                    character.modificationhistory.push({
+                        fields: "Trashed",
+                        date: new Date(),
+                        user: {googleId: req.user.googleId, name: req.user.displayName},
+                        previousVersion: previousversion
+                    });
+                    model.update(character.id, {state: "Trashed", googleId: "", modificationhistory: character.modificationhistory, modified: new Date()}, function (err) {
+                       res.json("ok");
+                    });
+                }else{
+                    next(new Error("forbidden"));
+                }
+            }
+        });
     },
     'background': function (req, res) {
         if (req.params.id) {
@@ -228,6 +253,7 @@ module.exports = {
                 return;
             }
             var char = vl.emptyCharacter(req.params.id);
+            char.state = "Draft";
             model.insert(char, function (err) {
                 if (err) {
                     res.json(err);
@@ -256,7 +282,7 @@ module.exports = {
             });
         }
     },
-    'edit': function (req, res, next) {
+    'edit': function (req, res) {
         if (req.params.id) {
             var out = {
                 user: req.user,
@@ -420,8 +446,8 @@ module.exports = {
             });
         }
     },
-    'wizard': function (req, res, next) {
-        var out = {user: req.user};
+    'wizard': function (req, res) {
+        var out = {user: req.user, characterid: req.params.id};
         res.render(ViewTemplatePath + "/wizard", out);
     },
     'export': function (req, res, next) {

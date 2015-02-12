@@ -126,14 +126,24 @@ textarea.vertical{
     padding: 0;
 }
 
+.noleftrightpadding{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
 .padding5 {
     padding-top: 5px;
+}
+
+.nomargin{
+    margin: 0;
 }
 
 .margin5{
     margin-left: 20px;
     right: 20px;
 }
+
 .row.warning{
     background-color:#76A0D3;
 }
@@ -172,6 +182,35 @@ textarea.vertical{
 
 .glyphicon-large{
     font-size: 2em;
+}
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    padding: 6px 0;
+    font-size: 12px;
+    line-height: 1.428571429;
+    border-radius: 15px;
+}
+.btn-circle.btn-lg {
+    width: 50px;
+    height: 50px;
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.33;
+    border-radius: 25px;
+}
+.btn-circle.btn-xl {
+    width: 70px;
+    height: 70px;
+    padding: 10px 16px;
+    font-size: 24px;
+    line-height: 1.33;
+    border-radius: 35px;
+}
+
+.step {
+    clear: none;
 }
 @media print {
     body {

@@ -3,6 +3,7 @@ app.controller('CharacterController', ['$scope', '$http', 'loading', '$filter', 
         sortingOrder : 'name',
         reverse : false
     };
+    $scope.selectedAll = false;
     $scope.loaded = false;
     $scope.gap = 5;
     $scope.itemsPerPage = 10;
@@ -22,9 +23,9 @@ app.controller('CharacterController', ['$scope', '$http', 'loading', '$filter', 
     $scope.exporttype = undefined;
 
     $scope.statusses = [
-        "Concept", "Draft", "Approved", "Rejected", "Background Approved", "Background Rejected", "Active", "Retired", "Deceased"
+        "Select a status...", "Trashed", "Concept", "Draft", "Approved", "Rejected", "Background Approved", "Background Rejected", "Active", "Retired", "Deceased"
     ];
-    $scope.selectedstatus = "Active";
+    $scope.selectedstatus = "Select a status...";
 
     $scope.init = function(){
         loading.show();
@@ -95,9 +96,16 @@ app.controller('CharacterController', ['$scope', '$http', 'loading', '$filter', 
     $scope.search = function () {
         $scope.filteredItems = $filter('filter')($scope.items, function (item) {
             for(var attr in item) {
-                if (searchMatch(item[attr], $scope.query) && item.chronicle == $scope.selectedchronicle.id && item.state == $scope.selectedstatus)
-                {
-                    return true;
+                if($scope.selectedstatus == "Select a status..."){
+                    if (searchMatch(item[attr], $scope.query) && item.chronicle == $scope.selectedchronicle.id)
+                    {
+                        return true;
+                    }
+                }else{
+                    if (searchMatch(item[attr], $scope.query) && item.chronicle == $scope.selectedchronicle.id && item.state == $scope.selectedstatus)
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
@@ -140,21 +148,40 @@ app.controller('CharacterController', ['$scope', '$http', 'loading', '$filter', 
     };
 
     $scope.prevPage = function () {
+        $scope.clearCheckAll();
         if ($scope.currentPage > 0) {
             $scope.currentPage--;
         }
     };
 
     $scope.nextPage = function () {
+        $scope.clearCheckAll();
         if ($scope.currentPage < $scope.pagedItems.length - 1) {
             $scope.currentPage++;
         }
     };
 
     $scope.setPage = function () {
+        $scope.clearCheckAll();
         $scope.currentPage = this.n;
     };
 
+    $scope.checkAll = function () {
+        if ($scope.selectedAll) {
+            $scope.selectedAll = true;
+        } else {
+            $scope.selectedAll = false;
+        }
+        angular.forEach($scope.pagedItems[$scope.currentPage], function (item) {
+            $scope.selected[item.id] = $scope.selectedAll;
+        });
+    };
+    $scope.clearCheckAll = function () {
+        $scope.selectedAll = false;
+        angular.forEach($scope.pagedItems[$scope.currentPage], function (item) {
+            $scope.selected[item.id] = $scope.selectedAll;
+        });
+    };
 }]);
 
 app.directive("customSort", function() {

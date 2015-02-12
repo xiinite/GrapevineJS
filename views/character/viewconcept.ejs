@@ -1,0 +1,24 @@
+<%- layout("../layout.ejs") %>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#btnTrash").click(function(){
+            $.get('/character/trash/<%= character.id %>').done(function () {
+                window.location = "/";
+            });
+        });
+    });
+</script>
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3><%= character.name %></h3>
+        </div>
+        <div class="panel-body">
+            <%= character.concept %>
+        </div>
+        <div class="panel-footer">
+            <a id="btnCreateConcept" class="btn btn-primary" href="/character/wizard/<%= character.id %>">Create Draft</a>
+            <button id="btnTrash" class="btn btn-warning">Delete concept</button>
+        </div>
+    </div>
+</div>

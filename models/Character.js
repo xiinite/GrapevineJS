@@ -37,6 +37,9 @@ module.exports = {
     },
     'remove': function(where, callback){
         model.remove(where, callback);
+    },
+    'count': function(where, callback){
+        model.count(where, callback);
     }
 };
 
