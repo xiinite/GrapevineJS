@@ -321,10 +321,15 @@ module.exports = {
                 "id": req.params.id
             }, function (err, result) {
                 if (err) return next(new Error(err));
-                if (!sec.checkAdmin(req, next, result[0].chronicle.id)) {
-                    return;
+                if (result.length > 0) {
+                    if (!sec.checkOwnership(req, next, result[0])) {
+                        return;
+                    }
+                    res.json(result[0]);
                 }
-                res.json(result[0]);
+                else {
+                    return next(new Error("No result"))
+                }
             });
         }
     },

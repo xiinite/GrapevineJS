@@ -28,6 +28,9 @@ angular.module('grapevinejs.JSON', ['ngResource', 'ngRoute', 'ngTouch', 'ngSanit
             merits: $resource('/resource/METRevised/Merits.json', {}, {
                 get: {method: 'GET', params: {}, isArray: true}
             }),
+            natures: $resource('/resource/METRevised/Nature.json', {}, {
+                get: {method: 'GET', params: {}, isArray: true}
+            }),
             negativemental: $resource('/resource/METRevised/NegativeMental.json', {}, {
                 get: {method: 'GET', params: {}, isArray: true}
             }),

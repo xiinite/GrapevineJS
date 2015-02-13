@@ -1,7 +1,7 @@
 app.controller('ProfileController', ['$scope', '$http', 'loading', function ($scope, $http, loading) {
 
     $scope.profile = {};
-    $scope.styles = ["default", "cerulean", "dark", "flatly", "sandstone", "slate", "superhero" ,"united"];
+    $scope.styles = ["default", "cerulean", "dark", "flatly", "sandstone", "bootstrap", "superhero", "united"];
 
     $scope.saveStyle = function(){
         if($scope.profile.stylesheet == "default"){$scope.profile.stylesheet = "";}

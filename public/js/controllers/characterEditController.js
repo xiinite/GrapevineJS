@@ -25,6 +25,7 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
     $scope.smental = {};
     $scope.merits = [];
     $scope.smerit = {};
+    $scope.natures = {};
     $scope.negativemental = [];
     $scope.snegativemental = {};
     $scope.negativephysical = [];
@@ -389,6 +390,9 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
             });
             resources.merits.get(function(data){
                 root.merits = data;
+            });
+            resources.natures.get(function (data) {
+                root.natures = data;
             });
             resources.negativemental.get(function(data){
                 root.negativemental = data;

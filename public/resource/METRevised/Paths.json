@@ -1,17 +1,42 @@
 [
-    {
-        "name": "Humanity",
-        "conscience": "Conscience",
-        "selfcontrol": "Self-Control"
-    },
-    {
-        "name": "Feral Heart",
-        "conscience": "Conscience",
-        "selfcontrol": "Self-Control"
-    },
-    {
-        "name": "Path of Blood",
-        "conscience": "Conscience",
-        "selfcontrol": "Self-Control"
-    }
+  {
+    "name": "Humanity",
+    "conscience": "Conscience",
+    "selfcontrol": "Self-Control"
+  },
+  {
+    "name": "Path of Blood",
+    "conscience": "Conviction",
+    "selfcontrol": "Self-Control"
+  },
+  {
+    "name": "Path of Bones",
+    "conscience": "Conviction",
+    "selfcontrol": "Self-Control"
+  },
+  {
+    "name": "Path of Metamorphosis",
+    "conscience": "Conviction",
+    "selfcontrol": "Instinct"
+  },
+  {
+    "name": "Path of Night",
+    "conscience": "Conviction",
+    "selfcontrol": "Instinct"
+  },
+  {
+    "name": "Path of Paradox",
+    "conscience": "Conviction",
+    "selfcontrol": "Self-Control"
+  },
+  {
+    "name": "Path of Typhon",
+    "conscience": "Conviction",
+    "selfcontrol": "Self-Control"
+  },
+  {
+    "name": "Feral Heart",
+    "conscience": "Conscience",
+    "selfcontrol": "Self-Control"
+  }
 ]

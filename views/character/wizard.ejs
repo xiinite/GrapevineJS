@@ -2,70 +2,459 @@
 <script type="text/javascript" src="/js/controllers/characterwizardController.js"></script>
 <div class="container">
     <div class='col-xs-12 col-lg-12 col-sm-12'>
-        <div ng-controller="CharacterWizardController">
+        <div ng-controller="CharacterWizardController" ng-init="init('<%= characterid %>')">
             <script id="wizard.html" type="text/ng-template">
                 <div class="wizard">
-
-                    <h1> Create draft: </h1>
-
-
                     <div ng-transclude></div>
 
                     <div class="row">
                         <div class="row voffset1 text-center">
-                            <a class="btn btn-default" ng-click="showPreviousStep()" ng-show="hasPrevious()">Previous</a>
+                            <a class="btn btn-default" ng-click="showPreviousStep()"
+                               ng-show="hasPrevious()">Previous</a>
                             <a class="btn btn-primary" ng-click="showNextStep()" ng-show="hasNext()">Next</a>
                         </div>
                     </div>
                 </div>
             </script>
 
-            <wizard on-before-step-change="log(event)" on-step-changing="log(event)" on-after-step-change="log(event)">
+            <h3> Create draft:</h3>
 
-                <step title="Step 1: Name">
-                    <strong>Name:</strong> <input type="text" ng-model="user.name"/>
-                </step>
+            <div class="col-lg-6 col-sm-12">
+                <wizard on-before-step-change="log(event)" on-step-changing="log(event)"
+                        on-after-step-change="log(event)">
 
-                <step title="Step 2: Email">
-                    <strong>Name:</strong> {{user.name}}
-                    <br>
-                    <strong>Email:</strong> <input type="text" ng-model="user.email"/>
-                </step>
+                    <step title="Step 1: Inspiration - Who are you? (LotN: 63)">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        Choose a name
+                                    </li>
+                                    <li class="list-group-item">
+                                        Choose a nature and demeanor (LotN: 73)
+                                    </li>
+                                    <li class="list-group-item">
+                                        Choose a Morality Path (LotN: 74)
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <form class="form-horizontal" name="stepform" ng-init="setFormScope(this)">
+                            <div class="form-group"
+                                 ng-class="{'has-error': !character.name, 'has-feedback': !character.name}">
+                                <label class="control-label col-lg-3"><b>Name: </b></label>
 
-                <step title="Step 3: Address">
-                    <strong>Name:</strong> {{user.name}}
-                    <br>
-                    <strong>Email:</strong> {{user.email}}
-                    <br>
-                    Address: <input type="text" ng-model="user.address"/>
-                </step>
+                                <div class="col-lg-7">
+                                    <input type="text" class="form-control" ng-class="{'has-error': !character.name}"
+                                           ng-model="character.name"
+                                           ng-required="true"/>
+                                <span ng-show="!character.name" class="glyphicon glyphicon-remove form-control-feedback"
+                                      aria-hidden="true"></span>
+                                    <span ng-show="!character.name" class="sr-only">(error)</span>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 ng-class="{'has-error': !character.nature, 'has-feedback': !character.nature}">
 
-                <step title="Step 4: Color">
-                    <strong>Name:</strong> {{user.name}}
-                    <br>
-                    <strong>Email:</strong> {{user.email}}
-                    <br>
-                    <strong>Address:</strong> {{user.address}}
-                    <br>
-                    <strong>Favorite Color:</strong> <select ng-model="user.color">
-                        <option>Red</option>
-                        <option>Green</option>
-                        <option>Orange</option>
-                        <option>Other</option>
-                    </select>
-                </step>
+                                <label class="control-label col-lg-3"><b>Nature:</b></label>
 
-                <step title="Summary">
+                                <div class="col-lg-7">
+                                    <select class="form-control"
+                                            ng-required="true"
+                                            ng-options="nature as nature for nature in natures"
+                                            ng-model="character.nature">
+                                        <option style="display:none" value="">Select a nature</option>
+                                    </select>
+                            <span ng-show="!character.nature" class="glyphicon glyphicon-remove form-control-feedback"
+                                  aria-hidden="true"></span>
+                                    <span ng-show="!character.nature" class="sr-only">(error)</span>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 ng-class="{'has-error': !character.demeanor, 'has-feedback': !character.demeanor}">
 
-                    <strong>Email:</strong> {{user.email}}
-                    <br>
-                    <strong>Address:</strong> {{user.address}}
-                    <br>
-                    <strong>Favorite Color:</strong> {{user.color}}
-                </step>
+                                <label class="control-label col-lg-3"><b>Demeanor:</b></label>
 
-            </wizard>
+                                <div class="col-lg-7">
+                                    <select class="form-control"
+                                            ng-required="true"
+                                            ng-options="nature as nature for nature in natures"
+                                            ng-model="character.demeanor">
+                                        <option style="display:none" value="">Select a nature</option>
+                                    </select>
+                            <span ng-show="!character.demeanor" class="glyphicon glyphicon-remove form-control-feedback"
+                                  aria-hidden="true"></span>
+                                    <span ng-show="!character.demeanor" class="sr-only">(error)</span>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 ng-class="{'has-error': !character.path.name, 'has-feedback': !character.path.name}">
 
+                                <label class="control-label col-lg-3"><b>Morality Path:</b></label>
+
+                                <div class="col-lg-7">
+                                    <select class="form-control"
+                                            ng-required="true"
+                                            ng-options="path.name as path.name for path in paths"
+                                            ng-model="character.path.name">
+                                        <option style="display:none" value="">Select a path</option>
+                                    </select>
+                                    <span ng-show="!character.path.name"
+                                          class="glyphicon glyphicon-remove form-control-feedback"
+                                          aria-hidden="true"></span>
+                                    <span ng-show="!character.path.name" class="sr-only">(error)</span>
+                                </div>
+                            </div>
+                        </form>
+                    </step>
+
+                    <step title="Step 2: Attributes - What are your basic capabilities?  (LotN: 66)">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        Prioritize Attributes (seven primary, five secondary and three tertiary)
+                                    </li>
+                                    <li class="list-group-item">
+                                        Choose traits (LotN: 79)
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <form class="form-horizontal" name="stepform" ng-init="setFormScope(this)">
+                            <div class="form-group"
+                                 ng-class="{'has-error': !primary, 'has-feedback': !primary}">
+                                <label class="control-label col-lg-3"><b>Primary Attribute:</b></label>
+
+                                <div class="col-lg-7">
+                                    <select class="form-control"
+                                            ng-required="true"
+                                            ng-options="item as item.key for item in attributes"
+                                            ng-change="clear(character.attributes[primary.key], [secondary, tertiary])"
+                                            ng-model="primary">
+                                        <option style="display:none" value="">Select an attribute group</option>
+                                    </select>
+                                    <span ng-show="!primary"
+                                          class="glyphicon glyphicon-remove form-control-feedback"
+                                          aria-hidden="true"></span>
+                                    <span ng-show="!primary" class="sr-only">(error)</span>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 ng-show="primary">
+                                <div class="col-lg-12">
+
+                                    <ul class="list-group">
+                                        <li class="list-group-item active">{{
+                                            calctotal(character.attributes[primary.key]) }} {{primary.key}}
+                                            Traits
+                                        </li>
+                                        <li ng-repeat='t in character.attributes[primary.key] | orderBy:"name":false'
+                                            class="list-group-item trait">
+                                            {{ t.name }}
+                                            <span ng-show="t.val > 1">
+                                                ({{ t.val }})
+                                            </span>
+                                            <button ng-click="removeTrait(t.name, character.attributes[primary.key])"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-minus"></span></button>
+                                            <button ng-hide="calctotal(character.attributes[primary.key]) > 6"
+                                                    ng-click="addTrait(t.name, character.attributes[primary.key])"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                    <div class="col-lg-12"
+                                         ng-hide="calctotal(character.attributes[primary.key]) > 6">
+                                        <div class="col-lg-9">
+                                            <select id="slc-physical" class="form-control"
+                                                    ng-options="attr for attr in primary.val"
+                                                    ng-model="sprimary">
+                                                <option style="display:none" value="">Select a trait</option>
+                                            </select>
+                                        </div>
+                                        <button ng-click="addTrait(sprimary, character.attributes[primary.key])"
+                                                class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 ng-show="calctotal(character.attributes[primary.key]) > 6"
+                                 ng-class="{'has-error': !secondary, 'has-feedback': !secondary}">
+                                <label class="control-label col-lg-3"><b>Secondary Attribute:</b></label>
+
+                                <div class="col-lg-7">
+                                    <select class="form-control"
+                                            ng-required="true"
+                                            ng-options="item as item.key for item in attributes |exclude: [primary]"
+                                            ng-change="clear(character.attributes[secondary.key], [tertiary])"
+                                            ng-model="secondary">
+                                        <option style="display:none" value="">Select an attribute group</option>
+                                    </select>
+                                    <span ng-show="!secondary"
+                                          class="glyphicon glyphicon-remove form-control-feedback"
+                                          aria-hidden="true"></span>
+                                    <span ng-show="!secondary" class="sr-only">(error)</span>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 ng-show="secondary && calctotal(character.attributes[primary.key]) > 6">
+                                <div class="col-lg-12">
+
+                                    <ul class="list-group">
+                                        <li class="list-group-item active">{{
+                                            calctotal(character.attributes[secondary.key])
+                                            }} {{secondary.key}}
+                                            Traits
+                                        </li>
+                                        <li ng-repeat='t in character.attributes[secondary.key] | orderBy:"name":false'
+                                            class="list-group-item trait">
+                                            {{ t.name }}
+                                            <span ng-show="t.val > 1">
+                                                ({{ t.val }})
+                                            </span>
+                                            <button ng-click="removeTrait(t.name, character.attributes[secondary.key])"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-minus"></span></button>
+                                            <button ng-hide="calctotal(character.attributes[secondary.key]) > 4"
+                                                    ng-click="addTrait(t.name, character.attributes[secondary.key])"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                    <div class="col-lg-12"
+                                         ng-hide="calctotal(character.attributes[secondary.key]) > 4">
+                                        <div class="col-lg-9">
+                                            <select id="slc-physical" class="form-control"
+                                                    ng-options="attr for attr in secondary.val"
+                                                    ng-model="ssecondary">
+                                                <option style="display:none" value="">Select a trait</option>
+                                            </select>
+                                        </div>
+                                        <button ng-click="addTrait(ssecondary, character.attributes[secondary.key])"
+                                                class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 ng-show="calctotal(character.attributes[secondary.key]) > 4"
+                                 ng-class="{'has-error': !primary, 'has-feedback': !tertiary}">
+                                <label class="control-label col-lg-3"><b>Tertiary Attributes:</b></label>
+
+                                <div class="col-lg-7">
+                                    <select class="form-control"
+                                            ng-required="true"
+                                            ng-options="item as item.key for item in attributes |exclude: [primary, secondary]"
+                                            ng-change="clear(character.attributes[tertiary.key], [])"
+                                            ng-model="tertiary">
+                                        <option style="display:none" value="">Select an attribute group</option>
+                                    </select>
+                                    <span ng-show="!tertiary"
+                                          class="glyphicon glyphicon-remove form-control-feedback"
+                                          aria-hidden="true"></span>
+                                    <span ng-show="!tertiary" class="sr-only">(error)</span>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 ng-show="tertiary && calctotal(character.attributes[secondary.key]) > 4">
+                                <div class="col-lg-12">
+
+                                    <ul class="list-group">
+                                        <li class="list-group-item active">{{
+                                            calctotal(character.attributes[tertiary.key])
+                                            }} {{tertiary.key}}
+                                            Traits
+                                        </li>
+                                        <li ng-repeat='t in character.attributes[tertiary.key] | orderBy:"name":false'
+                                            class="list-group-item trait">
+                                            {{ t.name }}
+                                            <span ng-show="t.val > 1">
+                                                ({{ t.val }})
+                                            </span>
+                                            <button ng-click="removeTrait(t.name, character.attributes[tertiary.key])"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-minus"></span></button>
+                                            <button ng-hide="calctotal(character.attributes[tertiary.key]) > 2"
+                                                    ng-click="addTrait(t.name, character.attributes[tertiary.key])"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                    <div class="col-lg-12"
+                                         ng-hide="calctotal(character.attributes[tertiary.key]) > 2">
+                                        <div class="col-lg-9">
+                                            <select class="form-control"
+                                                    ng-options="attr for attr in tertiary.val"
+                                                    ng-model="stertiary">
+                                                <option style="display:none" value="">Select a trait</option>
+                                            </select>
+                                        </div>
+                                        <button ng-click="addTrait(stertiary, character.attributes[tertiary.key])"
+                                                class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </step>
+
+                    <step title="Step 3: Advantages - What do you know?">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        Choose five abilities (LotN: 85)
+                                    </li>
+                                    <li class="list-group-item">
+                                        Choose three Basic Disciplines (LotN: 132)
+                                    </li>
+                                    <li class="list-group-item">
+                                        Choose five Backgrounds (LotN: 93)
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <form class="form-horizontal" name="stepform" ng-init="setFormScope(this)">
+
+                        </form>
+                    </step>
+
+                    <step title="Step 4: Last touches - Fill in the details (LotN: 68)">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        Assign Blood traits (LotN : 95, 106)
+                                    </li>
+                                    <li class="list-group-item">
+                                        Assign Willpower traits (LotN: 95, 107)
+                                    </li>
+                                    <li class="list-group-item">
+                                        Assign Virtue traits (LotN: 108)
+                                    </li>
+                                    <li class="list-group-item">
+                                        Choose Negative Traits and Flaws (if any) (LotN: 112)
+                                    </li>
+                                    <li class="list-group-item">
+                                        Choose a Derangement (if desired) (LotN: 112, 212)
+                                    </li>
+                                    <li class="list-group-item">
+                                        Spend five Free Traits and choose Merits (if any) (LotN: 112, 212)
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <form class="form-horizontal" name="stepform" ng-init="setFormScope(this)">
+
+                        </form>
+                    </step>
+
+                    <step title="Step 5: Spark of life (LotN: 72)">
+                        <form class="form-horizontal" name="stepform" ng-init="setFormScope(this)">
+
+                        </form>
+                    </step>
+
+                    <step title="Summary">
+
+                        <strong>Email:</strong> {{user.email}}
+                        <br>
+                        <strong>Address:</strong> {{user.address}}
+                        <br>
+                        <strong>Favorite Color:</strong> {{user.color}}
+                    </step>
+
+                </wizard>
+            </div>
+
+            <div class="col-lg-6 hidden-sm hidden-xs">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Summary: Concept
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-lg-6">
+                            <div class="row">
+                                <div class="col-lg-6"><b>Name: </b></div>
+                                <div class="col-lg-6"><b>{{character.name}}</b></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6"><b>Clan: </b></div>
+                                <div class="col-lg-6"><b>{{character.clan}}</b></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6" ng-show="currentIndex > 0">
+                            <div class="row">
+                                <div class="col-lg-6"><b>Nature: </b></div>
+                                <div class="col-lg-6"><b>{{character.nature}}</b></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6"><b>Demeanor: </b></div>
+                                <div class="col-lg-6"><b>{{character.demeanor}}</b></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6"><b>Path: </b></div>
+                                <div class="col-lg-6"><b>{{character.path.name}}</b></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default" ng-show="currentIndex > 1">
+                    <div class="panel-heading">
+                        Attributes
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{calctotal(character.attributes.physical)}} Physical
+                                </li>
+                                <li ng-repeat='t in character.attributes.physical | orderBy:"name":false'
+                                    class="list-group-item trait">
+                                    {{ t.name }}
+                                            <span ng-show="t.val > 1">
+                                                ({{ t.val }})
+                                            </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{calctotal(character.attributes.social)}} Social
+                                </li>
+                                <li ng-repeat='t in character.attributes.social | orderBy:"name":false'
+                                    class="list-group-item trait">
+                                    {{ t.name }}
+                                            <span ng-show="t.val > 1">
+                                                ({{ t.val }})
+                                            </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{calctotal(character.attributes.mental)}} Mental
+                                </li>
+                                <li ng-repeat='t in character.attributes.mental | orderBy:"name":false'
+                                    class="list-group-item trait">
+                                    {{ t.name }}
+                                            <span ng-show="t.val > 1">
+                                                ({{ t.val }})
+                                            </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+</div>
 </div>
