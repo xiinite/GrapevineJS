@@ -4,7 +4,7 @@ var sec = require('../bin/securityhandler.js');
 
 var ViewTemplatePath = 'chronicle';
 module.exports = {
-    'index': function (req, res) {
+    'index': function (req, res, next) {
         var out = {user: req.user};
         res.render(ViewTemplatePath + "/index", out);
     },
@@ -17,16 +17,18 @@ module.exports = {
                 admins: {$in: [userId]}
             };
             model.find(where, function (err, result) {
+                if(err) return next(new Error(err));
                 res.json(result);
             })
         }
         else {
             model.all(function (err, result) {
+                if(err) return next(new Error(err));
                 res.json(result);
             });
         }
     },
-    'list': function (req, res) {
+    'list': function (req, res, next) {
         var where = {};
         if (!req.user.isSuperAdmin) {
             var userId = req.user.googleId;
@@ -35,16 +37,19 @@ module.exports = {
                 admins: {$in: [userId]}
             };
             model.find(where, function (err, result) {
+                if(err) return next(new Error(err));
                 res.json(result);
             })
         } else {
             model.listAll(function (err, result) {
+                if(err) return next(new Error(err));
                 res.json(result);
             });
         }
     },
-    'listByPlayer': function(req, res){
+    'listByPlayer': function(req, res, next){
         model.list({players: req.user.googleId}, function (err, result) {
+            if(err) return next(new Error(err));
             res.json(result);
         });
     },
@@ -54,6 +59,7 @@ module.exports = {
                 if (!sec.checkAdmin(req, next, result[0].id)) {
                     return;
                 }
+                if(err) return next(new Error(err));
                 res.json(result[0]);
             });
         }
@@ -66,6 +72,7 @@ module.exports = {
                 if (!sec.checkAdmin(req, next, result[0].id)) {
                     return;
                 }
+                if(err) return next(new Error(err));
                 res.render(ViewTemplatePath + "/show", out);
             });
         }
@@ -76,15 +83,13 @@ module.exports = {
                 if (!sec.checkAdmin(req, next, result[0].id)) {
                     return;
                 }
+                if(err) return next(new Error(err));
                 var field = req.body.field;
                 var data = req.body.data;
                 var updateValues = {};
                 updateValues[field] = data;
                 model.update(req.body.id, updateValues, function (err) {
-                    if (err) {
-                        res.json(err);
-                        return;
-                    }
+                    if(err) return next(new Error(err));
                     res.json("ok");
                 });
             });
@@ -96,14 +101,12 @@ module.exports = {
                 if (!sec.checkAdmin(req, next, result[0].id)) {
                     return;
                 }
+                if(err) return next(new Error(err));
                 if (result[0].admins.indexOf(req.body.userId) == -1) {
                     result[0].admins.push(req.body.userId);
                 }
                 model.update(req.body.id, {'admins': result[0].admins}, function (err) {
-                    if (err) {
-                        res.json(err);
-                        return;
-                    }
+                    if(err) return next(new Error(err));
                     res.json("ok");
                 });
             });
@@ -115,14 +118,12 @@ module.exports = {
                 if (!sec.checkAdmin(req, next, result[0].id)) {
                     return;
                 }
+                if(err) return next(new Error(err));
                 if (result[0].admins.indexOf(req.body.userId) > -1) {
                     result[0].admins.splice(result[0].admins.indexOf(req.body.userId), 1);
                 }
                 model.update(req.body.id, {'admins': result[0].admins}, function (err) {
-                    if (err) {
-                        res.json(err);
-                        return;
-                    }
+                    if(err) return next(new Error(err));
                     res.json("ok");
                 });
             });
@@ -134,14 +135,12 @@ module.exports = {
                 if (!sec.checkAdmin(req, next, result[0].id)) {
                     return;
                 }
+                if(err) return next(new Error(err));
                 if (result[0].players.indexOf(req.body.userId) == -1) {
                     result[0].players.push(req.body.userId);
                 }
                 model.update(req.body.id, {'players': result[0].players}, function (err) {
-                    if (err) {
-                        res.json(err);
-                        return;
-                    }
+                    if(err) return next(new Error(err));
                     res.json("ok");
                 });
             });
@@ -153,14 +152,12 @@ module.exports = {
                 if (!sec.checkAdmin(req, next, result[0].id)) {
                     return;
                 }
+                if(err) return next(new Error(err));
                 if (result[0].players.indexOf(req.body.userId) > -1) {
                     result[0].players.splice(result[0].players.indexOf(req.body.userId), 1);
                 }
                 model.update(req.body.id, {'players': result[0].players}, function (err) {
-                    if (err) {
-                        res.json(err);
-                        return;
-                    }
+                    if(err) return next(new Error(err));
                     res.json("ok");
                 });
             });
@@ -184,10 +181,7 @@ module.exports = {
             characters: []
         };
         model.insert(chronicle, function (err) {
-            if (err) {
-                res.json(err);
-                return;
-            }
+            if(err) return next(new Error(err));
             res.json("ok");
         })
     },
@@ -205,10 +199,7 @@ module.exports = {
         var c4 = {id: uuid.v4(), name: 'Mechelen by Night', admins: ["9158"]};
         var c5 = {id: uuid.v4(), name: 'Gent bij Nachte', admins: ["114799359163510443499"]};
         model.insert([c1, c2, c3, c4, c5], function (err, result) {
-            if (err) {
-                res.json(err);
-                return;
-            }
+            if(err) return next(new Error(err));
             if (!err)res.json(result);
         });
     }

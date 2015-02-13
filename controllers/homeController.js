@@ -12,11 +12,11 @@ module.exports = {
                             })
                         }
                     }, function (err, c) {
+                        if(err) return next(new Error(err));
                         res.render('index', {user: req.user, characters: result, approvals: c});
                     }
                 );
             }else{
-                if (err) return next(new Error(err));
                 res.render('index', {user: req.user, characters: result, approvals: 0});
             };
         });

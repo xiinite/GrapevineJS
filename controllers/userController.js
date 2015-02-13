@@ -10,12 +10,13 @@ module.exports = {
         var out = {user: req.user};
         res.render(ViewTemplatePath + "/index", out);
     },
-    'profile': function (req, res, next) {
+    'profile': function (req, res) {
         var out = {user: req.user};
         res.render(ViewTemplatePath + "/profile", out);
     },
     'all': function (req, res, next) {
-        model.list({}, function(err, result){
+        model.list({}, function (err, result) {
+            if(err) return next(new Error(err));
             res.json(result);
         });
     },
@@ -25,27 +26,21 @@ module.exports = {
         }
         if (req.params.id) {
             model.find({"googleId": req.params.id}, function (err, result) {
+                if(err) return next(new Error(err));
                 var out = {user: req.user, profile: result[0]};
-
                 res.render(ViewTemplatePath + "/show", out);
             });
         }
     },
-    'find': function (req, res, next){
-        if(!req.user.isSuperAdmin && req.params.id != req.user.googleId){
-            res.json("forbidden");
-            return;}
+    'find': function (req, res, next) {
+        if (!req.user.isSuperAdmin && req.params.id != req.user.googleId) {
+            return next(new Error("forbidden"));
+        }
 
         if (req.params.id) {
             model.find({"googleId": req.params.id}, function (err, result) {
-                if(err)
-                {
-                    res.err(err);
-                }else
-                {
+                if(err) return next(new Error(err));
                     res.json(result[0]);
-                }
-
             });
         }
     },
@@ -57,14 +52,20 @@ module.exports = {
             res.json('ok')
         });
     },
-    'updateStylesheet': function(req, res, next){
+    'updateStylesheet': function (req, res, next) {
         model.update(req.user.googleId, {stylesheet: req.body.stylesheet}, function (err) {
-            if (err) {
-                res.json(err);
-            }
-            else {
-                res.json("ok");
-            }
+            if(err) return next(new Error(err));
+            res.json("ok");
+
+        });
+    },
+    'updateEmail': function (req, res, next) {
+        var emails = [];
+        emails.push({value: req.body.email});
+        model.update(req.user.googleId, {emails: emails}, function (err) {
+            if(err) return next(new Error(err));
+            res.json("ok");
+
         });
     },
     'toggleSuperAdmin': function (req, res, next) {
@@ -74,19 +75,13 @@ module.exports = {
         model.find({"googleId": req.params.id}, function (err, result) {
             if (result[0]._doc.isSuperAdmin) {
                 model.update(req.params.id, {'isSuperAdmin': false}, function (err2, numAffected) {
-                    if (err2) {
-                        res.json(err2);
-                        return;
-                    }
+                    if(err2) return next(new Error(err2));
                     if (!err2) res.json(numAffected);
                 });
             }
             else {
                 model.update(req.params.id, {'isSuperAdmin': true}, function (err2, numAffected) {
-                    if (err2) {
-                        res.json(err2);
-                        return;
-                    }
+                    if(err2) return next(new Error(err2));
                     if (!err2) res.json(numAffected);
                 });
             }
@@ -120,10 +115,7 @@ module.exports = {
                 }
             };
             model.insert(superAdmin, function (err, result) {
-                if (err) {
-                    res.json(err);
-                    return;
-                }
+                if(err) return next(new Error(err));
                 if (!err)res.json(result);
             })
         });

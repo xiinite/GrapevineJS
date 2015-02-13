@@ -17,8 +17,10 @@
                             <div><b>Mail: </b></div>
                         </div>
                         <div class="col-md-4">
-                            <input type="email" class="form-control" ng-repeat="email in profile.emails" ng-model="email.value" />
-                            <button class="btn btn-primary pull-right">Save</button>
+                            <div class="form-inline">
+                                <input type="email" class="form-control" ng-repeat="email in profile.emails" ng-model="email.value" />
+                                <button class="btn btn-primary pull-right" ng-click="updateEmail()">Save</button>
+                            </div>
                         </div>
                     </div>
                 </div>

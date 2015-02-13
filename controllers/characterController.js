@@ -33,15 +33,15 @@ var findByDate = function (collection, _date, cb) {
     }(coll.shift()));
 };
 module.exports = {
-    'index': function (req, res) {
+    'index': function (req, res, next) {
         if (!req.user.isSuperAdmin && !req.user.isAdmin) {
-            res.json("forbidden");
+            if (err) return next(new Error("forbidden"));
             return;
         }
         var out = {user: req.user};
         res.render(ViewTemplatePath + "/index", out);
     },
-    'all': function (req, res) {
+    'all': function (req, res, next) {
         var where = {};
         if (!req.user.isSuperAdmin) {
             var chronicleIds = [];
@@ -53,39 +53,43 @@ module.exports = {
                 chronicle: {"$in": chronicleIds}
             };
             model.list(where, function (err, result) {
+                if (err) return next(new Error(err));
                 res.json(result);
             })
         }
         else {
             model.list({}, function (err, result) {
+                if (err) return next(new Error(err));
                 res.json(result);
             });
         }
     },
-    'show': function (req, res) {
+    'show': function (req, res, next) {
         if (req.params.id) {
             model.find({
                 "id": req.params.id
             }, function (err, result) {
+                if (err) return next(new Error(err));
                 var character = result[0];
 
                 var out = {
                     user: req.user,
                     character: character
                 };
-                if(["Rejected", "Concept"].indexOf(character.state) > -1 ){
+                if (["Rejected", "Concept"].indexOf(character.state) > -1) {
                     res.render(ViewTemplatePath + "/viewconcept", out);
-                }else{
+                } else {
                     res.render(ViewTemplatePath + "/show", out);
                 }
             });
         }
     },
-    'lores': function (req, res) {
+    'lores': function (req, res, next) {
         if (req.params.id) {
             model.find({
                 "id": req.params.id
             }, function (err, result) {
+                if (err) return next(new Error(err));
                 var character = result[0];
 
                 var lores = [];
@@ -124,7 +128,6 @@ module.exports = {
         res.render(ViewTemplatePath + "/approve", out);
     },
     'approvelist': function (req, res, next) {
-
         model.find({
             state: {$in: ["Concept", "Draft"]}, chronicle: {
                 $in: req.user.chronicles.map(function (c) {
@@ -132,11 +135,8 @@ module.exports = {
                 })
             }
         }, function (err, result) {
-            if (err) {
-                next(err);
-            } else {
-                res.json(result);
-            }
+            if (err) return next(new Error(err));
+            res.json(result);
         });
     },
     'approveconcept': function (req, res, next) {
@@ -146,30 +146,26 @@ module.exports = {
             }
 
             model.update(req.body.id, {state: req.body.state}, function (err) {
-                if (err) {
-                    res.json(err);
-                }
-                else {
+                if (err) return next(new Error(err));
                 if (result[0].player.emails.length > 0) {
-                    if(req.body.state == "Approved"){
+                    if (req.body.state == "Approved") {
                         mail.sendmail(result[0].player.emails[0].value, "Concept approved: " + result[0].name, "Your concept has been approved by storyteller " + req.user.displayName + ": "
                         + "\nName:" + result[0].name
                         + "\nClan: " + result[0].clan
                         + "\n" + result[0].concept);
-                    }else if(req.body.state == "Rejected"){
+                    } else if (req.body.state == "Rejected") {
                         var reason = "";
-                        if(req.body.reason !== undefined){
+                        if (req.body.reason !== undefined) {
                             reason = "\nReason: " + req.body.reason.toString();
                         }
                         mail.sendmail(result[0].player.emails[0].value, "Concept rejected: " + result[0].name, "Your concept has been rejected by storyteller " + req.user.displayName.toString() + ": "
-                        + reason.toString() +
-                        + "\nName:" + result[0].name.toString()
+                        + reason.toString() + +"\nName:" + result[0].name.toString()
                         + "\nClan: " + result[0].clan.toString()
                         + "\n" + result[0].concept.toString());
                     }
                 }
                 return res.json("ok");
-                }
+
             });
         });
     },
@@ -177,7 +173,7 @@ module.exports = {
         var out = {user: req.user};
         res.render(ViewTemplatePath + "/concept", out);
     },
-    'submitconcept': function (req, res) {
+    'submitconcept': function (req, res, next) {
         var char = vl.emptyCharacter(req.body.chronicle);
         char.googleId = req.user.googleId;
         char.name = req.body.name;
@@ -185,28 +181,25 @@ module.exports = {
         char.concept = req.body.concept;
         char.state = "Concept"
         model.insert(char, function (err) {
-            if (err) {
-                res.json(err);
+            if (err) return next(new Error(err));
+            if (req.user.emails.length > 0) {
+                mail.sendmail(req.user.emails[0].value, "Concept submitted: " + char.name, "Your concept has been submitted for approval: "
+                + "\nName:" + char.name
+                + "\nClan: " + char.clan
+                + "\n" + char.concept);
             }
-            else {
-                if (req.user.emails.length > 0) {
-                    mail.sendmail(req.user.emails[0].value, "Concept submitted: " + char.name, "Your concept has been submitted for approval: "
-                    + "\nName:" + char.name
+            cmodel.find({id: req.body.chronicle}, function (err, result) {
+                if (err) return next(new Error(err));
+                var c = result[0];
+                if (c.email.length > 0) {
+                    mail.sendmail(c.email, "Concept submitted: " + char.name, "A new concept is waiting for your approval: " +
+                    "\nName:" + char.name
                     + "\nClan: " + char.clan
-                    +"\n" + char.concept);
+                    + "\nUser: " + req.user.displayName
+                    + "\n" + char.concept);
                 }
-                cmodel.find({id: req.body.chronicle}, function (err, result) {
-                    var c = result[0];
-                    if (c.email.length > 0) {
-                        mail.sendmail(c.email, "Concept submitted: " + char.name, "A new concept is waiting for your approval: " +
-                        "\nName:" + char.name
-                        + "\nClan: " + char.clan
-                        + "\nUser: " + req.user.displayName
-                        +"\n" + char.concept);
-                    }
-                });
-                res.json({id: char.id});
-            }
+            });
+            res.json({id: char.id});
         });
     },
     'submitbackground': function (req, res) {
@@ -215,30 +208,36 @@ module.exports = {
         };
         res.render(ViewTemplatePath + "/concept", out);
     },
-    'trash': function(req, res, next){
+    'trash': function (req, res, next) {
         model.find({id: req.params.id}, function (err, result) {
-            if(err){ next(new Error(err))} else {
-                if(result[0].player.googleId == req.user.googleId){
-                    var character = result[0];
-                    var previousversion = JSON.parse(JSON.stringify(character));
-                    character.modificationhistory.push({
-                        fields: "Trashed",
-                        date: new Date(),
-                        user: {googleId: req.user.googleId, name: req.user.displayName},
-                        previousVersion: previousversion
-                    });
-                    model.update(character.id, {state: "Trashed", googleId: "", modificationhistory: character.modificationhistory, modified: new Date()}, function (err) {
-                       res.json("ok");
-                    });
-                }else{
-                    next(new Error("forbidden"));
-                }
+            if (err) return next(new Error(err));
+            if (result[0].player.googleId == req.user.googleId) {
+                var character = result[0];
+                var previousversion = JSON.parse(JSON.stringify(character));
+                character.modificationhistory.push({
+                    fields: "Trashed",
+                    date: new Date(),
+                    user: {googleId: req.user.googleId, name: req.user.displayName},
+                    previousVersion: previousversion
+                });
+                model.update(character.id, {
+                    state: "Trashed",
+                    googleId: "",
+                    modificationhistory: character.modificationhistory,
+                    modified: new Date()
+                }, function (err) {
+                    if (err) return next(new Error(err));
+                    res.json("ok");
+                });
+            } else {
+                next(new Error("forbidden"));
             }
         });
     },
-    'background': function (req, res) {
+    'background': function (req, res, next) {
         if (req.params.id) {
             model.find({"id": req.params.id}, function (err, result) {
+                if (err) return next(new Error(err));
                 var out = {
                     user: req.user,
                     background: result[0].background
@@ -255,16 +254,12 @@ module.exports = {
             var char = vl.emptyCharacter(req.params.id);
             char.state = "Draft";
             model.insert(char, function (err) {
-                if (err) {
-                    res.json(err);
-                }
-                else {
-                    var out = {
-                        user: req.user,
-                        characterid: char.id
-                    };
-                    res.render(ViewTemplatePath + "/edit", out);
-                }
+                if (err) return next(new Error(err));
+                var out = {
+                    user: req.user,
+                    characterid: char.id
+                };
+                res.render(ViewTemplatePath + "/edit", out);
             });
         }
     },
@@ -274,11 +269,9 @@ module.exports = {
         }
         if (req.body.ids) {
             model.remove({id: {$in: req.body.ids}}, function (err) {
-                if (err) {
-                    res.json(err);
-                } else {
-                    res.json("ok");
-                }
+                if (err) return next(new Error(err));
+                res.json("ok");
+
             });
         }
     },
@@ -294,6 +287,7 @@ module.exports = {
     'update': function (req, res, next) {
         if (req.body.id) {
             model.find({"id": req.body.id}, function (err, result) {
+                if (err) return next(new Error(err));
                 if (!sec.checkAdmin(req, next, result[0].chronicle.id)) {
                     return;
                 }
@@ -315,12 +309,8 @@ module.exports = {
                 fields.modified = new Date();
 
                 model.update(req.body.id, fields, function (err) {
-                    if (err) {
-                        res.json(err);
-                    }
-                    else {
-                        res.json("ok");
-                    }
+                    if (err) return next(new Error(err));
+                    res.json("ok");
                 });
             });
         }
@@ -330,10 +320,10 @@ module.exports = {
             model.find({
                 "id": req.params.id
             }, function (err, result) {
+                if (err) return next(new Error(err));
                 if (!sec.checkAdmin(req, next, result[0].chronicle.id)) {
                     return;
                 }
-
                 res.json(result[0]);
             });
         }
@@ -341,40 +331,34 @@ module.exports = {
     'revert': function (req, res, next) {
         if (req.body.id && req.body.date) {
             model.find({"id": req.body.id}, function (err, result) {
-                    if (!sec.checkAdmin(req, next, result[0].chronicle.id)) {
-                        return;
-                    }
-                    findByDate(result[0].modificationhistory, new Date(req.body.date).toUTCString(), function (data) {
-                            var currentversion = JSON.parse(JSON.stringify(result[0]));
-                            var oldVersion = JSON.parse(JSON.stringify(data.previousVersion));
-                            oldVersion.modificationhistory = result[0].modificationhistory;
-                            currentversion.modificationhistory = [];
-                            oldVersion.modificationhistory.push({
-                                fields: {
-                                    reversiondate: req.body.date
-                                },
-                                date: new Date(),
-                                user: {
-                                    googleId: req.user.googleId, name: req.user.displayName
-                                }
-                                ,
-                                previousVersion: currentversion
-                            });
-                            delete oldVersion._id;
-                            model.update(req.body.id, oldVersion, function (err) {
-                                if (err) {
-                                    res.json(err);
-                                }
-                                else {
-                                    res.json("ok");
-                                }
-                            });
-                        }
-                    )
-                    ;
+                if (err) return next(new Error(err));
+                if (!sec.checkAdmin(req, next, result[0].chronicle.id)) {
+                    return;
                 }
-            )
-            ;
+                findByDate(result[0].modificationhistory, new Date(req.body.date).toUTCString(), function (data) {
+                        var currentversion = JSON.parse(JSON.stringify(result[0]));
+                        var oldVersion = JSON.parse(JSON.stringify(data.previousVersion));
+                        oldVersion.modificationhistory = result[0].modificationhistory;
+                        currentversion.modificationhistory = [];
+                        oldVersion.modificationhistory.push({
+                            fields: {
+                                reversiondate: req.body.date
+                            },
+                            date: new Date(),
+                            user: {
+                                googleId: req.user.googleId, name: req.user.displayName
+                            }
+                            ,
+                            previousVersion: currentversion
+                        });
+                        delete oldVersion._id;
+                        model.update(req.body.id, oldVersion, function (err) {
+                            if (err) return next(new Error(err));
+                            res.json("ok");
+                        });
+                    }
+                );
+            });
         }
         ;
     },
@@ -400,17 +384,12 @@ module.exports = {
                     if (err) {
                         res.json(err);
                         fs.unlink(tmpDir + '/' + file.name, function (err) {
-                            if (err) {
-                                res.json(err);
-                            }
+                            if (err) return next(new Error(err));
                         });
                         return;
                     } else {
                         fs.unlink(tmpDir + '/' + file.name, function (err) {
-                            if (err) {
-                                res.json(err);
-                            }
-                            ;
+                            if (err) return next(new Error(err));
                         });
                     }
 
@@ -424,21 +403,14 @@ module.exports = {
                         if (err) {
                             next(err);
                             fs.unlink(tmpDir + '/' + file.name, function (err) {
-                                if (err) {
-                                    if (err) {
-                                        next(err);
-                                    }
-                                }
+                                if (err) return next(new Error(err));
                             });
                             return;
                         }
                         else {
                             fs.unlink(tmpDir + '/' + file.name, function (err) {
-                                if (err) {
-                                    next(err);
-                                } else {
-                                    res.json(result);
-                                }
+                                if (err) return next(new Error(err));
+                                res.json(result);
                             });
                         }
                     });
@@ -669,11 +641,8 @@ module.exports = {
                 }]
             }, function (err) {
                 model.all(function (err, result) {
-                    if (err) {
-                        res.json(err);
-                        return;
-                    }
-                    if (!err) res.json(result);
+                    if (err) return next(new Error(err));
+                    res.json(result);
                 });
             });
         });
