@@ -110,8 +110,8 @@ module.exports = {
             xml += '            </aprsettings>\n';
 
             result.forEach(function (char, i) {
-                xml += '               <vampire name="' + char.name + '" nature="' + char.nature + '" demeanor="' + char.demeanor + '" clan="' + char.clan + '" sect="' + char.sect + '" sire="' + char.sire
-                xml += '" generation="' + char.generation + '" blood="' + char.bloodpool.total + '" willpower="' + char.willpower.total + '" conscience="' + char.conscience + '" selfcontrol="' + char.selfcontrol
+                xml += '               <vampire name="' + char.name + '" nature="' + char.nature + '" demeanor="' + char.demeanor + '" clan="' + char.clan + '" sect="' + char.sect + '" sire="' + char.sire;
+                xml += '" generation="' + char.generation + '" blood="' + char.bloodpool.total + '" willpower="' + char.willpower.total + '" conscience="' + char.conscience + '" selfcontrol="' + char.selfcontrol;
                 xml += '" courage="' + char.courage + '" path="' + char.path.type + '" pathtraits="' + char.rating + '" physicalmax="12" player="" status="' + char.state + '" startdate="26/07/2014 19:03:37" npc="yes" lastmodified="23/10/2014 20:47:10">\n';
                 xml += '                <experience unspent="' + char.experience.unspent + '" earned="' + char.experience.total + '">\n';
 
@@ -126,7 +126,7 @@ module.exports = {
 
             });
 
-            xml += '</grapevine>'
+            xml += '</grapevine>';
             fs.writeFile('.\\tmp\\export.gv3', xml, {encoding: 'binary'}, function (err) {
                 if (err) throw res.json(err);
 
@@ -134,4 +134,4 @@ module.exports = {
             });
         });
     }
-}
+};

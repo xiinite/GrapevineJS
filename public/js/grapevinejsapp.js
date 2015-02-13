@@ -99,7 +99,7 @@ app.filter('propsFilter', function() {
           var prop = keys[i];
           var text = props[prop].toLowerCase();
           if(angular.isArray(item[prop])){
-            item[prop].forEach(function ShowResults(value, index, ar) {
+              item[prop].forEach(function ShowResults(value) {
                 if (value.value.toString().toLowerCase().indexOf(text) !== -1) {
                     itemMatches = true;
               }

@@ -97,7 +97,7 @@ var ensureAuthenticated = function (req, res, next) {
         return next(null);
     }
     res.redirect('/login');
-}
+};
 
 module.exports = {
     'init': function initialize(app) {

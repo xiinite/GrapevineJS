@@ -4,7 +4,7 @@ var sec = require('../bin/securityhandler.js');
 
 var ViewTemplatePath = 'chronicle';
 module.exports = {
-    'index': function (req, res, next) {
+    'index': function (req, res) {
         var out = {user: req.user};
         res.render(ViewTemplatePath + "/index", out);
     },

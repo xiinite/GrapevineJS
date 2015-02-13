@@ -5,12 +5,10 @@ var model = schemas.Chronicle;
 var charModel = schemas.Character;
 var userModel = schemas.User;
 
-var chronicleModel = module.exports = {
+module.exports = {
     'all': function (callback) {
         model.find(function (err, result) {
             var aggregated = [];
-            var total = result.length;
-
             loadNext(result, 0, aggregated, callback);
         });
     },
@@ -39,7 +37,7 @@ var chronicleModel = module.exports = {
     'update': function (itemid, update, callback) {
         model.update({'id': itemid}, update, {multi: false}, callback);
     }
-}
+};
 
 
 function loadNext(collection, index, returnvalue, callback) {

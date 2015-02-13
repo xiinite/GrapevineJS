@@ -6,7 +6,7 @@
             e.preventDefault();
             $(this).tab('show');
         });
-        $(".navbar-nav li a").click(function (event) {
+        $(".navbar-nav li a").click(function () {
             $(".navbar-collapse").collapse('hide');
             $($(this).data('target')).collapse('show');
         });
@@ -24,7 +24,7 @@
         var print = function () {
             $('div.panel-collapse').unbind("shown.bs.collapse", print);
             setTimeout(window.print, 500);
-        }
+        };
 
         $('.trait').click(function () {
             if ($(this).find('del').length > 0) return;
@@ -70,7 +70,7 @@
 
         });
 
-        $('a[data-toggle="tab"]').on('shown', function (e) {
+        $('a[data-toggle="tab"]').on('shown', function () {
 
             var myState = $(this).attr('state'),
                     state = $('.expandcollapse').attr('state');

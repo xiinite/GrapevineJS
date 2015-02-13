@@ -18,10 +18,10 @@ module.exports = {
                 );
             }else{
                 res.render('index', {user: req.user, characters: result, approvals: 0});
-            };
+            }
         });
     },
     'login': function (req, res) {
         res.render('login', {layout: '_layoutNoAuth'});
     }
-}
+};

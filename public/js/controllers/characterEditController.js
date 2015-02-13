@@ -1,12 +1,12 @@
 app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resources', '$filter', function ($scope, $http, loading, resources, $filter) {
     $scope.log = function (event) {
         console.log(event);
-    }
+    };
     var orderBy = $filter('orderBy');
 
     $scope.conscienceTypes = ["Conscience", "Conviction"];
     $scope.selfcontrolTypes = ["Self-Control", "Instinct"];
-    $scope.bloodbondlevels = ["1", "2", "3"]
+    $scope.bloodbondlevels = ["1", "2", "3"];
     $scope.resourcesLoaded = false;
     $scope.abilities = [];
     $scope.sability = {};
@@ -307,7 +307,7 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
         $scope.noteItem = {};
         $scope.selectedList = {};
         $scope.selectedListName = '';
-    }
+    };
     
     $scope.setItemDirty = function(list, value)
     {
@@ -349,7 +349,7 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
     };
 
     $scope.revert = function(date){
-        $http.post("/character/revert", {id: $scope.character.id, date: date}).then(function(response){
+        $http.post("/character/revert", {id: $scope.character.id, date: date}).then(function () {
             $scope.init($scope.character.id);
         });
     };

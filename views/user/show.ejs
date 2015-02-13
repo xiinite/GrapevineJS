@@ -45,7 +45,7 @@
                         </div>
                         <div class="col-md-4">
                             <div>E-mail:
-                                <% for(i=0; i< profile.emails.length; i++){%>
+                                <% for(var i = 0; i < profile.emails.length; i++){ %>
                                 <a href="mailto:<%= profile.emails[i].value%>"><%= profile.emails[i].value%></a>
                                 <%}%>
                             </div>

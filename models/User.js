@@ -28,7 +28,7 @@ module.exports = {
     'update': function (itemid, update, callback) {
         model.update({'googleId': itemid}, update, {multi: false}, callback);
     }
-}
+};
 
 function loadNext(collection, index, returnvalue, callback) {
     var user = collection[index];

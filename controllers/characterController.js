@@ -94,14 +94,14 @@ module.exports = {
 
                 var lores = [];
 
-                character.abilities.forEach(function (ab, i) {
+                character.abilities.forEach(function (ab) {
                     if (ab.name.indexOf("Lore: ") > -1) {
 
                         var lore = {
                             name: ab.name.replace("Lore: ", ""),
                             tabname: ab.name.replace("Lore: ", "").replace(":", "_").replace(" ", "_"),
                             html: ""
-                        }
+                        };
                         for (var ratingcount = 1; ratingcount <= ab.rating; ratingcount++) {
                             var filename = ab.name.replace("Lore: ", "").replace("Clan: ", "") + " " + ratingcount + ".html";
                             if (fs.existsSync("server-resources/METRevised/lores/" + filename)) {
@@ -179,7 +179,7 @@ module.exports = {
         char.name = req.body.name;
         char.clan = req.body.clan;
         char.concept = req.body.concept;
-        char.state = "Concept"
+        char.state = "Concept";
         model.insert(char, function (err) {
             if (err) return next(new Error(err));
             if (req.user.emails.length > 0) {
@@ -360,7 +360,6 @@ module.exports = {
                 );
             });
         }
-        ;
     },
     'clear': function (req, res, next) {
         if (!sec.checkSU(req, next)) {
@@ -380,13 +379,12 @@ module.exports = {
             var parser = new xml2js.Parser();
 
             parser.addListener('end', function (result) {
-                importer.importgrapevine(result, req.params.chronicleId, function (err, result) {
+                importer.importgrapevine(result, req.params.chronicleId, function (err) {
                     if (err) {
                         res.json(err);
                         fs.unlink(tmpDir + '/' + file.name, function (err) {
                             if (err) return next(new Error(err));
                         });
-                        return;
                     } else {
                         fs.unlink(tmpDir + '/' + file.name, function (err) {
                             if (err) return next(new Error(err));
@@ -405,7 +403,6 @@ module.exports = {
                             fs.unlink(tmpDir + '/' + file.name, function (err) {
                                 if (err) return next(new Error(err));
                             });
-                            return;
                         }
                         else {
                             fs.unlink(tmpDir + '/' + file.name, function (err) {
@@ -438,6 +435,7 @@ module.exports = {
             return;
         }
         model.clear(function (err) {
+            if (err) return next(new Error(err));
             model.insert({
                 id: uuid.v4(),
                 name: "Jozef van Gelderland",
@@ -448,8 +446,8 @@ module.exports = {
                     total: 11,
                     unspent: 3
                 },
-                created: new Date(2013, 03, 21),
-                modified: new Date(2014, 01, 25),
+                created: new Date(2013, 3, 21),
+                modified: new Date(2014, 1, 25),
                 clan: "Tremere",
                 sect: "Camarilla",
                 coterie: "",
@@ -573,7 +571,7 @@ module.exports = {
                 }, {
                     name: "Incorporeal Passage",
                     level: "intermediate"
-                },],
+                }],
                 status: [{
                     name: "Honored"
                 }],
@@ -631,15 +629,16 @@ module.exports = {
                     value: "Storytelling NPC"
                 }],
                 experiencehistory: [{
-                    date: new Date(2013, 06, 29),
+                    date: new Date(2013, 6, 29),
                     change: 5,
                     reason: "Attendance"
                 }, {
-                    date: new Date(2013, 08, 23),
+                    date: new Date(2013, 8, 23),
                     change: -1,
                     reason: "Purchase: Linguistics"
                 }]
             }, function (err) {
+                if (err) return next(new Error(err));
                 model.all(function (err, result) {
                     if (err) return next(new Error(err));
                     res.json(result);

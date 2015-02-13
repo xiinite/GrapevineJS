@@ -5,7 +5,7 @@ var vl = require('../bin/vampirelogic.js');
 var model = require('../models/Character.js');
 
 module.exports = {
-    importjson: function(json, chronicleId, callback){
+    'importjson': function (json, chronicleId, callback) {
         var toBeInsert = [];
         var calls = [];
         json.forEach(function(char, index){
@@ -18,8 +18,7 @@ module.exports = {
                         char.id = result[0].id;
                         model.update(result[0].id, char, function (err) {
                             if (err) {
-                                callback(err)
-                                return;;
+                                callback(err);
                             }
                         });
                     }
@@ -42,7 +41,7 @@ module.exports = {
             });
         });
     },
-    importgrapevine: function(xml, chronicleId, callback){
+    'importgrapevine': function (xml, chronicleId, callback) {
         try{
             var characterList = [];
             for (var index in xml.grapevine.vampire) {
@@ -365,4 +364,4 @@ module.exports = {
             throw e;
         }
     }
-}
+};

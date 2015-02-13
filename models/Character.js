@@ -9,8 +9,6 @@ module.exports = {
     'all': function (callback) {
         model.find(function (err, result) {
             var aggregated = [];
-            var total = result.length;
-
             loadNext(result, 0, aggregated, callback);
         });
     },

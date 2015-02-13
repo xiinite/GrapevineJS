@@ -76,7 +76,7 @@
             $(data.context.children()).remove();
             angular.element('#content').scope().init();
         }).on('fileuploadfail', function (e, data) {
-            $.each(data.files, function (index, file) {
+            $.each(data.files, function (index) {
                 var error = $('<span class="text-danger"/>').text('File upload failed.');
                 $(data.context.children()[index])
                         .append('<br>')
@@ -94,7 +94,7 @@
             $('<option value="' + item.id + '" >' + item.name + '</option>').appendTo($('#slcChronicle'));
         }
 
-    }
+    };
 
     $(document).ready(function () {
         $.get('../chronicle/list').done(chroniclesLoaded);

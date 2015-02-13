@@ -1,13 +1,9 @@
-app.controller('ApproveController', ['$scope', '$http', 'loading', 'resources', function ($scope, $http, loading, resources) {
+app.controller('ApproveController', ['$scope', '$http', 'loading', function ($scope, $http, loading) {
     $scope.characters = [];
 
     $scope.showList = function(){
-        if($scope.characters.length > 0){
-            return true;
-        }else{
-            return false;
-        }
-    }
+        return $scope.characters.length > 0;
+    };
 
     $scope.approve = function(id){
         loading.show();
@@ -20,7 +16,7 @@ app.controller('ApproveController', ['$scope', '$http', 'loading', 'resources', 
                 }
             }
         });
-    }
+    };
 
     $scope.reject = function(id, reason){
         loading.show();
@@ -34,7 +30,7 @@ app.controller('ApproveController', ['$scope', '$http', 'loading', 'resources', 
             }
         });
 
-    }
+    };
 
     $scope.init = function () {
         loading.show();

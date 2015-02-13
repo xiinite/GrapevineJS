@@ -1,7 +1,7 @@
 app.controller('CharacterWizardController', ['$scope', function ($scope) {
     $scope.log = function (event) {
         console.log(event);
-    }
+    };
 
     $scope.user = {};
 }]);
@@ -32,7 +32,7 @@ app.directive('wizard', function ($timeout) {
 
             this.registerStep = function (step) {
                 $scope.steps.push(step);
-            }
+            };
 
             var toggleSteps = function (showIndex) {
                 var event = {event: {fromStep: $scope.currentStepIndex, toStep: showIndex}};
@@ -54,19 +54,19 @@ app.directive('wizard', function ($timeout) {
                     }
                 }, 250);
 
-            }
+            };
 
             $scope.showNextStep = function () {
                 toggleSteps($scope.currentStepIndex + 1);
-            }
+            };
 
             $scope.showPreviousStep = function () {
                 toggleSteps($scope.currentStepIndex - 1);
-            }
+            };
 
             $scope.hasNext = function () {
                 return $scope.currentStepIndex < ($scope.steps.length - 1);
-            }
+            };
 
             $scope.hasPrevious = function () {
                 return $scope.currentStepIndex > 0;

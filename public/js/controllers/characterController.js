@@ -59,11 +59,11 @@ app.controller('CharacterController', ['$scope', '$http', 'loading', '$filter', 
 
     $scope.exportvisible = function(){
         return ($scope.selectedexportchronicle === undefined || $scope.exporttype === undefined);
-    }
+    };
 
     $scope.CreateNew = function(){
         location = "/character/new/" + $scope.selectedchronicle.id;
-    }
+    };
 
     $scope.DeleteSelected = function(){
         var ids = [];
@@ -79,12 +79,12 @@ app.controller('CharacterController', ['$scope', '$http', 'loading', '$filter', 
                 $scope.init();
             });
         }
-    }
+    };
 
     $scope.openItem = function(itemid)
     {
         location = "/character/show/" + itemid;
-    }
+    };
 
     var searchMatch = function (haystack, needle) {
         if (!needle) {
@@ -167,11 +167,7 @@ app.controller('CharacterController', ['$scope', '$http', 'loading', '$filter', 
     };
 
     $scope.checkAll = function () {
-        if ($scope.selectedAll) {
-            $scope.selectedAll = true;
-        } else {
-            $scope.selectedAll = false;
-        }
+        $scope.selectedAll = !!$scope.selectedAll;
         angular.forEach($scope.pagedItems[$scope.currentPage], function (item) {
             $scope.selected[item.id] = $scope.selectedAll;
         });

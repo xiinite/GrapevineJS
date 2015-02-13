@@ -1,18 +1,18 @@
-app.controller('ProfileController', ['$scope', '$http', 'loading', '$route', function ($scope, $http, loading, $route) {
+app.controller('ProfileController', ['$scope', '$http', 'loading', function ($scope, $http, loading) {
 
     $scope.profile = {};
     $scope.styles = ["default", "cerulean", "dark", "flatly", "sandstone", "slate", "superhero" ,"united"];
 
     $scope.saveStyle = function(){
         if($scope.profile.stylesheet == "default"){$scope.profile.stylesheet = "";}
-        $http.post("/user/updateStylesheet/", {stylesheet: $scope.profile.stylesheet}).then(function(response){
+        $http.post("/user/updateStylesheet/", {stylesheet: $scope.profile.stylesheet}).then(function () {
             location.reload();
         });
     };
 
     $scope.updateEmail = function(){
         if($scope.profile.stylesheet == "default"){$scope.profile.stylesheet = "";}
-        $http.post("/user/updateEmail/", {email: $scope.profile.emails[0].value}).then(function(response){
+        $http.post("/user/updateEmail/", {email: $scope.profile.emails[0].value}).then(function () {
             init($scope.profile.googleId);
         });
     };

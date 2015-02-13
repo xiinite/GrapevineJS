@@ -43,9 +43,7 @@ ul.typeahead {
 }
 
 #logo {
-    background-image: url(/img/logo-default.png);
-    background-repeat: no-repeat;
-    background-position: center right;
+    background: url(/img/logo-default.png) no-repeat center right;
     display: block;
     float: left;
     padding: 18px;
@@ -66,7 +64,7 @@ ul.typeahead {
     content: "\f151";
     float: right;
     color: grey;
-    font-family: 'FontAwesome';
+    font-family: 'FontAwesome', sans-serif;
 }
 
 .panel-heading a.collapsed:after {
@@ -116,9 +114,7 @@ textarea.vertical{
     position:absolute;
     top:0;
     bottom:0;
-    margin:auto;
-    margin-left: 50%;
-    margin-right: 50%;
+    margin: auto 50%;
 }
 
 
@@ -127,8 +123,8 @@ textarea.vertical{
 }
 
 .noleftrightpadding{
-    padding-left: 0px;
-    padding-right: 0px;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .padding5 {
@@ -176,7 +172,7 @@ textarea.vertical{
     margin:0!important;
     text-align: center;
     color:white;
-    font-family: Segoe UI;
+    font-family: Segoe UI, sans-serif;
     font-weight: lighter;
 }
 
@@ -214,22 +210,18 @@ textarea.vertical{
 }
 @media print {
     body {
-        margin: 0;
         padding: 0;
         line-height: 1.4em;
         word-spacing: 1px;
         letter-spacing: 0.2px;
         font: 10px Arial, Helvetica, "Lucida Grande", serif;
         color: #000;
-        margin-left: 25px;
-        margin-right: 0;
-        margin-top: 20px;
-        margin-bottom: 0;
+        margin: 20px 0 0 25px;
     }
 
     @page {
         size: auto;   /* auto is the current printer page size */
-        margin: 0mm;  /* this affects the margin in the printer settings */
+        margin: 0;  /* this affects the margin in the printer settings */
     }
 
     .row {

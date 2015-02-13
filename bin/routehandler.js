@@ -4,7 +4,7 @@ module.exports = {
     register: function (app, path) {
         var router = express.Router();
         var controller = '../controllers/' + path + 'Controller.js';
-        var handler = require(controller)
+        var handler = require(controller);
 
         for (var m in handler) {
             switch (m) {

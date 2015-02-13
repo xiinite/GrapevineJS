@@ -14,4 +14,4 @@ module.exports = {
 
         return new Date(yyyy, mm, dd, h, m, s);
     }
-}
+};

@@ -1,12 +1,12 @@
 app.controller('ChronicleController', ['$scope', '$http', 'loading', function ($scope, $http, loading) {
     $scope.log = function (event) {
         console.log(event);
-    }
+    };
 
     $scope.chronicles = [];
 
     $scope.addChronicle = function(){
-        $http.post("/chronicle/insert", {name: $scope.name, description: $scope.description}).then(function(response){
+        $http.post("/chronicle/insert", {name: $scope.name, description: $scope.description}).then(function () {
             $scope.name = '';
             $scope.description = '';
             $scope.init();
