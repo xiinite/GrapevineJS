@@ -27,7 +27,7 @@ app.controller('ConceptController', ['$scope', '$http', 'loading', 'resources', 
             $http.post("/character/submitconcept", {chronicle: $scope.schronicle.id, clan: $scope.sclan, concept: $scope.concept, name: $scope.name}).then(function(response){
                 if(response.data.id !== undefined){
                     $scope.characterid = response.data.id;
-                    $scope.submitted = true;
+                    location = '/character/wizard/' + response.data.id;
                 }else
                 {
                     $window.alert(response.data);

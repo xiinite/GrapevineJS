@@ -180,9 +180,16 @@ module.exports = {
         char.clan = req.body.clan;
         char.concept = req.body.concept;
         char.state = "Concept";
+        char.modificationhistory = [];
+        char.modificationhistory.push({
+            fields: "Created Concept",
+            date: new Date(),
+            user: {googleId: req.user.googleId, name: req.user.displayName},
+            previousVersion: null
+        });
         model.insert(char, function (err) {
             if (err) return next(new Error(err));
-            if (req.user.emails.length > 0) {
+            /*if (req.user.emails.length > 0) {
                 mail.sendmail(req.user.emails[0].value, "Concept submitted: " + char.name, "Your concept has been submitted for approval: "
                 + "\nName:" + char.name
                 + "\nClan: " + char.clan
@@ -198,9 +205,38 @@ module.exports = {
                     + "\nUser: " + req.user.displayName
                     + "\n" + char.concept);
                 }
-            });
+            });*/
             res.json({id: char.id});
         });
+    },
+    'submitdraft': function(req, res, next){
+        var char = req.body.character;
+        if(char.googleId == req.user.googleId){
+            delete char._id;
+            delete char.__v;
+            delete char.prototype;
+            char.state = "Draft";
+            char.player = null;
+            char.chronicle = char.chronicle.id;
+            var previousversion = JSON.parse(JSON.stringify(char));
+            previousversion.modificationhistory = null;
+            char.modificationhistory.push({
+                fields: "Draft created",
+                date: new Date(),
+                user: {googleId: req.user.googleId, name: req.user.displayName},
+                previousVersion: previousversion
+            });
+            model.update(char.id, char, function (err) {
+                if (err) return next(new Error(err));
+                res.json("ok");
+            });
+        }else{
+            next(new Error("forbidden"));
+        }
+    },
+    'assignfreebies': function(req, res){
+        var out = {user: req.user, characterid: req.params.id};
+        res.render(ViewTemplatePath + "/assignfreebies", out);
     },
     'submitbackground': function (req, res) {
         var out = {

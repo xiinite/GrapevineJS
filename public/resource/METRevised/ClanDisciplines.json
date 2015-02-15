@@ -1,0 +1,131 @@
+[
+  {
+    "clan": "Assamites",
+    "disciplines": [
+      "Celerity",
+      "Obfuscate",
+      "Quietus"
+    ]
+  },
+  {
+    "clan": "Brujah",
+    "disciplines": [
+      "Celerity",
+      "Potence",
+      "Presence"
+    ]
+  },
+  {
+    "clan": "Followers of Set",
+    "disciplines": [
+      "Obfuscate",
+      "Presence",
+      "Serpentis"
+    ]
+  },
+  {
+    "clan": "Gangrel",
+    "disciplines": [
+      "Animalism",
+      "Fortitude",
+      "Protean"
+    ]
+  },
+  {
+    "clan": "Giovanni",
+    "disciplines": [
+      "Dominate",
+      "Necromancy",
+      "Potence"
+    ]
+  },
+  {
+    "clan": "Lasombra",
+    "disciplines": [
+      "Dominate",
+      "Obtenebration",
+      "Potence"
+    ]
+  },
+  {
+    "clan": "Malkavians",
+    "disciplines": [
+      "Auspex",
+      "Dementation",
+      "Dominate",
+      "Obfuscate"
+    ]
+  },
+  {
+    "clan": "Nosferatu",
+    "disciplines": [
+      "Animalism",
+      "Obfuscate",
+      "Potence"
+    ]
+  },
+  {
+    "clan": "Ravnos",
+    "disciplines": [
+      "Animalism",
+      "Chimestry",
+      "Fortitude"
+    ]
+  },
+  {
+    "clan": "Toreador",
+    "disciplines": [
+      "Auspex",
+      "Celerity",
+      "Presence"
+    ]
+  },
+  {
+    "clan": "Tremere",
+    "disciplines": [
+      "Auspex",
+      "Dominate",
+      "Thaumaturgy"
+    ]
+  },
+  {
+    "clan": "Tzimisce",
+    "disciplines": [
+      "Animalism",
+      "Auspex",
+      "Vicissitude"
+    ]
+  },
+  {
+    "clan": "Ventrue",
+    "disciplines": [
+      "Dominate",
+      "Fortitude",
+      "Presence"
+    ]
+  },
+  {
+    "clan": "Daughters of Cacophony",
+    "disciplines": [
+      "Fortitude",
+      "Melpominee",
+      "Presence"
+    ]
+  },
+  {
+    "clan": "Salubri",
+    "disciplines": [
+      "Auspex",
+      "Fortitude",
+      "Obeah"
+    ]
+  },
+  {
+    "clan": "Samedi",
+    "disciplines": [
+      "Fortitude",
+      "Obfuscate",
+      "Thanatosis"
+    ]
+  }
+]

@@ -10,6 +10,9 @@ angular.module('grapevinejs.JSON', ['ngResource', 'ngRoute', 'ngTouch', 'ngSanit
             clans: $resource('/resource/METRevised/Clans.json', {}, {
                 get: {method: 'GET', params: {}, isArray: true}
             }),
+            clandisciplines: $resource('/resource/METRevised/ClanDisciplines.json', {}, {
+                get: {method: 'GET', params: {}, isArray: true}
+            }),
             derangements: $resource('/resource/METRevised/Derangements.json', {}, {
                 get: {method: 'GET', params: {}, isArray: true}
             }),

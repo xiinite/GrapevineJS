@@ -1,10 +1,18 @@
 [
   {
     "name": "Dummy Flaw",
-    "cost": -1
+    "cost": 1
   },
   {
     "name": "Andere Flaw",
-    "cost": -3
+    "cost": 3
+  },
+  {
+    "name": "Nog Flaw",
+    "cost": 3
+  },
+  {
+    "name": "Meer Flaw",
+    "cost": 3
   }
 ]

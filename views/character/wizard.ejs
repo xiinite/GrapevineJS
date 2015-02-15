@@ -1,8 +1,8 @@
 <% layout("../layout.ejs") %>
 <script type="text/javascript" src="/js/controllers/characterwizardController.js"></script>
-<div class="container">
+<div class="container" ng-controller="CharacterWizardController" ng-init="init('<%= characterid %>')">
     <div class='col-xs-12 col-lg-12 col-sm-12'>
-        <div ng-controller="CharacterWizardController" ng-init="init('<%= characterid %>')">
+        <div>
             <script id="wizard.html" type="text/ng-template">
                 <div class="wizard">
                     <div ng-transclude></div>
@@ -96,6 +96,7 @@
                                     <select class="form-control"
                                             ng-required="true"
                                             ng-options="path.name as path.name for path in paths"
+                                            ng-change="onselectedpath()"
                                             ng-model="character.path.name">
                                         <option style="display:none" value="">Select a path</option>
                                     </select>
@@ -122,6 +123,7 @@
                             </div>
                         </div>
                         <form class="form-horizontal" name="stepform" ng-init="setFormScope(this)">
+                            <!-- Primary attributes -->
                             <div class="form-group"
                                  ng-class="{'has-error': !primary, 'has-feedback': !primary}">
                                 <label class="control-label col-lg-3"><b>Primary Attribute:</b></label>
@@ -180,8 +182,10 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Secondary attributes -->
+                            <hr ng-show="showSecondaryList"/>
                             <div class="form-group"
-                                 ng-show="calctotal(character.attributes[primary.key]) > 6"
+                                 ng-show="showSecondaryList"
                                  ng-class="{'has-error': !secondary, 'has-feedback': !secondary}">
                                 <label class="control-label col-lg-3"><b>Secondary Attribute:</b></label>
 
@@ -200,7 +204,7 @@
                                 </div>
                             </div>
                             <div class="form-group"
-                                 ng-show="secondary && calctotal(character.attributes[primary.key]) > 6">
+                                 ng-show="showSecondary">
                                 <div class="col-lg-12">
 
                                     <ul class="list-group">
@@ -240,8 +244,10 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Tertiary attributes -->
+                            <hr ng-show="showTertiaryList"/>
                             <div class="form-group"
-                                 ng-show="calctotal(character.attributes[secondary.key]) > 4"
+                                 ng-show="showTertiaryList"
                                  ng-class="{'has-error': !primary, 'has-feedback': !tertiary}">
                                 <label class="control-label col-lg-3"><b>Tertiary Attributes:</b></label>
 
@@ -260,7 +266,7 @@
                                 </div>
                             </div>
                             <div class="form-group"
-                                 ng-show="tertiary && calctotal(character.attributes[secondary.key]) > 4">
+                                 ng-show="showTertiary">
                                 <div class="col-lg-12">
 
                                     <ul class="list-group">
@@ -303,7 +309,7 @@
                         </form>
                     </step>
 
-                    <step title="Step 3: Advantages - What do you know?">
+                    <step title="Step 3: Advantages - What do you know? (LotN: 67">
                         <div class="row">
                             <div class="col-lg-12">
                                 <ul class="list-group">
@@ -314,13 +320,184 @@
                                         Choose three Basic Disciplines (LotN: 132)
                                     </li>
                                     <li class="list-group-item">
-                                        Choose five Backgrounds (LotN: 93)
+                                        Choose any combination of five Backgrounds and Influences (LotN: 93)
                                     </li>
                                 </ul>
                             </div>
                         </div>
                         <form class="form-horizontal" name="stepform" ng-init="setFormScope(this)">
+                            <!-- Abilities -->
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <ul class="list-group">
+                                        <li class="list-group-item active">{{
+                                            calctotal(character.abilities) }} Ability
+                                            Traits
+                                        </li>
+                                        <li ng-repeat='t in character.abilities | orderBy:"name":false'
+                                            class="list-group-item trait">
+                                            {{ t.name }}
+                                            <span ng-show="t.val > 1">
+                                                x{{ t.val }}
+                                            </span>
+                                            <span ng-show="t.note.length > 0">
+                                                ({{ t.note }})
+                                            </span>
+                                            <button ng-click="removeAdvantage(t.name, character.abilities)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-minus"></span></button>
+                                            <button ng-hide="calctotal(character.abilities) > 4"
+                                                    ng-click="addAdvantage(t.name, character.abilities)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                            <button ng-click="addNoteDialog(t, character.abilities)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-pencil"></span></button>
+                                        </li>
+                                    </ul>
 
+                                    <div class="col-lg-12"
+                                         ng-hide="calctotal(character.abilities) > 4">
+                                        <div class="col-lg-9">
+                                            <select id="slc-physical" class="form-control"
+                                                    ng-options="attr for attr in abilities"
+                                                    ng-model="sability">
+                                                <option style="display:none" value="">Select an ability</option>
+                                            </select>
+                                        </div>
+                                        <button ng-click="addAdvantage(sability, character.abilities)"
+                                                class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Disciplines -->
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <ul class="list-group">
+                                        <li class="list-group-item active">{{
+                                            character.disciplines.length }} Disciplines
+                                        </li>
+                                        <li ng-repeat='t in character.disciplines | orderBy:"path":false'
+                                            class="list-group-item trait">
+                                            {{ t.path }}: {{t.name}} ({{t.level}})
+                                            <button ng-click="removeDiscipline(t, character.disciplines)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-minus"></span></button>
+                                        </li>
+                                    </ul>
+
+                                    <div class="col-lg-12"
+                                         ng-hide="character.disciplines.length > 2">
+                                        <div class="col-lg-9">
+                                            <select id="slc-physical" class="form-control"
+                                                    ng-options="attr as attr.path + ': ' + attr.name for attr in disciplines | isClanDiscipline: [character.clan, clandisciplines]"
+                                                    ng-model="sdisciplines">
+                                                <option style="display:none" value="">Select a Discipline</option>
+                                            </select>
+                                        </div>
+                                        <button ng-click="addDiscipline(sdisciplines, character.disciplines)"
+                                                class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Backgrounds -->
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <ul class="list-group">
+                                        <li class="list-group-item active">{{
+                                            calctotal(character.backgrounds) }} Background
+                                            Traits
+                                        </li>
+                                        <li ng-repeat='t in character.backgrounds | orderBy:"name":false'
+                                            class="list-group-item trait">
+                                            {{ t.name }}
+                                            <span ng-show="t.val > 1">
+                                                x{{ t.val }}
+                                            </span>
+                                            <span ng-show="t.note.length > 0">
+                                                ({{ t.note }})
+                                            </span>
+                                            <button ng-click="removeAdvantage(t.name, character.backgrounds)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-minus"></span></button>
+                                            <button ng-hide="calctotal(character.backgrounds) + calctotal(character.influences) > 4"
+                                                    ng-click="addAdvantage(t.name, character.backgrounds)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                            <button ng-click="addNoteDialog(t, character.backgrounds)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-pencil"></span></button>
+                                        </li>
+                                    </ul>
+
+                                    <div class="col-lg-12"
+                                         ng-hide="calctotal(character.backgrounds) + calctotal(character.influences) > 4">
+                                        <div class="col-lg-9">
+                                            <select id="slc-physical" class="form-control"
+                                                    ng-options="attr for attr in backgrounds"
+                                                    ng-model="sbackground">
+                                                <option style="display:none" value="">Select a background</option>
+                                            </select>
+                                        </div>
+                                        <button ng-click="addAdvantage(sbackground, character.backgrounds)"
+                                                class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Influences -->
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <ul class="list-group">
+                                        <li class="list-group-item active">{{
+                                            calctotal(character.influences) }} Influence
+                                            Traits
+                                        </li>
+                                        <li ng-repeat='t in character.influences | orderBy:"name":false'
+                                            class="list-group-item trait">
+                                            {{ t.name }}
+                                            <span ng-show="t.val > 1">
+                                                x{{ t.val }}
+                                            </span>
+                                            <span ng-show="t.note.length > 0">
+                                                ({{ t.note }})
+                                            </span>
+                                            <button ng-click="removeAdvantage(t.name, character.influences)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-minus"></span></button>
+                                            <button ng-hide="calctotal(character.backgrounds) + calctotal(character.influences) > 4"
+                                                    ng-click="addAdvantage(t.name, character.influences)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                            <button ng-click="addNoteDialog(t, character.influences)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-pencil"></span></button>
+                                        </li>
+                                    </ul>
+
+                                    <div class="col-lg-12"
+                                         ng-hide="calctotal(character.backgrounds) + calctotal(character.influences) > 4">
+                                        <div class="col-lg-9">
+                                            <select id="slc-physical" class="form-control"
+                                                    ng-options="attr for attr in influences"
+                                                    ng-model="sinfluence">
+                                                <option style="display:none" value="">Select an influence</option>
+                                            </select>
+                                        </div>
+                                        <button ng-click="addAdvantage(sinfluence, character.influences)"
+                                                class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </form>
                     </step>
 
@@ -329,53 +506,291 @@
                             <div class="col-lg-12">
                                 <ul class="list-group">
                                     <li class="list-group-item">
-                                        Assign Blood traits (LotN : 95, 106)
-                                    </li>
-                                    <li class="list-group-item">
-                                        Assign Willpower traits (LotN: 95, 107)
-                                    </li>
-                                    <li class="list-group-item">
                                         Assign Virtue traits (LotN: 108)
                                     </li>
                                     <li class="list-group-item">
-                                        Choose Negative Traits and Flaws (if any) (LotN: 112)
+                                        <label class="label-warning">Optional: </label> Negative Traits (max 5 traits) and Flaws (max 7 traits) (if any) (LotN: 112)
                                     </li>
                                     <li class="list-group-item">
-                                        Choose a Derangement (if desired) (LotN: 112, 212)
-                                    </li>
-                                    <li class="list-group-item">
-                                        Spend five Free Traits and choose Merits (if any) (LotN: 112, 212)
+                                        <label class="label-warning">Optional: </label> Choose a Derangement (if desired, <u>this is not the Derangement for Clan Malkavian's disadvantage</u>) (LotN: 112, 212)
                                     </li>
                                 </ul>
                             </div>
                         </div>
                         <form class="form-horizontal" name="stepform" ng-init="setFormScope(this)">
 
+                            <!-- Virtues -->
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <ul class="list-group">
+                                        <li class="list-group-item active">{{
+                                            character.conscience.rating + character.selfcontrol.rating + character.courage.rating }} Virtue
+                                            Traits
+                                        </li>
+                                        <li class="list-group-item trait">
+                                            {{ character.conscience.name }}: <span>x{{ character.conscience.rating }}</span>
+                                            <button ng-click="removeVirtue(character.conscience)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-minus"></span></button>
+                                            <button ng-show="showAddVirtue()"
+                                                    ng-click="addVirtue(character.conscience)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </li>
+                                        <li class="list-group-item trait">
+                                            {{ character.selfcontrol.name }}: <span>x{{ character.selfcontrol.rating }}</span>
+                                            <button ng-click="removeVirtue(character.selfcontrol)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-minus"></span></button>
+                                            <button ng-show="showAddVirtue()"
+                                                    ng-click="addVirtue(character.selfcontrol)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </li>
+                                        <li class="list-group-item trait">
+                                            {{ character.courage.name }}: <span>x{{ character.courage.rating }}</span>
+                                            <button ng-click="removeVirtue(character.courage)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-minus"></span></button>
+                                            <button ng-show="showAddVirtue()"
+                                                    ng-click="addVirtue(character.courage)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Negative physical -->
+                            <div class="form-group">
+                                <div class="col-lg-12">
+
+                                    <ul class="list-group">
+                                        <li class="list-group-item active">{{
+                                            calctotal(character.attributes.negativephysical) }} Negative Physical Traits
+                                        </li>
+                                        <li ng-repeat='t in character.attributes.negativephysical | orderBy:"name":false'
+                                            class="list-group-item trait">
+                                            {{ t.name }}
+                                            <span ng-show="t.val > 1">
+                                                ({{ t.val }})
+                                            </span>
+                                            <button ng-click="removeTrait(t.name, character.attributes.negativephysical)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-minus"></span></button>
+                                            <button ng-show="showNegativeTraits()"
+                                                    ng-click="addTrait(t.name, character.attributes.negativephysical)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                    <div class="col-lg-12"
+                                         ng-show="showNegativeTraits()">
+                                        <div class="col-lg-9">
+                                            <select class="form-control"
+                                                    ng-options="attr for attr in negativephysical"
+                                                    ng-model="snegativephysical">
+                                                <option style="display:none" value="">Select a trait</option>
+                                            </select>
+                                        </div>
+                                        <button ng-click="addTrait(snegativephysical, character.attributes.negativephysical)"
+                                                class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Negative Social -->
+                            <div class="form-group">
+                                <div class="col-lg-12">
+
+                                    <ul class="list-group">
+                                        <li class="list-group-item active">{{
+                                            calctotal(character.attributes.negativesocial) }} Negative Social Traits
+                                        </li>
+                                        <li ng-repeat='t in character.attributes.negativesocial | orderBy:"name":false'
+                                            class="list-group-item trait">
+                                            {{ t.name }}
+                                            <span ng-show="t.val > 1">
+                                                ({{ t.val }})
+                                            </span>
+                                            <button ng-click="removeTrait(t.name, character.attributes.negativesocial)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-minus"></span></button>
+                                            <button ng-show="showNegativeTraits()"
+                                                    ng-click="addTrait(t.name, character.attributes.negativesocial)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                    <div class="col-lg-12"
+                                         ng-show="showNegativeTraits()">
+                                        <div class="col-lg-9">
+                                            <select class="form-control"
+                                                    ng-options="attr for attr in negativesocial"
+                                                    ng-model="snegativesocial">
+                                                <option style="display:none" value="">Select a trait</option>
+                                            </select>
+                                        </div>
+                                        <button ng-click="addTrait(snegativesocial, character.attributes.negativesocial)"
+                                                class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Negative mental -->
+                            <div class="form-group">
+                                <div class="col-lg-12">
+
+                                    <ul class="list-group">
+                                        <li class="list-group-item active">{{
+                                            calctotal(character.attributes.negativemental) }} Negative Mental Traits
+                                        </li>
+                                        <li ng-repeat='t in character.attributes.negativemental | orderBy:"name":false'
+                                            class="list-group-item trait">
+                                            {{ t.name }}
+                                            <span ng-show="t.val > 1">
+                                                ({{ t.val }})
+                                            </span>
+                                            <button ng-click="removeTrait(t.name, character.attributes.negativemental)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-minus"></span></button>
+                                            <button ng-show="showNegativeTraits()"
+                                                    ng-click="addTrait(t.name, character.attributes.negativemental)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                    <div class="col-lg-12"
+                                         ng-show="showNegativeTraits()">
+                                        <div class="col-lg-9">
+                                            <select class="form-control"
+                                                    ng-options="attr for attr in negativemental"
+                                                    ng-model="snegativemental">
+                                                <option style="display:none" value="">Select a trait</option>
+                                            </select>
+                                        </div>
+                                        <button ng-click="addTrait(snegativemental, character.attributes.negativemental)"
+                                                class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Flaws -->
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <ul class="list-group">
+                                        <li class="list-group-item active">{{
+                                            calctotalcost(character.flaws) }} Flaws
+                                        </li>
+                                        <li ng-repeat='t in character.flaws | orderBy:"name":false'
+                                            class="list-group-item trait">
+                                            {{ t.name }} ({{t.cost}})
+                                            <button ng-click="removeFlaw(t, character.flaws)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-minus"></span></button>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                    <div class="col-lg-12"
+                                         ng-show="showFlaws()">
+                                        <div class="col-lg-9">
+                                            <select class="form-control"
+                                                    ng-options="attr as attr.name +'('+ attr.cost + ')' for attr in flaws"
+                                                    ng-model="sflaw">
+                                                <option style="display:none" value="">Select a flaw</option>
+                                            </select>
+                                        </div>
+                                        <button ng-click="addFlaw(sflaw, character.flaws)"
+                                                class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Derangement -->
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <ul class="list-group">
+                                        <li class="list-group-item active">{{
+                                            calctotal(character.derangements) }} Derangements
+                                        </li>
+                                        <li ng-repeat='t in character.derangements'
+                                            class="list-group-item trait">
+                                            {{t.name}}
+                                            <button ng-click="removeDerangement(t.name, character.derangements)"
+                                                    class="btn btn-xs pull-right"><span
+                                                        class="glyphicon glyphicon-minus"></span></button>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                    <div class="col-lg-12"
+                                         ng-show="character.derangements.length == 0">
+                                        <div class="col-lg-9">
+                                            <select class="form-control"
+                                                    ng-options="attr for attr in derangements"
+                                                    ng-model="sderangement">
+                                                <option style="display:none" value="">Select a Derangement</option>
+                                            </select>
+                                        </div>
+                                        <button ng-click="addDerangement(sderangement, character.derangements)"
+                                                class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </form>
                     </step>
 
-                    <step title="Step 5: Spark of life (LotN: 72)">
-                        <form class="form-horizontal" name="stepform" ng-init="setFormScope(this)">
+                    <step title="Almost done...">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label class="label">Review your character to the left. In the next step, the
+                                    following actions are performed:</label>
 
-                        </form>
-                    </step>
-
-                    <step title="Summary">
-
-                        <strong>Email:</strong> {{user.email}}
-                        <br>
-                        <strong>Address:</strong> {{user.address}}
-                        <br>
-                        <strong>Favorite Color:</strong> {{user.color}}
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        (Automatic) Assign Clan advantages
+                                    </li>
+                                    <li class="list-group-item">
+                                        (Automatic) Assign Chronicle advantages
+                                    </li>
+                                    <li class="list-group-item">
+                                        (Automatic) Assign Blood traits (LotN : 95, 106)
+                                    </li>
+                                    <li class="list-group-item">
+                                        (Automatic) Assign Willpower traits (LotN: 95, 107)
+                                    </li>
+                                    <li class="list-group-item">
+                                        Spend five (or more) Free Traits and choose Merits (if any) (LotN: 71, 112, 212)
+                                    </li>
+                                    -
+                                </ul>
+                                <label class="label-warning">You will not be able to return after submitting this
+                                    step</label>
+                                <button class="btn btn-primary" ng-confirm-click="Are you sure?" ng-click="submitDraft()">Go to next step</button>
+                            </div>
+                        </div>
                     </step>
 
                 </wizard>
             </div>
 
+            <!-- Summary -->
             <div class="col-lg-6 hidden-sm hidden-xs">
+
+                <!-- Concept -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        Summary: Concept
+                        Concept
                     </div>
                     <div class="panel-body">
                         <div class="col-lg-6">
@@ -404,6 +819,8 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Attributes -->
                 <div class="panel panel-default" ng-show="currentIndex > 1">
                     <div class="panel-heading">
                         Attributes
@@ -453,8 +870,192 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Advantages -->
+                <div class="panel panel-default" ng-show="currentIndex > 2">
+                    <div class="panel-heading">
+                        Advantages
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{calctotal(character.abilities)}} Abilities
+                                </li>
+                                <li ng-repeat='t in character.abilities | orderBy:"name":false'
+                                    class="list-group-item trait">
+                                    {{ t.name }}
+                                    <span ng-show="t.val > 1">
+                                        x{{ t.val }}
+                                    </span>
+                                    <span ng-show="t.note.length > 0">
+                                        ({{ t.note }})
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{calctotal(character.disciplines)}} Disciplines
+                                </li>
+                                <li ng-repeat='t in character.disciplines | orderBy:"path":false'
+                                    class="list-group-item trait">
+                                    {{t.path}}: {{ t.name }} ({{t.level}})
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{calctotal(character.backgrounds)}} Backgrounds
+                                </li>
+                                <li ng-repeat='t in character.backgrounds | orderBy:"name":false'
+                                    class="list-group-item trait">
+                                    {{ t.name }}
+                                    <span ng-show="t.val > 1">
+                                        x{{ t.val }}
+                                    </span>
+                                    <span ng-show="t.note.length > 0">
+                                        ({{ t.note }})
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{calctotal(character.influences)}} Influences
+                                </li>
+                                <li ng-repeat='t in character.influences | orderBy:"name":false'
+                                    class="list-group-item trait">
+                                    {{ t.name }}
+                                    <span ng-show="t.val > 1">
+                                        x{{ t.val }}
+                                    </span>
+                                    <span ng-show="t.note.length > 0">
+                                        ({{ t.note }})
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4" ng-show="currentIndex > 3">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{character.conscience.rating + character.selfcontrol.rating + character.courage.rating}} Virtues
+                                </li>
+                                <li class="list-group-item trait">
+                                    {{character.conscience.name}} x {{character.conscience.rating}}
+                                </li>
+                                <li class="list-group-item trait">
+                                    {{character.selfcontrol.name}} x {{character.selfcontrol.rating}}
+                                </li>
+                                <li class="list-group-item trait">
+                                    {{character.courage.name}} x {{character.courage.rating}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Disadvantages -->
+                <div class="panel panel-default" ng-show="currentIndex > 3">
+                    <div class="panel-heading">
+                        Disadvantages
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{calctotal(character.attributes.negativephysical)}} Negative Physical
+                                </li>
+                                <li ng-repeat='t in character.attributes.negativephysical | orderBy:"name":false'
+                                    class="list-group-item trait">
+                                    {{ t.name }}
+                                    <span ng-show="t.val > 1">
+                                        ({{ t.val }})
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{calctotal(character.attributes.negativesocial)}} Negative Social
+                                </li>
+                                <li ng-repeat='t in character.attributes.negativesocial | orderBy:"name":false'
+                                    class="list-group-item trait">
+                                    {{ t.name }}
+                                    <span ng-show="t.val > 1">
+                                        ({{ t.val }})
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{calctotal(character.attributes.negativemental)}} Negative Mental
+                                </li>
+                                <li ng-repeat='t in character.attributes.negativemental | orderBy:"name":false'
+                                    class="list-group-item trait">
+                                    {{ t.name }}
+                                    <span ng-show="t.val > 1">
+                                        ({{ t.val }})
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{calctotalcost(character.flaws)}} Flaws
+                                </li>
+                                <li ng-repeat='t in character.flaws | orderBy:"name":false'
+                                    class="list-group-item trait">
+                                    {{ t.name }} ({{t.cost}})
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{calctotal(character.derangements)}}Derangements
+                                </li>
+                                <li ng-repeat='t in character.derangements'
+                                    class="list-group-item trait">
+                                    {{ t.name }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <!-- add note Modal -->
+    <div id="advNoteModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Edit note for {{noteItem.name}} ({{noteItem.rating}})</h4>
+                </div>
+                <div class="modal-body">
+                    Note: <input type="text" ng-model="noteItem.note"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="revertNoteItem()" data-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="saveNoteItem()" data-dismiss="modal">Ok
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 </div>

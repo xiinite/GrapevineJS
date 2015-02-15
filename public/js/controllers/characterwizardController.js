@@ -40,6 +40,7 @@ app.controller('CharacterWizardController', ['$scope', '$http', 'loading', 'reso
     $scope.sects = [];
     $scope.social = [];
     $scope.ssocial = {};
+    $scope.clandisciplines = [];
 
     $scope.sbloodbond = {};
 
@@ -64,10 +65,32 @@ app.controller('CharacterWizardController', ['$scope', '$http', 'loading', 'reso
         if (list === undefined) return "";
         var count = 0;
         $.each(list, function (index, item) {
-            count += item.val;
+            if(item.val !== undefined){
+                count += item.val;
+            }else if(item.rating !== undefined){
+                count += item.rating;
+            }
         });
         return count;
     };
+    $scope.calctotalcost = function (list) {
+        if (list === undefined) return "";
+        var count = 0;
+        $.each(list, function (index, item) {
+            count += item.cost;
+        });
+        return count;
+    };
+
+    $scope.onselectedpath = function(){
+        for(var i = 0; i<$scope.paths.length; i++){
+            if($scope.paths[i].name == $scope.character.path.name){
+                $scope.character.conscience.name =$scope.paths[i].conscience;
+                $scope.character.selfcontrol.name =$scope.paths[i].selfcontrol;
+                $scope.character.courage.name = "Courage";
+            }
+        }
+    }
 
     $scope.addTrait = function (value, list) {
         if (value.length === undefined) return;
@@ -96,11 +119,181 @@ app.controller('CharacterWizardController', ['$scope', '$http', 'loading', 'reso
         }
     };
 
+    $scope.addAdvantage = function (value, list) {
+        if (value.length === undefined) return;
+        if (value.length == 0) return;
+        var result = $.grep(list, function (e) {
+            return e.name == value;
+        });
+        if (result.length === 0) {
+            list.push({name: value, note: "", rating: 1});
+            list = orderBy(list, 'name', false);
+        } else {
+            result[0].rating++;
+        }
+    };
+
+    $scope.removeAdvantage = function (value, list) {
+        var result = $.grep(list, function (e) {
+            return e.name == value;
+        });
+        var attr = result[0];
+
+        if (attr.rating == 1) {
+            list.splice($.inArray(attr, list), 1);
+        } else {
+            attr.rating--;
+        }
+    };
+
+    $scope.addDiscipline = function(item, list){
+        if(item.name !== undefined){
+            var result = $.grep(list, function (e) {
+                return e.name == item.name && e.path == item.path;
+            });
+            if(result.length == 0){
+                list.push(item);
+            }
+        }
+    };
+
+    $scope.removeDiscipline = function(item, list){
+        if(item.name !== undefined){
+            var result = $.grep(list, function (e) {
+                return e.name == item.name && e.path == item.path;
+            });
+            if(result.length == 1){
+                list.splice($.inArray(result[0], list), 1);
+            }
+        }
+    };
+
+    $scope.addVirtue = function(virtue){
+        virtue.rating++;
+        if(virtue.rating > 5) virtue.rating = 5;
+    };
+    $scope.removeVirtue = function(virtue){
+        virtue.rating--;
+        if(virtue.rating < 1) virtue.rating = 1;
+    };
+    $scope.showAddVirtue = function(){
+        if($scope.character.conscience === undefined || $scope.character.selfcontrol === undefined || $scope.character.courage === undefined) return false;
+        var total = $scope.character.conscience.rating + $scope.character.selfcontrol.rating + $scope.character.courage.rating;
+        var max = 7 + 1;
+        if($scope.character.conscience.name === "Conscience") max++;
+        if($scope.character.selfcontrol.name === "Self-Control") max++;
+
+        return total < max;
+    };
+
+    $scope.addFlaw = function(item, list){
+        if(item.name !== undefined){
+            var result = $.grep(list, function (e) {
+                return e.name == item.name;
+            });
+            var clist = [];
+            angular.copy(list, clist);
+            clist.push(item);
+            if(result.length == 0 && ($scope.calctotalcost(clist) < 8)){
+                list.push(item);
+            }
+        }
+    };
+    $scope.removeFlaw = function(item, list){
+        if(item.name !== undefined){
+            var result = $.grep(list, function (e) {
+                return e.name == item.name;
+            });
+            if(result.length == 1){
+                list.splice($.inArray(result[0], list), 1);
+            }
+        }
+    };
+    $scope.showFlaws = function(){
+        var total = $scope.calctotalcost($scope.character.flaws);
+        var max = 7;
+
+        return total < max;
+    };
+
+    $scope.showNegativeTraits = function(){
+        if($scope.character.attributes === undefined) return false;
+        var total = $scope.calctotal($scope.character.attributes.negativephysical) + $scope.calctotal($scope.character.attributes.negativemental) + $scope.calctotal($scope.character.attributes.negativesocial);
+        var max = 5;
+        return total < max;
+    };
+
+    $scope.addDerangement = function(value, list){
+        if (value.length === undefined) return;
+        if (value.length == 0) return;
+        var result = $.grep(list, function (e) {
+            return e.name == value;
+        });
+        if (result.length === 0) {
+            list.push({name: value, note: "", rating: 1});
+            list = orderBy(list, 'name', false);
+        } else {
+            result[0].rating++;
+        }
+    }
+    $scope.removeDerangement = function(value, list){
+        var result = $.grep(list, function (e) {
+            return e.name == value;
+        });
+        var attr = result[0];
+
+        if (attr.rating == 1) {
+            list.splice($.inArray(attr, list), 1);
+        } else {
+            attr.rating--;
+        }
+    }
+    $scope.noteItem;
+    $scope.selectedList;
+    $scope.previousNoteValue = {};
+    $scope.addNoteDialog = function(adv, list)
+    {
+        angular.copy(adv, $scope.previousNoteValue);
+        $scope.noteItem = adv;
+        $scope.selectedList = list;
+        $("#advNoteModal").modal();
+    };
+
+    $scope.revertNoteItem = function(){
+        angular.copy($scope.previousNoteValue, $scope.noteItem);
+        $scope.noteItem = {};
+        $scope.selectedList = {};
+    };
+
+    $scope.saveNoteItem = function(){
+        $scope.noteItem = {};
+        $scope.selectedList = {};
+    };
+
+    $scope.showSecondary = false;
+    $scope.showTertiary = false
+    $scope.showSecondaryList = false;
+    $scope.showTertiaryList = false
     $scope.clear = function (list, list2) {
         while (list.length > 0) {
             list.pop();
         }
+
+        if(list2.length == 2){
+            $scope.showSecondary = false;
+            $scope.showTertiary = false;
+            $scope.showSecondaryList = true;
+            $scope.showTertiaryList = false
+        }else if(list2.length == 1){
+            $scope.showSecondary = true;
+            $scope.showTertiary = false;
+            $scope.showTertiaryList = true
+        }else{
+            $scope.showSecondary = true;
+            $scope.showTertiary = true;
+        }
     };
+
     $scope.init = function (id) {
         loading.show();
         var root = $scope;
@@ -117,6 +310,9 @@ app.controller('CharacterWizardController', ['$scope', '$http', 'loading', 'reso
             });
             resources.clans.get(function (data) {
                 root.clans = data;
+            });
+            resources.clandisciplines.get(function (data) {
+                root.clandisciplines = data;
             });
             resources.derangements.get(function (data) {
                 root.derangements = data;
@@ -172,12 +368,25 @@ app.controller('CharacterWizardController', ['$scope', '$http', 'loading', 'reso
             root.character = response.data;
             root.character.experience.unspent = parseInt(root.character.experience.unspent);
             root.character.experience.total = parseInt(root.character.experience.total);
+
+            root.character.conscience.rating = 1;
+            root.character.selfcontrol.rating = 1;
+            root.character.courage.rating = 1;
+
             if (root.chronicle === null) {
                 root.chronicle = root.character.chronicle;
             }
             else {
                 loading.hide();
             }
+        });
+    };
+
+    $scope.submitDraft = function(){
+        loading.show();
+        var root = $scope;
+        $http.post("/character/submitdraft", {character: root.character}).then(function(){
+            location = '/character/assignfreebies/' + root.character.id;
         });
     };
     $scope.setFormScope = function (scope) {
@@ -194,6 +403,12 @@ app.controller('CharacterWizardController', ['$scope', '$http', 'loading', 'reso
                 return $scope.calctotal($scope.character.attributes.physical)
                     + $scope.calctotal($scope.character.attributes.social)
                     + $scope.calctotal($scope.character.attributes.mental) == (7 + 5 + 3);
+            case 2:
+                return ($scope.calctotal($scope.character.abilities) == 5
+                && ($scope.calctotal($scope.character.backgrounds) + $scope.calctotal($scope.character.influences)) == 5
+                && $scope.character.disciplines.length == 3);
+            case 3:
+                return $scope.showAddVirtue() == false;
         }
         return $scope.formscope[$scope.currentIndex].stepform.$valid;
     }
@@ -312,6 +527,42 @@ app.filter('exclude', function () {
 
                 if (keys.indexOf(items[i].key) == -1) {
                     arrayToReturn.push(items[i]);
+                }
+            }
+        }
+
+        return arrayToReturn;
+    };
+});
+
+app.filter('isClanDiscipline', function () {
+
+    return function (items, filter) {
+        var clan;
+        var clandisciplines;
+        if(filter !== undefined){
+            clan = filter[0];
+            clandisciplines = filter[1];
+        }
+        var clanDiscs = [];
+        var clanFound = false;
+        for (var i = 0; i < clandisciplines.length; i++) {
+            if(clandisciplines[i].clan == clan){
+                clanFound = true;
+                for(var j = 0; j< clandisciplines[i].disciplines.length; j++){
+                    clanDiscs.push(clandisciplines[i].disciplines[j]);
+                }
+            }
+        }
+        var arrayToReturn = [];
+        for (var i = 0; i < items.length; i++) {
+            if (clanFound == false) {
+                arrayToReturn.push(items[i]);
+            } else {
+                for(var j = 0; j < clanDiscs.length; j++){
+                    if (items[i].path.indexOf(clanDiscs[j]) > -1 && items[i].level == 'basic') {
+                        arrayToReturn.push(items[i]);
+                    }
                 }
             }
         }
