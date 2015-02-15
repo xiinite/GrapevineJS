@@ -41,7 +41,7 @@ app.controller('CharacterWizardController', ['$scope', '$http', 'loading', 'reso
     $scope.social = [];
     $scope.ssocial = {};
     $scope.clandisciplines = [];
-
+    $scope.sstatus = '';
     $scope.sbloodbond = {};
 
     $scope.sstatus = "";
@@ -60,6 +60,154 @@ app.controller('CharacterWizardController', ['$scope', '$http', 'loading', 'reso
     $scope.ssecondary = "";
     $scope.tertiary = undefined;
     $scope.stertiary = "";
+
+    $scope.clanAdvChoiceMade = false;
+    $scope.clanAdvChoice1Made = false;
+    $scope.clanAdvChoice2Made = false;
+    $scope.clanAdvDialog = ["Brujah", "Malkavian", "Toreador", "Ventrue", "Lasombra", "Followers of Set",
+        "Giovanni", "Ravnos", "Daughters of Cacophony", "Baali", "Nagaraja", "True Brujah"];
+    $scope.addClanAdvDialog = function(){
+        $("#clanAdvantageModal").modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+    };
+
+    $scope.GiovanniChoice = function(ghoul){
+        if(ghoul){
+            $scope.addAdvantage("Retainer", $scope.character.backgrounds);
+            $scope.clanAdvChoiceMade = true;
+            $scope.clanAdvChoice2Made = true;
+        }else{
+            $scope.clanAdvChoice2Made = true;
+        }
+    };
+
+    $scope.addClanAdvDaughters = function (value, complete) {
+        if (value.length === undefined) return;
+        if (value.length == 0) return;
+
+        if(value == "High Society"){
+            var result = $.grep($scope.character.influences, function (e) {
+                return e.name == value;
+            });
+            if (result.length === 0) {
+                $scope.character.influences.push({name: value, note: "", rating: 1});
+                $scope.character.influences = orderBy($scope.character.influences, 'name', false);
+            } else {
+                result[0].rating++;
+            }
+        }else{
+            var result = $.grep($scope.character.abilities, function (e) {
+                return e.name == value;
+            });
+            if (result.length === 0) {
+                $scope.character.abilities.push({name: value, note: "", rating: 1});
+                $scope.character.abilities = orderBy($scope.character.abilities, 'name', false);
+            } else {
+                result[0].rating++;
+            }
+        }
+
+        if($scope.clanAdvChoice1Made == false) $scope.clanAdvChoice1Made = !complete;
+        $scope.clanAdvChoiceMade = complete;
+    };
+
+    $scope.addClanDerangement = function(value, list){
+        if (value.length === undefined) return;
+        if (value.length == 0) return;
+        var result = $.grep(list, function (e) {
+            return e.name == value;
+        });
+        if (result.length === 0) {
+            list.push({name: value, note: "", rating: 1});
+            list = orderBy(list, 'name', false);
+            $scope.clanAdvChoiceMade = true;
+        }
+    };
+
+    $scope.addClanAbility = function (value, complete) {
+        if (value.length === undefined) return;
+        if (value.length == 0) return;
+
+        var result = $.grep($scope.character.abilities, function (e) {
+            return e.name == value;
+        });
+        if (result.length === 0) {
+            $scope.character.abilities.push({name: value, note: "", rating: 1});
+            $scope.character.abilities = orderBy($scope.character.abilities, 'name', false);
+        } else {
+            result[0].rating++;
+        }
+        if($scope.clanAdvChoice1Made == false) $scope.clanAdvChoice1Made = !complete;
+        $scope.clanAdvChoiceMade = complete;
+
+    };
+
+    $scope.addClanInfluence = function (value, complete) {
+        if (value.length === undefined) return;
+        if (value.length == 0) return;
+
+        var result = $.grep($scope.character.influences, function (e) {
+            return e.name == value;
+        });
+        if (result.length === 0) {
+            $scope.character.influences.push({name: value, note: "", rating: 1});
+            $scope.character.influences = orderBy($scope.character.influences, 'name', false);
+        } else {
+            result[0].rating++;
+        }
+
+        if($scope.clanAdvChoice1Made == false) $scope.clanAdvChoice1Made = !complete;
+        $scope.clanAdvChoiceMade = complete;
+    };
+
+    $scope.addClanStatus = function (value, complete) {
+        if (value.length === undefined) return;
+        if (value.length == 0) return;
+
+        var result = $.grep($scope.character.status, function (e) {
+            return e.name == value;
+        });
+        if (result.length === 0) {
+            $scope.character.status.push({name: value, statustype: "fleeting", rating: 1});
+            $scope.character.status = orderBy($scope.character.status, 'name', false);
+        } else {
+            result[0].rating++;
+        }
+
+        if($scope.clanAdvChoice1Made == false) $scope.clanAdvChoice1Made = !complete;
+        $scope.clanAdvChoiceMade = complete;
+    };
+
+    $scope.addClanInfluenceAbility = function (value, complete) {
+        if (value.length === undefined) return;
+        if (value.length == 0) return;
+
+        var result = $.grep($scope.character.abilities, function (e) {
+            return e.name == value;
+        });
+        if (result.length === 0) {
+            $scope.character.abilities.push({name: value, note: "", rating: 1});
+            $scope.character.abilities = orderBy($scope.character.abilities, 'name', false);
+        } else {
+            result[0].rating++;
+        }
+        if(value == 'Politics') value = 'Political';
+        result = $.grep($scope.character.influences, function (e) {
+            return e.name == value;
+        });
+        if (result.length === 0) {
+            $scope.character.influences.push({name: value, note: "", rating: 1});
+            $scope.character.influences = orderBy($scope.character.influences, 'name', false);
+        } else {
+            result[0].rating++;
+        }
+
+        if($scope.clanAdvChoice1Made == false) $scope.clanAdvChoice1Made = !complete;
+        $scope.clanAdvChoiceMade = complete;
+
+    };
 
     $scope.calctotal = function (list) {
         if (list === undefined) return "";
@@ -235,7 +383,7 @@ app.controller('CharacterWizardController', ['$scope', '$http', 'loading', 'reso
         } else {
             result[0].rating++;
         }
-    }
+    };
     $scope.removeDerangement = function(value, list){
         var result = $.grep(list, function (e) {
             return e.name == value;
@@ -398,6 +546,7 @@ app.controller('CharacterWizardController', ['$scope', '$http', 'loading', 'reso
 
     $scope.currentIndex = 0;
     $scope.isStepValid = function () {
+        return true;
         switch ($scope.currentIndex) {
             case 1:
                 return $scope.calctotal($scope.character.attributes.physical)
@@ -538,11 +687,38 @@ app.filter('exclude', function () {
 app.filter('isClanDiscipline', function () {
 
     return function (items, filter) {
+        var contains = function(a, obj) {
+            var i = a.length;
+            while (i--) {
+                if (a[i].path === obj.path && a[i].name === obj.name) {
+                    return true;
+                }
+            }
+            return false;
+        };
+        var containspath = function(a, obj) {
+            var i = a.length;
+            while (i--) {
+                if(a[i].path === undefined){
+                    if (a[i] === obj.path) {
+                        return true;
+                    }
+                }else{
+                    if (a[i].path === obj.path) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        };
+
         var clan;
         var clandisciplines;
+        var currentdisciplines;
         if(filter !== undefined){
             clan = filter[0];
             clandisciplines = filter[1];
+            currentdisciplines = filter[2];
         }
         var clanDiscs = [];
         var clanFound = false;
@@ -557,12 +733,13 @@ app.filter('isClanDiscipline', function () {
         var arrayToReturn = [];
         for (var i = 0; i < items.length; i++) {
             if (clanFound == false) {
-                arrayToReturn.push(items[i]);
-            } else {
-                for(var j = 0; j < clanDiscs.length; j++){
-                    if (items[i].path.indexOf(clanDiscs[j]) > -1 && items[i].level == 'basic') {
-                        arrayToReturn.push(items[i]);
-                    }
+                if(items[i].level == 'basic'){
+                    arrayToReturn.push(items[i]);
+                }
+            } else{
+                if(items[i].level == 'basic' && containspath(clanDiscs, items[i]) && !contains(currentdisciplines, items[i]) && !containspath(arrayToReturn, items[i])){
+                    //
+                    arrayToReturn.push(items[i]);
                 }
             }
         }

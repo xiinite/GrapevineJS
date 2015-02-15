@@ -1,6 +1,6 @@
 [
   {
-    "clan": "Assamites",
+    "clan": "Assamite",
     "disciplines": [
       "Celerity",
       "Obfuscate",
@@ -127,5 +127,30 @@
       "Obfuscate",
       "Thanatosis"
     ]
+  },
+  {
+    "clan": "Baali",
+    "disciplines": [
+      "Daimoinon",
+      "Obfuscate",
+      "Presence"
+    ]
+  },
+  {
+    "clan": "Nagaraja",
+    "disciplines": [
+      "Auspex",
+      "Dominate",
+      "Necromancy"
+    ]
+  },
+  {
+    "clan": "True Brujah",
+    "disciplines": [
+      "Potence",
+      "Presence",
+      "Temporis"
+    ]
   }
+
 ]

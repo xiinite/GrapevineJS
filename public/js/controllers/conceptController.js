@@ -7,6 +7,9 @@ app.controller('ConceptController', ['$scope', '$http', 'loading', 'resources', 
     $scope.clans = [];
     $scope.sclan = undefined;
 
+    $scope.sects = [];
+    $scope.ssect = undefined;
+
     $scope.name = "";
     $scope.concept = "";
     $scope.submitted = false;
@@ -22,9 +25,9 @@ app.controller('ConceptController', ['$scope', '$http', 'loading', 'resources', 
     };
 
     $scope.submitForm = function(){
-        if($scope.schronicle !== undefined && $scope.sclan !== undefined && $scope.concept != "" && $scope.name != ""){
+        if($scope.schronicle !== undefined && $scope.sclan !== undefined && $scope.ssect != undefined && $scope.concept != "" && $scope.name != ""){
             loading.show();
-            $http.post("/character/submitconcept", {chronicle: $scope.schronicle.id, clan: $scope.sclan, concept: $scope.concept, name: $scope.name}).then(function(response){
+            $http.post("/character/submitconcept", {chronicle: $scope.schronicle.id, clan: $scope.sclan, sect: $scope.ssect, concept: $scope.concept, name: $scope.name}).then(function(response){
                 if(response.data.id !== undefined){
                     $scope.characterid = response.data.id;
                     location = '/character/wizard/' + response.data.id;
@@ -44,8 +47,11 @@ app.controller('ConceptController', ['$scope', '$http', 'loading', 'resources', 
             loading.hide();
         });
 
-        resources.clans.get(function(data){
-            $scope.clans = data;
+        resources.clandisciplines.get(function(data){
+            $scope.clans = data.map(function(m){return m.clan});
+        });
+        resources.sects.get(function(data){
+            $scope.sects = data;
         });
     }
 }]);

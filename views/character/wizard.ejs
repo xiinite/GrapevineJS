@@ -337,8 +337,8 @@
                                         <li ng-repeat='t in character.abilities | orderBy:"name":false'
                                             class="list-group-item trait">
                                             {{ t.name }}
-                                            <span ng-show="t.val > 1">
-                                                x{{ t.val }}
+                                            <span ng-show="t.rating > 1">
+                                                x{{ t.rating }}
                                             </span>
                                             <span ng-show="t.note.length > 0">
                                                 ({{ t.note }})
@@ -393,7 +393,7 @@
                                          ng-hide="character.disciplines.length > 2">
                                         <div class="col-lg-9">
                                             <select id="slc-physical" class="form-control"
-                                                    ng-options="attr as attr.path + ': ' + attr.name for attr in disciplines | isClanDiscipline: [character.clan, clandisciplines]"
+                                                    ng-options="attr as attr.path + ': ' + attr.name for attr in disciplines | isClanDiscipline: [character.clan, clandisciplines, character.disciplines]"
                                                     ng-model="sdisciplines">
                                                 <option style="display:none" value="">Select a Discipline</option>
                                             </select>
@@ -416,8 +416,8 @@
                                         <li ng-repeat='t in character.backgrounds | orderBy:"name":false'
                                             class="list-group-item trait">
                                             {{ t.name }}
-                                            <span ng-show="t.val > 1">
-                                                x{{ t.val }}
+                                            <span ng-show="t.rating > 1">
+                                                x{{ t.rating }}
                                             </span>
                                             <span ng-show="t.note.length > 0">
                                                 ({{ t.note }})
@@ -463,8 +463,8 @@
                                         <li ng-repeat='t in character.influences | orderBy:"name":false'
                                             class="list-group-item trait">
                                             {{ t.name }}
-                                            <span ng-show="t.val > 1">
-                                                x{{ t.val }}
+                                            <span ng-show="t.rating > 1">
+                                                x{{ t.rating }}
                                             </span>
                                             <span ng-show="t.note.length > 0">
                                                 ({{ t.note }})
@@ -509,10 +509,13 @@
                                         Assign Virtue traits (LotN: 108)
                                     </li>
                                     <li class="list-group-item">
-                                        <label class="label-warning">Optional: </label> Negative Traits (max 5 traits) and Flaws (max 7 traits) (if any) (LotN: 112)
+                                        <label class="label-warning">Optional: </label> Negative Traits (max 5 traits)
+                                        and Flaws (max 7 traits) (if any) (LotN: 112)
                                     </li>
                                     <li class="list-group-item">
-                                        <label class="label-warning">Optional: </label> Choose a Derangement (if desired, <u>this is not the Derangement for Clan Malkavian's disadvantage</u>) (LotN: 112, 212)
+                                        <label class="label-warning">Optional: </label> Choose a Derangement (if
+                                        desired, <u>this is not the Derangement for Clan Malkavian's disadvantage</u>)
+                                        (LotN: 112, 212)
                                     </li>
                                 </ul>
                             </div>
@@ -524,11 +527,13 @@
                                 <div class="col-lg-12">
                                     <ul class="list-group">
                                         <li class="list-group-item active">{{
-                                            character.conscience.rating + character.selfcontrol.rating + character.courage.rating }} Virtue
+                                            character.conscience.rating + character.selfcontrol.rating +
+                                            character.courage.rating }} Virtue
                                             Traits
                                         </li>
                                         <li class="list-group-item trait">
-                                            {{ character.conscience.name }}: <span>x{{ character.conscience.rating }}</span>
+                                            {{ character.conscience.name }}:
+                                            <span>x{{ character.conscience.rating }}</span>
                                             <button ng-click="removeVirtue(character.conscience)"
                                                     class="btn btn-xs pull-right"><span
                                                         class="glyphicon glyphicon-minus"></span></button>
@@ -539,7 +544,8 @@
                                             </button>
                                         </li>
                                         <li class="list-group-item trait">
-                                            {{ character.selfcontrol.name }}: <span>x{{ character.selfcontrol.rating }}</span>
+                                            {{ character.selfcontrol.name }}:
+                                            <span>x{{ character.selfcontrol.rating }}</span>
                                             <button ng-click="removeVirtue(character.selfcontrol)"
                                                     class="btn btn-xs pull-right"><span
                                                         class="glyphicon glyphicon-minus"></span></button>
@@ -776,7 +782,13 @@
                                 </ul>
                                 <label class="label-warning">You will not be able to return after submitting this
                                     step</label>
-                                <button class="btn btn-primary" ng-confirm-click="Are you sure?" ng-click="submitDraft()">Go to next step</button>
+                                <button class="btn btn-primary" ng-hide="clanAdvDialog.indexOf(character.clan) > -1"
+                                        ng-confirm-click="Are you sure?" ng-click="submitDraft()">Go to next step
+                                </button>
+                                <button class="btn btn-primary" ng-show="clanAdvDialog.indexOf(character.clan) > -1"
+                                        ng-confirm-click="Are you sure?" ng-click="addClanAdvDialog()">Make clan
+                                    advantage choice
+                                </button>
                             </div>
                         </div>
                     </step>
@@ -801,6 +813,10 @@
                             <div class="row">
                                 <div class="col-lg-6"><b>Clan: </b></div>
                                 <div class="col-lg-6"><b>{{character.clan}}</b></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6"><b>Sect: </b></div>
+                                <div class="col-lg-6"><b>{{character.sect}}</b></div>
                             </div>
                         </div>
                         <div class="col-lg-6" ng-show="currentIndex > 0">
@@ -885,8 +901,8 @@
                                 <li ng-repeat='t in character.abilities | orderBy:"name":false'
                                     class="list-group-item trait">
                                     {{ t.name }}
-                                    <span ng-show="t.val > 1">
-                                        x{{ t.val }}
+                                    <span ng-show="t.rating > 1">
+                                        x{{ t.rating }}
                                     </span>
                                     <span ng-show="t.note.length > 0">
                                         ({{ t.note }})
@@ -913,8 +929,8 @@
                                 <li ng-repeat='t in character.backgrounds | orderBy:"name":false'
                                     class="list-group-item trait">
                                     {{ t.name }}
-                                    <span ng-show="t.val > 1">
-                                        x{{ t.val }}
+                                    <span ng-show="t.rating > 1">
+                                        x{{ t.rating }}
                                     </span>
                                     <span ng-show="t.note.length > 0">
                                         ({{ t.note }})
@@ -930,8 +946,8 @@
                                 <li ng-repeat='t in character.influences | orderBy:"name":false'
                                     class="list-group-item trait">
                                     {{ t.name }}
-                                    <span ng-show="t.val > 1">
-                                        x{{ t.val }}
+                                    <span ng-show="t.rating > 1">
+                                        x{{ t.rating }}
                                     </span>
                                     <span ng-show="t.note.length > 0">
                                         ({{ t.note }})
@@ -942,7 +958,8 @@
                         <div class="col-lg-4" ng-show="currentIndex > 3">
                             <ul class="list-group">
                                 <li class="list-group-item active">
-                                    {{character.conscience.rating + character.selfcontrol.rating + character.courage.rating}} Virtues
+                                    {{character.conscience.rating + character.selfcontrol.rating +
+                                    character.courage.rating}} Virtues
                                 </li>
                                 <li class="list-group-item trait">
                                     {{character.conscience.name}} x {{character.conscience.rating}}
@@ -1050,6 +1067,527 @@
                         Cancel
                     </button>
                     <button type="button" class="btn btn-primary" ng-click="saveNoteItem()" data-dismiss="modal">Ok
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+    <!-- add note Modal -->
+    <div id="clanAdvantageModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Make a clan advantage choice</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="col-lg-12">
+                        <!-- Brujah -->
+                        <div ng-show="character.clan == 'Brujah'">
+                            <div class="col-lg-12">Choose 1 ability/influence group: </div>
+                            <div class="col-lg-6">
+                                <ul class="list-group">
+                                    <li class="list-group-item active">
+                                        {{calctotal(character.abilities)}} Abilities
+                                    </li>
+                                    <li ng-repeat='t in character.abilities | orderBy:"name":false'
+                                        class="list-group-item trait">
+                                        {{ t.name }}
+                                    <span ng-show="t.rating > 1">
+                                        x{{ t.rating }}
+                                    </span>
+                                    <span ng-show="t.note.length > 0">
+                                        ({{ t.note }})
+                                    </span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <ul class="list-group">
+                                    <li class="list-group-item active">
+                                        {{calctotal(character.influences)}} Influences
+                                    </li>
+                                    <li ng-repeat='t in character.influences | orderBy:"name":false'
+                                        class="list-group-item trait">
+                                        {{ t.name }}
+                                    <span ng-show="t.rating > 1">
+                                        x{{ t.rating }}
+                                    </span>
+                                    <span ng-show="t.note.length > 0">
+                                        ({{ t.note }})
+                                    </span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="col-lg-12"
+                                 ng-hide="clanAdvChoiceMade">
+                                <div class="col-lg-9">
+                                    <select class="form-control"
+                                            ng-options="attr for attr in ['Academics', 'Politics', 'Streetwise']"
+                                            ng-model="sability">
+                                        <option style="display:none" value="">Select one</option>
+                                    </select>
+                                </div>
+                                <button ng-click="addClanInfluenceAbility(sability, true)"
+                                        class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Malkavian -->
+                        <div ng-show="character.clan == 'Malkavian'">
+                            <div class="col-lg-12">Choose 1 derangement: </div>
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <ul class="list-group">
+                                        <li class="list-group-item active">{{
+                                            calctotal(character.derangements) }} Derangements
+                                        </li>
+                                        <li ng-repeat='t in character.derangements'
+                                            class="list-group-item trait">
+                                            {{t.name}}
+                                        </li>
+                                    </ul>
+                                    <div class="col-lg-12"
+                                         ng-hide="clanAdvChoiceMade">
+                                        <div class="col-lg-9">
+                                            <select class="form-control"
+                                                    ng-options="attr for attr in derangements"
+                                                    ng-model="sderangement">
+                                                <option style="display:none" value="">Select a derangement</option>
+                                            </select>
+                                        </div>
+                                        <button ng-click="addClanDerangement(sderangement, character.derangements)"
+                                                class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Toreador -->
+                        <div ng-show="character.clan == 'Toreador'">
+                            <div class="col-lg-12">Choose 2 abilities: </div>
+                            <div class="col-lg-12">
+                                <ul class="list-group">
+                                    <li class="list-group-item active">
+                                        {{calctotal(character.abilities)}} Abilities
+                                    </li>
+                                    <li ng-repeat='t in character.abilities | orderBy:"name":false'
+                                        class="list-group-item trait">
+                                        {{ t.name }}
+                                    <span ng-show="t.rating > 1">
+                                        x{{ t.rating }}
+                                    </span>
+                                    <span ng-show="t.note.length > 0">
+                                        ({{ t.note }})
+                                    </span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="col-lg-12"
+                                 ng-hide="clanAdvChoice1Made">
+                                <div class="col-lg-9">
+                                    <select class="form-control"
+                                            ng-options="attr for attr in ['Academics', 'Politics', 'Streetwise']"
+                                            ng-model="sability">
+                                        <option style="display:none" value="">Select an ability</option>
+                                    </select>
+                                </div>
+                                <button ng-click="addClanAbility(sability, false)"
+                                        class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                </button>
+                            </div>
+                            <div class="col-lg-12"
+                                 ng-show="clanAdvChoice1Made && !clanAdvChoiceMade">
+                                <div class="col-lg-9">
+                                    <select class="form-control"
+                                            ng-options="attr for attr in ['Academics', 'Politics', 'Streetwise']"
+                                            ng-model="sability">
+                                        <option style="display:none" value="">Select a 2nd ability</option>
+                                    </select>
+                                </div>
+                                <button ng-click="addClanAbility(sability, true)"
+                                        class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Ventrue -->
+                        <div ng-show="character.clan == 'Ventrue'">
+                            <div class="col-lg-12">Choose 1 influence: </div>
+                            <div class="col-lg-12">
+                                <ul class="list-group">
+                                    <li class="list-group-item active">
+                                        {{calctotal(character.influences)}} Influences
+                                    </li>
+                                    <li ng-repeat='t in character.influences | orderBy:"name":false'
+                                        class="list-group-item trait">
+                                        {{ t.name }}
+                                    <span ng-show="t.rating > 1">
+                                        x{{ t.rating }}
+                                    </span>
+                                    <span ng-show="t.note.length > 0">
+                                        ({{ t.note }})
+                                    </span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-12"
+                                 ng-hide="clanAdvChoiceMade">
+                                <div class="col-lg-9">
+                                    <select class="form-control"
+                                            ng-options="attr for attr in ['Finance', 'Political', 'High Society']"
+                                            ng-model="sinfluence">
+                                        <option style="display:none" value="">Select one</option>
+                                    </select>
+                                </div>
+                                <button ng-click="addClanInfluence(sinfluence, true)"
+                                        class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Lasombra -->
+                        <div ng-show="character.clan == 'Lasombra'">
+                            <div class="col-lg-12">Choose 1 influence and 1 status: </div>
+                            <div class="col-lg-6">
+                                <ul class="list-group">
+                                    <li class="list-group-item active">
+                                        {{calctotal(character.influences)}} Influences
+                                    </li>
+                                    <li ng-repeat='t in character.influences | orderBy:"name":false'
+                                        class="list-group-item trait">
+                                        {{ t.name }}
+                                    <span ng-show="t.rating > 1">
+                                        x{{ t.rating }}
+                                    </span>
+                                    <span ng-show="t.note.length > 0">
+                                        ({{ t.note }})
+                                    </span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-6">
+                                <ul class="list-group">
+                                    <li class="list-group-item active">
+                                        {{calctotal(character.status)}} Status
+                                    </li>
+                                    <li ng-repeat='t in character.status | orderBy:"name":false'
+                                        class="list-group-item trait">
+                                        {{ t.name }}
+                                    <span ng-show="t.rating > 1">
+                                        x{{ t.rating }}
+                                    </span>
+                                    <span ng-show="t.note.length > 0">
+                                        ({{ t.note }})
+                                    </span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-12"
+                                 ng-hide="clanAdvChoice1Made">
+                                <div class="col-lg-9">
+                                    <select class="form-control"
+                                            ng-options="attr for attr in ['Church', 'Political', 'Underworld']"
+                                            ng-model="sinfluence">
+                                        <option style="display:none" value="">Select one</option>
+                                    </select>
+                                </div>
+                                <button ng-click="addClanInfluence(sinfluence, false)"
+                                        class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                </button>
+                            </div>
+                            <div class="col-lg-12"
+                                 ng-show="clanAdvChoice1Made && !clanAdvChoiceMade">
+                                <div class="col-lg-9">
+                                    <input type="text" ng-model="sstatus" placeholder="Name a status"/>
+                                </div>
+                                <button ng-click="addClanStatus(sstatus, true)"
+                                        class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Followers of Set -->
+                        <div ng-show="character.clan == 'Followers of Set'">
+                            <div class="col-lg-12">Choose 1 influence: </div>
+                            <div class="col-lg-12">
+                                <ul class="list-group">
+                                    <li class="list-group-item active">
+                                        {{calctotal(character.influences)}} Influences
+                                    </li>
+                                    <li ng-repeat='t in character.influences | orderBy:"name":false'
+                                        class="list-group-item trait">
+                                        {{ t.name }}
+                                    <span ng-show="t.rating > 1">
+                                        x{{ t.rating }}
+                                    </span>
+                                    <span ng-show="t.note.length > 0">
+                                        ({{ t.note }})
+                                    </span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-12"
+                                 ng-hide="clanAdvChoiceMade">
+                                <div class="col-lg-9">
+                                    <select class="form-control"
+                                            ng-options="attr for attr in ['Street', 'Political', 'Underworld']"
+                                            ng-model="sinfluence">
+                                        <option style="display:none" value="">Select one</option>
+                                    </select>
+                                </div>
+                                <button ng-click="addClanInfluence(sinfluence, true)"
+                                        class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Giovanni -->
+                        <div ng-show="character.clan == 'Giovanni'">
+                            <div class="col-lg-12">Choose 1 influence and a Wraith retainer or an additional influence: </div>
+                            <div class="col-lg-12">
+                                <ul class="list-group">
+                                    <li class="list-group-item active">
+                                        {{calctotal(character.influences)}} Influences
+                                    </li>
+                                    <li ng-repeat='t in character.influences | orderBy:"name":false'
+                                        class="list-group-item trait">
+                                        {{ t.name }}
+                                    <span ng-show="t.rating > 1">
+                                        x{{ t.rating }}
+                                    </span>
+                                    <span ng-show="t.note.length > 0">
+                                        ({{ t.note }})
+                                    </span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-12"
+                                 ng-hide="clanAdvChoice1Made">
+                                <div class="col-lg-9">
+                                    <select class="form-control"
+                                            ng-options="attr for attr in ['Finance', 'Health']"
+                                            ng-model="sinfluence">
+                                        <option style="display:none" value="">Select one</option>
+                                    </select>
+                                </div>
+                                <button ng-click="addClanInfluence(sinfluence, false)"
+                                        class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                </button>
+                            </div>
+                            <div class="col-lg-12"
+                                 ng-show="clanAdvChoice1Made && !clanAdvChoice2Made">
+                                <button class="btn btn-default" ng-click="GiovanniChoice(true)">Retainer</button>
+                                <button class="btn btn-default" ng-click="GiovanniChoice(false)">Extra Influnece</button>
+                            </div>
+                            <div class="col-lg-12"
+                                 ng-show="clanAdvChoice1Made && clanAdvChoice2Made && !clanAdvChoiceMade">
+                                <div class="col-lg-9">
+                                    <select class="form-control"
+                                            ng-options="attr for attr in ['Finance', 'Health']"
+                                            ng-model="sinfluence">
+                                        <option style="display:none" value="">Select one</option>
+                                    </select>
+                                </div>
+                                <button ng-click="addClanInfluence(sinfluence, true)"
+                                        class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Ravnos -->
+                        <div ng-show="character.clan == 'Ravnos'">
+                            <div class="col-lg-12">Choose 1 influence: </div>
+                            <div class="col-lg-12">
+                                <ul class="list-group">
+                                    <li class="list-group-item active">
+                                        {{calctotal(character.influences)}} Influences
+                                    </li>
+                                    <li ng-repeat='t in character.influences | orderBy:"name":false'
+                                        class="list-group-item trait">
+                                        {{ t.name }}
+                                    <span ng-show="t.rating > 1">
+                                        x{{ t.rating }}
+                                    </span>
+                                    <span ng-show="t.note.length > 0">
+                                        ({{ t.note }})
+                                    </span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-12"
+                                 ng-hide="clanAdvChoiceMade">
+                                <div class="col-lg-9">
+                                    <select class="form-control"
+                                            ng-options="attr for attr in ['Street', 'Transportation']"
+                                            ng-model="sinfluence">
+                                        <option style="display:none" value="">Select one</option>
+                                    </select>
+                                </div>
+                                <button ng-click="addClanInfluence(sinfluence, true)"
+                                        class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Daughters of Cacophony -->
+                        <div ng-show="character.clan == 'Daughters of Cacophony'">
+
+                            <div class="col-lg-12">Choose influence (High Society) or ability (performance): </div>
+                            <div class="col-lg-6">
+                                <ul class="list-group">
+                                    <li class="list-group-item active">
+                                        {{calctotal(character.influences)}} Influences
+                                    </li>
+                                    <li ng-repeat='t in character.influences | orderBy:"name":false'
+                                        class="list-group-item trait">
+                                        {{ t.name }}
+                                    <span ng-show="t.rating > 1">
+                                        x{{ t.rating }}
+                                    </span>
+                                    <span ng-show="t.note.length > 0">
+                                        ({{ t.note }})
+                                    </span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-6">
+                                <ul class="list-group">
+                                    <li class="list-group-item active">
+                                        {{calctotal(character.abilities)}} Abilities
+                                    </li>
+                                    <li ng-repeat='t in character.abilities | orderBy:"name":false'
+                                        class="list-group-item trait">
+                                        {{ t.name }}
+                                    <span ng-show="t.rating > 1">
+                                        x{{ t.rating }}
+                                    </span>
+                                    <span ng-show="t.note.length > 0">
+                                        ({{ t.note }})
+                                    </span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-12"
+                                 ng-hide="clanAdvChoiceMade">
+                                <div class="col-lg-9">
+                                    <select class="form-control"
+                                            ng-options="attr for attr in ['High Society', 'Performance']"
+                                            ng-model="sinfluence">
+                                        <option style="display:none" value="">Select one</option>
+                                    </select>
+                                </div>
+                                <button ng-click="addClanAdvDaughters(sinfluence, true)"
+                                        class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Baali -->
+                        <div ng-show="character.clan == 'Baali'">
+                            <div class="col-lg-12">Choose 1 influence: </div>
+                            <div class="col-lg-12">
+                                <ul class="list-group">
+                                    <li class="list-group-item active">
+                                        {{calctotal(character.influences)}} Influences
+                                    </li>
+                                    <li ng-repeat='t in character.influences | orderBy:"name":false'
+                                        class="list-group-item trait">
+                                        {{ t.name }}
+                                    <span ng-show="t.rating > 1">
+                                        x{{ t.rating }}
+                                    </span>
+                                    <span ng-show="t.note.length > 0">
+                                        ({{ t.note }})
+                                    </span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-12"
+                                 ng-hide="clanAdvChoiceMade">
+                                <div class="col-lg-9">
+                                    <select class="form-control"
+                                            ng-options="attr for attr in ['Occult', 'University']"
+                                            ng-model="sinfluence">
+                                        <option style="display:none" value="">Select one</option>
+                                    </select>
+                                </div>
+                                <button ng-click="addClanInfluence(sinfluence, true)"
+                                        class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Nagaraja -->
+                        <div ng-show="character.clan == 'Nagaraja'">
+                            <div class="col-lg-12">Choose 1 influence: </div>
+                            <div class="col-lg-12">
+                                <ul class="list-group">
+                                    <li class="list-group-item active">
+                                        {{calctotal(character.influences)}} Influences
+                                    </li>
+                                    <li ng-repeat='t in character.influences | orderBy:"name":false'
+                                        class="list-group-item trait">
+                                        {{ t.name }}
+                                    <span ng-show="t.rating > 1">
+                                        x{{ t.rating }}
+                                    </span>
+                                    <span ng-show="t.note.length > 0">
+                                        ({{ t.note }})
+                                    </span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-12"
+                                 ng-hide="clanAdvChoiceMade">
+                                <div class="col-lg-9">
+                                    <select class="form-control"
+                                            ng-options="attr for attr in ['Occult', 'Health', 'University']"
+                                            ng-model="sinfluence">
+                                        <option style="display:none" value="">Select one</option>
+                                    </select>
+                                </div>
+                                <button ng-click="addClanInfluence(sinfluence, true)"
+                                        class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                </button>
+                            </div>
+                        </div>
+                        <!-- True Brujah -->
+                        <div ng-show="character.clan == 'True Brujah'">
+                            <div class="col-lg-12">Choose 1 lore: </div>
+                            <div class="col-lg-12">
+                                <ul class="list-group">
+                                    <li class="list-group-item active">
+                                        {{calctotal(character.abilities)}} Abilities
+                                    </li>
+                                    <li ng-repeat='t in character.abilities | orderBy:"name":false'
+                                        class="list-group-item trait">
+                                        {{ t.name }}
+                                    <span ng-show="t.rating > 1">
+                                        x{{ t.rating }}
+                                    </span>
+                                    <span ng-show="t.note.length > 0">
+                                        ({{ t.note }})
+                                    </span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-12"
+                                 ng-hide="clanAdvChoiceMade">
+                                <div class="col-lg-9">
+                                    <select class="form-control"
+                                            ng-options="attr for attr in ['Lore: Anarch','Lore: City','Lore: Clan: Assamite','Lore: Clan: Brujah','Lore: Clan: Caitiff','Lore: Camarilla','Lore: Clan: Gangrel','Lore: Garou','Lore: Clan: Giovanni','Lore: Kindred','Lore: Clan: Lasombra','Lore: Clan: Malkavian','Lore: Mechelen','Lore: Clan: Nosferatu','Lore: Clan: Ravnos','Lore: Sabbat','Lore: Clan: Setite','Lore: Clan: Toreador','Lore: Clan: Tremere','Lore: Clan: Tzimisce','Lore: Clan: Ventrue','Lore: Wraith']"
+                                            ng-model="sability">
+                                        <option style="display:none" value="">Select one</option>
+                                    </select>
+                                </div>
+                                <button ng-click="addClanAbility(sability, true)"
+                                        class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" ng-show="clanAdvChoiceMade"
+                            ng-click="submitDraft()">Go to next step
                     </button>
                 </div>
             </div>

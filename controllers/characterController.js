@@ -178,6 +178,7 @@ module.exports = {
         char.googleId = req.user.googleId;
         char.name = req.body.name;
         char.clan = req.body.clan;
+        char.sect = req.body.sect;
         char.concept = req.body.concept;
         char.state = "Concept";
         char.modificationhistory = [];
@@ -211,13 +212,18 @@ module.exports = {
     },
     'submitdraft': function(req, res, next){
         var char = req.body.character;
-        if(char.googleId == req.user.googleId){
+        if(char.googleId == req.user.googleId && char.state == 'Concept'){
             delete char._id;
             delete char.__v;
             delete char.prototype;
             char.state = "Draft";
             char.player = null;
             char.chronicle = char.chronicle.id;
+
+            char = vl.calculateClanAdvantage(char);
+            char = vl.calculateChronicleAdvantage(char);
+            char = vl.calculateStep4(char);
+            //Set a return point
             var previousversion = JSON.parse(JSON.stringify(char));
             previousversion.modificationhistory = null;
             char.modificationhistory.push({
