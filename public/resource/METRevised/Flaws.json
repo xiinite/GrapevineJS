@@ -1,18 +1,254 @@
 [
   {
-    "name": "Dummy Flaw",
+    "name": "Deep sleeper",
     "cost": 1
   },
   {
-    "name": "Andere Flaw",
+    "name": "Nightmares",
+    "cost": 1
+  },
+  {
+    "name": "Prey exclusion",
+    "cost": 1
+  },
+  {
+    "name": "Shy",
+    "cost": 1
+  },
+  {
+    "name": "Soft-hearted",
+    "cost": 1
+  },
+  {
+    "name": "Speech impediment",
+    "cost": 1
+  },
+  {
+    "name": "Amnesia",
+    "cost": 2
+  },
+  {
+    "name": "Lunacy",
+    "cost": 2
+  },
+  {
+    "name": "Phobia",
+    "cost": 2
+  },
+  {
+    "name": "Short fuse",
+    "cost": 2
+  },
+  {
+    "name": "Territorial",
+    "cost": 2
+  },
+  {
+    "name": "Vengeful",
+    "cost": 2
+  },
+  {
+    "name": "Weak-willed",
     "cost": 3
   },
   {
-    "name": "Nog Flaw",
+    "name": "Conspicuous consumption",
+    "cost": 4
+  },
+  {
+    "name": "Hard of hearing",
+    "cost": 1
+  },
+  {
+    "name": "Short",
+    "cost": 1
+  },
+  {
+    "name": "Smell of the grave",
+    "cost": 1
+  },
+  {
+    "name": "Bad sight",
+    "cost": 1
+  },
+  {
+    "name": "Bad sight",
+    "cost": 2
+  },
+  {
+    "name": "Bad sight",
     "cost": 3
   },
   {
-    "name": "Meer Flaw",
+    "name": "Fourteenth generation",
+    "cost": 2
+  },
+  {
+    "name": "Disfigured",
+    "cost": 2
+  },
+  {
+    "name": "One eye",
+    "cost": 2
+  },
+  {
+    "name": "Addiction",
     "cost": 3
+  },
+  {
+    "name": "Child",
+    "cost": 3
+  },
+  {
+    "name": "Deformity",
+    "cost": 3
+  },
+  {
+    "name": "Infectious bite",
+    "cost": 3
+  },
+  {
+    "name": "Lame",
+    "cost": 3
+  },
+  {
+    "name": "Monstrous",
+    "cost": 3
+  },
+  {
+    "name": "Permanent wound",
+    "cost": 3
+  },
+  {
+    "name": "Slow healing",
+    "cost": 3
+  },
+  {
+    "name": "Deaf",
+    "cost": 4
+  },
+  {
+    "name": "Disease carrier",
+    "cost": 4
+  },
+  {
+    "name": "Mute",
+    "cost": 4
+  },
+  {
+    "name": "Thin blood",
+    "cost": 4
+  },
+  {
+    "name": "Flesh of the corpse",
+    "cost": 5
+  },
+  {
+    "name": "Blind",
+    "cost": 6
+  },
+  {
+    "name": "Enemy",
+    "cost": 1
+  },
+  {
+    "name": "Enemy",
+    "cost": 2
+  },
+  {
+    "name": "Enemy",
+    "cost": 3
+  },
+  {
+    "name": "Enemy",
+    "cost": 4
+  },
+  {
+    "name": "Enemy",
+    "cost": 5
+  },
+  {
+    "name": "Dark secret",
+    "cost": 1
+  },
+  {
+    "name": "Infamous sire",
+    "cost": 1
+  },
+  {
+    "name": "Mistaken identity",
+    "cost": 1
+  },
+  {
+    "name": "Sire's resentment",
+    "cost": 1
+  },
+  {
+    "name": "Hunted",
+    "cost": 4
+  },
+  {
+    "name": "Probationary sect member",
+    "cost": 4
+  },
+  {
+    "name": "Cursed",
+    "cost": 1
+  },
+  {
+    "name": "Cursed",
+    "cost": 2
+  },
+  {
+    "name": "Cursed",
+    "cost": 3
+  },
+  {
+    "name": "Cursed",
+    "cost": 4
+  },
+  {
+    "name": "Cursed",
+    "cost": 5
+  },
+  {
+    "name": "Cast no reflection",
+    "cost": 1
+  },
+  {
+    "name": "Repulsed by garlic",
+    "cost": 1
+  },
+  {
+    "name": "Touch of frost",
+    "cost": 1
+  },
+  {
+    "name": "Eerie presence",
+    "cost": 2
+  },
+  {
+    "name": "Can't cross running water",
+    "cost": 3
+  },
+  {
+    "name": "Haunted",
+    "cost": 3
+  },
+  {
+    "name": "Repelled by crosses",
+    "cost": 3
+  },
+  {
+    "name": "Grip of the damned",
+    "cost": 4
+  },
+  {
+    "name": "Dark fate",
+    "cost": 5
+  },
+  {
+    "name": "Light-sensitive",
+    "cost": 5
   }
 ]

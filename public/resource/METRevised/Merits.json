@@ -1,10 +1,130 @@
 [
   {
-    "name": "Dummy Merit",
+    "name": "Common sense",
     "cost": 1
   },
   {
-    "name": "Andere Merit",
+    "name": "Concentration",
+    "cost": 1
+  },
+  {
+    "name": "Time sense",
+    "cost": 1
+  },
+  {
+    "name": "Code of honor",
+    "cost": 2
+  },
+  {
+    "name": "Eidetic memory",
+    "cost": 2
+  },
+  {
+    "name": "Light sleeper",
+    "cost": 2
+  },
+  {
+    "name": "Natural linguist",
+    "cost": 2
+  },
+  {
+    "name": "Calm heart",
     "cost": 3
+  },
+  {
+    "name": "Iron will",
+    "cost": 3
+  },
+  {
+    "name": "Acute sense",
+    "cost": 1
+  },
+  {
+    "name": "Ambidextrous",
+    "cost": 1
+  },
+  {
+    "name": "Catlike balance",
+    "cost": 1
+  },
+  {
+    "name": "Eat food",
+    "cost": 1
+  },
+  {
+    "name": "Blush of health",
+    "cost": 2
+  },
+  {
+    "name": "Enchanting voice",
+    "cost": 2
+  },
+  {
+    "name": "Daredevil",
+    "cost": 3
+  },
+  {
+    "name": "Efficient digestion",
+    "cost": 3
+  },
+  {
+    "name": "Huge size",
+    "cost": 4
+  },
+  {
+    "name": "Natural leader",
+    "cost": 1
+  },
+  {
+    "name": "Prestigious sire",
+    "cost": 1
+  },
+  {
+    "name": "Debt of gratitude",
+    "cost": 1
+  },
+  {
+    "name": "Debt of gratitude",
+    "cost": 2
+  },
+  {
+    "name": "Debt of gratitude",
+    "cost": 3
+  },
+  {
+    "name": "Magic resistance",
+    "cost": 2
+  },
+  {
+    "name": "Medium",
+    "cost": 2
+  },
+  {
+    "name": "Lucky",
+    "cost": 2
+  },
+  {
+    "name": "Oracular ability",
+    "cost": 3
+  },
+  {
+    "name": "Spirit mentor",
+    "cost": 3
+  },
+  {
+    "name": "Unbondable",
+    "cost": 3
+  },
+  {
+    "name": "True love",
+    "cost": 4
+  },
+  {
+    "name": "Nine lives",
+    "cost": 6
+  },
+  {
+    "name": "True faith",
+    "cost": 7
   }
 ]

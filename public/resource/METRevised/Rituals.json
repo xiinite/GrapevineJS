@@ -1,7 +1,26 @@
 [
-  {
-    "path": "Necromancy: Path of Bones",
-    "name": "Dummy ritual",
-    "level": "basic"
-  }
+  {"path": "Thaumaturgical Rituals","name": "Communicate with Kindred Sire","level": "Basic"},
+  {"path": "Thaumaturgical Rituals","name": "Defense of the Sacred Haven","level": "Basic"},
+  {"path": "Thaumaturgical Rituals","name": "Deflection of Wooden Doom","level": "Basic"},
+  {"path": "Thaumaturgical Rituals","name": "Devil’s Touch","level": "Basic"},
+  {"path": "Thaumaturgical Rituals","name": "The Open Passage","level": "Basic"},
+  {"path": "Thaumaturgical Rituals","name": "Principal Focus of Vitae Infusion","level": "Basic"},
+  {"path": "Thaumaturgical Rituals","name": "Scent of the Lupine’s Passing","level": "Basic"},
+  {"path": "Thaumaturgical Rituals","name": "Wake with Evening’s Freshness","level": "Basic"},
+  {"path": "Thaumaturgical Rituals","name": "Ward versus Ghouls","level": "Basic"},
+  {"path": "Thaumaturgical Rituals","name": "Bone of Lies","level": "Intermediate"},
+  {"path": "Thaumaturgical Rituals","name": "Incorporeal Passage","level": "Intermediate"},
+  {"path": "Thaumaturgical Rituals","name": "Pavis of Foul Presence","level": "Intermediate"},
+  {"path": "Thaumaturgical Rituals","name": "Rutor’s Hands","level": "Intermediate"},
+  {"path": "Thaumaturgical Rituals","name": "Soul of the Homunculi","level": "Intermediate"},
+  {"path": "Thaumaturgical Rituals","name": "Blood Contract","level": "Advanced"},
+  {"path": "Thaumaturgical Rituals","name": "Nectar of the Bitter Rose","level": "Advanced"},
+  {"path": "Thaumaturgical Rituals","name": "Umbra Walk","level": "Advanced"},
+  {"path": "Necromantic Rituals","name": "Call of the Hungry Dead","level": "Basic"},
+  {"path": "Necromantic Rituals","name": "Eyes of the Grave","level": "Basic"},
+  {"path": "Necromantic Rituals","name": "Spirit Beacon","level": "Basic"},
+  {"path": "Necromantic Rituals","name": "Cadaver’s Touch","level": "Intermediate"},
+  {"path": "Necromantic Rituals","name": "Call On the Shadow’s Grace","level": "Intermediate"},
+  {"path": "Necromantic Rituals","name": "Ritual of the Unearthed Fetter","level": "Intermediate"},
+  {"path": "Necromantic Rituals","name": "Grasp the Ghostly","level": "Advanced"}
 ]
