@@ -1,6 +1,8 @@
 <%- layout("../layout.ejs") %>
 <script type="text/javascript" src="/js/controllers/approveController.js"></script>
 <div class="container" ng-controller="ApproveController" ng-init="init()">
+    <h1 class="page-header hidden-xs hidden-sm">Approval</h1>
+
     <div class="col-lg-12" ng-show="showList()">
         <ul class="list-group">
             <li class="list-group-item" ng-repeat="char in characters">
@@ -9,20 +11,283 @@
                         {{char.name}} ({{char.clan}})
                     </div>
                     <div class="panel-body">
-                        {{char.concept}}
+                        <div class="row">
+                            <div class="col-lg-2">
+                                Concept description:
+                            </div>
+                            <div class="col-lg-10">
+                                {{char.concept}}
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 voffset1">
+
+                            <!-- Concept -->
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    About
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <div class="col-lg-6"><b>Name: </b></div>
+                                            <div class="col-lg-6"><b>{{char.name}}</b></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6"><b>Clan: </b></div>
+                                            <div class="col-lg-6"><b>{{char.clan}}</b></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6"><b>Sect: </b></div>
+                                            <div class="col-lg-6"><b>{{char.sect}}</b></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6" ng-show="currentIndex > 0">
+                                        <div class="row">
+                                            <div class="col-lg-6"><b>Nature: </b></div>
+                                            <div class="col-lg-6"><b>{{char.nature}}</b></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6"><b>Demeanor: </b></div>
+                                            <div class="col-lg-6"><b>{{char.demeanor}}</b></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6"><b>Path: </b></div>
+                                            <div class="col-lg-6"><b>{{char.path.name}}</b></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Attributes -->
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    Attributes
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-lg-4">
+                                        <ul class="list-group">
+                                            <li class="list-group-item active">
+                                                {{calctotal(char.attributes.physical)}} Physical
+                                            </li>
+                                            <li ng-repeat='t in char.attributes.physical | orderBy:"name":false'
+                                                class="list-group-item trait">
+                                                {{ t.name }}
+                                            <span ng-show="t.val > 1">
+                                                ({{ t.val }})
+                                            </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <ul class="list-group">
+                                            <li class="list-group-item active">
+                                                {{calctotal(char.attributes.social)}} Social
+                                            </li>
+                                            <li ng-repeat='t in char.attributes.social | orderBy:"name":false'
+                                                class="list-group-item trait">
+                                                {{ t.name }}
+                                            <span ng-show="t.val > 1">
+                                                ({{ t.val }})
+                                            </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <ul class="list-group">
+                                            <li class="list-group-item active">
+                                                {{calctotal(char.attributes.mental)}} Mental
+                                            </li>
+                                            <li ng-repeat='t in char.attributes.mental | orderBy:"name":false'
+                                                class="list-group-item trait">
+                                                {{ t.name }}
+                                            <span ng-show="t.val > 1">
+                                                ({{ t.val }})
+                                            </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Advantages -->
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    Advantages
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-lg-4">
+                                        <ul class="list-group">
+                                            <li class="list-group-item active">
+                                                {{calctotal(char.abilities)}} Abilities
+                                            </li>
+                                            <li ng-repeat='t in char.abilities | orderBy:"name":false'
+                                                class="list-group-item trait">
+                                                {{ t.name }}
+                                    <span ng-show="t.rating > 1">
+                                        x{{ t.rating }}
+                                    </span>
+                                    <span ng-show="t.note.length > 0">
+                                        ({{ t.note }})
+                                    </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <ul class="list-group">
+                                            <li class="list-group-item active">
+                                                {{calctotal(char.disciplines)}} Disciplines
+                                            </li>
+                                            <li ng-repeat='t in char.disciplines | orderBy:"path":false'
+                                                class="list-group-item trait">
+                                                {{t.path}}: {{ t.name }} ({{t.level}})
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <ul class="list-group">
+                                            <li class="list-group-item active">
+                                                {{calctotal(char.backgrounds)}} Backgrounds
+                                            </li>
+                                            <li ng-repeat='t in char.backgrounds | orderBy:"name":false'
+                                                class="list-group-item trait">
+                                                {{ t.name }}
+                                    <span ng-show="t.rating > 1">
+                                        x{{ t.rating }}
+                                    </span>
+                                    <span ng-show="t.note.length > 0">
+                                        ({{ t.note }})
+                                    </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <ul class="list-group">
+                                            <li class="list-group-item active">
+                                                {{calctotal(char.influences)}} Influences
+                                            </li>
+                                            <li ng-repeat='t in char.influences | orderBy:"name":false'
+                                                class="list-group-item trait">
+                                                {{ t.name }}
+                                    <span ng-show="t.rating > 1">
+                                        x{{ t.rating }}
+                                    </span>
+                                    <span ng-show="t.note.length > 0">
+                                        ({{ t.note }})
+                                    </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-4" ng-show="currentIndex > 3">
+                                        <ul class="list-group">
+                                            <li class="list-group-item active">
+                                                {{char.conscience.rating + char.selfcontrol.rating +
+                                                char.courage.rating}} Virtues
+                                            </li>
+                                            <li class="list-group-item trait">
+                                                {{char.conscience.name}} x {{char.conscience.rating}}
+                                            </li>
+                                            <li class="list-group-item trait">
+                                                {{char.selfcontrol.name}} x {{char.selfcontrol.rating}}
+                                            </li>
+                                            <li class="list-group-item trait">
+                                                {{char.courage.name}} x {{char.courage.rating}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Disadvantages -->
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    Disadvantages
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-lg-4">
+                                        <ul class="list-group">
+                                            <li class="list-group-item active">
+                                                {{calctotal(char.attributes.negativephysical)}} Negative Physical
+                                            </li>
+                                            <li ng-repeat='t in char.attributes.negativephysical | orderBy:"name":false'
+                                                class="list-group-item trait">
+                                                {{ t.name }}
+                                    <span ng-show="t.val > 1">
+                                        ({{ t.val }})
+                                    </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <ul class="list-group">
+                                            <li class="list-group-item active">
+                                                {{calctotal(char.attributes.negativesocial)}} Negative Social
+                                            </li>
+                                            <li ng-repeat='t in char.attributes.negativesocial | orderBy:"name":false'
+                                                class="list-group-item trait">
+                                                {{ t.name }}
+                                    <span ng-show="t.val > 1">
+                                        ({{ t.val }})
+                                    </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <ul class="list-group">
+                                            <li class="list-group-item active">
+                                                {{calctotal(char.attributes.negativemental)}} Negative Mental
+                                            </li>
+                                            <li ng-repeat='t in char.attributes.negativemental | orderBy:"name":false'
+                                                class="list-group-item trait">
+                                                {{ t.name }}
+                                    <span ng-show="t.val > 1">
+                                        ({{ t.val }})
+                                    </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <ul class="list-group">
+                                            <li class="list-group-item active">
+                                                {{calctotalcost(char.flaws)}} Flaws
+                                            </li>
+                                            <li ng-repeat='t in char.flaws | orderBy:"name":false'
+                                                class="list-group-item trait">
+                                                {{ t.name }} ({{t.cost}})
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <ul class="list-group">
+                                            <li class="list-group-item active">
+                                                {{calctotal(char.derangements)}} Derangements
+                                            </li>
+                                            <li ng-repeat='t in char.derangements'
+                                                class="list-group-item trait">
+                                                {{ t.name }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="panel-footer">
 
                         <div class="form-inline">
                             <div class="form-group">
-                                <button class="btn btn-primary form-control" ng-click="approve(char.id)">Approve</button>
-                                <button class="btn btn-default form-control" ng-click="reject(char.id, char.rejectionreason)">Reject</button>
+                                <button class="btn btn-primary form-control" ng-click="approve(char.id)">Approve
+                                </button>
+                                <button class="btn btn-default form-control"
+                                        ng-click="reject(char.id, char.rejectionreason)">Reject
+                                </button>
                             </div>
                         </div>
                         <div class="form-horizontal margin5">
                             <div class="form-group">
-                                <label class="label" >Rejection reason (optional):</label>
-                                <textarea ng-model="char.rejectionreason" class="form-control col-lg-6" rows="1"></textarea>
+                                <label class="label">Rejection reason (optional):</label>
+                                <textarea ng-model="char.rejectionreason" class="form-control col-lg-6"
+                                          rows="1"></textarea>
                             </div>
                         </div>
                     </div>
