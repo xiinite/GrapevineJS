@@ -13,7 +13,7 @@
         $('#btnPrint').click(function () {
             if ($(document).find('div.panel-collapse:not(.in)').length > 0) {
                 $('div.panel-collapse').on("shown.bs.collapse", print);
-                $(document).find('div.panel-collapse').collapse('show');
+                $(document).find('div.panel-collapse:not(.in)').collapse('show');
             }
             else {
                 window.print();
