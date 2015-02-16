@@ -150,7 +150,6 @@ module.exports = {
                                 character.attributes.physical.push({ name: t.$.name, val: tval});
                                 total += parseInt(tval);
                             }
-                            character.attributes.tphysical = total;
                             break;
                         case 'Social':
                             var total = 0;
@@ -161,7 +160,6 @@ module.exports = {
                                 character.attributes.social.push({ name: t.$.name, val: tval});
                                 total += parseInt(tval);
                             }
-                            character.attributes.tsocial = total;
                             break;
                         case 'Mental':
                             var total = 0;
@@ -172,7 +170,6 @@ module.exports = {
                                 character.attributes.mental.push({ name: t.$.name, val: tval});
                                 total += parseInt(tval);
                             }
-                            character.attributes.tmental = total;
                             break;
                         case "Negative Physical":
                             var total = 0;
@@ -183,7 +180,6 @@ module.exports = {
                                 character.attributes.negativephysical.push({ name: t.$.name, val: tval});
                                 total += parseInt(tval);
                             }
-                            character.attributes.tnegativephysical = total;
                             break;
                         case "Negative Social":
                             var total = 0;
@@ -194,7 +190,6 @@ module.exports = {
                                 character.attributes.negativesocial.push({ name: t.$.name, val: tval});
                                 total += parseInt(tval);
                             }
-                            character.attributes.tnegativesocial = total;
                             break;
                         case "Negative Mental":
                             var total = 0;
@@ -205,7 +200,6 @@ module.exports = {
                                 character.attributes.negativemental.push({ name: t.$.name, val: tval});
                                 total += parseInt(tval);
                             }
-                            character.attributes.tnegativemental = total;
                             break;
                         case "Abilities":
                             for (var y in tl.trait) {

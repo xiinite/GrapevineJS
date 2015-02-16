@@ -78,6 +78,12 @@ module.exports = {
                 };
                 if (["Rejected", "Concept"].indexOf(character.state) > -1) {
                     res.render(ViewTemplatePath + "/viewconcept", out);
+                } else if (["Draft", "Background Approved"].indexOf(character.state) > -1) {
+                    out = {
+                        user: req.user,
+                        characterid: character.id
+                    };
+                    res.render(ViewTemplatePath + "/assignfreebies", out);
                 } else {
                     res.render(ViewTemplatePath + "/show", out);
                 }
@@ -129,7 +135,7 @@ module.exports = {
     },
     'approvelist': function (req, res, next) {
         model.find({
-            state: {$in: ["Concept", "Draft"]}, chronicle: {
+            state: {$in: ["Approval pending", "Background Submitted", "Final Approval Pending"]}, chronicle: {
                 $in: req.user.chronicles.map(function (c) {
                     return c.id;
                 })
@@ -190,29 +196,12 @@ module.exports = {
         });
         model.insert(char, function (err) {
             if (err) return next(new Error(err));
-            /*if (req.user.emails.length > 0) {
-                mail.sendmail(req.user.emails[0].value, "Concept submitted: " + char.name, "Your concept has been submitted for approval: "
-                + "\nName:" + char.name
-                + "\nClan: " + char.clan
-                + "\n" + char.concept);
-            }
-            cmodel.find({id: req.body.chronicle}, function (err, result) {
-                if (err) return next(new Error(err));
-                var c = result[0];
-                if (c.email.length > 0) {
-                    mail.sendmail(c.email, "Concept submitted: " + char.name, "A new concept is waiting for your approval: " +
-                    "\nName:" + char.name
-                    + "\nClan: " + char.clan
-                    + "\nUser: " + req.user.displayName
-                    + "\n" + char.concept);
-                }
-            });*/
             res.json({id: char.id});
         });
     },
-    'submitdraft': function(req, res, next){
+    'submitdraft': function (req, res, next) {
         var char = req.body.character;
-        if(char.googleId == req.user.googleId && char.state == 'Concept'){
+        if (char.googleId == req.user.googleId && char.state == 'Concept') {
             delete char._id;
             delete char.__v;
             delete char.prototype;
@@ -223,9 +212,12 @@ module.exports = {
             char = vl.calculateClanAdvantage(char);
             char = vl.calculateChronicleAdvantage(char);
             char = vl.calculateStep4(char);
+            char = vl.calculateFreeTraits(char);
+
             //Set a return point
             var previousversion = JSON.parse(JSON.stringify(char));
             previousversion.modificationhistory = null;
+            char.modified = new Date();
             char.modificationhistory.push({
                 fields: "Draft created",
                 date: new Date(),
@@ -236,19 +228,214 @@ module.exports = {
                 if (err) return next(new Error(err));
                 res.json("ok");
             });
-        }else{
+        } else if (char.googleId == req.user.googleId && char.state == "Draft") {
+            delete char._id;
+            delete char.__v;
+            delete char.prototype;
+            char.state = "Approval pending";
+            char.player = null;
+            char.chronicle = char.chronicle.id;
+
+            //Set a return point
+            var previousversion = JSON.parse(JSON.stringify(char));
+            previousversion.modificationhistory = null;
+            char.modified = new Date();
+            char.modificationhistory.push({
+                fields: "Draft created",
+                date: new Date(),
+                user: {googleId: req.user.googleId, name: req.user.displayName},
+                previousVersion: previousversion
+            });
+            model.update(char.id, char, function (err) {
+                if (err) return next(new Error(err));
+                res.json("ok");
+
+
+                if (req.user.emails.length > 0) {
+                    mail.sendmail(req.user.emails[0].value, "Concept submitted: " + char.name, "Your concept has been submitted for approval: "
+                    + "\nName:" + char.name
+                    + "\nClan: " + char.clan
+                    + "\n" + char.concept);
+                }
+                cmodel.find({id: char.chronicle}, function (err, result) {
+                    if (err) return next(new Error(err));
+                    var c = result[0];
+                    if (c.email.length > 0) {
+                        mail.sendmail(c.email, "Concept submitted: " + char.name, "A new concept is waiting for your approval: " +
+                        "\nName:" + char.name
+                        + "\nClan: " + char.clan
+                        + "\nUser: " + req.user.displayName
+                        + "\n" + char.concept);
+                    }
+                });
+            });
+        } else if (char.googleId == req.user.googleId && char.state == "Background Approved") {
+            delete char._id;
+            delete char.__v;
+            delete char.prototype;
+            char.state = "Final Approval Pending";
+            char.player = null;
+            char.chronicle = char.chronicle.id;
+
+            //Set a return point
+            var previousversion = JSON.parse(JSON.stringify(char));
+            previousversion.modificationhistory = null;
+            char.modified = new Date();
+            char.modificationhistory.push({
+                fields: "Final version submitted",
+                date: new Date(),
+                user: {googleId: req.user.googleId, name: req.user.displayName},
+                previousVersion: previousversion
+            });
+            model.update(char.id, char, function (err) {
+                if (err) return next(new Error(err));
+                res.json("ok");
+
+
+                if (req.user.emails.length > 0) {
+                    mail.sendmail(req.user.emails[0].value, "Character submitted for final approval: " + char.name, "Your finalized character has been submitted for approval: "
+                    + "\nName:" + char.name
+                    + "\nClan: " + char.clan
+                    + "\n" + char.concept);
+                }
+                cmodel.find({id: char.chronicle}, function (err, result) {
+                    if (err) return next(new Error(err));
+                    var c = result[0];
+                    if (c.email.length > 0) {
+                        mail.sendmail(c.email, "Final approval: " + char.name, "A character is waiting for final approval: " +
+                        "\nName:" + char.name
+                        + "\nClan: " + char.clan
+                        + "\nUser: " + req.user.displayName
+                        + "\n" + char.concept);
+                    }
+                });
+            });
+        } else {
             next(new Error("forbidden"));
         }
     },
-    'assignfreebies': function(req, res){
+    'assignfreebies': function (req, res) {
         var out = {user: req.user, characterid: req.params.id};
         res.render(ViewTemplatePath + "/assignfreebies", out);
     },
-    'submitbackground': function (req, res) {
-        var out = {
-            user: req.user
-        };
-        res.render(ViewTemplatePath + "/concept", out);
+    'submitbackground': function (req, res, next) {
+        if (req.body.id) {
+            model.find({"id": req.body.id}, function (err, result) {
+                if (err) return next(new Error(err));
+
+                if (!sec.checkOwnership(req, next, result[0])) {
+                    return;
+                }
+                var fields = {background: req.body.background, state: "Background Submitted"};
+                var previousversion = JSON.parse(JSON.stringify(result[0]));
+                previousversion.modificationhistory = [];
+                var modHistory = [];
+                for (var i = 0; i < result[0].modificationhistory.length; i++) {
+                    modHistory.push(result[0].modificationhistory[i]);
+                }
+                modHistory.push({
+                    fields: {background: req.body.background, state: "Background Submitted"},
+                    date: new Date(),
+                    user: {googleId: req.user.googleId, name: req.user.displayName},
+                    previousVersion: previousversion
+                });
+                fields.modificationhistory = modHistory;
+                fields.modified = new Date();
+
+                model.update(req.body.id, fields, function (err) {
+                    if (err) return next(new Error(err));
+                    res.json("ok");
+                });
+            });
+        }
+    },
+    'approvebackground': function (req, res, next) {
+        model.find({id: req.body.id}, function (err, result) {
+            if (!sec.checkAdmin(req, next, result[0].chronicle.id)) {
+                return;
+            }
+            var fields = {state: req.body.state};
+            if(req.body.state == "Background Approved"){
+                fields.freetraits = parseInt(result[0].freetraits) + parseInt(req.body.freebees);
+            }
+            model.update(req.body.id, fields, function (err) {
+                if (err) return next(new Error(err));
+                if (result[0].player.emails.length > 0) {
+                    if (req.body.state == "Background Approved") {
+                        mail.sendmail(result[0].player.emails[0].value, "Background approved: " + result[0].name, "Your background has been approved by storyteller " + req.user.displayName + ": "
+                        + "\nName:" + result[0].name
+                        + "\nClan: " + result[0].clan
+                        + "\n" + result[0].concept);
+                    } else if (req.body.state == "Background Rejected") {
+                        var reason = "";
+                        if (req.body.reason !== undefined) {
+                            reason = "\nReason: " + req.body.reason.toString();
+                        }
+                        mail.sendmail(result[0].player.emails[0].value, "Background rejected: " + result[0].name, "Your background has been rejected by storyteller " + req.user.displayName.toString() + ": "
+                        + reason.toString() + +"\nName:" + result[0].name.toString()
+                        + "\nClan: " + result[0].clan.toString()
+                        + "\n" + result[0].concept.toString());
+                    }
+                }
+                return res.json("ok");
+
+            });
+        });
+    },
+    'approvefinal': function(req, res, next){
+        model.find({id: req.body.id}, function (err, result) {
+            if (!sec.checkAdmin(req, next, result[0].chronicle.id)) {
+                return;
+            }
+            if (req.body.state == "Active") {
+                var fields = {state: req.body.state};
+
+                model.update(req.body.id, fields, function (err) {
+                    if (err) return next(new Error(err));
+                    if (result[0].player.emails.length > 0) {
+                        if (req.body.state == "Active") {
+                            mail.sendmail(result[0].player.emails[0].value, "Character approved: " + result[0].name, "Your character has been approved by storyteller and is not active in play!"
+                            + req.user.displayName + ": "
+                            + "\nName:" + result[0].name
+                            + "\nClan: " + result[0].clan);
+                        }
+                    }
+                    return res.json("ok");
+                });
+            } else {
+                var currentversion = JSON.parse(JSON.stringify(result[0]));
+                var oldVersion = JSON.parse(JSON.stringify(result[0].modificationhistory[result[0].modificationhistory.length - 2].previousVersion));
+                oldVersion.modificationhistory = result[0].modificationhistory;
+                currentversion.modificationhistory = [];
+                if(oldVersion.chronicle.id !== undefined){
+                    oldVersion.chronicle = oldVersion.chronicle.id;
+                };
+                oldVersion.modificationhistory.push({
+                    fields: {
+                        reversiondate: req.body.date
+                    },
+                    date: new Date(),
+                    user: {
+                        googleId: req.user.googleId, name: req.user.displayName
+                    }
+                    ,
+                    previousVersion: currentversion
+                });
+                delete oldVersion._id;
+                model.update(req.body.id, oldVersion, function (err) {
+                    if (err) return next(new Error(err));
+                    if (result[0].player.emails.length > 0) {
+                        if (req.body.state == "Active") {
+                            mail.sendmail(result[0].player.emails[0].value, "Character rejected: " + result[0].name, "Your character has been rejected and reverted to Background Approved. Please reassing your freebies."
+                            + req.user.displayName + ": "
+                            + "\nName:" + result[0].name
+                            + "\nClan: " + result[0].clan);
+                        }
+                    }
+                    res.json("ok");
+                });
+            }
+        });
     },
     'trash': function (req, res, next) {
         model.find({id: req.params.id}, function (err, result) {
@@ -278,14 +465,13 @@ module.exports = {
     },
     'background': function (req, res, next) {
         if (req.params.id) {
-            model.find({"id": req.params.id}, function (err, result) {
-                if (err) return next(new Error(err));
-                var out = {
-                    user: req.user,
-                    background: result[0].background
-                };
-                res.render(ViewTemplatePath + "/background", out);
-            });
+            var out = {
+                user: req.user,
+                characterid: req.params.id
+            };
+            res.render(ViewTemplatePath + "/background", out);
+        } else {
+            next(new Error("forbidden"));
         }
     },
     'new': function (req, res, next) {
@@ -387,6 +573,9 @@ module.exports = {
                         var oldVersion = JSON.parse(JSON.stringify(data.previousVersion));
                         oldVersion.modificationhistory = result[0].modificationhistory;
                         currentversion.modificationhistory = [];
+                        if(oldVersion.chronicle.id !== undefined){
+                            oldVersion.chronicle = oldVersion.chronicle.id;
+                        };
                         oldVersion.modificationhistory.push({
                             fields: {
                                 reversiondate: req.body.date

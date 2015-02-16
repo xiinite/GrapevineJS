@@ -2,268 +2,518 @@
 <script type="text/javascript" src="/js/controllers/characterFreebiesController.js"></script>
 <div class="container" ng-controller="CharacterFreebiesController" ng-init="init('<%= characterid %>')">
     <h1 class="page-header hidden-xs hidden-sm">Assign free traits</h1>
-    <div class="col-lg-9">
 
-        <!-- Concept -->
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                Concept
-            </div>
-            <div class="panel-body">
-                <div class="col-lg-6">
-                    <div class="row">
-                        <div class="col-lg-6"><b>Name: </b></div>
-                        <div class="col-lg-6"><b>{{character.name}}</b></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6"><b>Clan: </b></div>
-                        <div class="col-lg-6"><b>{{character.clan}}</b></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6"><b>Sect: </b></div>
-                        <div class="col-lg-6"><b>{{character.sect}}</b></div>
-                    </div>
-                </div>
-                <div class="col-lg-6" ng-show="currentIndex > 0">
-                    <div class="row">
-                        <div class="col-lg-6"><b>Nature: </b></div>
-                        <div class="col-lg-6"><b>{{character.nature}}</b></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6"><b>Demeanor: </b></div>
-                        <div class="col-lg-6"><b>{{character.demeanor}}</b></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6"><b>Path: </b></div>
-                        <div class="col-lg-6"><b>{{character.path.name}}</b></div>
-                    </div>
-                </div>
-            </div>
+    <div class="col-lg-12">
+        <div class="row">
+            You can optionally assign free traits.
         </div>
-
-        <!-- Attributes -->
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                Attributes
-            </div>
-            <div class="panel-body">
-                <div class="col-lg-4">
-                    <ul class="list-group">
-                        <li class="list-group-item active">
-                            {{calctotal(character.attributes.physical)}} Physical
-                        </li>
-                        <li ng-repeat='t in character.attributes.physical | orderBy:"name":false'
-                            class="list-group-item trait">
-                            {{ t.name }}
-                                            <span ng-show="t.val > 1">
-                                                ({{ t.val }})
-                                            </span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-lg-4">
-                    <ul class="list-group">
-                        <li class="list-group-item active">
-                            {{calctotal(character.attributes.social)}} Social
-                        </li>
-                        <li ng-repeat='t in character.attributes.social | orderBy:"name":false'
-                            class="list-group-item trait">
-                            {{ t.name }}
-                                            <span ng-show="t.val > 1">
-                                                ({{ t.val }})
-                                            </span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-lg-4">
-                    <ul class="list-group">
-                        <li class="list-group-item active">
-                            {{calctotal(character.attributes.mental)}} Mental
-                        </li>
-                        <li ng-repeat='t in character.attributes.mental | orderBy:"name":false'
-                            class="list-group-item trait">
-                            {{ t.name }}
-                                            <span ng-show="t.val > 1">
-                                                ({{ t.val }})
-                                            </span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+        <div class="row" ng-show="character.state == 'Draft'">
+            You can continue without spending all your free traits and
+            save them until your background has been approved.
         </div>
-
-        <!-- Advantages -->
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                Advantages
-            </div>
-            <div class="panel-body">
-                <div class="col-lg-4">
-                    <ul class="list-group">
-                        <li class="list-group-item active">
-                            {{calctotal(character.abilities)}} Abilities
-                        </li>
-                        <li ng-repeat='t in character.abilities | orderBy:"name":false'
-                            class="list-group-item trait">
-                            {{ t.name }}
-                                    <span ng-show="t.rating > 1">
-                                        x{{ t.rating }}
-                                    </span>
-                                    <span ng-show="t.note.length > 0">
-                                        ({{ t.note }})
-                                    </span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-lg-4">
-                    <ul class="list-group">
-                        <li class="list-group-item active">
-                            {{calctotal(character.disciplines)}} Disciplines
-                        </li>
-                        <li ng-repeat='t in character.disciplines | orderBy:"path":false'
-                            class="list-group-item trait">
-                            {{t.path}}: {{ t.name }} ({{t.level}})
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-lg-4">
-                    <ul class="list-group">
-                        <li class="list-group-item active">
-                            {{calctotal(character.backgrounds)}} Backgrounds
-                        </li>
-                        <li ng-repeat='t in character.backgrounds | orderBy:"name":false'
-                            class="list-group-item trait">
-                            {{ t.name }}
-                                    <span ng-show="t.rating > 1">
-                                        x{{ t.rating }}
-                                    </span>
-                                    <span ng-show="t.note.length > 0">
-                                        ({{ t.note }})
-                                    </span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-lg-4">
-                    <ul class="list-group">
-                        <li class="list-group-item active">
-                            {{calctotal(character.influences)}} Influences
-                        </li>
-                        <li ng-repeat='t in character.influences | orderBy:"name":false'
-                            class="list-group-item trait">
-                            {{ t.name }}
-                                    <span ng-show="t.rating > 1">
-                                        x{{ t.rating }}
-                                    </span>
-                                    <span ng-show="t.note.length > 0">
-                                        ({{ t.note }})
-                                    </span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-lg-4" ng-show="currentIndex > 3">
-                    <ul class="list-group">
-                        <li class="list-group-item active">
-                            {{character.conscience.rating + character.selfcontrol.rating +
-                            character.courage.rating}} Virtues
-                        </li>
-                        <li class="list-group-item trait">
-                            {{character.conscience.name}} x {{character.conscience.rating}}
-                        </li>
-                        <li class="list-group-item trait">
-                            {{character.selfcontrol.name}} x {{character.selfcontrol.rating}}
-                        </li>
-                        <li class="list-group-item trait">
-                            {{character.courage.name}} x {{character.courage.rating}}
-                        </li>
-                    </ul>
-                </div>
-            </div>
+        <div class="row" ng-show="character.state == 'Background Approved'">
+            Unspent traits can NOT be redeemed in the future.
         </div>
-
-        <!-- Disadvantages -->
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                Disadvantages
-            </div>
-            <div class="panel-body">
-                <div class="col-lg-4">
-                    <ul class="list-group">
-                        <li class="list-group-item active">
-                            {{calctotal(character.attributes.negativephysical)}} Negative Physical
-                        </li>
-                        <li ng-repeat='t in character.attributes.negativephysical | orderBy:"name":false'
-                            class="list-group-item trait">
-                            {{ t.name }}
-                                    <span ng-show="t.val > 1">
-                                        ({{ t.val }})
-                                    </span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-lg-4">
-                    <ul class="list-group">
-                        <li class="list-group-item active">
-                            {{calctotal(character.attributes.negativesocial)}} Negative Social
-                        </li>
-                        <li ng-repeat='t in character.attributes.negativesocial | orderBy:"name":false'
-                            class="list-group-item trait">
-                            {{ t.name }}
-                                    <span ng-show="t.val > 1">
-                                        ({{ t.val }})
-                                    </span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-lg-4">
-                    <ul class="list-group">
-                        <li class="list-group-item active">
-                            {{calctotal(character.attributes.negativemental)}} Negative Mental
-                        </li>
-                        <li ng-repeat='t in character.attributes.negativemental | orderBy:"name":false'
-                            class="list-group-item trait">
-                            {{ t.name }}
-                                    <span ng-show="t.val > 1">
-                                        ({{ t.val }})
-                                    </span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-lg-4">
-                    <ul class="list-group">
-                        <li class="list-group-item active">
-                            {{calctotalcost(character.flaws)}} Flaws
-                        </li>
-                        <li ng-repeat='t in character.flaws | orderBy:"name":false'
-                            class="list-group-item trait">
-                            {{ t.name }} ({{t.cost}})
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-lg-4">
-                    <ul class="list-group">
-                        <li class="list-group-item active">
-                            {{calctotal(character.derangements)}} Derangements
-                        </li>
-                        <li ng-repeat='t in character.derangements'
-                            class="list-group-item trait">
-                            {{ t.name }}
-                        </li>
-                    </ul>
-                </div>
-            </div>
+        <div class="row">
+            Spent free traits cannot be refunded.
         </div>
     </div>
+    <div class="row voffset5">
+        <div class="col-lg-9">
 
-    <div class="col-lg-3">
+            <!-- Concept -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Concept
+                </div>
+                <div class="panel-body">
+                    <div class="col-lg-4">
+                        <div class="row">
+                            <div class="col-lg-6"><b>Name: </b></div>
+                            <div class="col-lg-6">{{character.name}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6"><b>Clan: </b></div>
+                            <div class="col-lg-6">{{character.clan}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6"><b>Sect: </b></div>
+                            <div class="col-lg-6">{{character.sect}}</div>
+                        </div>
+                        <div class="row voffset3">
+                            <div class="col-lg-6"><b>Bloodpool: </b></div>
+                            <div class="col-lg-6">{{character.bloodpool.current}} / {{character.bloodpool.max}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6"><b>Willpower: </b></div>
+                            <div class="col-lg-6">
+                                {{character.willpower.current}}
+                                <button ng-hide="character.freetraits < 3 || character.path.rating == character.willpower.max"
+                                        ng-click="addWillpower(character.willpower)"
+                                        class="btn btn-xs pull-right"><span
+                                            class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="row">
+                            <div class="col-lg-6"><b>Nature: </b></div>
+                            <div class="col-lg-6">{{character.nature}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6"><b>Demeanor: </b></div>
+                            <div class="col-lg-6">{{character.demeanor}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6"><b>Path: </b></div>
+                            <div class="col-lg-6">{{character.path.name}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6"><b>Path-rating: </b></div>
+                            <div class="col-lg-6">
+                                {{character.path.rating}}
 
-        <!-- Freebies -->
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                Free trait spending
+                                <button ng-hide="character.freetraits < 3 || character.path.rating == 5"
+                                        ng-click="addMorality(character.path)"
+                                        class="btn btn-xs pull-right"><span
+                                            class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <ul class="list-group">
+                            <li class="list-group-item active">
+                                {{character.conscience.rating + character.selfcontrol.rating +
+                                character.courage.rating}} Virtues
+                            </li>
+                            <li class="list-group-item trait">
+                                {{character.conscience.name}} x {{character.conscience.rating}}
+                                <button ng-hide="character.freetraits < 2 || character.conscience.rating == 5"
+                                        ng-click="addVirtue(character.conscience)"
+                                        class="btn btn-xs pull-right"><span
+                                            class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </li>
+                            <li class="list-group-item trait">
+                                {{character.selfcontrol.name}} x {{character.selfcontrol.rating}}
+                                <button ng-hide="character.freetraits < 2 || character.selfcontrol.rating == 5"
+                                        ng-click="addVirtue(character.selfcontrol)"
+                                        class="btn btn-xs pull-right"><span
+                                            class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </li>
+                            <li class="list-group-item trait">
+                                {{character.courage.name}} x {{character.courage.rating}}
+                                <button ng-hide="character.freetraits < 2 || character.courage.rating == 5"
+                                        ng-click="addVirtue(character.courage)"
+                                        class="btn btn-xs pull-right"><span
+                                            class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div class="panel-body">
-                <div class="col-lg-12">
-                    Remaining free traits:
+
+            <!-- Attributes -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Attributes
+                </div>
+                <div class="panel-body">
+                    <div class="col-lg-4">
+                        <ul class="list-group">
+                            <li class="list-group-item active">
+                                {{calctotal(character.attributes.physical)}} Physical
+                            </li>
+                            <li ng-repeat='t in character.attributes.physical | orderBy:"name":false'
+                                class="list-group-item trait">
+                                {{ t.name }}
+                            <span ng-show="t.val > 1">
+                                ({{ t.val }})
+                            </span>
+                                <button ng-hide="character.freetraits == 0"
+                                        ng-click="addTrait(t.name, 'attributes.physical')"
+                                        class="btn btn-xs pull-right"><span
+                                            class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="row voffset1">
+                            <div class="col-lg-12"
+                                 ng-hide="character.freetraits == 0">
+                                <div class="col-lg-9">
+                                    <select class="form-control"
+                                            ng-options="attr for attr in physical"
+                                            ng-model="sphysical">
+                                        <option style="display:none" value="">Select a trait</option>
+                                    </select>
+                                </div>
+                                <button ng-click="addTrait(sphysical, 'attributes.physical')"
+                                        class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <ul class="list-group">
+                            <li class="list-group-item active">
+                                {{calctotal(character.attributes.social)}} Social
+                            </li>
+                            <li ng-repeat='t in character.attributes.social | orderBy:"name":false'
+                                class="list-group-item trait">
+                                {{ t.name }}
+                            <span ng-show="t.val > 1">
+                                ({{ t.val }})
+                            </span>
+                                <button ng-hide="character.freetraits == 0"
+                                        ng-click="addTrait(t.name, 'attributes.social')"
+                                        class="btn btn-xs pull-right"><span
+                                            class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="row voffset1">
+                            <div class="col-lg-12"
+                                 ng-hide="character.freetraits == 0">
+                                <div class="col-lg-9">
+                                    <select class="form-control"
+                                            ng-options="attr for attr in social"
+                                            ng-model="ssocial">
+                                        <option style="display:none" value="">Select a trait</option>
+                                    </select>
+                                </div>
+                                <button ng-click="addTrait(ssocial, 'attributes.social')"
+                                        class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <ul class="list-group">
+                            <li class="list-group-item active">
+                                {{calctotal(character.attributes.mental)}} Mental
+                            </li>
+                            <li ng-repeat='t in character.attributes.mental | orderBy:"name":false'
+                                class="list-group-item trait">
+                                {{ t.name }}
+                            <span ng-show="t.val > 1">
+                                ({{ t.val }})
+                            </span>
+                                <button ng-hide="character.freetraits == 0"
+                                        ng-click="addTrait(t.name, 'attributes.mental')"
+                                        class="btn btn-xs pull-right"><span
+                                            class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="row voffset1">
+                            <div class="col-lg-12"
+                                 ng-hide="character.freetraits == 0">
+                                <div class="col-lg-9">
+                                    <select class="form-control"
+                                            ng-options="attr for attr in mental"
+                                            ng-model="smental">
+                                        <option style="display:none" value="">Select a trait</option>
+                                    </select>
+                                </div>
+                                <button ng-click="addTrait(smental, 'attributes.mental')"
+                                        class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advantages -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Advantages
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{calctotal(character.abilities)}} Abilities
+                                </li>
+                                <li ng-repeat='t in character.abilities | orderBy:"name":false'
+                                    class="list-group-item trait">
+                                    {{ t.name }}
+                            <span ng-show="t.rating > 1">
+                                x{{ t.rating }}
+                            </span>
+                            <span ng-show="t.note.length > 0">
+                                ({{ t.note }})
+                            </span>
+
+                                    <button ng-hide="character.freetraits == 0 || t.rating == 5"
+                                            ng-click="addAdvantage(t.name, 'abilities')"
+                                            class="btn btn-xs pull-right"><span
+                                                class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </li>
+                            </ul>
+                            <div class="row voffset1">
+                                <div class="col-lg-12"
+                                     ng-hide="character.freetraits == 0">
+                                    <div class="col-lg-9">
+                                        <select class="form-control"
+                                                ng-options="attr for attr in abilities"
+                                                ng-model="sability">
+                                            <option style="display:none" value="">Select a trait</option>
+                                        </select>
+                                    </div>
+                                    <button ng-click="addAdvantage(sability, 'abilities')"
+                                            class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{character.disciplines.length}} Disciplines
+                                </li>
+                                <li ng-repeat='t in character.disciplines | orderBy:"path":false'
+                                    class="list-group-item trait">
+                                    {{t.path}}: {{ t.name }} ({{t.level}})
+                                </li>
+                            </ul>
+                            <div class="row voffset1">
+                                <div class="col-lg-12"
+                                     ng-hide="character.freetraits == 0">
+                                    <div class="col-lg-9">
+                                        <select class="form-control"
+                                                ng-options="attr as attr.path + ': ' + attr.name for attr in disciplines | isClanDiscipline: [character.clan, clandisciplines, character.disciplines]"
+                                                ng-model="sdicipline">
+                                            <option style="display:none" value="">Select a discipline</option>
+                                        </select>
+                                    </div>
+                                    <button ng-click="addDiscipline(sdicipline, 'disciplines')"
+                                            class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{calctotal(character.backgrounds)}} Backgrounds
+                                </li>
+                                <li ng-repeat='t in character.backgrounds | orderBy:"name":false'
+                                    class="list-group-item trait">
+                                    {{ t.name }}
+                            <span ng-show="t.rating > 1">
+                                x{{ t.rating }}
+                            </span>
+                            <span ng-show="t.note.length > 0">
+                                ({{ t.note }})
+                            </span>
+                                    <button ng-hide="character.freetraits == 0 || t.rating == 5"
+                                            ng-click="addAdvantage(t.name, 'backgrounds')"
+                                            class="btn btn-xs pull-right"><span
+                                                class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </li>
+                                <div class="row voffset1">
+                                    <div class="col-lg-12"
+                                         ng-hide="character.freetraits == 0">
+                                        <div class="col-lg-9">
+                                            <select class="form-control"
+                                                    ng-options="attr for attr in backgrounds"
+                                                    ng-model="sbackground">
+                                                <option style="display:none" value="">Select a trait</option>
+                                            </select>
+                                        </div>
+                                        <button ng-click="addAdvantage(sbackground, 'backgrounds')"
+                                                class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row voffset3">
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{calctotal(character.status)}} Status
+                                </li>
+                                <li ng-repeat='t in character.status | orderBy:"name":false'
+                                    class="list-group-item trait">
+                                    {{ t.name }}
+                                    <span ng-show="t.rating > 1">
+                                        x{{ t.rating }}
+                                    </span>
+                                    <span>
+                                        ({{ t.statustype }})
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{calctotal(character.influences)}} Influences
+                                </li>
+                                <li ng-repeat='t in character.influences | orderBy:"name":false'
+                                    class="list-group-item trait">
+                                    {{ t.name }}
+                                    <span ng-show="t.rating > 1">
+                                        x{{ t.rating }}
+                                    </span>
+                                    <span ng-show="t.note.length > 0">
+                                        ({{ t.note }})
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{calctotalcost(character.merits)}} Merits
+                                </li>
+                                <li ng-repeat='t in character.merits | orderBy:"name":false'
+                                    class="list-group-item trait">
+                                    {{ t.name }}
+                            <span ng-show="t.rating > 1">
+                                x{{ t.cost }}
+                            </span>
+                                </li>
+                            </ul>
+                            <div class="row voffset1">
+                                <div class="col-lg-12"
+                                     ng-hide="character.freetraits == 0 || calctotalcost(character.merits) == 7">
+                                    <div class="col-lg-9">
+                                        <select class="form-control"
+                                                ng-options="attr as attr.name + '(' + attr.cost + ')' for attr in merits"
+                                                ng-model="smerit">
+                                            <option style="display:none" value="">Select a merit</option>
+                                        </select>
+                                    </div>
+                                    <button ng-click="addMerit(smerit)"
+                                            class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Disadvantages -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Disadvantages
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{calctotal(character.attributes.negativephysical)}} Negative Physical
+                                </li>
+                                <li ng-repeat='t in character.attributes.negativephysical | orderBy:"name":false'
+                                    class="list-group-item trait">
+                                    {{ t.name }}
+                                    <span ng-show="t.val > 1">
+                                        ({{ t.val }})
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{calctotal(character.attributes.negativesocial)}} Negative Social
+                                </li>
+                                <li ng-repeat='t in character.attributes.negativesocial | orderBy:"name":false'
+                                    class="list-group-item trait">
+                                    {{ t.name }}
+                                    <span ng-show="t.val > 1">
+                                        ({{ t.val }})
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{calctotal(character.attributes.negativemental)}} Negative Mental
+                                </li>
+                                <li ng-repeat='t in character.attributes.negativemental | orderBy:"name":false'
+                                    class="list-group-item trait">
+                                    {{ t.name }}
+                                    <span ng-show="t.val > 1">
+                                        ({{ t.val }})
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row voffset3">
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{calctotalcost(character.flaws)}} Flaws
+                                </li>
+                                <li ng-repeat='t in character.flaws | orderBy:"name":false'
+                                    class="list-group-item trait">
+                                    {{ t.name }} ({{t.cost}})
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">
+                                    {{calctotal(character.derangements)}} Derangements
+                                </li>
+                                <li ng-repeat='t in character.derangements'
+                                    class="list-group-item trait">
+                                    {{ t.name }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+
+            <!-- Freebies -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Free trait spending
+                </div>
+                <div class="panel-body">
+                    <div class="col-lg-12">
+                        Remaining free traits: {{character.freetraits}}
+                    </div>
+                    <div class="col-lg-12">
+                        <ul class="list-group">
+                            <li class="list-group-item active">
+                                Chosen traits:
+                            </li>
+                            <li ng-repeat='t in freetraitspendage'
+                                class="list-group-item trait">
+                                {{ t.value }} ({{ t.cost }})
+                                <button ng-click="reversefreetrait(t)"
+                                        class="btn btn-xs pull-right"><span
+                                            class="glyphicon glyphicon-minus"></span></button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-12">
+                        <button class="btn btn-primary" ng-confirm-click="Are you sure?" ng-click="submitDraft()">Submit
+                            character
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

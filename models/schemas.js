@@ -102,7 +102,8 @@ module.exports = {
         equipment: {type: [equipment]},
         notes: {type: [note]},
         experiencehistory: {type: [xphistory]},
-        modificationhistory: {type: Array}
+        modificationhistory: {type: Array},
+        freetraits: {type: Number}
     }),
     'Chronicle': mongoose.model('chronicle',{
         id: {type: String},

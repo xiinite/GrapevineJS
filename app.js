@@ -14,6 +14,7 @@ var mongoose = require('mongoose');
 var compression = require('compression');
 var MongoStore = require('connect-mongostore')(sess);
 
+require('./bin/locals.js').config(app);
 // database setup
 mongoose.connect(config.db.connectionString);
 

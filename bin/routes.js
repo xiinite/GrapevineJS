@@ -23,6 +23,9 @@ module.exports = {
         router.post(app, 'character', 'submitconcept');
         router.post(app, 'character', 'approveconcept');
         router.post(app, 'character', 'submitdraft');
+        router.post(app, 'character', 'submitbackground');
+        router.post(app, 'character', 'approvebackground');
+        router.post(app, 'character', 'approvefinal');
 
         router.post(app, 'chronicle', 'insert');
         router.post(app, 'chronicle', 'addadmin');

@@ -399,8 +399,7 @@ app.controller('CharacterWizardController', ['$scope', '$http', 'loading', 'reso
     $scope.noteItem;
     $scope.selectedList;
     $scope.previousNoteValue = {};
-    $scope.addNoteDialog = function(adv, list)
-    {
+    $scope.addNoteDialog = function(adv, list) {
         angular.copy(adv, $scope.previousNoteValue);
         $scope.noteItem = adv;
         $scope.selectedList = list;
@@ -700,7 +699,7 @@ app.filter('isClanDiscipline', function () {
             var i = a.length;
             while (i--) {
                 if(a[i].path === undefined){
-                    if (a[i] === obj.path) {
+                    if ( obj.path.indexOf(a[i]) > -1 ) {
                         return true;
                     }
                 }else{

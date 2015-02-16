@@ -208,7 +208,8 @@
                     <div class="col-md-12">
                         <div class="col-md-4">
                             <ul class="list-group">
-                                <li class="list-group-item active">{{ character.attributes.tphysical }} Physical
+                                <li class="list-group-item active">{{ calctotal(character.attributes.physical) }}
+                                    Physical
                                     Traits
                                 </li>
                                 <li ng-repeat='t in character.attributes.physical | orderBy:"name":false'
@@ -217,28 +218,30 @@
 									<span ng-show="t.val > 1">
 										({{ t.val }})
 									</span>
-                                    <button ng-click="removeTrait(t.name, character.attributes.physical, 'tphysical')"
+                                    <button ng-click="removeTrait(t.name, character.attributes.physical, 'physical')"
                                             class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-minus"></span></button>
-                                    <button ng-click="addTrait(t.name, character.attributes.physical, 'tphysical')"
+                                    <button ng-click="addTrait(t.name, character.attributes.physical, 'physical')"
                                             class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span>
                                     </button>
                                 </li>
-                                <li>
-                                    <select id="slc-physical" class=" col-md-9"
+                            </ul>
+                            <div class="row voffset3">
+                                <div class="col-md-9">
+                                    <select id="slc-physical" class="form-control"
                                             ng-options="attr for attr in physical"
                                             ng-model="sphysical">
                                         <option style="display:none" value="">Select a trait</option>
                                     </select>
-                                    <button ng-click="addTrait(sphysical, character.attributes.physical, 'tphysical', 'physical')"
-                                            class="btn btn-default btn-sm pull-right">Add
-                                    </button>
-                                </li>
-                            </ul>
+                                </div>
+                                <button ng-click="addTrait(sphysical, character.attributes.physical, 'physical')"
+                                        class="btn btn-default btn-sm pull-right">Add
+                                </button>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <ul class="list-group">
-                                <li class="list-group-item active">{{ character.attributes.tsocial }} Social
+                                <li class="list-group-item active">{{ calctotal(character.attributes.social) }} Social
                                     Traits
                                 </li>
                                 <li ng-repeat='t in character.attributes.social | orderBy:"name":false'
@@ -247,28 +250,30 @@
 									<span ng-show="t.val > 1">
 										({{ t.val }})
 									</span>
-                                    <button ng-click="removeTrait(t.name, character.attributes.social, 'tsocial')"
+                                    <button ng-click="removeTrait(t.name, character.attributes.social, 'social')"
                                             class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-minus"></span></button>
-                                    <button ng-click="addTrait(t.name, character.attributes.social, 'tsocial')"
+                                    <button ng-click="addTrait(t.name, character.attributes.social, 'social')"
                                             class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span>
                                     </button>
                                 </li>
-                                <li>
-                                    <select id="slc-social" class=" col-md-9"
+                            </ul>
+                            <div class="row voffset3">
+                                <div class="col-md-9">
+                                    <select id="slc-social" class="form-control"
                                             ng-options="attr for attr in social"
                                             ng-model="ssocial">
                                         <option style="display:none" value="">Select a trait</option>
                                     </select>
-                                    <button ng-click="addTrait(ssocial, character.attributes.social, 'tsocial', 'social')"
-                                            class="btn btn-default btn-sm pull-right">Add
-                                    </button>
-                                </li>
-                            </ul>
+                                </div>
+                                <button ng-click="addTrait(ssocial, character.attributes.social, 'social')"
+                                        class="btn btn-default btn-sm pull-right">Add
+                                </button>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <ul class="list-group">
-                                <li class="list-group-item active">{{ character.attributes.tmental }} Mental
+                                <li class="list-group-item active">{{ calctotal(character.attributes.mental) }} Mental
                                     Traits
                                 </li>
                                 <li ng-repeat='t in character.attributes.mental | orderBy:"name":false'
@@ -277,32 +282,35 @@
 									<span ng-show="t.val > 1">
 										({{ t.val }})
 									</span>
-                                    <button ng-click="removeTrait(t.name, character.attributes.mental, 'tmental')"
+                                    <button ng-click="removeTrait(t.name, character.attributes.mental, 'mental')"
                                             class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-minus"></span></button>
-                                    <button ng-click="addTrait(t.name, character.attributes.mental, 'tmental')"
+                                    <button ng-click="addTrait(t.name, character.attributes.mental, 'mental')"
                                             class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span>
                                     </button>
                                 </li>
-                                <li>
-                                    <select id="slc-mental" class=" col-md-9"
+                            </ul>
+                            <div class="row voffset3">
+                                <div class="col-md-9">
+                                    <select id="slc-mental" class="form-control"
                                             ng-options="attr for attr in mental"
                                             ng-model="smental">
                                         <option style="display:none" value="">Select a trait</option>
                                     </select>
-                                    <button ng-click="addTrait(smental, character.attributes.mental, 'tmental', 'mental')"
-                                            class="btn btn-default btn-sm pull-right">Add
-                                    </button>
-                                </li>
-                            </ul>
+                                </div>
+                                <button ng-click="addTrait(smental, character.attributes.mental, 'mental')"
+                                        class="btn btn-default btn-sm pull-right">Add
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row voffset3">
                     <div class="col-md-12">
                         <div class="col-md-4">
                             <ul class="list-group">
-                                <li class="list-group-item active">{{ character.attributes.tnegativephysical }}
+                                <li class="list-group-item active">{{ calctotal(character.attributes.negativephysical)
+                                    }}
                                     Negative Physical Traits
                                 </li>
                                 <li ng-repeat='t in character.attributes.negativephysical | orderBy:"name":false'
@@ -311,28 +319,30 @@
 									<span ng-show="t.val > 1">
 										({{ t.val }})
 									</span>
-                                    <button ng-click="removeTrait(t.name, character.attributes.negativephysical, 'tnegativephysical')"
+                                    <button ng-click="removeTrait(t.name, character.attributes.negativephysical, 'negativephysical')"
                                             class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-minus"></span></button>
-                                    <button ng-click="addTrait(t.name, character.attributes.negativephysical, 'tnegativephysical')"
+                                    <button ng-click="addTrait(t.name, character.attributes.negativephysical, 'negativephysical')"
                                             class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span>
                                     </button>
                                 </li>
-                                <li>
-                                    <select id="slc-negativephysical" class=" col-md-9"
+                            </ul>
+                            <div class="row voffset3">
+                                <div class="col-md-9">
+                                    <select id="slc-negativephysical" class="form-control"
                                             ng-options="attr for attr in negativephysical"
                                             ng-model="snegativephysical">
                                         <option style="display:none" value="">Select a trait</option>
                                     </select>
-                                    <button ng-click="addTrait(snegativephysical, character.attributes.negativephysical, 'tnegativephysical', 'negativephysical')"
-                                            class="btn btn-default btn-sm pull-right">Add
-                                    </button>
-                                </li>
-                            </ul>
+                                </div>
+                                <button ng-click="addTrait(snegativephysical, character.attributes.negativephysical, 'negativephysical')"
+                                        class="btn btn-default btn-sm pull-right">Add
+                                </button>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <ul class="list-group">
-                                <li class="list-group-item active">{{ character.attributes.tnegativesocial }}
+                                <li class="list-group-item active">{{ calctotal(character.attributes.negativesocial) }}
                                     Negative Social Traits
                                 </li>
                                 <li ng-repeat='t in character.attributes.negativesocial | orderBy:"name":false'
@@ -341,28 +351,30 @@
 									<span ng-show="t.val > 1">
 										({{ t.val }})
 									</span>
-                                    <button ng-click="removeTrait(t.name, character.attributes.negativesocial, 'tnegativesocial')"
+                                    <button ng-click="removeTrait(t.name, character.attributes.negativesocial, 'negativesocial')"
                                             class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-minus"></span></button>
-                                    <button ng-click="addTrait(t.name, character.attributes.negativesocial, 'tnegativesocial')"
+                                    <button ng-click="addTrait(t.name, character.attributes.negativesocial, 'negativesocial')"
                                             class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span>
                                     </button>
                                 </li>
-                                <li>
-                                    <select id="slc-negativesocial" class=" col-md-9"
+                            </ul>
+                            <div class="row voffset3">
+                                <div class="col-md-9">
+                                    <select id="slc-negativesocial" class="form-control"
                                             ng-options="attr for attr in negativesocial"
                                             ng-model="snegativesocial">
                                         <option style="display:none" value="">Select a trait</option>
                                     </select>
-                                    <button ng-click="addTrait(snegativesocial, character.attributes.negativesocial, 'tnegativesocial', 'negativesocial')"
-                                            class="btn btn-default btn-sm pull-right">Add
-                                    </button>
-                                </li>
-                            </ul>
+                                </div>
+                                <button ng-click="addTrait(snegativesocial, character.attributes.negativesocial, 'negativesocial')"
+                                        class="btn btn-default btn-sm pull-right">Add
+                                </button>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <ul class="list-group">
-                                <li class="list-group-item active">{{ character.attributes.tnegativemental }}
+                                <li class="list-group-item active">{{ calctotal(character.attributes.negativemental) }}
                                     Negative Mental Traits
                                 </li>
                                 <li ng-repeat='t in character.attributes.negativemental | orderBy:"name":false'
@@ -371,24 +383,26 @@
 									<span ng-show="t.val > 1">
 										({{ t.val }})
 									</span>
-                                    <button ng-click="removeTrait(t.name, character.attributes.negativemental, 'tnegativemental')"
+                                    <button ng-click="removeTrait(t.name, character.attributes.negativemental, 'negativemental')"
                                             class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-minus"></span></button>
-                                    <button ng-click="addTrait(t.name, character.attributes.negativemental, 'tnegativemental')"
+                                    <button ng-click="addTrait(t.name, character.attributes.negativemental, 'negativemental')"
                                             class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span>
                                     </button>
                                 </li>
-                                <li>
-                                    <select id="slc-negativemental" class=" col-md-9"
+                            </ul>
+                            <div class="row voffset3">
+                                <div class="col-md-9">
+                                    <select id="slc-negativemental" class="form-control"
                                             ng-options="attr for attr in negativemental"
                                             ng-model="snegativemental">
                                         <option style="display:none" value="">Select a trait</option>
                                     </select>
-                                    <button ng-click="addTrait(snegativemental, character.attributes.negativemental, 'tnegativemental', 'negativemental')"
-                                            class="btn btn-default btn-sm pull-right">Add
-                                    </button>
-                                </li>
-                            </ul>
+                                </div>
+                                <button ng-click="addTrait(snegativemental, character.attributes.negativemental, 'negativemental')"
+                                        class="btn btn-default btn-sm pull-right">Add
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -408,7 +422,7 @@
                     <div class="col-md-12">
                         <div class="col-md-4">
                             <ul class="list-group">
-                                <li class="list-group-item active">{{ character.abilities.length }} Abilities</li>
+                                <li class="list-group-item active">{{ calctotal(character.abilities) }} Abilities</li>
                                 <li ng-repeat="a in character.abilities | orderBy:'name':false" class="list-group-item">
                                     {{ a.name + ": " + a.rating }}
                                     <span ng-show="a.note.length > 0">
@@ -424,17 +438,19 @@
                                             class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-pencil"></span></button>
                                 </li>
-                                <li>
-                                    <select id="slc-abilities" class=" col-md-9"
+                            </ul>
+                            <div class="row voffset3">
+                                <div class="col-md-9">
+                                    <select id="slc-abilities" class="form-control"
                                             ng-options="adv for adv in abilities"
                                             ng-model="sability">
                                         <option style="display:none" value="">Select an ability</option>
                                     </select>
-                                    <button ng-click="addAdvantage(sability, '', character.abilities, 'abilities', 'abilities')"
-                                            class="btn btn-default btn-sm pull-right">Add
-                                    </button>
-                                </li>
-                            </ul>
+                                </div>
+                                <button ng-click="addAdvantage(sability, '', character.abilities, 'abilities', 'abilities')"
+                                        class="btn btn-default btn-sm pull-right">Add
+                                </button>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <ul class="list-group">
@@ -445,9 +461,11 @@
                                     <button ng-click="removeDiscipline(d)" class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-minus"></span></button>
                                 </li>
-                                <li class="list-group-item">
+                            </ul>
+                            <div class="row voffset3">
+                                <div class="col-md-10">
                                     <ui-select ng-model="sdiscipline.selected" theme="bootstrap" ng-disabled="disabled"
-                                               class="col-md-9 nopadding">
+                                               >
                                         <ui-select-match placeholder="Select a discipline...">
                                             {{$select.selected.path}}:{{$select.selected.name}}
                                         </ui-select-match>
@@ -459,11 +477,10 @@
                                             </small>
                                         </ui-select-choices>
                                     </ui-select>
-
-                                    <button ng-click="addDiscipline()" class="btn btn-default btn-sm pull-right">Add
-                                    </button>
-                                </li>
-                            </ul>
+                                </div>
+                                <button ng-click="addDiscipline()" class="btn btn-default btn-sm pull-right">Add
+                                </button>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <ul class="list-group">
@@ -474,10 +491,10 @@
                                     <button ng-click="removeRitual(r)" class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-minus"></span></button>
                                 </li>
-                                <li>
-
-                                    <ui-select ng-model="sritual.selected" theme="bootstrap" ng-disabled="disabled"
-                                               class="col-md-9 nopadding">
+                            </ul>
+                            <div class="row voffset3">
+                                <div class="col-md-10">
+                                    <ui-select ng-model="sritual.selected" theme="bootstrap" ng-disabled="disabled">
                                         <ui-select-match placeholder="Select a ritual...">
                                             {{$select.selected.path}}:{{$select.selected.name}}
                                         </ui-select-match>
@@ -489,19 +506,20 @@
                                             </small>
                                         </ui-select-choices>
                                     </ui-select>
-                                    <button ng-click="addRitual()" class="btn btn-default btn-sm pull-right">Add
-                                    </button>
-                                </li>
-                            </ul>
+                                </div>
+                                <button ng-click="addRitual()" class="btn btn-default btn-sm pull-right">Add
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row voffset3">
                     <div class="col-md-12">
                         <div class="col-md-4">
                             <ul class="list-group">
-                                <li class="list-group-item active">{{ character.backgrounds.length }} Backgrounds</li>
+                                <li class="list-group-item active">{{ calctotal(character.backgrounds) }} Backgrounds
+                                </li>
                                 <li ng-repeat="b in character.backgrounds" class="list-group-item trait">
                                     {{ b.name + ": " + b.rating }}
                                     <span ng-show="b.note.length > 0">
@@ -517,21 +535,23 @@
                                             class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-pencil"></span></button>
                                 </li>
-                                <li>
-                                    <select id="slc-backgrounds" class=" col-md-9"
+                            </ul>
+                            <div class="row voffset3">
+                                <div class="col-md-9">
+                                    <select id="slc-backgrounds" class="form-control"
                                             ng-options="adv for adv in backgrounds"
                                             ng-model="sbackground">
                                         <option style="display:none" value="">Select a background</option>
                                     </select>
-                                    <button ng-click="addAdvantage(sbackground, '', character.backgrounds, 'backgrounds', 'backgrounds')"
-                                            class="btn btn-default btn-sm pull-right">Add
-                                    </button>
-                                </li>
-                            </ul>
+                                </div>
+                                <button ng-click="addAdvantage(sbackground, '', character.backgrounds, 'backgrounds', 'backgrounds')"
+                                        class="btn btn-default btn-sm pull-right">Add
+                                </button>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <ul class="list-group">
-                                <li class="list-group-item active">{{ character.influences.length }} Influences</li>
+                                <li class="list-group-item active">{{ calctotal(character.influences) }} Influences</li>
                                 <li ng-repeat="i in character.influences" class="list-group-item trait">
                                     {{ i.name + ": " + i.rating }}
                                     <span ng-show="i.note.length > 0">
@@ -547,21 +567,24 @@
                                             class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-pencil"></span></button>
                                 </li>
-                                <li>
-                                    <select id="slc-influences" class=" col-md-9"
+                            </ul>
+                            <div class="row voffset3">
+                                <div class="col-md-9">
+                                    <select id="slc-influences" class="form-control"
                                             ng-options="adv for adv in influences"
                                             ng-model="sinfluence">
                                         <option style="display:none" value="">Select an influence</option>
                                     </select>
-                                    <button ng-click="addAdvantage(sinfluence, '', character.influences, 'influences', 'influences')"
-                                            class="btn btn-default btn-sm pull-right">Add
-                                    </button>
-                                </li>
-                            </ul>
+                                </div>
+                                <button ng-click="addAdvantage(sinfluence, '', character.influences, 'influences', 'influences')"
+                                        class="btn btn-default btn-sm pull-right">Add
+                                </button>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <ul class="list-group">
-                                <li class="list-group-item active">{{ character.misc.length }} Miscelaneous Traits</li>
+                                <li class="list-group-item active">{{ calctotal(character.misc) }} Miscelaneous Traits
+                                </li>
                                 <li ng-repeat="m in character.misc" class="list-group-item">
                                     {{ m.name + ": " + m.rating }}
                                     <span ng-show="m.note.length > 0">
@@ -573,26 +596,29 @@
                                     <button ng-click="addAdvantage(m.name, m.note, character.misc, 'misc')"
                                             class="btn btn-xs pull-right"><span class="glyphicon glyphicon-plus"></span>
                                     </button>
-                                    <button ng-click="addNoteDialog(m, character.misc, 'misc')" class="btn btn-xs pull-right">
+                                    <button ng-click="addNoteDialog(m, character.misc, 'misc')"
+                                            class="btn btn-xs pull-right">
                                         <span class="glyphicon glyphicon-pencil"></span></button>
                                 </li>
-                                <li>
-                                    <input type='text' id="slc-misc" class=" col-md-9"
+                            </ul>
+                            <div class="row voffset3">
+                                <div class="col-md-9">
+                                    <input type='text' id="slc-misc" class="form-control"
                                            placeholder="Misc character trait"
                                            ng-model="smisc"/>
-                                    <button ng-click="addAdvantage(smisc, '', character.misc, 'misc', 'misc')"
-                                            class="btn btn-default btn-sm pull-right">Add
-                                    </button>
-                                </li>
-                            </ul>
+                                </div>
+                                <button ng-click="addAdvantage(smisc, '', character.misc, 'misc', 'misc')"
+                                        class="btn btn-default btn-sm pull-right">Add
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row voffset3">
                     <div class="col-md-12">
                         <div class="col-md-4">
                             <ul class="list-group">
-                                <li class="list-group-item active">{{ character.status.length }} Status</li>
+                                <li class="list-group-item active">{{ calctotal(character.status) }} Status</li>
                                 <li ng-repeat="s in character.status" class="list-group-item">
                                     {{ s.name }} 
                                     <span ng-show="s.statustype.length > 0">
@@ -606,61 +632,71 @@
                                     <button ng-click="addStatus(s)" class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-plus"></span></button>
                                 </li>
-                                <li>
-                                    <input type='text' id="slc-status" class=" col-md-6" placeholder="status"
+                            </ul>
+                            <div class="row voffset3">
+                                <div class="col-md-9">
+                                    <input type='text' id="slc-status" class="col-md-6 form-control" placeholder="status"
                                            ng-model="sstatus"/>
-                                    <select id="slc-statustype" ng-model="sstatustype" class="col0md-3">
+                                    <select id="slc-statustype" ng-model="sstatustype" class="col-md-6 form-control">
                                         <option>fleeting</option>
                                         <option>abiding</option>
                                     </select>
-                                    <button ng-click="addStatus()" class="btn btn-default btn-sm pull-right">Add
-                                    </button>
-                                </li>
-                            </ul>
+                                </div>
+                                <button ng-click="addStatus()" class="btn btn-default btn-sm pull-right">Add
+                                </button>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <ul class="list-group">
-                                <li class="list-group-item active">{{ character.merits.length }} Merits</li>
+                                <li class="list-group-item active">{{ calctotalcost(character.merits) }} Merits</li>
                                 <li ng-repeat="m in character.merits" class="list-group-item trait">
                                     {{ m.name + " (" + m.cost + ")" }}
-                                    <button ng-click="removeMF(m, character.merits, 'merits')" class="btn btn-xs pull-right"><span
+                                    <button ng-click="removeMF(m, character.merits, 'merits')"
+                                            class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-minus"></span></button>
                                 </li>
                                 <li>
-                                    <select id="slc-merits" class=" col-md-9"
+                                </li>
+                            </ul>
+                            <div class="row voffset3">
+                                <div class="col-md-9">
+                                    <select id="slc-merits" class="form-control"
                                             ng-options="adv.name for adv in merits"
                                             ng-model="smerit">
                                         <option style="display:none" value="">Select a merit</option>
                                     </select>
-                                    <button ng-click="addMF(smerit, character.merits, 'merits', 'merits')"
-                                            class="btn btn-default btn-sm pull-right">Add
-                                    </button>
-                                </li>
-                            </ul>
+                                </div>
+                                <button ng-click="addMF(smerit, character.merits, 'merits', 'merits')"
+                                        class="btn btn-default btn-sm pull-right">Add
+                                </button>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <ul class="list-group">
-                                <li class="list-group-item active">{{ character.flaws.length }} Flaws</li>
+                                <li class="list-group-item active">{{ calctotalcost(character.flaws) }} Flaws</li>
                                 <li ng-repeat="f in character.flaws" class="list-group-item">
                                     {{ f.name + " (" + f.cost + ")" }}
-                                    <button ng-click="removeMF(f, character.flaws, 'flaws')" class="btn btn-xs pull-right"><span
+                                    <button ng-click="removeMF(f, character.flaws, 'flaws')"
+                                            class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-minus"></span></button>
                                 </li>
-                                <li>
-                                    <select id="slc-flaws" class=" col-md-9"
+                            </ul>
+                            <div class="row voffset3">
+                                <div class="col-md-9">
+                                    <select id="slc-flaws" class="form-control"
                                             ng-options="adv.name for adv in flaws"
                                             ng-model="sflaw">
                                         <option style="display:none" value="">Select a flaw</option>
                                     </select>
-                                    <button ng-click="addMF(sflaw, character.flaws, 'flaws', 'flaws')"
-                                            class="btn btn-default btn-sm pull-right">Add
-                                    </button>
-                                </li>
-                            </ul>
+                                </div>
+                                <button ng-click="addMF(sflaw, character.flaws, 'flaws', 'flaws')"
+                                        class="btn btn-default btn-sm pull-right">Add
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row voffset3">
                     <div class="col-md-12">
                         <div class="col-md-4">
                             <ul class="list-group">
@@ -670,9 +706,13 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="col-md-4"> <ul class="list-group">
-                                <li class="list-group-item active">{{ character.derangements.length }} Derangements</li>
-                                <li ng-repeat="a in character.derangements | orderBy:'name':false" class="list-group-item">
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">{{ calctotal(character.derangements) }}
+                                    Derangements
+                                </li>
+                                <li ng-repeat="a in character.derangements | orderBy:'name':false"
+                                    class="list-group-item">
                                     {{ a.name + ": " + a.rating }}
                                     <span ng-show="a.note.length > 0">
                                     ( {{ a.note }} )
@@ -687,17 +727,19 @@
                                             class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-pencil"></span></button>
                                 </li>
-                                <li class="list-group-item">
-                                    <select id="slc-abilities" class=" col-md-9"
+                            </ul>
+                            <div class="row voffset3">
+                                <div class="col-md-9">
+                                    <select id="slc-abilities" class="form-control"
                                             ng-options="adv for adv in derangements"
                                             ng-model="sderangement">
                                         <option style="display:none" value="">Select a derangement</option>
                                     </select>
-                                    <button ng-click="addAdvantage(sderangement, '', character.derangements, 'derangements', 'derangements')"
-                                            class="btn btn-default btn-sm pull-right">Add
-                                    </button>
-                                </li>
-                            </ul>
+                                </div>
+                                <button ng-click="addAdvantage(sderangement, '', character.derangements, 'derangements', 'derangements')"
+                                        class="btn btn-default btn-sm pull-right">Add
+                                </button>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <ul class="list-group">
@@ -715,20 +757,22 @@
                                             class="btn btn-xs pull-right"><span
                                                 class="glyphicon glyphicon-pencil"></span></button>
                                 </li>
-                                <li>
-                                    <input class="col-xs-12" type="text" placeholder="Name of other character"
+                            </ul>
+                            <div class="row voffset3">
+                                <div class="col-md-9">
+                                    <input class="form-control" type="text" placeholder="Name of other character"
                                            ng-model="sbloodbond.character"/>
-                                    <select id="slc-equipment" class=" col-xs-12"
+                                    <select id="slc-equipment" class="form-control"
                                             ng-options="adv for adv in bloodbondlevels"
                                             ng-model="sbloodbond.level">
                                         <option style="display:none" value="">Select level</option>
                                     </select>
                                     <input class="col-xs-12" type="text" placeholder="Note..."
                                            ng-model="sbloodbond.note"/>
-                                    <button ng-click="addBloodbond()" class="btn btn-default btn-sm pull-right">Add
-                                    </button>
-                                </li>
-                            </ul>
+                                </div>
+                                <button ng-click="addBloodbond()" class="btn btn-default btn-sm pull-right">Add
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -753,17 +797,19 @@
                                         class="btn btn-xs pull-right"><span
                                             class="glyphicon glyphicon-pencil"></span></button>
                             </li>
-                            <li>
-                                <select id="slc-equipment" class=" col-md-9"
+                        </ul>
+                        <div class="row voffset3">
+                            <div class="col-md-9">
+                                <select id="slc-equipment" class="form-control"
                                         ng-options="adv for adv in equipment"
                                         ng-model="sequipment">
                                     <option style="display:none" value="">Select equipment</option>
                                 </select>
-                                <button ng-click="addAdvantage(sequipment, '', character.equipment, 'equiptment', 'equipment')"
-                                        class="btn btn-default btn-sm pull-right">Add
-                                </button>
-                            </li>
-                        </ul>
+                            </div>
+                            <button ng-click="addAdvantage(sequipment, '', character.equipment, 'equiptment', 'equipment')"
+                                    class="btn btn-default btn-sm pull-right">Add
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

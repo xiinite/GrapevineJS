@@ -97,7 +97,166 @@ app.controller('CharacterFreebiesController', ['$scope', '$http', 'loading', 're
         return count;
     };
 
+    $scope.freetraitspendage = [];
+    $scope.reversefreetrait = function(trait){
+        var list;
 
+        if(trait.list == 'disciplines'){
+            list = $scope.character.disciplines;
+            var item = trait.item;
+            var result = $.grep(list, function (e) {
+                return e.name == item.name && e.path == item.path;
+            });
+            var attr = result[0];
+            list.splice($.inArray(attr, list), 1);
+        }
+        if(trait.list == "merits"){
+            list = $scope.character.merits;
+            var item = trait.item;
+            var result = $.grep(list, function (e) {
+                return e.name == item.name && e.cost == item.cost;
+            });
+            var attr = result[0];
+            list.splice($.inArray(attr, list), 1);
+        }else if(trait.list !== undefined){
+            var nparts = trait.list.split('.');
+            if(nparts.length == 2){
+                list = $scope.character[nparts[0]][nparts[1]];
+            }else{
+                list = $scope.character[trait.list];
+            }
+            var value = trait.value;
+
+            var result = $.grep(list, function (e) {
+                return e.name == value;
+            });
+            var attr = result[0];
+
+            if (attr.val == 1){
+                list.splice($.inArray(attr, list), 1);
+            } else if(attr.rating == 1) {
+                list.splice($.inArray(attr, list), 1);
+            }
+            else if(attr.val !== undefined){
+                attr.val--;
+            }else if(attr.rating !== undefined){
+                attr.rating--;
+            }
+        }else if(trait.item !== undefined){
+            trait.item.rating--;
+        }
+
+
+        $scope.character.freetraits += parseInt(trait.cost);
+
+        $scope.freetraitspendage.splice($.inArray(trait, $scope.freetraitspendage), 1);
+    };
+
+    $scope.addTrait = function (value, listname) {
+        var nparts = listname.split('.');
+        var list = $scope.character[nparts[0]][nparts[1]];
+        if (value.length === undefined) return;
+        if (value.length == 0) return;
+        var result = $.grep(list, function (e) {
+            return e.name == value;
+        });
+        if (result.length === 0) {
+            list.push({name: value, val: 1});
+            list = orderBy(list, 'name', false);
+        } else {
+            result[0].val++;
+        }
+
+        $scope.freetraitspendage.push({value: value, list: listname, cost: 1});
+        $scope.character.freetraits--;
+    };
+
+    $scope.addAdvantage = function (value, listname) {
+        var list = $scope.character[listname];
+        if (value.length === undefined) return;
+        if (value.length == 0) return;
+        var result = $.grep(list, function (e) {
+            return e.name == value;
+        });
+        if (result.length === 0) {
+            list.push({name: value, note: "", rating: 1});
+            list = orderBy(list, 'name', false);
+        } else {
+            result[0].rating++;
+            if(result[0].rating > 5){
+                result[0].rating = 5;
+                return;
+            };
+        }
+
+        $scope.freetraitspendage.push({value: value, list: listname, cost: 1});
+        $scope.character.freetraits--;
+    };
+    $scope.addMerit = function (item) {
+        if(item === undefined) return;
+        if($scope.character.freetraits - item.cost < 0 || $scope.calctotalcost($scope.character.merits) + item.cost > 7) return;
+
+        var list = $scope.character.merits;
+        var result = $.grep(list, function (e) {
+            return e.name == item.name;
+        });
+        if (result.length === 0) {
+            list.push(item);
+            list = orderBy(list, 'name', false);
+
+            $scope.freetraitspendage.push({value: item.name, item: item, list: "merits", cost: item.cost});
+            $scope.character.freetraits -= item.cost;
+        }
+    };
+    $scope.addDiscipline= function (item, listname) {
+        if(item === undefined) return;
+        if($scope.character.freetraits - item.cost < 0 || $scope.calctotalcost($scope.character.merits) + item.cost > 7) return;
+
+        var list = $scope.character[listname];
+        var result = $.grep(list, function (e) {
+            return e.name == item.name;
+        });
+        if (result.length === 0) {
+            list.push(item);
+            list = orderBy(list, 'path', false);
+
+            var cost = 6;
+            if(item.level == 'basic') cost = 3;
+            $scope.freetraitspendage.push({value: item.name, item: item, list: listname, cost: cost});
+            $scope.character.freetraits -= cost;
+        }
+    };
+    $scope.addVirtue = function (item) {
+        if(item === undefined) return;
+        item.rating++;
+        if(item.rating > 5){
+            item.rating = 5;
+            return;
+        }
+
+        $scope.freetraitspendage.push({value: item.name, item: item, list: undefined, cost: 2});
+        $scope.character.freetraits -= 2;
+    };
+    $scope.addMorality = function (item) {
+        item.rating++;
+        if(item.rating > 5){
+            item.rating = 5;
+            return;
+        }
+
+        $scope.freetraitspendage.push({value: "Morality path", item: item, list: undefined, cost: 3});
+        $scope.character.freetraits -= 3;
+    };
+    $scope.addWillpower = function (item) {
+        item.current++;
+        if(item.rating > 5){
+            item.rating = 5;
+            return;
+        }
+
+        $scope.freetraitspendage.push({value: "Willpower", item: item, list: undefined, cost: 3});
+        $scope.character.freetraits -= 3;
+    };
     $scope.init = function (id) {
         loading.show();
         var root = $scope;
@@ -181,4 +340,76 @@ app.controller('CharacterFreebiesController', ['$scope', '$http', 'loading', 're
             }
         });
     };
+
+    $scope.submitDraft = function(){
+        loading.show();
+        var root = $scope;
+        $http.post("/character/submitdraft", {character: root.character}).then(function(){
+            location = '/character/show/' + root.character.id;
+        });
+    };
 }]);
+
+app.filter('isClanDiscipline', function () {
+
+    return function (items, filter) {
+        var contains = function(a, obj) {
+            var i = a.length;
+            while (i--) {
+                if (a[i].path === obj.path && a[i].name === obj.name) {
+                    return true;
+                }
+            }
+            return false;
+        };
+        var containspath = function(a, obj) {
+            var i = a.length;
+            while (i--) {
+                if(a[i].path === undefined){
+                    if ( obj.path.indexOf(a[i]) > -1 ) {
+                        return true;
+                    }
+                }else{
+                    if (a[i].path === obj.path) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        };
+
+        var clan;
+        var clandisciplines;
+        var currentdisciplines;
+        if(filter !== undefined){
+            clan = filter[0];
+            clandisciplines = filter[1];
+            currentdisciplines = filter[2];
+        }
+        var clanDiscs = [];
+        var clanFound = false;
+        for (var i = 0; i < clandisciplines.length; i++) {
+            if(clandisciplines[i].clan == clan){
+                clanFound = true;
+                for(var j = 0; j< clandisciplines[i].disciplines.length; j++){
+                    clanDiscs.push(clandisciplines[i].disciplines[j]);
+                }
+            }
+        }
+        var arrayToReturn = [];
+        for (var i = 0; i < items.length; i++) {
+            if (clanFound == false) {
+                if(items[i].level == 'basic' || items[i].level == 'intermediate' ){
+                    arrayToReturn.push(items[i]);
+                }
+            } else{
+                if((items[i].level == 'basic' || items[i].level == 'intermediate') && containspath(clanDiscs, items[i]) && !contains(currentdisciplines, items[i]) && !containspath(arrayToReturn, items[i])){
+                    //
+                    arrayToReturn.push(items[i]);
+                }
+            }
+        }
+
+        return arrayToReturn;
+    };
+});

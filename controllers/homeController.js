@@ -6,7 +6,7 @@ module.exports = {
             if (err) return next(new Error(err));
             if (req.user.isAdmin) {
                 model.count({
-                        state: {$in: ["Concept", "Draft"]}, chronicle: {
+                        state: {$in: ["Approval pending", "Background Submitted"]}, chronicle: {
                             $in: req.user.chronicles.map(function (c) {
                                 return c.id;
                             })

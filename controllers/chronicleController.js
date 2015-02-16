@@ -56,11 +56,16 @@ module.exports = {
     'find': function (req, res, next) {
         if (req.params.id) {
             model.find({"id": req.params.id}, function (err, result) {
-                if (!sec.checkAdmin(req, next, result[0].id)) {
-                    return;
-                }
                 if(err) return next(new Error(err));
-                res.json(result[0]);
+                if(result.length > 0){
+                    if (!sec.checkAdmin(req, next, result[0].id)) {
+                        return;
+                    }
+                    res.json(result[0]);
+                }
+                else {
+                    res.json();
+                }
             });
         }
     },

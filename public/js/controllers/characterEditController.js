@@ -50,7 +50,8 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
     $scope.character = [];
     $scope.players = [];
     $scope.statusses = [
-        "Concept", "Draft", "Approved", "Rejected", "Background Approved", "Background Rejected", "Active", "Retired", "Deceased"
+        "Select a status...", "Trashed", "Concept", "Draft", "Approval pending", "Approved", "Rejected", "Background Submitted",
+        "Background Approved", "Background Rejected", "Final Approval Pending", "Active", "Retired", "Deceased"
     ];
 
     $scope.noteItem = {};
@@ -58,7 +59,28 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
     
     $scope.dirtylists = [];
 
-    $scope.addTrait = function(value, list, total, select){
+    $scope.calctotal = function (list) {
+        if (list === undefined) return "";
+        var count = 0;
+        $.each(list, function (index, item) {
+            if(item.val !== undefined){
+                count += item.val;
+            }else if(item.rating !== undefined){
+                count += item.rating;
+            }
+        });
+        return count;
+    };
+    $scope.calctotalcost = function (list) {
+        if (list === undefined) return "";
+        var count = 0;
+        $.each(list, function (index, item) {
+            count += item.cost;
+        });
+        return count;
+    };
+
+    $scope.addTrait = function(value, list, select){
         if(value.length === undefined) return;
         var result = $.grep(list, function(e){ return e.name == value; });
         if(result.length === 0) {
@@ -68,26 +90,16 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
             result[0].val++;
         }
 
-        if(total.length !== undefined)
-        {
-            var t = 0;
-            $.each(list, function(index, item){
-                t +=  item.val;
-            });
-            $scope.character.attributes[total] = t;
-            $scope.setItemDirty("attributes." + total, t);
-        }
-
         value = {};
         if(select !== undefined)
         {
             $("#slc-" + select).removeClass("ng-dirty");
             $("#slc-" + select).val(null);
         }
-        $scope.setItemDirty("attributes." + total.slice(1), list);
+        $scope.setItemDirty("attributes." + select, list);
     };
 
-    $scope.removeTrait = function(value, list, total){
+    $scope.removeTrait = function(value, list, select){
         var result = $.grep(list, function(e){ return e.name == value; });
         var attr = result[0];
 
@@ -96,16 +108,7 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
         }else{
             attr.val--;
         }
-        if(total.length !== undefined)
-        {
-            var t = 0;
-            $.each(list, function(index, item){
-                t +=  item.val;
-            });
-            $scope.character.attributes[total] = t;
-            $scope.setItemDirty("attributes." + total, t);
-        }
-        $scope.setItemDirty("attributes." + total.slice(1), list);
+        $scope.setItemDirty("attributes." + select, list);
     };
 
     $scope.addAdvantage = function(value, notevalue, list, listname, select){
