@@ -392,7 +392,7 @@ module.exports = {
         }
 
         //calculate bloodpool and willpower
-        character.path.rating = (character.selfcontrol + character.conscience) / 2;
+        character.path.rating = (character.selfcontrol.rating + character.conscience.rating) / 2;
         character.bloodpool.max = calcBloodpool(character.generation);
         character.bloodpool.current = character.bloodpool.max;
         character.willpower.max = calcWillpower(character.generation);

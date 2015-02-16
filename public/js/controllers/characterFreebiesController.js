@@ -109,8 +109,7 @@ app.controller('CharacterFreebiesController', ['$scope', '$http', 'loading', 're
             });
             var attr = result[0];
             list.splice($.inArray(attr, list), 1);
-        }
-        if(trait.list == "merits"){
+        }else if(trait.list == "merits"){
             list = $scope.character.merits;
             var item = trait.item;
             var result = $.grep(list, function (e) {
@@ -210,7 +209,10 @@ app.controller('CharacterFreebiesController', ['$scope', '$http', 'loading', 're
     };
     $scope.addDiscipline= function (item, listname) {
         if(item === undefined) return;
-        if($scope.character.freetraits - item.cost < 0 || $scope.calctotalcost($scope.character.merits) + item.cost > 7) return;
+		
+		var cost = 6;
+		if(item.level == 'basic') cost = 3;
+        if($scope.character.freetraits - cost < 0) return;
 
         var list = $scope.character[listname];
         var result = $.grep(list, function (e) {
@@ -220,8 +222,6 @@ app.controller('CharacterFreebiesController', ['$scope', '$http', 'loading', 're
             list.push(item);
             list = orderBy(list, 'path', false);
 
-            var cost = 6;
-            if(item.level == 'basic') cost = 3;
             $scope.freetraitspendage.push({value: item.name, item: item, list: listname, cost: cost});
             $scope.character.freetraits -= cost;
         }
