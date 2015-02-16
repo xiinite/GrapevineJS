@@ -328,7 +328,7 @@ module.exports = {
                 }
                 var fields = {background: req.body.background};
                 if(["Background Rejected", "Approved"].indexOf(result[0].state) > -1){
-                    fields.state: "Background Submitted";
+                    fields.state = "Background Submitted";
                 }
                 var previousversion = JSON.parse(JSON.stringify(result[0]));
 
@@ -344,7 +344,7 @@ module.exports = {
                     modHistory.push(result[0].modificationhistory[i]);
                 }
                 modHistory.push({
-                    fields: {fields},
+                    fields: JSON.parse(JSON.stringify(fields)),
                     date: new Date(),
                     user: {googleId: req.user.googleId, name: req.user.displayName},
                     previousVersion: previousversion
