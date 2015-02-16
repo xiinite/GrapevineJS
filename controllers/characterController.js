@@ -328,6 +328,13 @@ module.exports = {
                 }
                 var fields = {background: req.body.background, state: "Background Submitted"};
                 var previousversion = JSON.parse(JSON.stringify(result[0]));
+
+                delete previousversion._id;
+                delete previousversion.__v;
+                delete previousversion.prototype;
+                previousversion.state = "Final Approval Pending";
+                previousversion.player = null;
+                previousversion.chronicle = previousversion.chronicle.id;
                 previousversion.modificationhistory = [];
                 var modHistory = [];
                 for (var i = 0; i < result[0].modificationhistory.length; i++) {
@@ -443,6 +450,11 @@ module.exports = {
             if (result[0].player.googleId == req.user.googleId) {
                 var character = result[0];
                 var previousversion = JSON.parse(JSON.stringify(character));
+                delete previousversion._id;
+                delete previousversion.__v;
+                delete previousversion.prototype;
+                previousversion.player = null;
+                previousversion.previousversion = char.chronicle.id;
                 character.modificationhistory.push({
                     fields: "Trashed",
                     date: new Date(),
@@ -520,6 +532,11 @@ module.exports = {
                     return;
                 }
                 var previousversion = JSON.parse(JSON.stringify(result[0]));
+                delete previousversion._id;
+                delete previousversion.__v;
+                delete previousversion.prototype;
+                previousversion.player = null;
+                previousversion.chronicle = previousversion.chronicle.id;
                 previousversion.modificationhistory = [];
                 var modHistory = [];
                 for (var i = 0; i < result[0].modificationhistory.length; i++) {
@@ -570,6 +587,11 @@ module.exports = {
                 }
                 findByDate(result[0].modificationhistory, new Date(req.body.date).toUTCString(), function (data) {
                         var currentversion = JSON.parse(JSON.stringify(result[0]));
+                        delete currentversion._id;
+                        delete currentversion.__v;
+                        delete currentversion.prototype;
+                        currentversion.player = null;
+                        currentversion.chronicle = currentversion.chronicle.id;
                         var oldVersion = JSON.parse(JSON.stringify(data.previousVersion));
                         oldVersion.modificationhistory = result[0].modificationhistory;
                         currentversion.modificationhistory = [];
