@@ -326,7 +326,10 @@ module.exports = {
                 if (!sec.checkOwnership(req, next, result[0])) {
                     return;
                 }
-                var fields = {background: req.body.background, state: "Background Submitted"};
+                var fields = {background: req.body.background};
+                if(["Background Rejected", "Approved"].indexOf(result[0].state) > -1){
+                    fields.state: "Background Submitted";
+                }
                 var previousversion = JSON.parse(JSON.stringify(result[0]));
 
                 delete previousversion._id;
@@ -341,7 +344,7 @@ module.exports = {
                     modHistory.push(result[0].modificationhistory[i]);
                 }
                 modHistory.push({
-                    fields: {background: req.body.background, state: "Background Submitted"},
+                    fields: {fields},
                     date: new Date(),
                     user: {googleId: req.user.googleId, name: req.user.displayName},
                     previousVersion: previousversion
