@@ -35,12 +35,17 @@ app.controller('BackgroundController', ['$scope', '$http', 'loading', 'resources
             root.character.experience.unspent = parseInt(root.character.experience.unspent);
             root.character.experience.total = parseInt(root.character.experience.total);
 
-            if(root.character.background.length == 0 || root.character.state == 'Background Rejected'){
+            if(root.character.background === undefined){
                 root.submitted = false;
                 root.editing = true;
             }else{
-                root.submitted = true;
-                root.editing = false;
+                if(root.character.background.length == 0 || root.character.state == 'Background Rejected'){
+                    root.submitted = false;
+                    root.editing = true;
+                }else{
+                    root.submitted = true;
+                    root.editing = false;
+                }
             }
         });
     }

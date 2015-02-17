@@ -11,17 +11,15 @@
         </div>
     </h1>
     <div class="col-lg-12" ng-hide="submitted">
-        <div class="form-horizontal">
-            <div class="form-group">
-                <label class="label">Background:</label>
-                <textarea class="form-control" ng-model="background" rows="10"></textarea>
-            </div>
+        <h4>Add background: </h4>
+        <div text-angular ng-model="background"></div>
+        <div class="form-horizontal voffset3">
             <div class="form-group">
                 <button class="btn btn-primary" ng-confirm-click="Are you sure?" ng-click="submitForm()">Submit background</button>
             </div>
         </div>
     </div>
-    <div class="col-lg-12" ng-hide="editting">
-        {{character.background}}
+    <div class="col-lg-12" ng-hide="editting" ng-bind-html="character.background">
+
     </div>
 </div>
