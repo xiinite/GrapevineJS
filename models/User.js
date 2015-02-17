@@ -42,7 +42,7 @@ function loadNext(collection, index, returnvalue, callback) {
             chronicleModel.find({
                 admins: user.googleId
             }, function (err, result) {
-                cb(err, result[0]);
+                cb(err, result);
             });
         }
     }, function (err, result) {

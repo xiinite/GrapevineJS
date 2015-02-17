@@ -310,24 +310,25 @@ module.exports = {
                 if (err) return next(new Error(err));
                 res.json("ok");
 
-
-                if (req.user.emails.length > 0) {
-                    mail.sendmail(req.user.emails[0].value, "Character submitted for final approval: " + char.name, "Your finalized character has been submitted for approval: "
-                    + "\nName:" + char.name
-                    + "\nClan: " + char.clan
-                    + "\n" + char.concept);
-                }
-                cmodel.find({id: char.chronicle}, function (err, result) {
-                    if (err) return next(new Error(err));
-                    var c = result[0];
-                    if (c.email.length > 0) {
-                        mail.sendmail(c.email, "Final approval: " + char.name, "A character is waiting for final approval: " +
-                        "\nName:" + char.name
+                try{
+                    if (req.user.emails.length > 0) {
+                        mail.sendmail(req.user.emails[0].value, "Character submitted for final approval: " + char.name, "Your finalized character has been submitted for approval: "
+                        + "\nName:" + char.name
                         + "\nClan: " + char.clan
-                        + "\nUser: " + req.user.displayName
                         + "\n" + char.concept);
                     }
-                });
+                    cmodel.find({id: char.chronicle}, function (err, result) {
+                        if (err) return next(new Error(err));
+                        var c = result[0];
+                        if (c.email.length > 0) {
+                            mail.sendmail(c.email, "Final approval: " + char.name, "A character is waiting for final approval: " +
+                            "\nName:" + char.name
+                            + "\nClan: " + char.clan
+                            + "\nUser: " + req.user.displayName
+                            + "\n" + char.concept);
+                        }
+                    });
+                }catch(e) {}
             });
         } else {
             next(new Error("forbidden"));
@@ -501,7 +502,7 @@ module.exports = {
                 delete previousversion.__v;
                 delete previousversion.prototype;
                 previousversion.player = null;
-                previousversion.previousversion = char.chronicle.id;
+                previousversion.previousversion = result[0].chronicle.id;
                 character.modificationhistory.push({
                     fields: "Trashed",
                     date: new Date(),
