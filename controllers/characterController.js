@@ -32,6 +32,22 @@ var findByDate = function (collection, _date, cb) {
         }
     }(coll.shift()));
 };
+var findByState = function (collection, _state, cb) {
+    var coll = collection.slice(0); // create a clone
+    var i = coll.length;
+    while (i--) {
+        var data = coll[i];
+        var state = "";
+        if(data.previousVersion !== null){
+            state = data.previousVersion.state;
+        }
+        if (state === _state) {
+            cb.apply(null, [data]);
+            return;
+        }
+    }
+    cb.apply(new Error("Not found"), null);
+};
 module.exports = {
     'index': function (req, res, next) {
         if (!req.user.isSuperAdmin && !req.user.isAdmin) {
@@ -135,7 +151,7 @@ module.exports = {
     },
     'approvelist': function (req, res, next) {
         model.find({
-            state: {$in: ["Approval pending", "Background Submitted", "Final Approval Pending"]}, chronicle: {
+            state: {$in: ["Approval Pending", "Background Submitted", "Final Approval Pending"]}, chronicle: {
                 $in: req.user.chronicles.map(function (c) {
                     return c.id;
                 })
@@ -232,9 +248,11 @@ module.exports = {
             delete char._id;
             delete char.__v;
             delete char.prototype;
-            char.state = "Approval pending";
+            char.state = "Approval Pending";
             char.player = null;
             char.chronicle = char.chronicle.id;
+
+            char = vl.calculateFinalDraft(char);
 
             //Set a return point
             var previousversion = JSON.parse(JSON.stringify(char));
@@ -276,6 +294,7 @@ module.exports = {
             char.state = "Final Approval Pending";
             char.player = null;
             char.chronicle = char.chronicle.id;
+            char = vl.calculateFinalDraft(char);
 
             //Set a return point
             var previousversion = JSON.parse(JSON.stringify(char));
@@ -329,13 +348,12 @@ module.exports = {
                 var fields = {background: req.body.background};
                 if(["Background Rejected", "Approved"].indexOf(result[0].state) > -1){
                     fields.state = "Background Submitted";
-                }
+                };
                 var previousversion = JSON.parse(JSON.stringify(result[0]));
 
                 delete previousversion._id;
                 delete previousversion.__v;
                 delete previousversion.prototype;
-                previousversion.state = "Final Approval Pending";
                 previousversion.player = null;
                 previousversion.chronicle = previousversion.chronicle.id;
                 previousversion.modificationhistory = [];
@@ -368,6 +386,24 @@ module.exports = {
             if(req.body.state == "Background Approved"){
                 fields.freetraits = parseInt(result[0].freetraits) + parseInt(req.body.freebees);
             }
+
+            var previousversion = JSON.parse(JSON.stringify(result[0]));
+            delete previousversion._id;
+            delete previousversion.__v;
+            delete previousversion.prototype;
+            previousversion.state = req.body.state;
+            previousversion.player = null;
+            previousversion.chronicle = result[0].chronicle.id;
+            previousversion.modificationhistory = null;
+
+            fields.modified = new Date();
+            fields.modificationhistory = result[0].modificationhistory;
+            fields.modificationhistory.push({
+                fields: req.body.state,
+                date: new Date(),
+                user: {googleId: req.user.googleId, name: req.user.displayName},
+                previousVersion: previousversion
+            });
             model.update(req.body.id, fields, function (err) {
                 if (err) return next(new Error(err));
                 if (result[0].player.emails.length > 0) {
@@ -413,36 +449,44 @@ module.exports = {
                     return res.json("ok");
                 });
             } else {
-                var currentversion = JSON.parse(JSON.stringify(result[0]));
-                var oldVersion = JSON.parse(JSON.stringify(result[0].modificationhistory[result[0].modificationhistory.length - 2].previousVersion));
-                oldVersion.modificationhistory = result[0].modificationhistory;
-                currentversion.modificationhistory = [];
-                if(oldVersion.chronicle.id !== undefined){
-                    oldVersion.chronicle = oldVersion.chronicle.id;
-                };
-                oldVersion.modificationhistory.push({
-                    fields: {
-                        reversiondate: req.body.date
-                    },
-                    date: new Date(),
-                    user: {
-                        googleId: req.user.googleId, name: req.user.displayName
-                    }
-                    ,
-                    previousVersion: currentversion
-                });
-                delete oldVersion._id;
-                model.update(req.body.id, oldVersion, function (err) {
-                    if (err) return next(new Error(err));
-                    if (result[0].player.emails.length > 0) {
-                        if (req.body.state == "Active") {
-                            mail.sendmail(result[0].player.emails[0].value, "Character rejected: " + result[0].name, "Your character has been rejected and reverted to Background Approved. Please reassing your freebies."
-                            + req.user.displayName + ": "
-                            + "\nName:" + result[0].name
-                            + "\nClan: " + result[0].clan);
+                findByState(result[0].modificationhistory, "Background Approved", function (data) {
+                    if (result.length == 0) return next(new Error("Cannot revert to Background Approved state"));
+                    var currentversion = JSON.parse(JSON.stringify(result[0]));
+                    delete currentversion._id;
+                    delete currentversion.__v;
+                    delete currentversion.prototype;
+                    currentversion.player = null;
+                    if (currentversion.chronicle.id !== undefined) currentversion.chronicle = currentversion.chronicle.id;
+                    var oldVersion = JSON.parse(JSON.stringify(data.previousVersion));
+                    oldVersion.modificationhistory = result[0].modificationhistory;
+                    currentversion.modificationhistory = [];
+                    if (oldVersion.chronicle.id !== undefined) oldVersion.chronicle = oldVersion.chronicle.id;
+                    ;
+                    oldVersion.modificationhistory.push({
+                        fields: {
+                            reversiondate: req.body.date
+                        },
+                        date: new Date(),
+                        user: {
+                            googleId: req.user.googleId, name: req.user.displayName
                         }
-                    }
-                    res.json("ok");
+                        ,
+                        previousVersion: currentversion
+                    });
+                    delete oldVersion._id;
+
+                    model.update(req.body.id, oldVersion, function (err) {
+                        if (err) return next(new Error(err));
+                        if (result[0].player.emails.length > 0) {
+                            if (req.body.state == "Active") {
+                                mail.sendmail(result[0].player.emails[0].value, "Character rejected: " + result[0].name, "Your character has been rejected and reverted to Background Approved. Please reassing your freebies."
+                                + req.user.displayName + ": "
+                                + "\nName:" + result[0].name
+                                + "\nClan: " + result[0].clan);
+                            }
+                        }
+                        res.json("ok");
+                    });
                 });
             }
         });
@@ -594,7 +638,7 @@ module.exports = {
                         delete currentversion.__v;
                         delete currentversion.prototype;
                         currentversion.player = null;
-                        currentversion.chronicle = currentversion.chronicle.id;
+                        if(currentversion.chronicle.id !== undefined) currentversion.chronicle = currentversion.chronicle.id;
                         var oldVersion = JSON.parse(JSON.stringify(data.previousVersion));
                         oldVersion.modificationhistory = result[0].modificationhistory;
                         currentversion.modificationhistory = [];

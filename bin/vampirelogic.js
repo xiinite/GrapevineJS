@@ -392,7 +392,7 @@ module.exports = {
         }
 
         //calculate bloodpool and willpower
-        character.path.rating = (character.selfcontrol.rating + character.conscience.rating) / 2;
+        character.path.rating = Math.ceil((character.selfcontrol.rating + character.conscience.rating) / 2);
         character.bloodpool.max = calcBloodpool(character.generation);
         character.bloodpool.current = character.bloodpool.max;
         character.willpower.max = calcWillpower(character.generation);
@@ -400,6 +400,26 @@ module.exports = {
         return character;
     },
     calculateFinalDraft: function(character){
+        var findBackground = function (a, obj) {
+        if (a.length == 0) return undefined;
+        var i = a.length;
+        while (i--) {
+            if (a[i].name === obj) {
+                return a[i];
+            }
+        }
+        return undefined;
+        };
+        var findFlaw = function (a, obj) {
+            if (a.length == 0) return undefined;
+            var i = a.length;
+            while (i--) {
+                if (a[i].name === obj) {
+                    return a[i];
+                }
+            }
+            return undefined;
+        };
         //Calculate generation
         var genBackground = findBackground(character.backgrounds, "Generation");
         var flawFourteenth = findFlaw(character.flaws, "Fourteenth generation");
