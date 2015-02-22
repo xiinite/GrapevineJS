@@ -1,6 +1,7 @@
 <% layout("../layout.ejs") %>
 <script type="text/javascript" src="/js/controllers/characterwizardController.js"></script>
 <div class="container" ng-controller="CharacterWizardController" ng-init="init('<%= characterid %>')">
+    <a id="top"></a>
     <div class='col-xs-12 col-lg-12 col-sm-12'>
         <div>
             <script id="wizard.html" type="text/ng-template">
@@ -18,10 +19,9 @@
             </script>
 
             <h3> Create draft:</h3>
-
-            <div class="col-lg-6 col-sm-12">
-                <wizard on-before-step-change="log(event)" on-step-changing="log(event)"
-                        on-after-step-change="log(event)">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <wizard on-before-step-change="jumpTop()" on-step-changing=""
+                        on-after-step-change="">
 
                     <step title="Step 1: Inspiration - Who are you? (LotN: 63)">
                         <div class="row">
@@ -42,7 +42,7 @@
                         <form class="form-horizontal" name="stepform" ng-init="setFormScope(this)">
                             <div class="form-group"
                                  ng-class="{'has-error': !character.name, 'has-feedback': !character.name}">
-                                <label class="control-label col-lg-3"><b>Name: </b></label>
+                                <label class="control-label col-lg-3"><b>Character Name: </b></label>
 
                                 <div class="col-lg-7">
                                     <input type="text" class="form-control" ng-class="{'has-error': !character.name}"
@@ -65,8 +65,8 @@
                                             ng-model="character.nature">
                                         <option style="display:none" value="">Select a nature</option>
                                     </select>
-                            <span ng-show="!character.nature" class="glyphicon glyphicon-remove form-control-feedback"
-                                  aria-hidden="true"></span>
+                                    <span ng-show="!character.nature" class="glyphicon glyphicon-remove form-control-feedback"
+                                        aria-hidden="true"></span>
                                     <span ng-show="!character.nature" class="sr-only">(error)</span>
                                 </div>
                             </div>
@@ -104,6 +104,7 @@
                                           class="glyphicon glyphicon-remove form-control-feedback"
                                           aria-hidden="true"></span>
                                     <span ng-show="!character.path.name" class="sr-only">(error)</span>
+                                    <div ng-hide="character.path.name === '' || character.path.name === 'Humanity'" class="text-warning">Choosing this path adds 1 exotic point and requires ST approval</div>
                                 </div>
                             </div>
                         </form>
@@ -797,7 +798,7 @@
             </div>
 
             <!-- Summary -->
-            <div class="col-lg-6 hidden-sm hidden-xs">
+            <div class="col-lg-6  col-md-6 hidden-sm hidden-xs">
 
                 <!-- Concept -->
                 <div class="panel panel-default">

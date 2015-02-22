@@ -54,6 +54,8 @@ app.controller('CharacterFreebiesController', ['$scope', '$http', 'loading', 're
 
     $scope.attributes = [];
 
+    $scope.exoticDisciplines = 0;
+
     $scope.noteItem;
     $scope.selectedList;
     $scope.previousNoteValue = {};
@@ -97,6 +99,35 @@ app.controller('CharacterFreebiesController', ['$scope', '$http', 'loading', 're
         return count;
     };
 
+    $scope.isClanDiscipline = function(obj) {
+        var clanDiscs = [];
+        for (var i = 0; i < $scope.clandisciplines.length; i++) {
+            if($scope.clandisciplines[i].clan == $scope.character.clan){
+                clanFound = true;
+                for(var j = 0; j< $scope.clandisciplines[i].disciplines.length; j++){
+                    clanDiscs.push($scope.clandisciplines[i].disciplines[j]);
+                }
+            }
+        };
+        if(clanFound)
+        {
+            var i = clanDiscs.length;
+            while (i--) {
+                if(clanDiscs[i].path === undefined){
+                    if ( obj.path.indexOf(clanDiscs[i]) > -1 ) {
+                        return true;
+                    }
+                }else{
+                    if (clanDiscs[i].path === obj.path) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        return true;
+    };
+
     $scope.freetraitspendage = [];
     $scope.reversefreetrait = function(trait){
         var list;
@@ -109,6 +140,14 @@ app.controller('CharacterFreebiesController', ['$scope', '$http', 'loading', 're
             });
             var attr = result[0];
             list.splice($.inArray(attr, list), 1);
+
+            if(!$scope.isClanDiscipline(item)){
+                if(item.level == 'basic'){
+                    $scope.character.exotic--;
+                }else{
+                    $scope.character.exotic-=2;
+                }
+            }
         }else if(trait.list == "merits"){
             list = $scope.character.merits;
             var item = trait.item;
@@ -142,7 +181,11 @@ app.controller('CharacterFreebiesController', ['$scope', '$http', 'loading', 're
                 attr.rating--;
             }
         }else if(trait.item !== undefined){
-            trait.item.rating--;
+            if(trait.item.rating !== undefined){
+                trait.item.rating--;
+            }else if(trait.item.current !== undefined){
+                trait.item.current--;
+            }
         }
 
 
@@ -222,7 +265,15 @@ app.controller('CharacterFreebiesController', ['$scope', '$http', 'loading', 're
             list.push(item);
             list = orderBy(list, 'path', false);
 
-            $scope.freetraitspendage.push({value: item.name, item: item, list: listname, cost: cost});
+            if(!$scope.isClanDiscipline(item)){
+                if(item.level == 'basic'){
+                    $scope.character.exotic++;
+                }else{
+                    $scope.character.exotic+=2;
+                }
+            }
+
+            $scope.freetraitspendage.push({value: item.path + ": " + item.name, item: item, list: listname, cost: cost});
             $scope.character.freetraits -= cost;
         }
     };
@@ -249,8 +300,8 @@ app.controller('CharacterFreebiesController', ['$scope', '$http', 'loading', 're
     };
     $scope.addWillpower = function (item) {
         item.current++;
-        if(item.rating > 5){
-            item.rating = 5;
+        if(item.current > item.max){
+            item.current = item.max;
             return;
         }
 
@@ -404,6 +455,69 @@ app.filter('isClanDiscipline', function () {
                 }
             } else{
                 if((items[i].level == 'basic' || items[i].level == 'intermediate') && containspath(clanDiscs, items[i]) && !contains(currentdisciplines, items[i]) && !containspath(arrayToReturn, items[i])){
+                    //
+                    arrayToReturn.push(items[i]);
+                }
+            }
+        }
+
+        return arrayToReturn;
+    };
+});
+app.filter('notClanDiscipline', function () {
+
+    return function (items, filter) {
+        var contains = function(a, obj) {
+            var i = a.length;
+            while (i--) {
+                if (a[i].path === obj.path && a[i].name === obj.name) {
+                    return true;
+                }
+            }
+            return false;
+        };
+        var containspath = function(a, obj) {
+            var i = a.length;
+            while (i--) {
+                if(a[i].path === undefined){
+                    if ( obj.path.indexOf(a[i]) > -1 ) {
+                        return true;
+                    }
+                }else{
+                    if (a[i].path === obj.path) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        };
+
+        var clan;
+        var clandisciplines;
+        var currentdisciplines;
+        if(filter !== undefined){
+            clan = filter[0];
+            clandisciplines = filter[1];
+            currentdisciplines = filter[2];
+        }
+        var clanDiscs = [];
+        var clanFound = false;
+        for (var i = 0; i < clandisciplines.length; i++) {
+            if(clandisciplines[i].clan == clan){
+                clanFound = true;
+                for(var j = 0; j< clandisciplines[i].disciplines.length; j++){
+                    clanDiscs.push(clandisciplines[i].disciplines[j]);
+                }
+            }
+        }
+        var arrayToReturn = [];
+        for (var i = 0; i < items.length; i++) {
+            if (clanFound == false) {
+                if(items[i].level == 'basic' || items[i].level == 'intermediate' ){
+                    arrayToReturn.push(items[i]);
+                }
+            } else{
+                if((items[i].level == 'basic' || items[i].level == 'intermediate') && !containspath(clanDiscs, items[i]) && !contains(currentdisciplines, items[i]) && !containspath(arrayToReturn, items[i])){
                     //
                     arrayToReturn.push(items[i]);
                 }

@@ -46,6 +46,9 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
     $scope.sstatus = "";
     $scope.sstatustype = "";
 
+    $scope.sxp = 0;
+    $scope.sxpdescription = "";
+
     $scope.chronicle = null;
     $scope.character = [];
     $scope.players = [];
@@ -287,7 +290,18 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
         $scope.setItemDirty("status", $scope.character.status);
         
     };
-    
+
+    $scope.addxp = function(val, descr){
+        var _date = new Date();
+        $scope.character.experiencehistory.push({date: _date, change: val, reason: descr});
+        $scope.setItemDirty("experiencehistory", $scope.character.experiencehistory);
+    };
+
+    $scope.removexp = function(item){
+        $scope.character.experiencehistory.splice($.inArray(item, $scope.character.experiencehistory),1);
+        $scope.setItemDirty("experiencehistory", $scope.character.experiencehistory);
+    }
+
     $scope.previousNoteValue = {};
     $scope.addNoteDialog = function(adv, list, listname)
     {

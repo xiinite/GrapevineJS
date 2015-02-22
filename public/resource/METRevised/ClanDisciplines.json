@@ -5,7 +5,8 @@
       "Celerity",
       "Obfuscate",
       "Quietus"
-    ]
+    ],
+    "exotic": 1
   },
   {
     "clan": "Brujah",
@@ -13,7 +14,22 @@
       "Celerity",
       "Potence",
       "Presence"
-    ]
+    ],
+    "exotic": 0
+  },
+  {
+    "clan": "Caitiff",
+    "disciplines": [
+      "Animalism",
+      "Auspex",
+      "Celerity",
+      "Dominate",
+      "Fortitude",
+      "Obfuscate",
+      "Potence",
+      "Presence"
+    ],
+    "exotic": 0
   },
   {
     "clan": "Followers of Set",
@@ -21,7 +37,8 @@
       "Obfuscate",
       "Presence",
       "Serpentis"
-    ]
+    ],
+    "exotic": 1
   },
   {
     "clan": "Gangrel",
@@ -29,7 +46,8 @@
       "Animalism",
       "Fortitude",
       "Protean"
-    ]
+    ],
+    "exotic": 0
   },
   {
     "clan": "Giovanni",
@@ -37,7 +55,8 @@
       "Dominate",
       "Necromancy",
       "Potence"
-    ]
+    ],
+    "exotic": 1
   },
   {
     "clan": "Lasombra",
@@ -45,7 +64,8 @@
       "Dominate",
       "Obtenebration",
       "Potence"
-    ]
+    ],
+    "exotic": 2
   },
   {
     "clan": "Malkavian",
@@ -54,7 +74,8 @@
       "Dementation",
       "Dominate",
       "Obfuscate"
-    ]
+    ],
+    "exotic": 0
   },
   {
     "clan": "Nosferatu",
@@ -62,7 +83,8 @@
       "Animalism",
       "Obfuscate",
       "Potence"
-    ]
+    ],
+    "exotic": 0
   },
   {
     "clan": "Ravnos",
@@ -70,7 +92,8 @@
       "Animalism",
       "Chimestry",
       "Fortitude"
-    ]
+    ],
+    "exotic": 1
   },
   {
     "clan": "Toreador",
@@ -78,7 +101,8 @@
       "Auspex",
       "Celerity",
       "Presence"
-    ]
+    ],
+    "exotic": 0
   },
   {
     "clan": "Tremere",
@@ -86,7 +110,8 @@
       "Auspex",
       "Dominate",
       "Thaumaturgy"
-    ]
+    ],
+    "exotic": 0
   },
   {
     "clan": "Tzimisce",
@@ -94,7 +119,8 @@
       "Animalism",
       "Auspex",
       "Vicissitude"
-    ]
+    ],
+    "exotic": 2
   },
   {
     "clan": "Ventrue",
@@ -102,7 +128,8 @@
       "Dominate",
       "Fortitude",
       "Presence"
-    ]
+    ],
+    "exotic": 0
   },
   {
     "clan": "Daughters of Cacophony",
@@ -110,7 +137,8 @@
       "Fortitude",
       "Melpominee",
       "Presence"
-    ]
+    ],
+    "exotic": 3
   },
   {
     "clan": "Salubri",
@@ -118,7 +146,8 @@
       "Auspex",
       "Fortitude",
       "Obeah"
-    ]
+    ],
+    "exotic": 3
   },
   {
     "clan": "Samedi",
@@ -126,7 +155,8 @@
       "Fortitude",
       "Obfuscate",
       "Thanatosis"
-    ]
+    ],
+    "exotic": 3
   },
   {
     "clan": "Baali",
@@ -134,7 +164,8 @@
       "Daimoinon",
       "Obfuscate",
       "Presence"
-    ]
+    ],
+    "exotic": 3
   },
   {
     "clan": "Nagaraja",
@@ -142,7 +173,8 @@
       "Auspex",
       "Dominate",
       "Necromancy"
-    ]
+    ],
+    "exotic": 3
   },
   {
     "clan": "True Brujah",
@@ -150,7 +182,8 @@
       "Potence",
       "Presence",
       "Temporis"
-    ]
+    ],
+    "exotic": 3
   }
 
 ]

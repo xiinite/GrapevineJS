@@ -1,4 +1,4 @@
-app.controller('CharacterWizardController', ['$scope', '$http', 'loading', 'resources', '$filter', function ($scope, $http, loading, resources, $filter) {
+app.controller('CharacterWizardController', ['$scope', '$http', 'loading', 'resources', '$filter', '$location', '$anchorScroll', function ($scope, $http, loading, resources, $filter, $location, $anchorScroll) {
     $scope.log = function (event) {
         console.log(event);
     };
@@ -532,6 +532,9 @@ app.controller('CharacterWizardController', ['$scope', '$http', 'loading', 'reso
     $scope.submitDraft = function(){
         loading.show();
         var root = $scope;
+        if(root.character.path.name !== 'Humanity'){
+            root.character.exotic++;
+        }
         $http.post("/character/submitdraft", {character: root.character}).then(function(){
             location = '/character/assignfreebies/' + root.character.id;
         });
@@ -559,6 +562,11 @@ app.controller('CharacterWizardController', ['$scope', '$http', 'loading', 'reso
         }
         return $scope.formscope[$scope.currentIndex].stepform.$valid;
     }
+
+    $scope.jumpTop = function(){
+        $location.hash('top');
+        $anchorScroll();
+    };
 }]);
 
 app.directive('wizard', function ($timeout) {

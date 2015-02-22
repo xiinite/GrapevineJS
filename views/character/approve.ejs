@@ -10,7 +10,7 @@
                     <div class="panel-heading">
                         {{char.name}} ({{char.clan}})
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body panel-collapse">
                         <div class="row">
                             <div class="col-lg-2">
                                 <b>State:</b>
@@ -24,17 +24,25 @@
                             <div class="col-lg-10">
                                 {{char.freetraits}}
                             </div>
+                            <div class="col-lg-2 text-warning" ng-show="char.exotic > 0">
+                                <b>Exotic points:</b>
+                            </div>
+                            <div class="col-lg-10 text-warning">
+                                {{char.exotic}}
+                            </div>
                             <div class="col-lg-2">
                                 <b>Concept description:</b>
                             </div>
                             <div class="col-lg-10">
-                                {{char.concept}}
+                                <p read-more ng-model="char.concept" words="false" length="100"></p>
                             </div>
                             <div class="col-lg-2" ng-show="char.background.length > 0">
                                 <b>Background:</b>
                             </div>
                             <div class="col-lg-10" ng-show="char.background.length > 0">
-                                {{char.background}}
+                                <button ng-hide="char.visible" class="btn btn-default" ng-click="showbg(char)">Show</button>
+                                <span ng-show="char.visible" class="ta-scroll-window ng-scope ta-text ta-editor form-control" ng-bind-html="char.background"></span>
+                                <button ng-show="char.visible" class="btn btn-default" ng-click="showbg(char)">Hide</button>
                             </div>
                         </div>
 

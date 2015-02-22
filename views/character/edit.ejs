@@ -816,6 +816,35 @@
         </div>
     </div>
 
+    <div id='pnlExperience' class="panel panel-default hidden-print">
+        <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseExperience">
+            <h4 id="hdrExperience" class="panel-title">
+                Experience History
+            </h4>
+        </div>
+        <div id="collapseExperience" class="panel-collapse collapse in">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="list-group">
+                            <li ng-repeat="item in character.experiencehistory" class="list-group-item">
+                                <span ng-bind="item.date | date:'MM/yyyy'"></span>: {{item.change}} Experience, {{item.reason}}
+                                <button ng-click="removexp(item)"
+                                        class="btn btn-xs pull-right"><span
+                                            class="glyphicon glyphicon-minus"></span></button>
+                            </li>
+                            <li class="list-group-item">
+                                Change: <input ng-model="sxp" type="number" />
+                                Reason: <input ng-model="sxpdescription" type="text" />
+                                <button class="btn btn-default" ng-click="addxp(sxp, sxpdescription)">add</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="panel panel-default">
         <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseEditHistory">
             <h4 class="panel-title">

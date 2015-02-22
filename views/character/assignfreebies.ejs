@@ -24,29 +24,29 @@
             <!-- Concept -->
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Concept
+                    Concept <span ng-show="character.exotic > 0">(Exotic points: {{character.exotic}})</span>
                 </div>
                 <div class="panel-body">
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-md-4 col-xs-6">
                         <div class="row">
-                            <div class="col-lg-6"><b>Name: </b></div>
-                            <div class="col-lg-6">{{character.name}}</div>
+                            <div class="col-lg-6 col-md-6 col-xs-6"><b>Name: </b></div>
+                            <div class="col-lg-6 col-md-6 col-xs-6">{{character.name}}</div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6"><b>Clan: </b></div>
-                            <div class="col-lg-6">{{character.clan}}</div>
+                            <div class="col-lg-6 col-md-6 col-xs-6"><b>Clan: </b></div>
+                            <div class="col-lg-6 col-md-6 col-xs-6">{{character.clan}}</div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6"><b>Sect: </b></div>
-                            <div class="col-lg-6">{{character.sect}}</div>
+                            <div class="col-lg-6 col-md-6 col-xs-6"><b>Sect: </b></div>
+                            <div class="col-lg-6 col-md-6 col-xs-6">{{character.sect}}</div>
                         </div>
                         <div class="row voffset3">
-                            <div class="col-lg-6"><b>Bloodpool: </b></div>
-                            <div class="col-lg-6">{{character.bloodpool.current}} / {{character.bloodpool.max}}</div>
+                            <div class="col-lg-6 col-md-6 col-xs-6"><b>Bloodpool: </b></div>
+                            <div class="col-lg-6 col-md-6 col-xs-6">{{character.bloodpool.current}} / {{character.bloodpool.max}}</div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6"><b>Willpower: </b></div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-6 col-md-6 col-xs-6"><b>Willpower: </b></div>
+                            <div class="col-lg-6 col-md-6 col-xs-6">
                                 {{character.willpower.current}}
                                 <button ng-hide="character.freetraits < 3 || character.path.rating == character.willpower.max"
                                         ng-click="addWillpower(character.willpower)"
@@ -56,22 +56,22 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-md-4 col-xs-6">
                         <div class="row">
-                            <div class="col-lg-6"><b>Nature: </b></div>
-                            <div class="col-lg-6">{{character.nature}}</div>
+                            <div class="col-lg-6 col-md-6 col-xs-6"><b>Nature: </b></div>
+                            <div class="col-lg-6 col-md-6 col-xs-6">{{character.nature}}</div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6"><b>Demeanor: </b></div>
-                            <div class="col-lg-6">{{character.demeanor}}</div>
+                            <div class="col-lg-6 col-md-6 col-xs-6"><b>Demeanor: </b></div>
+                            <div class="col-lg-6 col-md-6 col-xs-6">{{character.demeanor}}</div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6"><b>Path: </b></div>
-                            <div class="col-lg-6">{{character.path.name}}</div>
+                            <div class="col-lg-6 col-md-6 col-xs-6"><b>Path: </b></div>
+                            <div class="col-lg-6 col-md-6 col-xs-6">{{character.path.name}}</div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-6"><b>Path-rating: </b></div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-6 col-md-6 col-xs-6"><b>Path-rating: </b></div>
+                            <div class="col-lg-6 col-md-6 col-xs-6">
                                 {{character.path.rating}}
 
                                 <button ng-hide="character.freetraits < 3 || character.path.rating == 5"
@@ -82,7 +82,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-md-4 col-xs-12">
                         <ul class="list-group">
                             <li class="list-group-item active">
                                 {{character.conscience.rating + character.selfcontrol.rating +
@@ -286,10 +286,16 @@
                             </ul>
                             <div class="row voffset1">
                                 <div class="col-lg-12"
-                                     ng-hide="character.freetraits == 0">
+                                     ng-hide="character.freetraits < 3">
+                                    Clan disciplines:
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12"
+                                     ng-hide="character.freetraits < 3">
                                     <div class="col-lg-9">
                                         <select class="form-control"
-                                                ng-options="attr as attr.path + ': ' + attr.name for attr in disciplines | isClanDiscipline: [character.clan, clandisciplines, character.disciplines]"
+                                                ng-options="attr as attr.path + ': ' + attr.name + '(' + attr.level + ')' for attr in disciplines | isClanDiscipline: [character.clan, clandisciplines, character.disciplines]"
                                                 ng-model="sdicipline">
                                             <option style="display:none" value="">Select a discipline</option>
                                         </select>
@@ -298,6 +304,28 @@
                                             class="btn btn-default btn-sm pull-right col-lg-3">Add
                                     </button>
                                 </div>
+                            </div>
+                            <div class="row voffset1">
+                                <div class="col-lg-12"
+                                     ng-hide="character.freetraits < 3">
+                                    Exotic Disciplines:
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12"
+                                     ng-hide="character.freetraits < 3">
+                                    <div class="col-lg-9">
+                                        <select class="form-control"
+                                                ng-options="attr as attr.path + ': ' + attr.name + '(' + attr.level + ')'  for attr in disciplines | notClanDiscipline: [character.clan, clandisciplines, character.disciplines]"
+                                                ng-model="sdicipline">
+                                            <option style="display:none" value="">Select a discipline</option>
+                                        </select>
+                                    </div>
+                                    <button ng-click="addDiscipline(sdicipline, 'disciplines')"
+                                            class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                    </button>
+                                </div>
+                                <div class="text-warning">Choosing an exotic discipline adds 1 (basic level) or 2 (intermediate level) exotic points and requires ST approval</div>
                             </div>
                         </div>
                         <div class="col-lg-4">
@@ -487,7 +515,7 @@
         <div class="col-lg-3">
 
             <!-- Freebies -->
-            <div class="panel panel-default">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
                     Free trait spending
                 </div>

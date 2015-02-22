@@ -201,6 +201,7 @@ module.exports = {
         char.name = req.body.name;
         char.clan = req.body.clan;
         char.sect = req.body.sect;
+        char.exotic = req.body.exotic;
         char.concept = req.body.concept;
         char.state = "Concept";
         char.modificationhistory = [];
@@ -278,12 +279,14 @@ module.exports = {
                 cmodel.find({id: char.chronicle}, function (err, result) {
                     if (err) return next(new Error(err));
                     var c = result[0];
-                    if (c.email.length > 0) {
-                        mail.sendmail(c.email, "Concept submitted: " + char.name, "A new concept is waiting for your approval: " +
-                        "\nName:" + char.name
-                        + "\nClan: " + char.clan
-                        + "\nUser: " + req.user.displayName
-                        + "\n" + char.concept);
+                    if(c.email !== undefined){
+                        if (c.email.length > 0) {
+                            mail.sendmail(c.email, "Concept submitted: " + char.name, "A new concept is waiting for your approval: " +
+                            "\nName:" + char.name
+                            + "\nClan: " + char.clan
+                            + "\nUser: " + req.user.displayName
+                            + "\n" + char.concept);
+                        }
                     }
                 });
             });
@@ -320,12 +323,14 @@ module.exports = {
                     cmodel.find({id: char.chronicle}, function (err, result) {
                         if (err) return next(new Error(err));
                         var c = result[0];
-                        if (c.email.length > 0) {
-                            mail.sendmail(c.email, "Final approval: " + char.name, "A character is waiting for final approval: " +
-                            "\nName:" + char.name
-                            + "\nClan: " + char.clan
-                            + "\nUser: " + req.user.displayName
-                            + "\n" + char.concept);
+                        if(c.email !== undefined){
+                            if (c.email.length > 0) {
+                                mail.sendmail(c.email, "Final approval: " + char.name, "A character is waiting for final approval: " +
+                                "\nName:" + char.name
+                                + "\nClan: " + char.clan
+                                + "\nUser: " + req.user.displayName
+                                + "\n" + char.concept);
+                            }
                         }
                     });
                 }catch(e) {}

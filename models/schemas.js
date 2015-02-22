@@ -32,6 +32,7 @@ module.exports = {
         chronicle: {type: Mixed},
         concept: {type: String},
         background: {type: String},
+        exotic: {type: Number},
         state: {type: String},
         experience: {
             unspent: String,

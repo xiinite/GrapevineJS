@@ -1,8 +1,26 @@
 [
-  "",
-  "Autarch",
-  "Camarilla",
-  "Sabbat",
-  "Inconnu",
-  "Independant"
+  {
+    "name": "Autarch",
+    "exotic": 1
+  },
+  {
+    "name": "Anarch",
+    "exotic": 1
+  },
+  {
+    "name": "Camarilla",
+    "exotic": 0
+  },
+  {
+    "name": "Sabbat",
+    "exotic": 3
+  },
+  {
+    "name": "Inconnu",
+    "exotic": 3
+  },
+  {
+    "name": "Independant",
+    "exotic": 1
+  }
 ]

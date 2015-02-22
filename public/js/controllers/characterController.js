@@ -6,7 +6,7 @@ app.controller('CharacterController', ['$scope', '$http', 'loading', '$filter', 
     $scope.selectedAll = false;
     $scope.loaded = false;
     $scope.gap = 5;
-    $scope.itemsPerPage = 10;
+    $scope.itemsPerPage = 25;
 
     $scope.filteredItems = [];
     $scope.groupedItems = [];

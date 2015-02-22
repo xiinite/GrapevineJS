@@ -26,6 +26,11 @@ app.controller('ApproveController', ['$scope', '$http', 'loading', function ($sc
         return $scope.characters.length > 0;
     };
 
+    $scope.showbg = function(char){
+        if(char.visible === undefined) char.visible = false;
+        char.visible = !char.visible;
+    }
+
     $scope.approve = function(id, state, freebees){
         loading.show();
         if(state == "Approval Pending"){
