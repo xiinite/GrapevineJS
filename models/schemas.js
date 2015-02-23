@@ -133,5 +133,14 @@ module.exports = {
     'Downtime': mongoose.model('downtime',{
         id: {unique: true, type: String},
         actions: {type: JSON}
+    }),
+    'Event': mongoose.model('event', {
+        id: {unique: true, type: String},
+        chronicleid: {type: String},
+        venue: {type: String},
+        date: {type: Date},
+        players: {type: Array},
+        characters: {type: Array},
+        xpawarded: {type: Boolean}
     })
 };

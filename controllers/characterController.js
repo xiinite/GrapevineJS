@@ -956,5 +956,52 @@ module.exports = {
                 });
             });
         });
+    },
+    'awardxp': function(req, res, next){
+        if (req.body.ids) {
+            model.find({"id": {$in: req.body.ids}}, function (err, result) {
+                if (err) return next(new Error(err));
+                for(var i = 0; i<result.length; i++){
+                    if (!sec.checkOwnership(req, next, result[i])) {
+                        return;
+                    }
+
+                    var previousversion = JSON.parse(JSON.stringify(result[i]));
+
+                    delete previousversion._id;
+                    delete previousversion.__v;
+                    delete previousversion.prototype;
+                    previousversion.player = null;
+                    previousversion.chronicle = previousversion.chronicle.id;
+                    previousversion.modificationhistory = [];
+                    var modHistory = [];
+                    var fields = {};
+                    for (var j = 0; j < result[i].modificationhistory.length; j++) {
+                        modHistory.push(result[i].modificationhistory[j]);
+                    }
+                    modHistory.push({
+                        fields: "XP Awarded: " + req.body.amount.toString(),
+                        date: new Date(),
+                        user: {googleId: req.user.googleId, name: req.user.displayName},
+                        previousVersion: previousversion
+                    });
+                    fields.modificationhistory = modHistory;
+                    fields.modified = new Date();
+
+                    fields.experience = previousversion.experience;
+                    fields.experience.unspent = parseInt(fields.experience.unspent) + parseInt(req.body.amount);
+                    fields.experience.total = parseInt(fields.experience.total) + parseInt(req.body.amount);
+
+                    fields.experiencehistory = previousversion.experiencehistory;
+                    fields.experiencehistory.push({date: new Date(), change: req.body.amount, reason: "Attendance"});
+
+                    model.update(result[i].id, fields, function (err) {
+                        if (err) return next(new Error(err));
+                    });
+                }
+
+                res.json("ok");
+            });
+        }
     }
 };

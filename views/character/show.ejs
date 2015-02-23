@@ -562,7 +562,7 @@
                         <ul class="list-group">
                             <% for(var i = 0; i < character.experiencehistory.length; i++) { %>
                             <li class="list-group-item">
-                                <%= new Date(character.experiencehistory[i].date).getMonth() + "/" + new Date(character.experiencehistory[i].date).getFullYear() + " Experience: " + character.experiencehistory[i].change + ", Reason: " + character.experiencehistory[i].reason %>
+                                <%= (new Date(character.experiencehistory[i].date).getMonth() + 1) + "/" + new Date(character.experiencehistory[i].date).getFullYear() + " Experience: " + character.experiencehistory[i].change + ", Reason: " + character.experiencehistory[i].reason %>
                             </li>
                             <% } %>
                         </ul>

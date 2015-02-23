@@ -1,0 +1,124 @@
+<%- layout("../layout.ejs") %>
+<script type='text/javascript' charset="utf-8" src="/js/controllers/eventEditController.js"></script>
+<div id="content" class="container" ng-controller="EventEditController" ng-init="init('<%= event.id %>')">
+    <h1 class="page-header">
+        Event
+    </h1>
+    <div class="col-md-12">
+        <div class="col-md-4 col-sm-12">
+            <div class="row">
+                <div class="col-md-6 col-xs-4">
+                    <label class="control-label">Chronicle:</label>
+                </div>
+                <div class="col-md-6 col-xs-8">
+                    <select class="form-control"
+                            ng-required="true"
+                            ng-change="updateSelectedChronicle()"
+                            ng-options="c.id as c.name for c in chronicles"
+                            ng-model="event.chronicleid">
+                        <option style="display:none" value="">Select a chronicle</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row voffset1">
+                <div class="col-md-6 col-xs-4">
+                    <label class="control-label">Venue:</label>
+                </div>
+                <div class="col-md-6 col-xs-8">
+                    <input class="form-control" ng-model="event.venue" type="text" />
+                </div>
+            </div>
+            <div class="row voffset1">
+                <div class="col-md-6 col-xs-4">
+                    <label class="control-label">Date:</label>
+                </div>
+                <div class="col-md-6 col-xs-8">
+                    <input class="form-control" ng-model="event.date" type="date" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8 col-sm-12">
+            <div class="row">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-heading">Attended players</li>
+                    <li class="list-group-item" ng-repeat="p in event.players">
+                        <div class="row">
+                            <span class="col-sm-4">{{p.displayName}}</span>
+                            <button ng-click="removeAttendee(p)" class="btn btn-xs pull-right"><span
+                                        class="glyphicon glyphicon-minus"></span></button>
+                        </div>
+                        <div class="row">
+                            <span class="col-sm-6">
+                                <select class="form-control"
+                                        ng-required="true"
+                                        ng-options="c as c.name for c in characters | propsFilter: {googleId: p.googleId}"
+                                        ng-model="attendingCharacter">
+                                    <option style="display:none" value="">Select a character</option>
+                                </select>
+                            </span>
+                            <button class="btn btn-default" ng-click="addChar(attendingCharacter)">Add</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="row voffset1">
+                <div class="col-md-12">
+                    <ui-select ng-model="attendee.selected" theme="bootstrap" ng-disabled="disabled" class="col-md-9">
+                        <ui-select-match placeholder="Select a person in the list or search his e-mail...">{{$select.selected.displayName}}</ui-select-match>
+                        <ui-select-choices repeat="person in players | propsFilter: {displayName: $select.search, emails: $select.search}">
+                            <div ng-bind-html="person.displayName | highlight: $select.search"></div>
+                            <small>
+                                email: {{person.emails[0].value}} ||
+                                {{person.provider}} account
+                            </small>
+                        </ui-select-choices>
+                    </ui-select>
+                    <button ng-click="addAttendee()" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="row voffset3">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-heading">
+                        Attending characters
+                    </li>
+                    <li class="list-group-item" ng-repeat="c in event.characters">
+                        {{c.name}}
+                        <button ng-click="removeChar(c)" class="btn btn-xs pull-right"><span
+                                    class="glyphicon glyphicon-minus"></span></button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <button class="btn btn-primary" ng-click="save()">Save</button>
+            <button class="btn btn-primary" ng-hide="event.xpawarded" data-toggle="modal" data-target="#advXpModal">Award XP</button>
+        </div>
+    </div>
+    <div id="advXpModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Choose XP amount</h4>
+                </div>
+                <div class="modal-body">
+                    Session XP Amount: <input type="number" ng-model="xpamount"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-confirm-click="Are you sure?" ng-click="awardXP()" data-dismiss="modal">Ok
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+</div>

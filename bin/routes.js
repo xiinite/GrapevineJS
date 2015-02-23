@@ -26,6 +26,7 @@ module.exports = {
         router.post(app, 'character', 'submitbackground');
         router.post(app, 'character', 'approvebackground');
         router.post(app, 'character', 'approvefinal');
+        router.post(app, 'character', 'awardxp');
 
         router.post(app, 'chronicle', 'insert');
         router.post(app, 'chronicle', 'addadmin');
@@ -34,6 +35,10 @@ module.exports = {
         router.post(app, 'chronicle', 'removeplayer');
         router.get(app, 'chronicle', 'find', [":id"]);
 
+        router.post(app, 'event', 'find');
+        router.get(app, 'event', 'edit', [":id"]);
+
+
         router.get(app, 'user', 'toggleSuperAdmin', [':id']);
         router.get(app, 'user', 'find', [':id']);
         router.post(app, 'user', 'updateStylesheet');
@@ -41,6 +46,7 @@ module.exports = {
 
         router.register(app, 'character');
         router.register(app, 'chronicle');
+        router.register(app, 'event');
         router.register(app, 'user');
         router.register(app, 'superAdmin');
         router.register(app, 'downtimeSubmission');
