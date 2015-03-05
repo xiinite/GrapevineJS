@@ -215,6 +215,7 @@ app.controller('CharacterFreebiesController', ['$scope', '$http', 'loading', 're
 
     $scope.addAdvantage = function (value, listname) {
         var list = $scope.character[listname];
+        if(value.name !== undefined) value = value.name;
         if (value.length === undefined) return;
         if (value.length == 0) return;
         var result = $.grep(list, function (e) {

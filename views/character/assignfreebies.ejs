@@ -146,7 +146,7 @@
                                  ng-hide="character.freetraits == 0">
                                 <div class="col-lg-9">
                                     <select class="form-control"
-                                            ng-options="attr for attr in physical"
+                                            ng-options="attr.name as attr.name + '    (' + attr.source + ')' group by attr.category for attr in physical"
                                             ng-model="sphysical">
                                         <option style="display:none" value="">Select a trait</option>
                                     </select>
@@ -180,7 +180,7 @@
                                  ng-hide="character.freetraits == 0">
                                 <div class="col-lg-9">
                                     <select class="form-control"
-                                            ng-options="attr for attr in social"
+                                            ng-options="attr.name as attr.name + '    (' + attr.source + ')' group by attr.category for attr in social"
                                             ng-model="ssocial">
                                         <option style="display:none" value="">Select a trait</option>
                                     </select>
@@ -214,7 +214,7 @@
                                  ng-hide="character.freetraits == 0">
                                 <div class="col-lg-9">
                                     <select class="form-control"
-                                            ng-options="attr for attr in mental"
+                                            ng-options="attr.name as attr.name + '    (' + attr.source + ')' group by attr.category for attr in mental"
                                             ng-model="smental">
                                         <option style="display:none" value="">Select a trait</option>
                                     </select>
@@ -263,7 +263,7 @@
                                      ng-hide="character.freetraits == 0">
                                     <div class="col-lg-9">
                                         <select class="form-control"
-                                                ng-options="attr for attr in abilities"
+                                                ng-options="attr as attr.name + '    ('+attr.source+')' for attr in abilities"
                                                 ng-model="sability">
                                             <option style="display:none" value="">Select a trait</option>
                                         </select>
@@ -272,6 +272,7 @@
                                             class="btn btn-default btn-sm pull-right col-lg-3">Add
                                     </button>
                                 </div>
+                                <div ng-show="sability.source == 'Lores'" class="text-warning">Lores always require special ST approval!</div>
                             </div>
                         </div>
                         <div class="col-lg-4">
@@ -325,7 +326,7 @@
                                             class="btn btn-default btn-sm pull-right col-lg-3">Add
                                     </button>
                                 </div>
-                                <div class="text-warning">Choosing an exotic discipline adds 1 (basic level) or 2 (intermediate level) exotic points and requires ST approval</div>
+                                <div ng-hide="character.freetraits < 3" class="text-warning">Choosing an exotic discipline adds 1 (basic level) or 2 (intermediate level) exotic points and requires ST approval</div>
                             </div>
                         </div>
                         <div class="col-lg-4">
@@ -353,7 +354,7 @@
                                          ng-hide="character.freetraits == 0">
                                         <div class="col-lg-9">
                                             <select class="form-control"
-                                                    ng-options="attr for attr in backgrounds"
+                                                    ng-options="attr as attr.name + '    ('+attr.source+')' for attr in backgrounds"
                                                     ng-model="sbackground">
                                                 <option style="display:none" value="">Select a trait</option>
                                             </select>
@@ -398,7 +399,27 @@
                                     <span ng-show="t.note.length > 0">
                                         ({{ t.note }})
                                     </span>
+                                    <button ng-hide="character.freetraits == 0 || t.rating == 5"
+                                            ng-click="addAdvantage(t.name, 'influences')"
+                                            class="btn btn-xs pull-right"><span
+                                                class="glyphicon glyphicon-plus"></span>
+                                    </button>
                                 </li>
+                                <div class="row voffset1">
+                                    <div class="col-lg-12"
+                                         ng-hide="character.freetraits == 0">
+                                        <div class="col-lg-9">
+                                            <select class="form-control"
+                                                    ng-options="attr as attr.name + '    ('+attr.source+')' for attr in influences"
+                                                    ng-model="sinfluence">
+                                                <option style="display:none" value="">Select a trait</option>
+                                            </select>
+                                        </div>
+                                        <button ng-click="addAdvantage(sinfluence, 'influences')"
+                                                class="btn btn-default btn-sm pull-right col-lg-3">Add
+                                        </button>
+                                    </div>
+                                </div>
                             </ul>
                         </div>
                         <div class="col-lg-4">

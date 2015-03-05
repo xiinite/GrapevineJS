@@ -31,11 +31,13 @@
                     <div class="col-sm-10">
                         <select class="form-control"
                                 ng-required="true"
-                                ng-options="c as c.clan for c in clans"
+                                ng-options="c as c.name + '    (' + c.source + ')' group by 'Exotic level: ' + c.exotic for c in clans | orderBy:'exotic':false"
                                 ng-model="sclan">
                             <option style="display:none" value="">Select a clan</option>
                         </select>
-                        <div ng-show="sclan.exotic > 0" class="text-warning">Choosing this clan adds {{sclan.exotic}} exotic points and requires ST approval</div>
+                        <div ng-show="sclan.exotic > 0 && sclan.exotic < 20" class="text-warning">Choosing this clan adds {{sclan.exotic}} exotic points and requires ST approval</div>
+                        <div ng-show="sclan.exotic >= 20" class="text-danger">This clan is strictly limited to NPC characters and will never be approved</div>
+                        <div ng-show="sclan.name != undefined && clandisciplines.indexOf(sclan.name.trim()) == -1" class="text-warning">Data for this clan is currently incomplete. You will require the source book to find more specific details</div>
                     </div>
                 </div>
                 <div class="form-group ">
@@ -44,11 +46,12 @@
                     <div class="col-sm-10">
                         <select class="form-control"
                                 ng-required="true"
-                                ng-options="c as c.name for c in sects"
+                                ng-options="c as c.name + '    (' + c.source + ')' group by 'Exotic level: ' + c.exotic for c in sects | orderBy:'exotic':false"
                                 ng-model="ssect">
                             <option style="display:none" value="">Select a sect</option>
                         </select>
-                        <div ng-show="ssect.exotic > 0" class="text-warning">Choosing this sect adds {{ssect.exotic}} exotic points and requires ST approval</div>
+                        <div ng-show="ssect.exotic > 0 && ssect.exotic < 20" class="text-warning">Choosing this sect adds {{ssect.exotic}} exotic points and requires ST approval</div>
+                        <div ng-show="ssect.exotic >= 20" class="text-danger">This sect is strictly limited to NPC characters and will never be approved</div>
                     </div>
                 </div>
                 <div class="form-group">

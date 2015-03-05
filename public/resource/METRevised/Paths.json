@@ -1,42 +1,20 @@
 [
-  {
-    "name": "Humanity",
-    "conscience": "Conscience",
-    "selfcontrol": "Self-Control"
-  },
-  {
-    "name": "Path of Blood",
-    "conscience": "Conviction",
-    "selfcontrol": "Self-Control"
-  },
-  {
-    "name": "Path of Bones",
-    "conscience": "Conviction",
-    "selfcontrol": "Self-Control"
-  },
-  {
-    "name": "Path of Metamorphosis",
-    "conscience": "Conviction",
-    "selfcontrol": "Instinct"
-  },
-  {
-    "name": "Path of Night",
-    "conscience": "Conviction",
-    "selfcontrol": "Instinct"
-  },
-  {
-    "name": "Path of Paradox",
-    "conscience": "Conviction",
-    "selfcontrol": "Self-Control"
-  },
-  {
-    "name": "Path of Typhon",
-    "conscience": "Conviction",
-    "selfcontrol": "Self-Control"
-  },
-  {
-    "name": "Feral Heart",
-    "conscience": "Conscience",
-    "selfcontrol": "Instinct"
-  }
+  { "name": "Humanity", "source": "Laws of the Night 75", "conscience": "Conscience", "selfcontrol": "Self-Control" },
+  { "name": "Path of Blood", "source": "Laws of the Night 76", "conscience": "Conviction", "selfcontrol": "Self-Control" },
+  { "name": "Path of Bone ", "source": "Laws of the Night 77", "conscience": "Conviction", "selfcontrol": "Self-Control" },
+  { "name": "Path of Caine", "source": "Laws of the Night: Sabbat Guide 76", "conscience": "Conviction", "selfcontrol": "Instinct" },
+  { "name": "Path of Cathari", "source": "Laws of the Night: Sabbat Guide 78", "conscience": "Conviction", "selfcontrol": "Instinct" },
+  { "name": "Path of Death and the Soul", "source": "Laws of the Night: Sabbat Guide 81", "conscience": "Conviction", "selfcontrol": "Self-Control" },
+  { "name": "Path of Ecstasy", "source": "Laws of Elysium 55 ", "conscience": "Conscience", "selfcontrol": "Self-Control" },
+  { "name": "Path of Evil Revelation", "source": "Laws of the Night: Sabbat Guide 83 ", "conscience": "Conviction", "selfcontrol": "Instinct" },
+  { "name": "Path of Feral Heart", "source": "Laws of the Night: Sabbat Guide 86", "conscience": "Conviction", "selfcontrol": "Instinct" },
+  { "name": "Path of Harmony", "source": "Laws of Elysium 49 ", "conscience": "Conscience", "selfcontrol": "Instinct" },
+  { "name": "Path of Honorable Accord", "source": "Laws of the Night: Sabbat Guide 88", "conscience": "Conscience", "selfcontrol": "Self-Control" },
+  { "name": "Path of Lilith", "source": "Laws of the Night: Sabbat Guide 90", "conscience": "Conviction", "selfcontrol": "Instinct" },
+  { "name": "Path of Metamorphosis", "source": "Laws of the Night 77", "conscience": "Conviction", "selfcontrol": "Instinct" },
+  { "name": "Path of Night", "source": "Laws of the Night 78", "conscience": "Conviction", "selfcontrol": "Instinct" },
+  { "name": "Path of Paradox ", "source": "Laws of the Night 78", "conscience": "Conviction", "selfcontrol": "Self-Control" },
+  { "name": "Path of Power and the Inner Voice", "source": "Laws of the Night: Sabbat Guide 93", "conscience": "Conviction", "selfcontrol": "Instinct" },
+  { "name": "Path of Typhon", "source": "Laws of the Night 79", "conscience": "Conviction", "selfcontrol": "Self-Control" },
+  { "name": "Path of the Warrior", "source": "Laws of Elysium 56", "conscience": "Conviction", "selfcontrol": "Self-Control" }
 ]

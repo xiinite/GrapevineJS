@@ -6,6 +6,7 @@ app.controller('ConceptController', ['$scope', '$http', 'loading', 'resources', 
 
     $scope.clans = [];
     $scope.sclan = undefined;
+    $scope.clandisciplines = [];
 
     $scope.sects = [];
     $scope.ssect = undefined;
@@ -28,7 +29,7 @@ app.controller('ConceptController', ['$scope', '$http', 'loading', 'resources', 
         if($scope.schronicle !== undefined && $scope.sclan !== undefined && $scope.ssect != undefined && $scope.concept != "" && $scope.name != ""){
             loading.show();
             var exotic = $scope.ssect.exotic + $scope.sclan.exotic;
-            $http.post("/character/submitconcept", {chronicle: $scope.schronicle.id, clan: $scope.sclan.clan, sect: $scope.ssect.name, concept: $scope.concept, name: $scope.name, exotic: exotic}).then(function(response){
+            $http.post("/character/submitconcept", {chronicle: $scope.schronicle.id, clan: $scope.sclan.name, sect: $scope.ssect.name, concept: $scope.concept, name: $scope.name, exotic: exotic}).then(function(response){
                 if(response.data.id !== undefined){
                     $scope.characterid = response.data.id;
                     location = '/character/wizard/' + response.data.id;
@@ -48,8 +49,11 @@ app.controller('ConceptController', ['$scope', '$http', 'loading', 'resources', 
             loading.hide();
         });
 
+        resources.clans.get(function(data){
+            $scope.clans = data;
+        });
         resources.clandisciplines.get(function(data){
-            $scope.clans = data.map(function(m){return {clan: m.clan, exotic: m.exotic}});
+            $scope.clandisciplines = data.map(function(c){return c.clan;});
         });
         resources.sects.get(function(data){
             $scope.sects = data;

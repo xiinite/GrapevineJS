@@ -75,7 +75,7 @@
                             <div class="form-group row">
                                 <label class="col-md-6"><b>Clan:</b></label>
                                 <select data-field="clan" class="nopadding col-md-6"
-                                        ng-options="c as c for c in clans"
+                                        ng-options="c.name as c.name + '    (' + c.source + ')' group by 'Exotic level: ' + c.exotic for c in clans | orderBy:'exotic':false"
                                         ng-model="character.clan">
                                     <option style="display:none" value="">Select a Clan</option>
                                 </select>
@@ -83,7 +83,7 @@
                             <div class="form-group row">
                                 <label class="col-md-6"><b>Sect:</b></label>
                                 <select data-field="sect" class="nopadding col-md-6"
-                                        ng-options="s as s for s in sects"
+                                        ng-options="c.name as c.name + '    (' + c.source + ')' group by 'Exotic level: ' + c.exotic for c in sects | orderBy:'exotic':false"
                                         ng-model="character.sect">
                                     <option style="display:none" value="">Select a Sect</option>
                                 </select>
@@ -149,7 +149,8 @@
                             <div class="form-group row">
                                 <label class="col-md-6"><b>Path:</b></label>
                                 <select data-field="path.name" class="nopadding col-md-6"
-                                        ng-options="c.name as c.name for c in paths"
+                                        ng-options="p.name as p.name for p in paths"
+                                        ng-change="updateMorality()"
                                         ng-model="character.path.name">
                                     <option style="display:none" value="">Select path</option>
                                 </select>
@@ -167,20 +168,12 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group row">
-                                <select data-field="conscience.name" class="nopadding col-md-6"
-                                        ng-options="c as c for c in conscienceTypes"
-                                        ng-model="character.conscience.name">
-                                    <option style="display:none" value="">Select conscience/conviction</option>
-                                </select>
+                                <label class="col-md-6"><b>{{character.conscience.name}}:</b></label>
                                 <input type="number" class="col-md-6 nopadding" ng-model="character.conscience.rating"
                                        data-field="conscience.rating"/>
                             </div>
                             <div class="form-group row">
-                                <select data-field="selfcontrol.name" class="nopadding col-md-6"
-                                        ng-options="c as c for c in selfcontrolTypes"
-                                        ng-model="character.selfcontrol.name">
-                                    <option style="display:none" value="">Select self-control/instinc</option>
-                                </select>
+                                <label class="col-md-6"><b>{{character.selfcontrol.name}}:</b></label>
                                 <input type="number" class="col-md-6 nopadding" ng-model="character.selfcontrol.rating"
                                        data-field="selfcontrol.rating"/>
                             </div>
@@ -229,7 +222,7 @@
                             <div class="row voffset3">
                                 <div class="col-md-9">
                                     <select id="slc-physical" class="form-control"
-                                            ng-options="attr for attr in physical"
+                                            ng-options="attr.name as attr.name + '    (' + attr.source + ')' group by attr.category for attr in physical"
                                             ng-model="sphysical">
                                         <option style="display:none" value="">Select a trait</option>
                                     </select>
@@ -261,7 +254,7 @@
                             <div class="row voffset3">
                                 <div class="col-md-9">
                                     <select id="slc-social" class="form-control"
-                                            ng-options="attr for attr in social"
+                                            ng-options="attr.name as attr.name + '    (' + attr.source + ')' group by attr.category for attr in social"
                                             ng-model="ssocial">
                                         <option style="display:none" value="">Select a trait</option>
                                     </select>
@@ -293,7 +286,7 @@
                             <div class="row voffset3">
                                 <div class="col-md-9">
                                     <select id="slc-mental" class="form-control"
-                                            ng-options="attr for attr in mental"
+                                            ng-options="attr.name as attr.name + '    (' + attr.source + ')' group by attr.category for attr in mental"
                                             ng-model="smental">
                                         <option style="display:none" value="">Select a trait</option>
                                     </select>
@@ -330,7 +323,7 @@
                             <div class="row voffset3">
                                 <div class="col-md-9">
                                     <select id="slc-negativephysical" class="form-control"
-                                            ng-options="attr for attr in negativephysical"
+                                            ng-options="attr.name as attr.name + '    (' + attr.source + ')' group by attr.category for attr in negativephysical"
                                             ng-model="snegativephysical">
                                         <option style="display:none" value="">Select a trait</option>
                                     </select>
@@ -362,7 +355,7 @@
                             <div class="row voffset3">
                                 <div class="col-md-9">
                                     <select id="slc-negativesocial" class="form-control"
-                                            ng-options="attr for attr in negativesocial"
+                                            ng-options="attr.name as attr.name + '    (' + attr.source + ')' group by attr.category for attr in negativesocial"
                                             ng-model="snegativesocial">
                                         <option style="display:none" value="">Select a trait</option>
                                     </select>
@@ -394,7 +387,7 @@
                             <div class="row voffset3">
                                 <div class="col-md-9">
                                     <select id="slc-negativemental" class="form-control"
-                                            ng-options="attr for attr in negativemental"
+                                            ng-options="attr.name as attr.name + '    (' + attr.source + ')' group by attr.category for attr in negativemental"
                                             ng-model="snegativemental">
                                         <option style="display:none" value="">Select a trait</option>
                                     </select>
@@ -442,7 +435,7 @@
                             <div class="row voffset3">
                                 <div class="col-md-9">
                                     <select id="slc-abilities" class="form-control"
-                                            ng-options="adv for adv in abilities"
+                                            ng-options="adv.name as adv.name + '    ('+adv.source+')' for adv in abilities"
                                             ng-model="sability">
                                         <option style="display:none" value="">Select an ability</option>
                                     </select>
@@ -539,7 +532,7 @@
                             <div class="row voffset3">
                                 <div class="col-md-9">
                                     <select id="slc-backgrounds" class="form-control"
-                                            ng-options="adv for adv in backgrounds"
+                                            ng-options="adv.name as adv.name + '    ('+adv.source+')' for adv in backgrounds"
                                             ng-model="sbackground">
                                         <option style="display:none" value="">Select a background</option>
                                     </select>
@@ -571,7 +564,7 @@
                             <div class="row voffset3">
                                 <div class="col-md-9">
                                     <select id="slc-influences" class="form-control"
-                                            ng-options="adv for adv in influences"
+                                            ng-options="adv.name as adv.name + '    ('+adv.source+')' for adv in influences"
                                             ng-model="sinfluence">
                                         <option style="display:none" value="">Select an influence</option>
                                     </select>
@@ -731,7 +724,7 @@
                             <div class="row voffset3">
                                 <div class="col-md-9">
                                     <select id="slc-abilities" class="form-control"
-                                            ng-options="adv for adv in derangements"
+                                            ng-options="adv.name as adv.name + '    ('+adv.source+')' for adv in derangements"
                                             ng-model="sderangement">
                                         <option style="display:none" value="">Select a derangement</option>
                                     </select>

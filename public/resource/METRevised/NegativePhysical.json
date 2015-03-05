@@ -1,12 +1,14 @@
 [
-  "Clumsy",
-  "Cowardly",
-  "Decrepit",
-  "Delicate",
-  "Docile",
-  "Flabby",
-  "Lame",
-  "Lethargic",
-  "Puny",
-  "Sickly"
+  { "category": "Negative Physical ", "name": "Clumsy", "source": "Laws of the Night 81" },
+  { "category": "Negative Physical ", "name": "Cowardly", "source": "Laws of the Night 81" },
+  { "category": "Negative Physical ", "name": "Decrepit", "source": "Laws of the Night 81" },
+  { "category": "Negative Physical ", "name": "Docile", "source": "Laws of the Night 81" },
+  { "category": "Negative Physical ", "name": "Flabby", "source": "Laws of the Night 81" },
+  { "category": "Negative Physical ", "name": "Frail", "source": "Laws of the Night: Sabbat Guide 62" },
+  { "category": "Negative Physical ", "name": "Lame", "source": "Laws of the Night 81" },
+  { "category": "Negative Physical ", "name": "Lethargic", "source": "Laws of the Night 82" },
+  { "category": "Negative Physical ", "name": "Puny", "source": "Laws of the Night 82" },
+  { "category": "Negative Physical ", "name": "Sickly", "source": "Laws of the Night 82" },
+  { "category": "Negative Physical ", "name": "Slow", "source": "Laws of the Night: Sabbat Guide 62" },
+  { "category": "Negative Physical ", "name": "Soft", "source": "Laws of the Night: Sabbat Guide 62" }
 ]

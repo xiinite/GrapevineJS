@@ -1,26 +1,32 @@
 [
   {
-    "name": "Autarch",
-    "exotic": 1
+    "name": "Autarkis",
+    "exotic": 20,
+    "source": "The Long Night 18"
   },
   {
     "name": "Anarch",
-    "exotic": 1
+    "exotic": 1,
+    "source": "Laws of the Night: Anarch Guide"
   },
   {
     "name": "Camarilla",
-    "exotic": 0
+    "exotic": 0,
+    "source": "Laws of the Night: Camarilla Guide"
+  },
+  {
+    "name": "Independants",
+    "exotic": 1,
+    "source": "Laws of the Night 29"
+  },
+  {
+    "name": "Liabon",
+    "exotic": 20,
+    "source": "Faith & Fire 70"
   },
   {
     "name": "Sabbat",
-    "exotic": 3
-  },
-  {
-    "name": "Inconnu",
-    "exotic": 3
-  },
-  {
-    "name": "Independant",
-    "exotic": 1
+    "exotic": 5,
+    "source": "Laws of the Night: Sabbat Guide"
   }
 ]

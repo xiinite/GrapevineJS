@@ -87,7 +87,7 @@ app.controller('CharacterWizardController', ['$scope', '$http', 'loading', 'reso
         if (value.length === undefined) return;
         if (value.length == 0) return;
 
-        if(value == "High Society"){
+        if(value == "High society"){
             var result = $.grep($scope.character.influences, function (e) {
                 return e.name == value;
             });
@@ -268,6 +268,7 @@ app.controller('CharacterWizardController', ['$scope', '$http', 'loading', 'reso
     };
 
     $scope.addAdvantage = function (value, list) {
+        if (value.name !== undefined) value = value.name;
         if (value.length === undefined) return;
         if (value.length == 0) return;
         var result = $.grep(list, function (e) {
@@ -548,6 +549,7 @@ app.controller('CharacterWizardController', ['$scope', '$http', 'loading', 'reso
 
     $scope.currentIndex = 0;
     $scope.isStepValid = function () {
+        return true;
         switch ($scope.currentIndex) {
             case 1:
                 return $scope.calctotal($scope.character.attributes.physical)

@@ -1,12 +1,15 @@
 [
-  "Forgetful",
-  "Gullible",
-  "Ignorant",
-  "Impatient",
-  "Oblivious",
-  "Predictable",
-  "Shortsighted",
-  "Submissive",
-  "Violent",
-  "Witless"
+  { "category": "Negative Mental", "name": "Deceitful", "source": "Laws of the Night: Sabbat Guide 64" },
+  { "category": "Negative Mental", "name": "Forgetful", "source": "Laws of the Night 85" },
+  { "category": "Negative Mental", "name": "Gullible", "source": "Laws of the Night 85" },
+  { "category": "Negative Mental", "name": "Ignorant", "source": "Laws of the Night 85" },
+  { "category": "Negative Mental", "name": "Impatient", "source": "Laws of the Night 85" },
+  { "category": "Negative Mental", "name": "Oblivious", "source": "Laws of the Night 85" },
+  { "category": "Negative Mental", "name": "Predictable", "source": "Laws of the Night 85" },
+  { "category": "Negative Mental", "name": "Shortsighted", "source": "Laws of the Night 85" },
+  { "category": "Negative Mental", "name": "Squeamish", "source": "Laws of the Night: Sabbat Guide 64" },
+  { "category": "Negative Mental", "name": "Submissive", "source": "Laws of the Night 85" },
+  { "category": "Negative Mental", "name": "Unstable", "source": "Laws of the Night: Sabbat Guide 64" },
+  { "category": "Negative Mental", "name": "Violent", "source": "Laws of the Night 85" },
+  { "category": "Negative Mental", "name": "Witless", "source": "Laws of the Night 85" }
 ]

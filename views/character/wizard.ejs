@@ -61,7 +61,7 @@
                                 <div class="col-lg-7">
                                     <select class="form-control"
                                             ng-required="true"
-                                            ng-options="nature as nature for nature in natures"
+                                            ng-options="nature.name as nature.name + '    (' + nature.source + ')' for nature in natures"
                                             ng-model="character.nature">
                                         <option style="display:none" value="">Select a nature</option>
                                     </select>
@@ -78,7 +78,7 @@
                                 <div class="col-lg-7">
                                     <select class="form-control"
                                             ng-required="true"
-                                            ng-options="nature as nature for nature in natures"
+                                            ng-options="nature.name as nature.name + '    (' + nature.source + ')' for nature in natures"
                                             ng-model="character.demeanor">
                                         <option style="display:none" value="">Select a nature</option>
                                     </select>
@@ -95,7 +95,7 @@
                                 <div class="col-lg-7">
                                     <select class="form-control"
                                             ng-required="true"
-                                            ng-options="path.name as path.name for path in paths"
+                                            ng-options="path.name as path.name + '    (' + path.source + ')'  for path in paths"
                                             ng-change="onselectedpath()"
                                             ng-model="character.path.name">
                                         <option style="display:none" value="">Select a path</option>
@@ -172,7 +172,7 @@
                                          ng-hide="calctotal(character.attributes[primary.key]) > 6">
                                         <div class="col-lg-9">
                                             <select id="slc-physical" class="form-control"
-                                                    ng-options="attr for attr in primary.val"
+                                                    ng-options="attr.name as attr.name + '    (' + attr.source + ')' group by attr.category for attr in primary.val"
                                                     ng-model="sprimary">
                                                 <option style="display:none" value="">Select a trait</option>
                                             </select>
@@ -234,7 +234,7 @@
                                          ng-hide="calctotal(character.attributes[secondary.key]) > 4">
                                         <div class="col-lg-9">
                                             <select id="slc-physical" class="form-control"
-                                                    ng-options="attr for attr in secondary.val"
+                                                    ng-options="attr.name as attr.name + '    (' + attr.source + ')' group by attr.category for attr in secondary.val"
                                                     ng-model="ssecondary">
                                                 <option style="display:none" value="">Select a trait</option>
                                             </select>
@@ -296,7 +296,7 @@
                                          ng-hide="calctotal(character.attributes[tertiary.key]) > 2">
                                         <div class="col-lg-9">
                                             <select class="form-control"
-                                                    ng-options="attr for attr in tertiary.val"
+                                                    ng-options="attr.name as attr.name + '    (' + attr.source + ')' group by attr.category for attr in tertiary.val"
                                                     ng-model="stertiary">
                                                 <option style="display:none" value="">Select a trait</option>
                                             </select>
@@ -362,7 +362,7 @@
                                          ng-hide="calctotal(character.abilities) > 4">
                                         <div class="col-lg-9">
                                             <select id="slc-physical" class="form-control"
-                                                    ng-options="attr for attr in abilities"
+                                                    ng-options="attr as attr.name + '    ('+attr.source+')' for attr in abilities"
                                                     ng-model="sability">
                                                 <option style="display:none" value="">Select an ability</option>
                                             </select>
@@ -370,6 +370,7 @@
                                         <button ng-click="addAdvantage(sability, character.abilities)"
                                                 class="btn btn-default btn-sm pull-right col-lg-3">Add
                                         </button>
+                                        <div ng-show="sability.source == 'Lores'" class="text-warning">Lores always require special ST approval!</div>
                                     </div>
                                 </div>
                             </div>
@@ -441,7 +442,7 @@
                                          ng-hide="calctotal(character.backgrounds) + calctotal(character.influences) > 4">
                                         <div class="col-lg-9">
                                             <select id="slc-physical" class="form-control"
-                                                    ng-options="attr for attr in backgrounds"
+                                                    ng-options="attr as attr.name + '    ('+attr.source+')' for attr in backgrounds"
                                                     ng-model="sbackground">
                                                 <option style="display:none" value="">Select a background</option>
                                             </select>
@@ -488,7 +489,7 @@
                                          ng-hide="calctotal(character.backgrounds) + calctotal(character.influences) > 4">
                                         <div class="col-lg-9">
                                             <select id="slc-physical" class="form-control"
-                                                    ng-options="attr for attr in influences"
+                                                    ng-options="attr as attr.name + '    ('+attr.source+')' for attr in influences"
                                                     ng-model="sinfluence">
                                                 <option style="display:none" value="">Select an influence</option>
                                             </select>
@@ -599,7 +600,7 @@
                                          ng-show="showNegativeTraits()">
                                         <div class="col-lg-9">
                                             <select class="form-control"
-                                                    ng-options="attr for attr in negativephysical"
+                                                    ng-options="attr as attr.name + '    ('+attr.source+')' group by attr.category for attr in negativephysical"
                                                     ng-model="snegativephysical">
                                                 <option style="display:none" value="">Select a trait</option>
                                             </select>
@@ -639,7 +640,7 @@
                                          ng-show="showNegativeTraits()">
                                         <div class="col-lg-9">
                                             <select class="form-control"
-                                                    ng-options="attr for attr in negativesocial"
+                                                    ng-options="attr as attr.name + '    ('+attr.source+')' group by attr.category for attr in negativesocial"
                                                     ng-model="snegativesocial">
                                                 <option style="display:none" value="">Select a trait</option>
                                             </select>
@@ -679,7 +680,7 @@
                                          ng-show="showNegativeTraits()">
                                         <div class="col-lg-9">
                                             <select class="form-control"
-                                                    ng-options="attr for attr in negativemental"
+                                                    ng-options="attr as attr.name + '    ('+attr.source+')' group by attr.category for attr in negativemental"
                                                     ng-model="snegativemental">
                                                 <option style="display:none" value="">Select a trait</option>
                                             </select>
@@ -743,7 +744,7 @@
                                          ng-show="character.derangements.length == 0">
                                         <div class="col-lg-9">
                                             <select class="form-control"
-                                                    ng-options="attr for attr in derangements"
+                                                    ng-options="attr as attr.name + '    ('+attr.source+')' for attr in derangements"
                                                     ng-model="sderangement">
                                                 <option style="display:none" value="">Select a Derangement</option>
                                             </select>
@@ -1156,7 +1157,7 @@
                                          ng-hide="clanAdvChoiceMade">
                                         <div class="col-lg-9">
                                             <select class="form-control"
-                                                    ng-options="attr for attr in derangements"
+                                                    ng-options="attr as attr.name + '    ('+attr.source+')' for attr in derangements"
                                                     ng-model="sderangement">
                                                 <option style="display:none" value="">Select a derangement</option>
                                             </select>

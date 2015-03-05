@@ -83,6 +83,18 @@ app.controller('CharacterEditController', ['$scope', '$http', 'loading', 'resour
         return count;
     };
 
+    $scope.updateMorality = function()
+    {
+        var result = $.grep($scope.paths, function(e){ return e.name == $scope.character.path.name; });
+        if(result !== undefined){
+            $scope.character.conscience.name = result[0].conscience;
+            $scope.character.selfcontrol.name = result[0].selfcontrol;
+
+            $scope.setItemDirty("conscience", $scope.character.conscience);
+            $scope.setItemDirty("selfcontrol", $scope.character.selfcontrol);
+        }
+    }
+
     $scope.addTrait = function(value, list, select){
         if(value.length === undefined) return;
         var result = $.grep(list, function(e){ return e.name == value; });

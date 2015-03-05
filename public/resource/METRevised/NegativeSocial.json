@@ -1,13 +1,16 @@
 [
-  "Bestial",
-  "Callous",
-  "Condescending",
-  "Dull",
-  "Feral",
-  "Naïve",
-  "Obnoxious",
-  "Repugnant",
-  "Shy",
-  "Tactless",
-  "Untrustworthy"
+  { "category": "Negative Social", "name": "Bestial", "source": "Laws of the Night 83" },
+  { "category": "Negative Social", "name": "Callous", "source": "Laws of the Night 83" },
+  { "category": "Negative Social", "name": "Condescending", "source": "Laws of the Night 83" },
+  { "category": "Negative Social", "name": "Dull", "source": "Laws of the Night 83" },
+  { "category": "Negative Social", "name": "Empathetic", "source": "Laws of the Night: Sabbat Guide 63" },
+  { "category": "Negative Social", "name": "Feral", "source": "Laws of the Night 83" },
+  { "category": "Negative Social", "name": "Kind", "source": "Laws of the Night: Sabbat Guide 63" },
+  { "category": "Negative Social", "name": "Meek", "source": "Laws of the Night: Sabbat Guide 63" },
+  { "category": "Negative Social", "name": "Naive", "source": "Laws of the Night 83" },
+  { "category": "Negative Social", "name": "Obnoxious", "source": "Laws of the Night 83" },
+  { "category": "Negative Social", "name": "Repugnant", "source": "Laws of the Night 83" },
+  { "category": "Negative Social", "name": "Shy", "source": "Laws of the Night 83" },
+  { "category": "Negative Social", "name": "Tactless", "source": "Laws of the Night 83" },
+  { "category": "Negative Social", "name": "Untrustworthy", "source": "Laws of the Night 83" }
 ]

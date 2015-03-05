@@ -1,10 +1,12 @@
 [
-  "Allies",
-  "Contacts",
-  "Generation",
-  "Fame",
-  "Herd",
-  "Mentor",
-  "Resources",
-  "Retainer"
+  { "name": "Allies", "source": "Laws of the Night 93" },
+  { "name": "Contacts", "source": "Laws of the Night 94" },
+  { "name": "Domain", "source": "Faith & Fire 116" },
+  { "name": "Fame", "source": "Laws of the Night 94" },
+  { "name": "Generation", "source": "Laws of the Night 96" },
+  { "name": "Herd", "source": "Laws of the Night 96" },
+  { "name": "Insight", "source": "Laws of the Night: Anarch Guide 110" },
+  { "name": "Mentor", "source": "Laws of the Night 104" },
+  { "name": "Resources", "source": "Laws of the Night 104" },
+  { "name": "Retainers", "source": "Laws of the Night 105" }
 ]
