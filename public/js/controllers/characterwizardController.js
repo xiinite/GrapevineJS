@@ -549,7 +549,6 @@ app.controller('CharacterWizardController', ['$scope', '$http', 'loading', 'reso
 
     $scope.currentIndex = 0;
     $scope.isStepValid = function () {
-        return true;
         switch ($scope.currentIndex) {
             case 1:
                 return $scope.calctotal($scope.character.attributes.physical)
