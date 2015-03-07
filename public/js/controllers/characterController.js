@@ -19,7 +19,7 @@ app.controller('CharacterController', ['$scope', '$http', 'loading', '$filter', 
     $scope.selectedexportchronicle = undefined;
     $scope.selected = {};
 
-    $scope.exporttypes = [{name: 'grapevinejs json', ext: "json"}, {name: 'classic grapevine gv3', ext: "gv3"}];
+    $scope.exporttypes = [{name: 'cymeriad json', ext: "json"}, {name: 'classic grapevine gv3', ext: "gv3"}];
     $scope.exporttype = undefined;
 
     $scope.statusses = [

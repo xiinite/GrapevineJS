@@ -24,10 +24,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(compression());
-app.use(cookieParser('grapevinecookie'));
+app.use(cookieParser('cymeriadcookie'));
 app.use(sess(
     {
-        secret: 'grapevinesecret',
+        secret: 'cymeriadsecret',
         resave: false,
         saveUninitialized: false,
         cookie: {secure: false, maxAge: 1000*60*60*24},
@@ -80,7 +80,7 @@ app.use(function (err, req, res) {
 });
 
 app.listen(config.server.PORT, config.server.IP, function () {
-    console.log("GrapevineJS running on " + config.server.IP + ":" + config.server.PORT);
+    console.log("Cymeriad running on " + config.server.IP + ":" + config.server.PORT);
 });
 
 module.exports = app;

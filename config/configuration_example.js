@@ -16,6 +16,12 @@ config.facebook.FACEBOOK_CLIENT_ID = "";
 config.facebook.FACEBOOK_CLIENT_SECRET = "";
 config.facebook.FACEBOOK_RETURN_URL = "http://localhost/auth/facebook/callback";
 
-config.db.connectionString = "mongodb://localhost/Grapevine";
+config.db.connectionString = "mongodb://localhost/Cymeriad";
+
+config.email.gmail = {
+    user: '',
+    pass: ''
+};
+
 
 module.exports = config;
