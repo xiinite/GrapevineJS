@@ -78,14 +78,15 @@ passport.serializeUser(function (user, done) {
 passport.deserializeUser(function (id, done) {
     try {
         model.find({googleId: id}, function (err, user) {
-            if(err)
+            if(err || user.length==0)
             {
-                sess.destroy();
+                var emptyUser = {googleId: -1, name: "Anonymous"};
+                done(null, emptyUser);
+            }else{
+                done(err, user[0]);
             }
-            done(err, user[0]);
         });
     } catch (error) {
-        sess.destroy();
         //console.log("[User Deserialization Error] - oAuth deserializeUser - User not found. Could not deserialize user.");
         var emptyUser = {googleId: -1, name: "Anonymous"};
         done(null, emptyUser);

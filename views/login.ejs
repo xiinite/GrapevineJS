@@ -9,6 +9,7 @@
     <meta name="description" content="Mind&#39;s Eye Theatre Chronicle manager">
     <meta name="keywords" content="cymeriad">
     <title>cymeriad</title>
+    <link type="text/css" href="/css/bootstrap.min.css" rel="stylesheet"/>
     <link type="text/css" href="/css/bootstrap-slate.min.css" rel="stylesheet"/>
     <link type="text/css" href="/css/font-awesome.min.css" rel="stylesheet"/>
     <link type="text/css" href="/css/style.css" rel="stylesheet"/>
@@ -23,7 +24,6 @@
             src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
             alt="Fork me on GitHub"
             data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
-<%- partial('./_headerNoAuth') %>
 <!-- messages -->
 <!-- content -->
 <div class="container">
@@ -35,20 +35,18 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-lg-offset-3 col-md-offset-3 col-sm-offset-2 col-lg-6 col-sm-8 col-md-6"
-             style="margin-top:100px">
-            <div class="login-header">
-                <h2><i class="fa fa-unlock-alt"></i> cymeriad</h2>
+        <div class="col-lg-offset-3 col-md-offset-3 col-sm-offset-2 col-lg-6 col-sm-8 col-md-6">
+            <div class="panel panel-body">
+                <div class="col-xs-12 col-lg-6 col-sm-6">
+                    <h2><img class="img-circle" src="img/Masks.png" /> Cymeriad</h2>
+                </div>
+                <div class="col-xs-12 col-lg-6 col-sm-6" style="text-align:center">
+                    <a class="btn btn-md btn-block btn-primary" href='/auth/google/'><i class="fa fa-google"></i>&nbsp;&nbsp;&nbsp;&nbsp;Sign in
+                        with google</a>
+                    <a class="btn btn-md btn-block btn-primary" href='/auth/facebook/'><i class="fa fa-facebook-official"></i>&nbsp;&nbsp;&nbsp;&nbsp;Sign in
+                        with facebook</a>
+                </div>
             </div>
-            <div class="col-xs-12 col-lg-6 col-sm-6" style="text-align:center">
-                <a class="btn btn-md btn-block btn-primary" href='/auth/google/'><i class="fa fa-sign-in"></i> Sign in
-                    with google</a>
-                <a class="btn btn-md btn-block btn-primary" href='/auth/facebook/'><i class="glyphicon glyphicon-facebook"></i> Sign in
-                    with facebook</a>
-
-                <!-- <button class="btn btn-md btn-block btn-default" type="clear"><i class="fa fa-times"></i> Clear</button> -->
-            </div>
-            <div class="clearfix"><br/></div>
         </div>
     </div>
 </div>
