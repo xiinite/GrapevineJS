@@ -1,4 +1,4 @@
-# GrapevineJS
+# Cymeriad
 a Mind's Eye Theatre chronicle manager
 
 Installation instructions:
