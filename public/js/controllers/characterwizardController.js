@@ -241,6 +241,7 @@ app.controller('CharacterWizardController', ['$scope', '$http', 'loading', 'reso
     }
 
     $scope.addTrait = function (value, list) {
+        if(value.name !== undefined) value = value.name;
         if (value.length === undefined) return;
         if (value.length == 0) return;
         var result = $.grep(list, function (e) {
@@ -373,6 +374,7 @@ app.controller('CharacterWizardController', ['$scope', '$http', 'loading', 'reso
     };
 
     $scope.addDerangement = function(value, list){
+        if(value.name !== undefined) value = value.name;
         if (value.length === undefined) return;
         if (value.length == 0) return;
         var result = $.grep(list, function (e) {
