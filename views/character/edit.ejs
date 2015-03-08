@@ -1,7 +1,12 @@
 <% layout("../layout.ejs") %>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.confirmClick.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.readMore.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.JSON.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.services.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.propertyFilter.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/applications/cymeriad.app.character.js"></script>
 <script type="text/javascript" src="/js/controllers/characterEditController.js"></script>
-
-<div id="content" class="container" ng-controller="CharacterEditController" ng-init="init('<%= characterid %>')"
+<div id="content" class="container" ng-app="cymeriad.app.character" ng-controller="CharacterEditController" ng-init="init('<%= characterid %>')"
      ng-form="characterForm">
     <h1 class="page-header">{{character.name}}
         <div class='btn-toolbar pull-right hidden-print'>

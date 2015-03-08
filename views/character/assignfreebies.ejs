@@ -1,6 +1,12 @@
 <%- layout("../layout.ejs") %>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.confirmClick.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.readMore.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.JSON.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.services.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.propertyFilter.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/applications/cymeriad.app.character.js"></script>
 <script type="text/javascript" src="/js/controllers/characterFreebiesController.js"></script>
-<div class="container" ng-controller="CharacterFreebiesController" ng-init="init('<%= characterid %>')">
+<div class="container" ng-app="cymeriad.app.character"  ng-controller="CharacterFreebiesController" ng-init="init('<%= characterid %>')">
     <h1 class="page-header hidden-xs hidden-sm">Assign free traits</h1>
 
     <div class="col-lg-12">

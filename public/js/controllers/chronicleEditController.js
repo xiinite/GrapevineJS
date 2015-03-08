@@ -53,7 +53,7 @@ app.controller('ChronicleEditController', ['$scope', '$filter', '$http', 'loadin
         $scope.editId = 0;
     }
     $scope.descriptionNull = function(){
-        if($scope.chronicle.description === Undefined)
+        if($scope.chronicle.description === undefined)
         {
             return true;
         }
@@ -63,7 +63,7 @@ app.controller('ChronicleEditController', ['$scope', '$filter', '$http', 'loadin
         return false;
     }
     $scope.emailNull = function(){
-        if($scope.chronicle.email === Undefined)
+        if($scope.chronicle.email === undefined)
         {
             return true;
         }

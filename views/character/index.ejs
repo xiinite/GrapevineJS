@@ -1,5 +1,11 @@
 <% layout("../layout.ejs") %>
 <script type='text/javascript' charset="utf-8" src="/js/jquery.fileupload.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.confirmClick.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.readMore.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.JSON.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.services.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.propertyFilter.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/applications/cymeriad.app.character.js"></script>
 <script type='text/javascript' charset="utf-8" src="/js/controllers/characterController.js"></script>
 <script type="text/javascript" charset="utf-8">
 
@@ -102,7 +108,7 @@
     });
 
 </script>
-<div id="content" class="container" ng-controller="CharacterController" ng-init="init()">
+<div id="content" class="container" ng-app="cymeriad.app.character" ng-controller="CharacterController" ng-init="init()">
     <h1 class="page-header hidden-xs hidden-sm">Characters</h1>
 
     <div class="row">

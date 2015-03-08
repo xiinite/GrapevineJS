@@ -49,6 +49,6 @@ module.exports = {
         router.register(app, 'event');
         router.register(app, 'user');
         router.register(app, 'superAdmin');
-        router.register(app, 'downtimeSubmission');
+        router.register(app, 'downtime');
     }
 };

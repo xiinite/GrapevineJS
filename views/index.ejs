@@ -89,6 +89,13 @@
                                                 <div class="row">
                                                     <div class="text-center col-lg-12"><%= characters[i].clan %></div>
                                                 </div>
+                                                <% if(["Approved"].indexOf(characters[i].state) > -1 ){ %>
+                                                <div class="row">
+                                                    <div class="text-center col-lg-12">
+                                                        <a class="btn btn-primary btn-sm" href="character/background/<%= characters[i].id %>">Submit background</a>
+                                                    </div>
+                                                </div>
+                                                <% } %>
                                             </div>
                                             <% } %>
                                             <% if(["Rejected", "Background Rejected", "Retired", "Deceased"].indexOf(characters[i].state) > -1 ){ %>
@@ -110,6 +117,13 @@
                                                 <div class="row">
                                                     <div class="text-center col-lg-12"><%= characters[i].clan %></div>
                                                 </div>
+                                                <% if(["Background Rejected"].indexOf(characters[i].state) > -1 ){ %>
+                                                <div class="row">
+                                                    <div class="text-center col-lg-12">
+                                                        <a class="btn btn-primary btn-sm" href="character/background/<%= characters[i].id %>">Submit new background</a>
+                                                    </div>
+                                                </div>
+                                                <% } %>
                                             </div>
                                             <% } %>
                                             <% if(characters[i].state === 'Active'){ %>

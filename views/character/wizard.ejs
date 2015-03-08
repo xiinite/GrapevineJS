@@ -1,6 +1,12 @@
 <% layout("../layout.ejs") %>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.confirmClick.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.readMore.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.JSON.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.services.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.propertyFilter.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/applications/cymeriad.app.character.js"></script>
 <script type="text/javascript" src="/js/controllers/characterwizardController.js"></script>
-<div class="container" ng-controller="CharacterWizardController" ng-init="init('<%= characterid %>')">
+<div class="container" ng-app="cymeriad.app.character" ng-controller="CharacterWizardController" ng-init="init('<%= characterid %>')">
     <a id="top"></a>
     <div class='col-xs-12 col-lg-12 col-sm-12'>
         <div>

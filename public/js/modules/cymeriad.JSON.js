@@ -1,4 +1,4 @@
-angular.module('cymeriad.JSON', ['ngResource', 'ngRoute', 'ngTouch', 'ngSanitize', 'ui.select', 'ngAnimate', 'textAngular'])
+angular.module('cymeriad.resources', ['ngResource', 'ngRoute', 'ngTouch', 'ngSanitize', 'ui.select', 'ngAnimate', 'textAngular'])
     .factory("resources", function($resource) {
         return {
             abilities: $resource('/resource/METRevised/Abilities.json', {}, {
