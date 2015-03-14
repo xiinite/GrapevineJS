@@ -1,6 +1,6 @@
 var schemas = require('../models/schemas.js');
 
-var model = schemas.Downtime;
+var model = schemas.DowntimePeriod;
 
 module.exports = {
     'all': function (callback) {

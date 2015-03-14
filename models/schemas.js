@@ -130,9 +130,18 @@ module.exports = {
         chronicles: {type: Array},
         stylesheet: {type: String}
     }),
+    'DowntimePeriod': mongoose.model('downtimeperiod', {
+        openTo: {type: Date},
+        chronicleId: {type: String},
+        id: {unique: true, type: String},
+        openFrom: {type: Date}
+    }),
     'Downtime': mongoose.model('downtime',{
         id: {unique: true, type: String},
-        actions: {type: JSON}
+        downtimePeriod: {type: String},
+        characterid: {type: String},
+        actions: {type: Mixed},
+        response: {type: Mixed}
     }),
     'Event': mongoose.model('event', {
         id: {unique: true, type: String},
@@ -142,5 +151,14 @@ module.exports = {
         players: {type: Array},
         characters: {type: Array},
         xpawarded: {type: Boolean}
-    })
+    }),
+    'Gametype': mongoose.model('gametype',
+        {
+            id: {unique: true, type: String},
+            parentid: {type: String},
+            parent: {type: Mixed},
+            name: {type: String},
+            description: {type: String},
+            code: {type: String}
+        })
 };

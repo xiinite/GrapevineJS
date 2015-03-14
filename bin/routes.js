@@ -33,22 +33,21 @@ module.exports = {
         router.post(app, 'chronicle', 'removeadmin');
         router.post(app, 'chronicle', 'addplayer');
         router.post(app, 'chronicle', 'removeplayer');
-        router.get(app, 'chronicle', 'find', [":id"]);
 
-        router.post(app, 'event', 'find');
-        router.get(app, 'event', 'edit', [":id"]);
+        router.get(app, 'downtime', 'allPeriods');
 
+        router.get(app, 'gametype', 'new');
 
         router.get(app, 'user', 'toggleSuperAdmin', [':id']);
-        router.get(app, 'user', 'find', [':id']);
         router.post(app, 'user', 'updateStylesheet');
         router.post(app, 'user', 'updateEmail');
 
         router.register(app, 'character');
         router.register(app, 'chronicle');
-        router.register(app, 'event');
-        router.register(app, 'user');
-        router.register(app, 'superAdmin');
         router.register(app, 'downtime');
+        router.register(app, 'event');
+        router.register(app, 'gametype');
+        router.register(app, 'superAdmin');
+        router.register(app, 'user');
     }
 };

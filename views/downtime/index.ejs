@@ -1,9 +1,7 @@
 <% layout("../layout.ejs") %>
 <script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.confirmClick.js"></script>
-<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.services.js"></script>
-<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.propertyFilter.js"></script>
 <script type="text/javascript" charset="utf-8" src="/js/applications/cymeriad.app.downtime.js"></script>
-<div id="content" class="container">
+<div id="content" class="container" ng-app="cymeriad.app.downtime" ng-controller="cymeriad.controller.downtime.index" ng-init="init()">
     <div class="col-lg-6 col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">

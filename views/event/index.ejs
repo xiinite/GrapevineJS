@@ -2,65 +2,12 @@
 <script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.confirmClick.js"></script>
 <script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.services.js"></script>
 <script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.propertyFilter.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.crudTable.js"></script>
 <script type="text/javascript" charset="utf-8" src="/js/applications/cymeriad.app.event.js"></script>
-<script type='text/javascript' charset="utf-8" src="/js/controllers/eventController.js"></script>
-<div id="content" class="container" ng-app="cymeriad.app.event" ng-controller="EventController" ng-init="init()">
+<script type='text/javascript' charset="utf-8" src="/js/controllers/cymeriad.controller.event.index.js"></script>
+<div id="content" class="container" ng-app="cymeriad.app.event" ng-controller="cymeriad.controller.event.index" ng-init="init()">
     <h1 class="page-header hidden-xs hidden-sm">Events</h1>
     <div class="row">
-        <div class="col-md-12">
-            <div class="col-md-3">
-                <div class="btn-group">
-                    <button class="btn btn-default" ng-click="DeleteSelected()">Delete</button>
-                    <button class="btn btn-default" ng-click="addNew()">New</button>
-                </div>
-            </div>
-            <div class="col-md-3">
-            </div>
-            <span class="col-md-3 text-right">
-                Search:
-            </span>
-            <span class="col-md-3">
-                <input class=" form-control" type="text" ng-model="query" ng-change="search()"/>
-            </span>
-            <table class="table table-striped table-condensed table-hover">
-                <thead>
-                <tr>
-                    <th width="10px"></th>
-                    <th class="date" custom-sort order="'date'" sort="sort">Date&nbsp;</th>
-                    <th class="date" custom-sort order="'venue'" sort="sort">Venue&nbsp;</th>
-                </tr>
-                </thead>
-                <tfoot>
-                <td>
-                    <nav class="col-md-6">
-                        <ul class="pagination">
-                            <li ng-class="{disabled: currentPage == 0}">
-                                <a href ng-click="prevPage()" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                            <li ng-repeat="n in range(pagedItems.length, currentPage, currentPage + gap) "
-                                ng-class="{active: n == currentPage}"
-                                ng-click="setPage()">
-                                <a href ng-bind="n + 1">1</a>
-                            </li>
-                            <li ng-class="{disabled: (currentPage) == pagedItems.length - 1}">
-                                <a href ng-click="nextPage()">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </td>
-                </tfoot>
-                <tbody>
-                <tr ng-repeat="item in pagedItems[currentPage] | orderBy:sort.sortingOrder:sort.reverse">
-                    <td><input type="checkbox" ng-model="selected[item.id]"></td>
-                    <td class="clickable" ng-click="openItem(item.id)"><span ng-bind="item.date | date:'dd/MM/yyyy'"></span></td>
-                    <td class="clickable" ng-click="openItem(item.id)">{{item.venue}}</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+        <crudtable table="event" columns="date|venue" sort="name" data="loadData(callback)"></crudtable>
     </div>
 </div>

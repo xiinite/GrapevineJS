@@ -1,0 +1,13 @@
+<%- layout("../layout.ejs") %>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.confirmClick.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.services.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.propertyFilter.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.crudTable.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/applications/cymeriad.app.gametype.js"></script>
+<script type='text/javascript' charset="utf-8" src="/js/controllers/cymeriad.controller.gametype.index.js"></script>
+<div class="container" ng-app="cymeriad.app.gametype" ng-controller="cymeriad.controller.gametype.index">
+    <h1 class="page-header hidden-xs hidden-sm">Game types</h1>
+    <div class="row">
+        <crudtable table="gametype" columns="name|description" sort="name"></crudtable>
+    </div>
+</div>

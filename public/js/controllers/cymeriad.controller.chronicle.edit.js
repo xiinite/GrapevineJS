@@ -1,20 +1,20 @@
-app.controller('ChronicleEditController', ['$scope', '$filter', '$http', 'loading', function ($scope, $filter, $http, loading) {
+app.controller('cymeriad.controller.chronicle.edit', ['$scope', '$filter', '$http', 'loading', function ($scope, $filter, $http, loading) {
     var orderBy = $filter('orderBy');
-    
+
     $scope.disabled = undefined;
-    
+
     $scope.enable = function() {
         $scope.disabled = false;
     };
-    
+
     $scope.disable = function() {
         $scope.disabled = true;
     };
-    
+
     $scope.clear = function() {
         $scope.userid = undefined;
     };
-  
+
     $scope.log = function (event) {
         console.log(event);
     }

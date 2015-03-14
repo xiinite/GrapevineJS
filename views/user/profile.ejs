@@ -2,8 +2,8 @@
 <script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.confirmClick.js"></script>
 <script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.services.js"></script>
 <script type="text/javascript" charset="utf-8" src="/js/applications/cymeriad.app.user.js"></script>
-<script type="text/javascript" src="/js/controllers/profileController.js"></script>
-<div id="content" class="container" ng-app="cymeriad.app.user" ng-controller="ProfileController" ng-init="init('<%= user.googleId %>')">
+<script type="text/javascript" src="/js/controllers/cymeriad.controller.user.profile.js"></script>
+<div id="content" class="container" ng-app="cymeriad.app.user" ng-controller="cymeriad.controller.user.profile" ng-init="init('<%= user.googleId %>')">
     <h1 class="page-header">{{ profile.displayName }}
     </h1>
     <div id='pnlAbout' class="panel panel-default">

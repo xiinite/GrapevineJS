@@ -17,6 +17,7 @@ module.exports = {
                     break;
                 case "find":
                     router.get('/' + m + "/:id", require(controller)[m]);
+                    router.post('/' + m, require(controller)[m]);
                     break;
                 case "edit":
                     router.get('/' + m + "/:id", require(controller)[m]);

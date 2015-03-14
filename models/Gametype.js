@@ -1,6 +1,6 @@
 var schemas = require('../models/schemas.js');
 
-var model = schemas.Downtime;
+var model = schemas.Gametype;
 
 module.exports = {
     'all': function (callback) {
@@ -14,6 +14,9 @@ module.exports = {
     },
     'insert': function (items, callback) {
         model.create(items, callback);
+    },
+    'update': function (itemid, update, callback) {
+        model.update({'id': itemid}, update, {multi: false}, callback);
     },
     'remove': function(where, callback){
         model.remove(where, callback);
