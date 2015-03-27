@@ -1,0 +1,15 @@
+<%- layout("../layout.ejs") %>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.confirmClick.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.services.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.propertyFilter.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/applications/cymeriad.app.downtime.js"></script>
+<script type='text/javascript' charset="utf-8" src="/js/controllers/cymeriad.controller.downtime.submit.js"></script>
+<div class="container" ng-app="cymeriad.app.downtime" ng-controller="cymeriad.controller.downtime.submit" ng-init="init('<%= period %>')">
+    <h3>{{period.openFrom}}</h3>
+    <select class="form-control"
+            ng-change="search()"
+            ng-options="c as c.name for c in characters"
+            ng-model="scharacter">
+    </select>
+    <button class="btn btn-primary" ng-click="submit()">Submit</button>
+</div>

@@ -80,6 +80,12 @@ module.exports = {
             });
         }
     },
+    'allByPlayer': function(req, res, next){
+        model.list({googleId: req.user.googleId}, function (err, result) {
+            if (err) return next(new Error(err));
+            res.json(result);
+        })
+    },
     'show': function (req, res, next) {
         if (req.params.id) {
             model.find({

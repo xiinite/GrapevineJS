@@ -1,0 +1,42 @@
+<%- layout("../layout.ejs") %>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.confirmClick.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.services.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.propertyFilter.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/applications/cymeriad.app.downtime.js"></script>
+<script type='text/javascript' charset="utf-8" src="/js/controllers/cymeriad.controller.downtime.edit.js"></script>
+<div class="container" ng-app="cymeriad.app.downtime" ng-controller="cymeriad.controller.downtime.edit" ng-init="init('<%= period %>')">
+    <h1 class="page-header hidden-xs hidden-sm">New downtimeperiod</h1>
+
+    <div class="col-lg-12">
+        <div class="row">
+            <form class="form-horizontal">
+                <input type="hidden" ng-model="period.id" />
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">openFrom:</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" type="date" ng-model="period.openFrom" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">openTo:</label>
+                    <div class="col-sm-10">
+                        <input class="col-sm-10 form-control" type="date" ng-model="period.openTo" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">chronicle:</label>
+                    <div class="col-sm-10">
+                        <select class="form-control"
+                                ng-change="search()"
+                                ng-options="c.id as c.name for c in chronicles"
+                                ng-model="period.chronicleId">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <button class="btn btn-default" ng-click="Save()">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

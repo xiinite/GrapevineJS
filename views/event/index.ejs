@@ -8,6 +8,6 @@
 <div id="content" class="container" ng-app="cymeriad.app.event" ng-controller="cymeriad.controller.event.index" ng-init="init()">
     <h1 class="page-header hidden-xs hidden-sm">Events</h1>
     <div class="row">
-        <crudtable table="event" columns="date|venue" sort="name" data="loadData(callback)"></crudtable>
+        <crudtable table="event" columns="date|venue" sort="date" data="loadData(callback)"></crudtable>
     </div>
 </div>

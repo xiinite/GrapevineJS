@@ -17,5 +17,8 @@ module.exports = {
     },
     'remove': function(where, callback){
         model.remove(where, callback);
+    },
+    'update': function (itemid, update, callback) {
+        model.update({'id': itemid}, update, {multi: false}, callback);
     }
 };

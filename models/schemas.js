@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var Mixed = mongoose.Schema.Types.Mixed;
 
-var attr = new Schema({ name: String, val: Number });
+var attr = new Schema({name: String, val: Number});
 
 var discipline = new Schema({path: String, name: String, level: String, number: Number});
 var ritual = new Schema({path: String, name: String, level: String});
@@ -23,7 +23,7 @@ var note = new Schema({note: String});
 var status = new Schema({name: String, statustype: String, rating: Number});
 
 module.exports = {
-    'Character': mongoose.model('character',{
+    'Character': mongoose.model('character', {
         id: {unique: true, type: String},
         charactertype: {type: String},
         name: {type: String},
@@ -37,7 +37,7 @@ module.exports = {
         experience: {
             unspent: String,
             total: String
-            },
+        },
         started: {type: Date},
         created: {type: Date},
         modified: {type: Date},
@@ -106,7 +106,7 @@ module.exports = {
         modificationhistory: {type: Array},
         freetraits: {type: Number}
     }),
-    'Chronicle': mongoose.model('chronicle',{
+    'Chronicle': mongoose.model('chronicle', {
         id: {type: String},
         name: {type: String},
         description: {type: String},
@@ -117,7 +117,7 @@ module.exports = {
         characters: {type: Array},
         email: {type: String}
     }),
-    'User': mongoose.model('user',{
+    'User': mongoose.model('user', {
         provider: {type: String},
         displayName: {type: String},
         name: {type: JSON},
@@ -136,7 +136,7 @@ module.exports = {
         id: {unique: true, type: String},
         openFrom: {type: Date}
     }),
-    'Downtime': mongoose.model('downtime',{
+    'Downtime': mongoose.model('downtime', {
         id: {unique: true, type: String},
         downtimePeriod: {type: String},
         characterid: {type: String},

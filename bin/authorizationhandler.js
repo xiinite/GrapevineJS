@@ -1,11 +1,30 @@
 var model = require("../models/User.js");
+var cmodel = require('../models/Chronicle.js');
 var config = require("../config/configuration.js");
 var url = require('url');
 var passport = require('passport'),
     GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
     FacebookStrategy = require('passport-facebook').Strategy,
+    OAuth2Strategy = require('passport-oauth2'),
     uuid = require('node-uuid');
 ;
+
+OAuth2Strategy.prototype.userProfile = function(accessToken, done) {
+    this._oauth2.get('http://www.nachtkronieken.com/oauth2/userinfo', accessToken, function (err, body, res) {
+        var p = JSON.parse(body);
+        var profile = {
+            provider: "Nachtkronieken",
+            displayName: p.sub,
+            name: p.sub,
+            emails: [{value: p.email}],
+            _raw: "",
+            _json: p,
+            id: "NACHT_" + p.sub
+        };
+        return done(null, profile);
+    });
+    //return done(null, {});
+};
 
 var sess = require('express-session');
 
@@ -61,6 +80,44 @@ passport.use(new FacebookStrategy({
     }
 ));
 
+//Drupal - Nachtkronieken
+passport.use(new OAuth2Strategy({
+        authorizationURL: 'http://www.nachtkronieken.com/oauth2/authorize',
+        tokenURL: 'http://www.nachtkronieken.com/oauth2/token',
+        clientID: config.drupal.DRUPAL_CLIENT_ID,
+        clientSecret: config.drupal.DRUPAL_CLIENT_SECRET,
+        callbackURL: config.drupal.DRUPAL_RETURN_URL,
+        skipUserProfile: false
+    },
+    function (accessToken, refreshToken, profile, done) {
+        process.nextTick(function () {
+            return model.find({googleId: profile.id}, function (err, user) {
+                if (err) {
+                    throw err;
+                }
+                else if (user.length === 0) {
+                    profile.googleId = profile.id;
+                    profile.id = uuid.v4();
+                    model.insert(profile, function (err, user) {
+
+                        cmodel.find({"name": "Nachtkronieken"}, function (err, result) {
+                            if(err) return next(new Error(err));
+                            if(result.length == 0) return;
+                            if (result[0].players.indexOf(user.id) == -1) {
+                                result[0].players.push(user.id);
+                            }
+                            cmodel.update(result[0].id, {'players': result[0].players}, function (err) {
+                                return done(null, user);
+                            });
+                        });
+                    });
+                } else {
+                    return done(null, user[0]);
+                }
+            });
+        });
+    }
+));
 /**
  * serializeUser
  * @param {Object} user
@@ -123,9 +180,16 @@ module.exports = {
 
         app.get('/auth/facebook', passport.authenticate('facebook'));
 
-
         app.get('/auth/facebook/callback',
-            passport.authenticate('facebook', {
+            passport.authenticate('drupal', {
+                successRedirect: '/',
+                failureRedirect: '/login'
+            }));
+
+        app.get('/auth/nachtkronieken', passport.authenticate('oauth2', { scope: 'profile openid email cymeriad_clients', state: "new"}));
+
+        app.get('/auth/nachtkronieken/callback',
+            passport.authenticate('oauth2', {
                 successRedirect: '/',
                 failureRedirect: '/login'
             }));
