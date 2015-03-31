@@ -46,7 +46,7 @@ function loadNext(collection, index, returnvalue, callback) {
             });
         }
     }, function (err, result) {
-        if (result.isAdmin) {
+        if (result.isAdmin.length > 0) {
             user.isAdmin = true;
             user.chronicles = result.isAdmin;
         }
