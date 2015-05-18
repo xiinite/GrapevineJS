@@ -1,3 +1,4 @@
+"use strict";
 app.controller('cymeriad.controller.downtime.edit', ['$scope', '$http', 'loading', function ($scope, $http, loading) {
     $scope.period = {};
     $scope.chronicles = [];

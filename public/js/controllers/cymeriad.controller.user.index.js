@@ -1,3 +1,4 @@
+"use strict";
 app.controller('cymeriad.controller.user.index', ['$scope', '$http', 'loading', '$filter', function ($scope, $http, loading, $filter) {
     $scope.sort = {
         sortingOrder : 'name',

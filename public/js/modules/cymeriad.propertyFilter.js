@@ -1,3 +1,4 @@
+"use strict";
 angular.module('cymeriad.propertyFilter', []).filter('propsFilter', function() {
     return function(items, props) {
         var out = [];

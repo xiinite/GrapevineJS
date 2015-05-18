@@ -1,3 +1,4 @@
+"use strict";
 app.controller('cymeriad.controller.chronicle.edit', ['$scope', '$filter', '$http', 'loading', function ($scope, $filter, $http, loading) {
     var orderBy = $filter('orderBy');
 

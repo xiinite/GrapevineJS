@@ -1,3 +1,4 @@
+"use strict";
 angular.module('cymeriad.crudTable', ['cymeriad.services']).directive('crudtable', function () {
     return {
         restrict: 'AE',
@@ -122,7 +123,7 @@ angular.module('cymeriad.crudTable', ['cymeriad.services']).directive('crudtable
 
                             $scope.search();
                             loading.hide();
-                        }
+                        };
                         $scope.data({callback: cb});
                     }
                 };

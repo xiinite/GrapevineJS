@@ -120,7 +120,7 @@
                             <div class="form-group row">
                                 <label class="col-md-6"><b>Nature:</b></label>
                                 <select data-field="nature" class="nopadding col-md-6"
-                                        ng-options="nature as nature for nature in natures"
+                                        ng-options="nature.name as nature.name + '    (' + nature.source + ')' for nature in natures"
                                         ng-model="character.nature">
                                     <option style="display:none" value="">Select a nature</option>
                                 </select>
@@ -128,7 +128,7 @@
                             <div class="form-group row">
                                 <label class="col-md-6"><b>Demeanor:</b></label>
                                 <select data-field="demeanor" class="nopadding col-md-6"
-                                        ng-options="nature as nature for nature in natures"
+                                        ng-options="nature.name as nature.name + '    (' + nature.source + ')' for nature in natures"
                                         ng-model="character.demeanor">
                                     <option style="display:none" value="">Select a demeanor</option>
                                 </select>
@@ -307,8 +307,7 @@
                     <div class="col-md-12">
                         <div class="col-md-4">
                             <ul class="list-group">
-                                <li class="list-group-item active">{{ calctotal(character.attributes.negativephysical)
-                                    }}
+                                <li class="list-group-item active">{{ calctotal(character.attributes.negativephysical) }}
                                     Negative Physical Traits
                                 </li>
                                 <li ng-repeat='t in character.attributes.negativephysical | orderBy:"name":false'

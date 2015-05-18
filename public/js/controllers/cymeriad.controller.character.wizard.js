@@ -1,3 +1,4 @@
+"use strict";
 app.controller('cymeriad.controller.character.wizard', ['$scope', '$http', 'loading', 'resources', '$filter', '$location', '$anchorScroll', function ($scope, $http, loading, resources, $filter, $location, $anchorScroll) {
     $scope.log = function (event) {
         console.log(event);
@@ -114,8 +115,10 @@ app.controller('cymeriad.controller.character.wizard', ['$scope', '$http', 'load
     };
 
     $scope.addClanDerangement = function(value, list){
-        if (value.length === undefined) return;
-        if (value.length == 0) return;
+        if (value === undefined) return;
+        if (value.name === undefined) return;
+        if (value.name.length == 0) return;
+        var value = value.name;
         var result = $.grep(list, function (e) {
             return e.name == value;
         });

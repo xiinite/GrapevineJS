@@ -1,3 +1,4 @@
+"use strict";
 app.controller('cymeriad.controller.chronicle.index', ['$scope', '$http', 'loading', function ($scope, $http, loading) {
     $scope.log = function (event) {
         console.log(event);

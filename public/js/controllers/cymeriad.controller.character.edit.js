@@ -1,3 +1,4 @@
+"use strict";
 app.controller('cymeriad.controller.character.edit', ['$scope', '$http', 'loading', 'resources', '$filter', function ($scope, $http, loading, resources, $filter) {
     $scope.log = function (event) {
         console.log(event);

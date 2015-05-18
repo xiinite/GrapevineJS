@@ -1,3 +1,4 @@
+"use strict";
 app.controller('cymeriad.controller.event.edit', ['$scope', '$http', 'loading', '$filter', function ($scope, $http, loading, $filter) {
     $scope.event = {};
     $scope.chronicles = [];

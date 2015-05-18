@@ -1,3 +1,4 @@
+"use strict";
 app.controller('cymeriad.controller.character.approve', ['$scope', '$http', 'loading', function ($scope, $http, loading) {
     $scope.characters = [];
     $scope.freebees = 0;

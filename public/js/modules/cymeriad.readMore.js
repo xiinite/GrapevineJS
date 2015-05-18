@@ -1,3 +1,4 @@
+"use strict";
 angular.module('cymeriad.readMore', []).directive('readMore', function() {
     return {
         restrict: 'AE',

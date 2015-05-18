@@ -1,3 +1,4 @@
+"use strict";
 app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loading', '$q', function ($scope, $http, loading, $q) {
     $scope.period = {};
     $scope.downtime = {};

@@ -1,3 +1,4 @@
+"use strict";
 angular.module('cymeriad.services', [])
     .service('loading', function () {
         this.show = function () {

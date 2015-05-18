@@ -1,3 +1,4 @@
+"use strict";
 app.controller('cymeriad.controller.character.concept', ['$scope', '$http', 'loading', 'resources', '$window', function ($scope, $http, loading, resources, $window) {
     $scope.chronicles = [];
     $scope.schronicle = undefined;

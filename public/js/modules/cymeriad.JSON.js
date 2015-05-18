@@ -1,3 +1,4 @@
+"use strict";
 angular.module('cymeriad.resources', ['ngResource', 'ngRoute', 'ngTouch', 'ngSanitize', 'ui.select', 'ngAnimate', 'textAngular'])
     .factory("resources", function($resource) {
         return {

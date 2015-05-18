@@ -1,3 +1,4 @@
+"use strict";
 app.controller('cymeriad.controller.user.profile', ['$scope', '$http', 'loading', function ($scope, $http, loading) {
 
     $scope.profile = {};

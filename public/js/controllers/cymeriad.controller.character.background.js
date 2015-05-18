@@ -1,3 +1,4 @@
+"use strict";
 app.controller('cymeriad.controller.character.background', ['$scope', '$http', 'loading', 'resources', '$window', function ($scope, $http, loading, resources, $window) {
     $scope.character = {};
     $scope.background = "";

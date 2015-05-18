@@ -1,3 +1,4 @@
+"use strict"; 
 app.controller('cymeriad.controller.character.assignfreebies', ['$scope', '$http', 'loading', 'resources', '$filter', function ($scope, $http, loading, resources, $filter) {
     $scope.log = function (event) {
         console.log(event);
@@ -101,6 +102,7 @@ app.controller('cymeriad.controller.character.assignfreebies', ['$scope', '$http
 
     $scope.isClanDiscipline = function(obj) {
         var clanDiscs = [];
+        var clanFound = false;
         for (var i = 0; i < $scope.clandisciplines.length; i++) {
             if($scope.clandisciplines[i].clan == $scope.character.clan){
                 clanFound = true;
