@@ -345,7 +345,7 @@ app.controller('cymeriad.controller.character.edit', ['$scope', '$http', 'loadin
     };
     
     $scope.saveNoteItem = function(){
-        $scope.setItemDirty($scope.selectedListName);
+        $scope.setItemDirty($scope.selectedListName, $scope.selectedList);
         var duplicateNote = false;
 
         $scope.selectedList.filter(function(element, index, array){
@@ -393,7 +393,7 @@ app.controller('cymeriad.controller.character.edit', ['$scope', '$http', 'loadin
             $scope.editId = 0;
             $scope.dirtylists = [];
         }catch(e)
-        {alert("Error while saving!");}
+        {alert("Error while saving!"); throw e;}
     };
 
     $scope.display = function(player){
