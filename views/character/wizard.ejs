@@ -350,11 +350,11 @@
                                             <span ng-show="t.note.length > 0">
                                                 ({{ t.note }})
                                             </span>
-                                            <button ng-click="removeAdvantage(t.name, character.abilities)"
+                                            <button ng-click="removeAdvantage(t.name, t.note, character.abilities)"
                                                     class="btn btn-xs pull-right"><span
                                                         class="glyphicon glyphicon-minus"></span></button>
                                             <button ng-hide="calctotal(character.abilities) > 4"
-                                                    ng-click="addAdvantage(t.name, character.abilities)"
+                                                    ng-click="addAdvantage(t.name, character.abilities, null, t.note)"
                                                     class="btn btn-xs pull-right"><span
                                                         class="glyphicon glyphicon-plus"></span>
                                             </button>
@@ -373,7 +373,7 @@
                                                 <option style="display:none" value="">Select an ability</option>
                                             </select>
                                         </div>
-                                        <button ng-click="addAdvantage(sability, character.abilities)"
+                                        <button ng-click="addAdvantage(sability, character.abilities, abilities)"
                                                 class="btn btn-default btn-sm pull-right col-lg-3">Add
                                         </button>
                                         <div ng-show="sability.source == 'Lores'" class="text-warning">Lores always require special ST approval!</div>
@@ -430,11 +430,11 @@
                                             <span ng-show="t.note.length > 0">
                                                 ({{ t.note }})
                                             </span>
-                                            <button ng-click="removeAdvantage(t.name, character.backgrounds)"
+                                            <button ng-click="removeAdvantage(t.name, t.note, character.backgrounds)"
                                                     class="btn btn-xs pull-right"><span
                                                         class="glyphicon glyphicon-minus"></span></button>
                                             <button ng-hide="calctotal(character.backgrounds) + calctotal(character.influences) > 4"
-                                                    ng-click="addAdvantage(t.name, character.backgrounds)"
+                                                    ng-click="addAdvantage(t.name, character.backgrounds, null, t.note)"
                                                     class="btn btn-xs pull-right"><span
                                                         class="glyphicon glyphicon-plus"></span>
                                             </button>
@@ -453,7 +453,7 @@
                                                 <option style="display:none" value="">Select a background</option>
                                             </select>
                                         </div>
-                                        <button ng-click="addAdvantage(sbackground, character.backgrounds)"
+                                        <button ng-click="addAdvantage(sbackground, character.backgrounds, backgrounds)"
                                                 class="btn btn-default btn-sm pull-right col-lg-3">Add
                                         </button>
                                     </div>
@@ -477,11 +477,11 @@
                                             <span ng-show="t.note.length > 0">
                                                 ({{ t.note }})
                                             </span>
-                                            <button ng-click="removeAdvantage(t.name, character.influences)"
+                                            <button ng-click="removeAdvantage(t.name, t.note, character.influences)"
                                                     class="btn btn-xs pull-right"><span
                                                         class="glyphicon glyphicon-minus"></span></button>
                                             <button ng-hide="calctotal(character.backgrounds) + calctotal(character.influences) > 4"
-                                                    ng-click="addAdvantage(t.name, character.influences)"
+                                                    ng-click="addAdvantage(t.name, character.influences, null, t.note)"
                                                     class="btn btn-xs pull-right"><span
                                                         class="glyphicon glyphicon-plus"></span>
                                             </button>
@@ -500,7 +500,7 @@
                                                 <option style="display:none" value="">Select an influence</option>
                                             </select>
                                         </div>
-                                        <button ng-click="addAdvantage(sinfluence, character.influences)"
+                                        <button ng-click="addAdvantage(sinfluence, character.influences, influences)"
                                                 class="btn btn-default btn-sm pull-right col-lg-3">Add
                                         </button>
                                     </div>

@@ -188,5 +188,10 @@
   {"path": "Bardo","name": "Banishing Sign of Thoth","level": "basic"},
   {"path": "Bardo","name": "Boon of Anubis","level": "intermediate"},
   {"path": "Bardo","name": "Pillar of Osiris","level": "intermediate"},
-  {"path": "Bardo","name": "Mummification Ritual","level": "advanced"}
+  {"path": "Bardo","name": "Mummification Ritual","level": "advanced"},
+  {"path": "Semini’s Curse","name": "True Sight","level": "basic"},
+  {"path": "Semini’s Curse","name": "Touch of Essence","level": "basic"},
+  {"path": "Semini’s Curse","name": "Prince Charming","level": "intermediate"},
+  {"path": "Semini’s Curse","name": "Project Essence","level": "intermediate"},
+  {"path": "Semini’s Curse","name": "Mortality","level": "advanced"}
 ]

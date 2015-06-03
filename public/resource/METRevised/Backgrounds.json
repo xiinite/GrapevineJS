@@ -8,5 +8,5 @@
   { "name": "Insight", "source": "Laws of the Night: Anarch Guide 110" },
   { "name": "Mentor", "source": "Laws of the Night 104" },
   { "name": "Resources", "source": "Laws of the Night 104" },
-  { "name": "Retainers", "source": "Laws of the Night 105" }
+  { "name": "Retainers", "source": "Laws of the Night 105", "multitrack": true  }
 ]

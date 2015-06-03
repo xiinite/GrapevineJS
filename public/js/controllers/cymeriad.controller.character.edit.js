@@ -130,10 +130,22 @@ app.controller('cymeriad.controller.character.edit', ['$scope', '$http', 'loadin
     $scope.addAdvantage = function(value, notevalue, list, listname, select){
         if(value.length === undefined) return;
         var result = $.grep(list, function(e){ return e.name == value; });
+        var multitrack = false;
+        if(angular.element(event.currentTarget).hasClass('btn-sm'))
+        {
+            $scope[listname].filter(function(element, index, array){
+                if(element.name == value && element.multitrack){ multitrack = true; }
+            });
+        }
         if(result.length === 0) {
             list.push({name: value, note: notevalue, rating: 1});
             list = orderBy(list, 'name', false);
+        }else if(multitrack) {
+            var newItemTrack = {name: value, note: notevalue, rating: 1};
+            $scope.addNoteDialog(newItemTrack, list, listname);
         }else{
+            if(notevalue != '')
+                result = $.grep(list, function(e){ return e.name == value && e.note == notevalue; });
             result[0].rating++;
         }
         
@@ -148,7 +160,7 @@ app.controller('cymeriad.controller.character.edit', ['$scope', '$http', 'loadin
     };
     
     $scope.removeAdvantage = function(value, notevalue, list, listname){
-        var result = $.grep(list, function(e){ return e.name == value; });
+        var result = $.grep(list, function(e){ return e.name == value && e.note == notevalue; });
         var adv = result[0];
 
         if(adv.rating == 1){
@@ -334,7 +346,17 @@ app.controller('cymeriad.controller.character.edit', ['$scope', '$http', 'loadin
     
     $scope.saveNoteItem = function(){
         $scope.setItemDirty($scope.selectedListName);
-        
+        var duplicateNote = false;
+
+        $scope.selectedList.filter(function(element, index, array){
+            if(element.name == $scope.noteItem.name && element.note == $scope.noteItem.note){ duplicateNote = true; }
+        });
+
+        if($scope.selectedList.indexOf($scope.noteItem) == -1 && $scope.noteItem.note != '' && !duplicateNote){
+            $scope.selectedList.push($scope.noteItem);
+            $scope.selectedList = orderBy($scope.selectedList, 'name', false);
+        }
+
         $scope.noteItem = {};
         $scope.selectedList = {};
         $scope.selectedListName = '';
@@ -342,32 +364,36 @@ app.controller('cymeriad.controller.character.edit', ['$scope', '$http', 'loadin
     
     $scope.setItemDirty = function(list, value)
     {
-        if($scope.dirtylists.indexOf({key: list, value: value}) > -1){
-            $scope.dirtylists.splice($.inArray({key: list, value: value}, $scope.dirtylists),1);
+        var previous = $.grep($scope.dirtylists, function(e){ return e.key == list; });
+        if(previous.length > 1){
+            $scope.dirtylists.splice($.inArray(previous[0], $scope.dirtylists),1);
         }
         $scope.dirtylists.push({key: list, value: value});
     };
 
     $scope.save = function(){
-        var fields = {};
-        $(".ng-dirty").each(function(index, item){
-            if($(item).data("field") !== undefined){
+        try{
+            var fields = {};
+            $(".ng-dirty").each(function(index, item){
+                if($(item).data("field") !== undefined){
 
                     fields[$(item).data("field")] = angular.element(item).data('$ngModelController').$modelValue;
-                
-            }
-        });
-        $.each($scope.dirtylists, function(index, item){
-            $.each(item.value, function(i, m){
-                delete m._id;
+
+                }
             });
-            fields[item.key] = item.value;
-        });
-        $http.post("/character/update", {id: $scope.character.id, fields: fields}).then(function(){
-            $scope.init($scope.character.id);
-        });
-        $scope.editId = 0;
-        $scope.dirtylists = [];
+            $.each($scope.dirtylists, function(index, item){
+                $.each(item.value, function(i, m){
+                    delete m._id;
+                });
+                fields[item.key] = item.value;
+            });
+            $http.post("/character/update", {id: $scope.character.id, fields: fields}).then(function(){
+                $scope.init($scope.character.id);
+            });
+            $scope.editId = 0;
+            $scope.dirtylists = [];
+        }catch(e)
+        {alert("Error while saving!");}
     };
 
     $scope.display = function(player){

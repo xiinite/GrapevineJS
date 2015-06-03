@@ -76,7 +76,7 @@ app.controller('cymeriad.controller.character.wizard', ['$scope', '$http', 'load
 
     $scope.GiovanniChoice = function(ghoul){
         if(ghoul){
-            $scope.addAdvantage("Retainer", $scope.character.backgrounds);
+            $scope.addAdvantage("Retainer", $scope.character.backgrounds, $scope.backgrounds, 'Wraith');
             $scope.clanAdvChoiceMade = true;
             $scope.clanAdvChoice2Made = true;
         }else{
@@ -271,25 +271,39 @@ app.controller('cymeriad.controller.character.wizard', ['$scope', '$http', 'load
         }
     };
 
-    $scope.addAdvantage = function (value, list) {
+    $scope.addAdvantage = function (value, list, selectionlist, notevalue) {
+
         if (value.name !== undefined) value = value.name;
         if (value.length === undefined) return;
         if (value.length == 0) return;
+
+
+        var multitrack = false;
+        if(selectionlist != null)
+        {
+            selectionlist.filter(function(element, index, array){
+                if(element.name == value && element.multitrack){ multitrack = true; }
+            });
+        }
+
         var result = $.grep(list, function (e) {
             return e.name == value;
         });
         if (result.length === 0) {
             list.push({name: value, note: "", rating: 1});
             list = orderBy(list, 'name', false);
+        }else if(multitrack) {
+            var newItemTrack = {name: value, note: '', rating: 1};
+            $scope.addNoteDialog(newItemTrack, list);
         } else {
+            if(notevalue != '')
+                result = $.grep(list, function(e){ return e.name == value && e.note == notevalue; });
             result[0].rating++;
         }
     };
 
-    $scope.removeAdvantage = function (value, list) {
-        var result = $.grep(list, function (e) {
-            return e.name == value;
-        });
+    $scope.removeAdvantage = function (value, notevalue, list) {
+        var result = $.grep(list, function(e){ return e.name == value && e.note == notevalue; });
         var attr = result[0];
 
         if (attr.rating == 1) {
@@ -419,6 +433,17 @@ app.controller('cymeriad.controller.character.wizard', ['$scope', '$http', 'load
     };
 
     $scope.saveNoteItem = function(){
+        var duplicateNote = false;
+
+        $scope.selectedList.filter(function(element, index, array){
+            if(element.name == $scope.noteItem.name && element.note == $scope.noteItem.note){ duplicateNote = true; }
+        });
+
+        if($scope.selectedList.indexOf($scope.noteItem) == -1 && $scope.noteItem.note != '' && !duplicateNote){
+            $scope.selectedList.push($scope.noteItem);
+            $scope.selectedList = orderBy($scope.selectedList, 'name', false);
+        }
+
         $scope.noteItem = {};
         $scope.selectedList = {};
     };

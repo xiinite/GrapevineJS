@@ -9,7 +9,7 @@
   { "name": "Brawl", "source": "Laws of the Night 87" },
   { "name": "Commerce", "source": "Faith & Fire 109" },
   { "name": "Computer", "source": "Laws of the Night 88" },
-  { "name": "Crafts", "source": "Laws of the Night 88" },
+  { "name": "Crafts", "source": "Laws of the Night 88", "multitrack": true },
   { "name": "Dodge", "source": "Laws of the Night 88" },
   { "name": "Drive", "source": "Laws of the Night 88" },
   { "name": "Empathy", "source": "Laws of the Night 88" },
