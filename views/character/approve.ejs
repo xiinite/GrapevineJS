@@ -14,7 +14,16 @@
             <li class="list-group-item" ng-repeat="char in characters">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        {{char.name}} ({{char.clan}})
+                        <div class="row">
+                            <div class="col-lg-12">
+                                {{char.name}} ({{char.clan}})
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                Player: {{char.player.displayName}}
+                            </div>
+                        </div>
                     </div>
                     <div class="panel-body panel-collapse">
                         <div class="row">

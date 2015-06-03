@@ -60,6 +60,19 @@
                                 </div>
                             </div>
                             <div class="form-group"
+                                 ng-class="{'has-error': !character.sire, 'has-feedback': !character.sire}">
+                                <label class="control-label col-lg-3"><b>Character's Sire: </b></label>
+
+                                <div class="col-lg-7">
+                                    <input type="text" class="form-control" ng-class="{'has-error': !character.sire}"
+                                           ng-model="character.sire"
+                                           ng-required="true"/>
+                                <span ng-show="!character.sire" class="glyphicon glyphicon-remove form-control-feedback"
+                                      aria-hidden="true"></span>
+                                    <span ng-show="!character.sire" class="sr-only">(error)</span>
+                                </div>
+                            </div>
+                            <div class="form-group"
                                  ng-class="{'has-error': !character.nature, 'has-feedback': !character.nature}">
 
                                 <label class="control-label col-lg-3"><b>Nature:</b></label>

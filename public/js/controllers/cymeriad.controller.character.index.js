@@ -34,7 +34,7 @@ app.controller('cymeriad.controller.character.index', ['$scope', '$http', 'loadi
         var root = $scope;
         if($scope.loaded === false){
             
-            $http.get("/chronicle/list").then(function(resp){
+            $http.get("/chronicle/all").then(function(resp){
                 root.chronicles = resp.data;
                 if(root.chronicles.length > 0){
                     root.selectedchronicle = root.chronicles[0];
@@ -182,6 +182,16 @@ app.controller('cymeriad.controller.character.index', ['$scope', '$http', 'loadi
     };
 }]);
 
+app.filter('findPlayer', function() {
+    return function(input, allPlayers){
+        var players = $.grep(allPlayers, function(element){
+            return element.googleId == input;
+        });
+        if(players.length > 0) return players[0].displayName;
+        return '';
+    }
+});
+
 app.directive("customSort", function() {
     return {
         restrict: 'A',
@@ -210,8 +220,10 @@ app.directive("customSort", function() {
 
 
             scope.selectedCls = function(column) {
-                if(column == scope.sort.sortingOrder){
-                    return ('icon-chevron-' + ((scope.sort.reverse) ? 'down' : 'up'));
+                if(scope.sort != null){
+                    if(column == scope.sort.sortingOrder){
+                        return ('icon-chevron-' + ((scope.sort.reverse) ? 'down' : 'up'));
+                    }
                 }
                 else{
                     return'icon-sort'
