@@ -72,7 +72,7 @@
                     <ui-select ng-model="attendee.selected" theme="bootstrap" ng-disabled="disabled" class="col-md-9">
                         <ui-select-match placeholder="Select a person in the list or search his e-mail...">{{$select.selected.displayName}}</ui-select-match>
                         <ui-select-choices repeat="person in players | propsFilter: {displayName: $select.search, emails: $select.search}">
-                            <div ng-bind-html="person.displayName | highlight: $select.search"></div>
+                            <div>{{person.displayName}}</div>
                             <small>
                                 email: {{person.emails[0].value}} ||
                                 {{person.provider}} account

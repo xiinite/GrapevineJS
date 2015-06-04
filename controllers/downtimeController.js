@@ -85,7 +85,7 @@ module.exports = {
             });
         });
     },
-    'submittedPeriods': function(req, res){
+    'submittedPeriods': function(req, res, next){
         characterModel.find({googleId: req.user.googleId, state: {$in: ["Active"]}}, function (err, result) {
             if (err) return next(new Error(err));
             var characterids = result.map(function(item){
@@ -101,6 +101,18 @@ module.exports = {
                     if(err) return next(new Error(err));
                     res.json(result);
                 });
+            });
+        });
+    },
+    'submittedCharacters': function(req, res, next){
+        characterModel.find({googleId: req.user.googleId, state: {$in: ["Active"]}}, function (err, result) {
+            if (err) return next(new Error(err));
+            var characterids = result.map(function(item){
+                return item.id;
+            });
+            model.find({characterid: {$in: characterids}, downtimePeriod: req.params.id}, function(err, result){
+                if(err) return next(new Error(err));
+                res.json(result);
             });
         });
     },

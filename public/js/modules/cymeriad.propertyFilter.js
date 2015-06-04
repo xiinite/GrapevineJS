@@ -18,8 +18,10 @@ angular.module('cymeriad.propertyFilter', []).filter('propsFilter', function() {
                             }
                         });
                     }else{
-                        if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
-                            itemMatches = true;
+                        if(item[prop] !== undefined){
+                            if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
+                                itemMatches = true;
+                            }
                         }
                     }
 

@@ -37,7 +37,7 @@ app.controller('cymeriad.controller.downtime.index', ['$scope', '$http', 'loadin
             );
         }
 
-        $q.all(
+        $q.all([
             $http.get("/chronicle/list").then(function (response) {
                 root.chronicles = response.data;
             }),
@@ -46,7 +46,7 @@ app.controller('cymeriad.controller.downtime.index', ['$scope', '$http', 'loadin
             }),
             $http.get("/downtime/submittedPeriods/").then(function(response){
                 root.submittedperiods = response.data;
-            })
+            })]
         ).then(function(){
                 loading.hide();
             });

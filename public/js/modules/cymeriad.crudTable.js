@@ -111,7 +111,11 @@ angular.module('cymeriad.crudTable', ['cymeriad.services']).directive('crudtable
                     {
                         $http.get("/" + $scope.itemtype + "/all").then(function (response) {
                             root.items = response.data;
-
+                            for(var i = root.items.length; i--; ){
+                                if(root.items[i].date !== undefined){
+                                    root.items[i].date = $filter('date')(root.items[i].date, 'yyyy-MM-dd');
+                                }
+                            }
                             $scope.search();
                             loading.hide();
                         });
@@ -120,7 +124,11 @@ angular.module('cymeriad.crudTable', ['cymeriad.services']).directive('crudtable
                     {
                         var cb = function(response){
                             root.items = response.data;
-
+                            for(var i = root.items.length; i--; ){
+                                if(root.items[i].date !== undefined){
+                                    root.items[i].date = $filter('date')(root.items[i].date, 'yyyy-MM-dd');
+                                }
+                            }
                             $scope.search();
                             loading.hide();
                         };

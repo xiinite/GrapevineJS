@@ -6,10 +6,18 @@
 <script type='text/javascript' charset="utf-8" src="/js/controllers/cymeriad.controller.downtime.submit.js"></script>
 <div class="container" ng-app="cymeriad.app.downtime" ng-controller="cymeriad.controller.downtime.submit" ng-init="init('<%= period %>')">
     <h3>{{period.openFrom}}</h3>
-    <select class="form-control"
-            ng-change="search()"
-            ng-options="c as c.name for c in characters"
-            ng-model="scharacter">
-    </select>
-    <button class="btn btn-primary" ng-click="submit()">Submit</button>
+    <div ng-hide="characters.length == 0">
+        <select class="form-control"
+                ng-change="search()"
+                ng-options="c as c.name for c in characters"
+                ng-model="scharacter">
+        </select>
+        <button class="btn btn-primary" ng-click="submit()">Submit</button>
+    </div>
+    <div ng-show="submittedperiods.length > 0">
+        <div class="panel panel-default">
+            <div class="panel-heading">Submitted downtimes</div>
+            <div class="panel-body"></div>
+        </div>
+    </div>
 </div>
