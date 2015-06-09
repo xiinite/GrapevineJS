@@ -58,6 +58,30 @@ angular.module('cymeriad.resources', ['ngResource', 'ngRoute', 'ngTouch', 'ngSan
             }),
             social: $resource('/resource/METRevised/Social.json', {}, {
                 get: {method: 'GET', params: {}, isArray: true}
+            }),
+            allyActions: $resource('/resource/Nachtkronieken/AllyActions.json', {}, {
+                get: {method: 'GET', params: {}, isArray: true}
+            }),
+            contactActions: $resource('/resource/Nachtkronieken/ContactActions.json', {}, {
+                get: {method: 'GET', params: {}, isArray: true}
+            }),
+            influenceActions: $resource('/resource/Nachtkronieken/InfluenceActions.json', {}, {
+                get: {method: 'GET', params: {}, isArray: true}
+            }),
+            playerActions: $resource('/resource/Nachtkronieken/PlayerActions.json', {}, {
+                get: {method: 'GET', params: {}, isArray: true}
+            }),
+            resourceActions: $resource('/resource/Nachtkronieken/ResourceActions.json', {}, {
+                get: {method: 'GET', params: {}, isArray: true}
+            }),
+            retainerActions: $resource('/resource/Nachtkronieken/RetainerActions.json', {}, {
+                get: {method: 'GET', params: {}, isArray: true}
+            }),
+            locations: $resource('/resource/Nachtkronieken/Locations.json', {}, {
+                get: {method: 'GET', params: {}, isArray: true}
+            }),
+            bloodgrounds: $resource('/resource/Nachtkronieken/Bloodgrounds.json', {}, {
+                get: {method: 'GET', params: {}, isArray: true}
             })
-        };
+        }
     });

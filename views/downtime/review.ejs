@@ -1,0 +1,8 @@
+<%- layout("../layout.ejs") %>
+<%- partial('./scripts') %>
+<script type='text/javascript' charset="utf-8" src="/js/controllers/cymeriad.controller.downtime.review.js"></script>
+<div class="container" ng-app="cymeriad.app.downtime" ng-controller="cymeriad.controller.downtime.review" ng-init="init('<%= period %>')">
+    <div>
+        {{downtime}}
+    </div>
+</div>

@@ -29,9 +29,19 @@ module.exports = {
         var out = {user: req.user, period: req.params.id};
         res.render(ViewTemplatePath + "/edit", out);
     },
+    'review': function(req, res){
+        var out = {user: req.user, period: req.params.id};
+        res.render(ViewTemplatePath + "/review", out);
+    },
     'submit': function(req, res){
         var out = {user: req.user, period: req.params.id};
         res.render(ViewTemplatePath + "/submit", out);
+    },
+    'find': function(req, res, next){
+        model.find({id: req.params.id}, function(err, result){
+            if(err) return next(new Error(err));
+            res.json(result);
+        });
     },
     'findPeriod': function(req, res, next){
         periodModel.find({id: req.params.id}, function(err, result){

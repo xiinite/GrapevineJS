@@ -47,6 +47,7 @@ module.exports = {
         router.get(app, 'downtime', 'submittedPeriods');
         router.get(app, 'downtime', 'findPeriod', [':id']);
         router.get(app, 'downtime', 'submit', [':id']);
+        router.get(app, 'downtime', 'review', [':id']);
         router.get(app, 'downtime', 'submittedCharacters', [':id']);
         router.post(app, 'downtime', 'savesubmission');
 

@@ -1,8 +1,5 @@
 <%- layout("../layout.ejs") %>
-<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.confirmClick.js"></script>
-<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.services.js"></script>
-<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.propertyFilter.js"></script>
-<script type="text/javascript" charset="utf-8" src="/js/applications/cymeriad.app.downtime.js"></script>
+<%- partial('./scripts') %>
 <script type='text/javascript' charset="utf-8" src="/js/controllers/cymeriad.controller.downtime.edit.js"></script>
 <div class="container" ng-app="cymeriad.app.downtime" ng-controller="cymeriad.controller.downtime.edit" ng-init="init('<%= period %>')">
     <h1 class="page-header hidden-xs hidden-sm">New downtimeperiod</h1>
@@ -12,7 +9,7 @@
             <form class="form-horizontal">
                 <input type="hidden" ng-model="period.id" />
                 <div class="form-group">
-                    <label class="col-lg-2 control-label">openFrom:</label>
+                    <label class="col-sm-2 control-label">openFrom:</label>
                     <div class="col-sm-10">
                         <input class="form-control" type="date" ng-model="period.openFrom" />
                     </div>

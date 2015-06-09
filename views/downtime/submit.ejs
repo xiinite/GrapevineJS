@@ -1,23 +1,408 @@
 <%- layout("../layout.ejs") %>
-<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.confirmClick.js"></script>
-<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.services.js"></script>
-<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.propertyFilter.js"></script>
-<script type="text/javascript" charset="utf-8" src="/js/applications/cymeriad.app.downtime.js"></script>
+<%- partial('./scripts') %>
 <script type='text/javascript' charset="utf-8" src="/js/controllers/cymeriad.controller.downtime.submit.js"></script>
-<div class="container" ng-app="cymeriad.app.downtime" ng-controller="cymeriad.controller.downtime.submit" ng-init="init('<%= period %>')">
-    <h3>{{period.openFrom}}</h3>
-    <div ng-hide="characters.length == 0">
-        <select class="form-control"
-                ng-change="search()"
-                ng-options="c as c.name for c in characters"
-                ng-model="scharacter">
-        </select>
-        <button class="btn btn-primary" ng-click="submit()">Submit</button>
-    </div>
-    <div ng-show="submittedperiods.length > 0">
-        <div class="panel panel-default">
+<div class="container" ng-app="cymeriad.app.downtime" ng-controller="cymeriad.controller.downtime.submit"
+     ng-init="init('<%= period %>')">
+    <h3>{{period.openFrom | date}}</h3>
+
+    <div ng-show="submittedperiods.length > 0" class="voffset">
+        <div class="panel panel-info">
             <div class="panel-heading">Submitted downtimes</div>
-            <div class="panel-body"></div>
+            <div class="panel-body">
+                <div class="row" ng-repeat="period in submittedperiods">
+                    <div class="col-lg-12">
+                        <a ng-href="/downtime/review/{{period.id}}">{{findCharacter(period.characterid)}}</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    <form name="downtimeForm" ng-submit="submit()">
+        <div class="row voffset">
+            <div class="col-lg-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseCharInfo">
+                        Character Info
+                    </div>
+                    <div class="panel-body collapse in" id="collapseCharInfo">
+                        <div class="col-lg-12">
+                            <div ng-hide="characters.length == 0" class="col-lg-12">
+                                <select class="form-control"
+                                        ng-change="search()"
+                                        ng-options="c as c.name for c in characters"
+                                        ng-model="scharacter" required>
+                                    <option style="display:none" value="">Select a character</option>
+                                </select>
+                            </div>
+                        <span class="voffset" ng-hide="character === undefined">
+                            <span class="col-lg-3 col-sm-3">Herd:</span>
+                            <span class="col-lg-9 col-sm-9">{{findBackgroundValue('Herd');}}</span>
+                            <span class="col-lg-3 col-sm-3">Base feed:</span>
+                            <span class="col-lg-9 col-sm-9">3</span>
+                        </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row voffset" ng-hide="scharacter === undefined">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapsePersonalActions">
+                        Personal actions
+                    </div>
+                    <div class="panel-body collapse in" id="collapsePersonalActions">
+                        <div class="col-sm-12 form-group">
+                            <div>
+                                <span class="col-sm-3">Personal action 1:</span>
+                                <span class="col-sm-9">
+                                    <select class="form-control"
+                                            ng-options="action for action in playerActions"
+                                            ng-change="clearAction('playerAction1')"
+                                            ng-model="actions.playerAction1.action" required>
+                                        <option style="display:none" value="">Select an action</option>
+                                    </select>
+                                </span>
+                            </div>
+
+                            <div ng-show="isLocationRequired(actions.playerAction1)">
+                                <span class="col-sm-3">Location:</span>
+                                <span class="col-sm-9">
+                                    <select class="form-control"
+                                            ng-options="location for location in locations"
+                                            ng-model="actions.playerAction1.location" ng-required="isLocationRequired(actions.playerActions1)">
+                                        <option style="display:none" value="">Select a locations</option>
+                                    </select>
+                                </span>
+                            </div>
+
+                            <div ng-show="isBloodgroundRequired(actions.playerAction1)">
+                                <span class="col-sm-3">Location:</span>
+                                <span class="col-sm-9">
+                                    <select class="form-control"
+                                            ng-options="location for location in bloodgrounds"
+                                            ng-model="actions.playerAction1.location" ng-required="isBloodgroundRequired(actions.playerActions1)">
+                                        <option style="display:none" value="">Select a locations</option>
+                                    </select>
+                                </span>
+                            </div>
+
+                            <div ng-show="isDescriptionRequired(actions.playerAction1)">
+                                <span class="col-sm-3" ng-show="actions.playerAction1">Describe: </span>
+                                <span class="col-sm-9">
+                                <textarea class="form-control" rows="5" maxlength="1000"
+                                          ng-model="actions.playerAction1.description"
+                                          ng-required="isDescriptionRequired(actions.playerAction1)"></textarea>
+                                </span>
+                            </div>
+
+                            <div ng-show="showTest(actions.playerAction1)">
+                                <span class="col-sm-3">Test: </span>
+                                <span class="col-sm-3"><span class="fa fa-cloud"></span> Rock
+                                    <input type="radio" ng-model="actions.playerAction1.test" value="rock"
+                                           ng-required="isTestRequired(actions.playerAction1)"/></span>
+                                <span class="col-sm-3"><span class="fa fa-file"></span> Paper
+                                    <input type="radio" ng-model="actions.playerAction1.test" value="paper"
+                                           ng-required="isTestRequired(actions.playerAction1)"/></span>
+                                <span class="col-sm-3"><span class="fa fa-scissors"></span> Scissors
+                                    <input type="radio" ng-model="actions.playerAction1.test" value="scissors"
+                                           ng-required="isTestRequired(actions.playerAction1)"/></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 form-group">
+                            <div>
+                                <span class="col-sm-3">Personal action 2:</span>
+                                <span class="col-sm-9">
+                                    <select class="form-control"
+                                            ng-options="action for action in playerActions"
+                                            ng-change="clearAction('playerAction2')"
+                                            ng-model="actions.playerAction2.action">
+                                        <option style="display:none" value="" maxlength="1000" required>Select an action
+                                        </option>
+                                    </select>
+                                </span>
+                            </div>
+
+                            <div ng-show="isLocationRequired(actions.playerAction2)">
+                                <span class="col-sm-3">Location:</span>
+                                <span class="col-sm-9">
+                                    <select class="form-control"
+                                            ng-options="location for location in locations"
+                                            ng-model="actions.playerAction1.location" ng-required="isLocationRequired(actions.playerActions2)">
+                                        <option style="display:none" value="">Select a locations</option>
+                                    </select>
+                                </span>
+                            </div>
+
+                            <div ng-show="isBloodgroundRequired(actions.playerAction2)">
+                                <span class="col-sm-3">Bloodground:</span>
+                                <span class="col-sm-9">
+                                    <select class="form-control"
+                                            ng-options="location for location in bloodgrounds"
+                                            ng-model="actions.playerAction1.location" ng-required="isBloodgroundRequired(actions.playerActions2)">
+                                        <option style="display:none" value="">Select a locations</option>
+                                    </select>
+                                </span>
+                            </div>
+
+                            <div ng-show="isDescriptionRequired(actions.playerAction2)">
+                                <span class="col-sm-3" ng-show="actions.playerAction2">Describe: </span>
+                                <span class="col-sm-9">
+                                    <textarea class="form-control" rows="5" maxlength="1000"
+                                              ng-model="actions.playerAction2.description"
+                                              ng-required="isDescriptionRequired(actions.playerAction2)"></textarea>
+                                </span>
+                            </div>
+
+                            <div ng-show="showTest(actions.playerAction2)">
+                                <span class="col-sm-3">Test: </span>
+                                <span class="col-sm-3"><span class="fa fa-cloud"></span> Rock
+                                    <input type="radio" ng-model="actions.playerAction2.test" value="rock"
+                                           ng-required="isTestRequired(actions.playerAction2)"/></span>
+                                <span class="col-sm-3"><span class="fa fa-file"></span> Paper
+                                    <input type="radio" ng-model="actions.playerAction2.test" value="paper"
+                                           ng-required="isTestRequired(actions.playerAction2)"/></span>
+                                <span class="col-sm-3"><span class="fa fa-scissors"></span> Scissors
+                                    <input type="radio" ng-model="actions.playerAction2.test" value="scissors"
+                                           ng-required="isTestRequired(actions.playerAction2)"/></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row voffset" ng-hide="findBackgroundValue('Retainers') == 0">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseRetainerActions">
+                        Retainer actions
+                    </div>
+                    <div class="panel-body collapse in" id="collapseRetainerActions">
+                        <div class="col-lg-12">
+                            <div class="row" ng-repeat="r in getRetainers()">
+                                <div class="col-sm-12 h4">
+                                    <span>Retainer </span><span ng-hide="r.note == ''">"{{r.note}}" </span>
+                                    <span>(rating {{r.rating}})</span>
+                                </div>
+                                <div class="col-sm-12 form-group">
+                                    <div>
+                                        <span class="col-sm-3">Retainer action:</span>
+                                        <span class="col-sm-9">
+                                            <select class="form-control"
+                                                    ng-options="action for action in retainerActions"
+                                                    ng-change="clearAction('retainerAction' + $index)"
+                                                    ng-model="actions['retainerAction' + $index].action">
+                                                <option style="display:none" value="" maxlength="1000" required>Select an action
+                                                </option>
+                                            </select>
+                                        </span>
+                                    </div>
+
+                                    <div ng-show="isLocationRequired(actions['retainerAction' + $index])">
+                                        <span class="col-sm-3">Location:</span>
+                                        <span class="col-sm-9">
+                                            <select class="form-control"
+                                                    ng-options="location for location in locations"
+                                                    ng-model="actions['retainerAction' + $index].location" ng-required="isLocationRequired(actions['retainerAction' + $index])">
+                                                <option style="display:none" value="">Select a locations</option>
+                                            </select>
+                                        </span>
+                                    </div>
+
+                                    <div ng-show="isDescriptionRequired(actions['retainerAction' + $index])">
+                                        <span class="col-sm-3" ng-show="actions['retainerAction' + $index]">Describe: </span>
+                                        <span class="col-sm-9">
+                                            <textarea class="form-control" rows="5" maxlength="1000"
+                                                      ng-model="actions['retainerAction' + $index].description"
+                                                      ng-required="isDescriptionRequired(actions['retainerAction' + $index])"></textarea>
+                                        </span>
+                                    </div>
+
+                                    <div ng-show="showTest(actions['retainerAction' + $index])">
+                                        <span class="col-sm-3">Test: </span>
+                                        <span class="col-sm-3"><span class="fa fa-cloud"></span> Rock
+                                            <input type="radio" ng-model="actions['retainerAction' + $index].test" value="rock"
+                                                   ng-required="isTestRequired(actions['retainerAction' + $index])"/></span>
+                                        <span class="col-sm-3"><span class="fa fa-file"></span> Paper
+                                            <input type="radio" ng-model="actions['retainerAction' + $index].test" value="paper"
+                                                   ng-required="isTestRequired(actions['retainerAction' + $index])"/></span>
+                                        <span class="col-sm-3"><span class="fa fa-scissors"></span> Scissors
+                                            <input type="radio" ng-model="actions['retainerAction' + $index].test" value="scissors"
+                                                   ng-required="isTestRequired(actions['retainerAction' + $index])"/></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row voffset" ng-hide="findBackgroundValue('Allies') == 0 && findBackgroundValue('Contacts') == 0 && findBackgroundValue('Resources') == 0">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading clickable" data-toggle="collapse"
+                         data-target="#collapseBackgroundActions">
+                        Background actions
+                    </div>
+                    <div class="panel-body collapse in" id="collapseBackgroundActions">
+                        <div class="form-group" ng-show="findBackgroundValue('Allies') > 0">
+                            <div class="col-sm-12 h4">
+                                <span>Allies </span>
+                                <span>(rating {{findBackgroundValue('Allies')}})</span>
+                            </div>
+
+                            <div class="voffset">
+                                <span class="col-sm-3">Ally action:</span>
+                                <span class="col-sm-9">
+                                    <select class="form-control"
+                                            ng-options="action for action in allyActions"
+                                            ng-change="clearAction('allyAction')"
+                                            ng-model="actions.allyAction.action">
+                                        <option style="display:none" value="" maxlength="1000" required>Select an action
+                                        </option>
+                                    </select>
+                                </span>
+                            </div>
+                            <div ng-show="isDescriptionRequired(actions.allyAction)">
+                                <span class="col-sm-3" ng-show="actions.allyAction">Describe: </span>
+                                <span class="col-sm-9">
+                                    <textarea class="form-control" rows="5" maxlength="1000"
+                                              ng-model="actions.allyAction.description"
+                                              ng-required="isDescriptionRequired(actions.allyAction)"></textarea>
+                                </span>
+                            </div>
+
+                            <div ng-show="showTest(actions.allyAction)">
+                                <span class="col-sm-3">Test: </span>
+                                <span class="col-sm-3"><span class="fa fa-cloud"></span> Rock
+                                    <input type="radio" ng-model="actions.allyAction.test" value="rock"
+                                           ng-required="isTestRequired(actions.allyAction)"/></span>
+                                <span class="col-sm-3"><span class="fa fa-file"></span> Paper
+                                    <input type="radio" ng-model="actions.allyAction.test" value="paper"
+                                           ng-required="isTestRequired(actions.allyAction)"/></span>
+                                <span class="col-sm-3"><span class="fa fa-scissors"></span> Scissors
+                                    <input type="radio" ng-model="actions.allyAction.test" value="scissors"
+                                           ng-required="isTestRequired(actions.allyAction)"/></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-show="findBackgroundValue('Contacts') > 0">
+                            <div class="col-sm-12 h4">
+                                <span>Contacts </span>
+                                <span>(rating {{findBackgroundValue('Contacts')}})</span>
+                            </div>
+
+                            <div class="voffset">
+                                <span class="col-sm-3">Contact action:</span>
+                                <span class="col-sm-9">
+                                    <select class="form-control"
+                                            ng-options="action for action in contactActions"
+                                            ng-change="clearAction('contactAction')"
+                                            ng-model="actions.contactAction.action">
+                                        <option style="display:none" value="" maxlength="1000" required>Select an action
+                                        </option>
+                                    </select>
+                                </span>
+                            </div>
+                            <div ng-show="isDescriptionRequired(actions.contactAction)">
+                                <span class="col-sm-3" ng-show="actions.contactAction">Describe: </span>
+                                <span class="col-sm-9">
+                                    <textarea class="form-control" rows="5" maxlength="1000"
+                                              ng-model="actions.contactAction.description"
+                                              ng-required="isDescriptionRequired(actions.contactAction)"></textarea>
+                                </span>
+                            </div>
+
+                            <div ng-show="showTest(actions.contactAction)">
+                                <span class="col-sm-3">Test: </span>
+                                <span class="col-sm-3"><span class="fa fa-cloud"></span> Rock
+                                    <input type="radio" ng-model="actions.contactAction.test" value="rock"
+                                           ng-required="isTestRequired(actions.contactAction)"/></span>
+                                <span class="col-sm-3"><span class="fa fa-file"></span> Paper
+                                    <input type="radio" ng-model="actions.contactAction.test" value="paper"
+                                           ng-required="isTestRequired(actions.contactAction)"/></span>
+                                <span class="col-sm-3"><span class="fa fa-scissors"></span> Scissors
+                                    <input type="radio" ng-model="actions.contactAction.test" value="scissors"
+                                           ng-required="isTestRequired(actions.contactAction)"/></span>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="findBackgroundValue('Resources') > 0">
+                            <div class="col-sm-12 h4">
+                                <span>Resources </span>
+                                <span>(rating {{findBackgroundValue('Resources')}})</span>
+                            </div>
+
+                            <div class="voffset">
+                                <span class="col-sm-3">Resource action:</span>
+                                <span class="col-sm-9">
+                                    <select class="form-control"
+                                            ng-options="action for action in resourceActions"
+                                            ng-change="clearAction('resourceAction')"
+                                            ng-model="actions.resourceAction.action">
+                                        <option style="display:none" value="" maxlength="1000" required>Select an action
+                                        </option>
+                                    </select>
+                                </span>
+                            </div>
+                            <div ng-show="isDescriptionRequired(actions.resourceAction)">
+                                <span class="col-sm-3" ng-show="actions.resourceAction">Describe: </span>
+                                <span class="col-sm-9">
+                                    <textarea class="form-control" rows="5" maxlength="1000"
+                                              ng-model="actions.resourceAction.description"
+                                              ng-required="isDescriptionRequired(actions.resourceAction)"></textarea>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row voffset" ng-hide="scharacter === undefined">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading clickable" data-toggle="collapse"
+                         data-target="#collapseDominionInfluences">
+                        Dominion Influences
+                    </div>
+                    <div class="panel-body collapse in" id="collapseDominionInfluences">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row voffset" ng-hide="scharacter === undefined">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseWealthInfluences">
+                        Wealth Influences
+                    </div>
+                    <div class="panel-body collapse in" id="collapseWealthInfluences">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row voffset" ng-hide="scharacter === undefined">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapsePublicInfluences">
+                        Public Influences
+                    </div>
+                    <div class="panel-body collapse in" id="collapsePublicInfluences">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <input type="submit" class="btn btn-lg btn-primary pull-right" value="Submit"></input>
+        </div>
+    </form>
 </div>
