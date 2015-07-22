@@ -112,6 +112,36 @@ module.exports = {
             });
         }
     },
+    'showoldversion': function (req, res, next) {
+        if (req.params.id) {
+            model.find({
+                "id": req.params.id
+            }, function (err, result) {
+                if (err) return next(new Error(err));
+                var character = result[0];
+                findByDate(character.modificationhistory, new Date(req.params.version).toUTCString(), function (data) {
+
+                    if(data === null || data === undefined) return next(new Error("Not found"));
+                    if(data.previousVersion === null || data.previousVersion === undefined) return next(new Error("Not found"));
+                    var oldVersion = (data.previousVersion);
+                    if(oldVersion.chronicle.id !== undefined){
+                        oldVersion.chronicle = oldVersion.chronicle.id;
+                    }
+                    oldVersion.player = {};
+
+                    oldVersion.created = new Date(oldVersion.created);
+                    oldVersion.modified = new Date(oldVersion.modified);
+
+                    var out = {
+                        user: req.user,
+                        character: oldVersion
+                    };
+
+                    res.render(ViewTemplatePath + "/showOldversion", out);
+                });
+            });
+        }
+    },
     'lores': function (req, res, next) {
         if (req.params.id) {
             model.find({

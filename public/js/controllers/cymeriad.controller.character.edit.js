@@ -1,5 +1,5 @@
 "use strict";
-app.controller('cymeriad.controller.character.edit', ['$scope', '$http', 'loading', 'resources', '$filter', function ($scope, $http, loading, resources, $filter) {
+app.controller('cymeriad.controller.character.edit', ['$scope', '$window', '$http', 'loading', 'resources', '$filter', function ($scope, $window, $http, loading, resources, $filter) {
     $scope.log = function (event) {
         console.log(event);
     };
@@ -403,6 +403,10 @@ app.controller('cymeriad.controller.character.edit', ['$scope', '$http', 'loadin
         }else {
             return player.displayName + " (" + player.provider + ")";
         }
+    };
+
+    $scope.showOld = function(date){
+        $window.open('/character/showOldversion/' + $scope.character.id + '/' + date, '_blank');
     };
 
     $scope.revert = function(date){

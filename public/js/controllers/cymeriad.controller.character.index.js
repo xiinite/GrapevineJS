@@ -33,11 +33,27 @@ app.controller('cymeriad.controller.character.index', ['$scope', '$http', 'loadi
         loading.show();
         var root = $scope;
         if($scope.loaded === false){
-            
+            try{
+                $scope.itemsPerPage = localStorage.getItem("itemsperpage");
+            }catch(ex){}
+            if(!$scope.itemsPerPage || $scope.itemsPerPage === "null"){
+                $scope.itemsPerPage = 25;
+            }
             $http.get("/chronicle/all").then(function(resp){
                 root.chronicles = resp.data;
                 if(root.chronicles.length > 0){
-                    root.selectedchronicle = root.chronicles[0];
+                    try{
+                        var selectedchronicle = localStorage.getItem("selectedchronicle");
+                        if(selectedchronicle){
+                            root.selectedchronicle = $.grep(root.chronicles, function(item){
+                                return item.id === selectedchronicle;
+                            })[0];
+                        };
+                    }catch(e){
+
+                    }
+                    if(!root.selectedchronicle)
+                        root.selectedchronicle = root.chronicles[0];
                     $scope.loaded = true;
                 }
                 
@@ -112,6 +128,12 @@ app.controller('cymeriad.controller.character.index', ['$scope', '$http', 'loadi
             }
             return false;
         });
+
+        try{
+            localStorage.setItem("selectedchronicle", $scope.selectedchronicle.id);
+            localStorage.setItem("itemsperpage", $scope.itemsPerPage);
+        }catch(e){}
+
         // take care of the sorting order
         if ($scope.sort.sortingOrder !== '') {
             $scope.filteredItems = $filter('orderBy')($scope.filteredItems, $scope.sort.sortingOrder, $scope.sort.reverse);

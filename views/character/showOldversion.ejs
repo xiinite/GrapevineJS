@@ -10,42 +10,6 @@
             $(".navbar-collapse").collapse('hide');
             $($(this).data('target')).collapse('show');
         });
-        $('#btnPrint').click(function () {
-            if ($(document).find('div.panel-collapse:not(.in)').length > 0) {
-                $('div.panel-collapse').on("shown.bs.collapse", print);
-                $(document).find('div.panel-collapse:not(.in)').collapse('show');
-            }
-            else {
-                window.print();
-            }
-            //window.print();
-        });
-
-        var print = function () {
-            $('div.panel-collapse').unbind("shown.bs.collapse", print);
-            setTimeout(window.print, 500);
-        };
-
-        $('.trait').click(function () {
-            if ($(this).find('del').length > 0) return;
-            var trait = $(this);
-            var btnConfirm = $('<button class="btn btn-xs btn-warning pull-right">expend</button>');
-            var btnCancel = $('<button class="btn btn-xs pull-right">cancel</button>');
-
-            if ($(this).find('button').length > 0) return;
-            trait.append(btnCancel);
-            trait.append(btnConfirm);
-            btnConfirm.click(function () {
-                trait.addClass("expendedTrait").removeClass('trait');
-                trait.find('button').remove();
-                trait.html("<del>" + trait.html() + "</del>");
-            });
-
-            btnCancel.click(function () {
-                trait.find('button').remove();
-                event.stopPropagation();
-            });
-        });
 
         $('.expandcollapse').click(function () {
 
@@ -94,7 +58,6 @@
     <header class="page-header navbar navbar-default navbar-fixed-bottom hidden-print" role="banner">
         <nav class="collapse navbar-collapse tr-navbar-collapse " role="navigation">
             <ul class="nav navbar-nav">
-                <li><a href="#pnlGlance" data-target="#collapseGlance">Glance</a></li>
                 <li><a href="#pnlAbout" data-target="#collapseAbout">About</a></li>
                 <li><a href="#pnlAttributes" data-target="#collapseAttributes">Attributes</a></li>
                 <li><a href="#pnlAdvantages" data-target="#collapseAdvantages">Advantages</a></li>
@@ -107,73 +70,11 @@
             </ul>
         </nav>
     </header>
+
     <h1 class="page-header"><%= character.name %>
-        <div class='btn-toolbar pull-right hidden-print'>
-            <div class='btn-group'>
-                <button id="btnPrint" type='button' class='btn btn-info'><span class="glyphicon glyphicon-print"></span>
-                    Print
-                </button>
-                <a href="/character/lores/<%= character.id %>" class="btn btn-default"><span
-                            class="glyphicon glyphicon-education"></span>
-                    Lores
-                </a>
-                <% if(character.state == 'Active' || character.state == 'Approved' || character.state == 'Background Rejected') { %>
-                <a href="/character/background/<%= character.id %>" class="btn btn-default"><span
-                            class="glyphicon glyphicon-briefcase"></span>
-                    Background
-                </a>
-                <% } %>
-                <% if(user.isSuperAdmin || character.chronicle.admins.indexOf(user.googleId) > 0){ %>
-                <a href="/character/edit/<%= character.id %>" class="btn btn-default"><span
-                            class="glyphicon glyphicon-edit"></span>
-                    Edit
-                </a>
-                <% } %>
-            </div>
-        </div>
+        (version: <%= character.modified.getDate() + "/" + character.modified.getMonth() + "/" + character.modified.getFullYear() %>)
+
     </h1>
-
-    <div id="pnlGlance" class="panel panel-default hidden-print">
-        <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseGlance">
-            <h4 id="hdrGlance" class="panel-title">
-                Glance
-            </h4>
-        </div>
-        <div id="collapseGlance" class="panel-collapse collapse">
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="col-md-4">
-                            <div class="label-default"><b>Physical:</b> <span
-                                        class='pull-right'><%= calctotal(character.attributes.physical) %></span></div>
-                            <div><b>Social:</b> <span
-                                        class='pull-right'><%= calctotal(character.attributes.social) %></span></div>
-                            <div class="label-default"><b>Mental:</b> <span
-                                        class='pull-right'><%= calctotal(character.attributes.mental) %></span></div>
-                        </div>
-                        <div class="col-md-4">
-                            <div><b><%= character.conscience.name %>:</b> <span
-                                        class='pull-right'><%= character.conscience.rating %></span></div>
-                            <div class="label-default"><b><%= character.selfcontrol.name %>:</b> <span
-                                        class='pull-right'><%= character.selfcontrol.rating %></span></div>
-                            <div><b><%= character.courage.name %>:</b> <span
-                                        class='pull-right'><%= character.courage.rating %></span></div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="label-default"><b>Willpower (total):</b> <span
-                                        class='pull-right'><%= character.willpower.current %>
-                                    (<%= character.willpower.max %>)</span></div>
-                            <div><b>Morality Traits:</b> <span class='pull-right'><%= character.path.rating %></span>
-                            </div>
-                            <div class="label-default"><b>Status:</b> <span
-                                        class='pull-right'><%= calctotal(character.status) %></span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div id='pnlAbout' class="panel panel-default">
         <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseAbout">
             <h4 id="hdrAbout" class="panel-title">

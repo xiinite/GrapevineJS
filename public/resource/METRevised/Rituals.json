@@ -22,5 +22,7 @@
   {"path": "Necromantic Rituals","name": "Cadaver’s Touch","level": "Intermediate"},
   {"path": "Necromantic Rituals","name": "Call On the Shadow’s Grace","level": "Intermediate"},
   {"path": "Necromantic Rituals","name": "Ritual of the Unearthed Fetter","level": "Intermediate"},
-  {"path": "Necromantic Rituals","name": "Grasp the Ghostly","level": "Advanced"}
+  {"path": "Necromantic Rituals","name": "Grasp the Ghostly","level": "Advanced"},
+  {"path": "Thaumaturgical Rituals","name": "Hearth of Stone","level": "Intermediate"},
+  {"path": "Thaumaturgical Rituals","name": "Ward versus Spirits","level": "Advanced"}
 ]
