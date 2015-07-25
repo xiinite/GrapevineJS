@@ -235,6 +235,10 @@ textarea.vertical{
         page-break-before: always;
     }
 
+    .pb{
+        page-break-after: always;
+    }
+
     .page-header {
         padding: 0;
         margin-top: 0;

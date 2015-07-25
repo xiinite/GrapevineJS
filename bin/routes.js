@@ -20,6 +20,7 @@ module.exports = {
 
         router.get(app, 'character', 'new', [':id']);
         router.get(app, 'character', 'showoldversion', [':id', ':version']);
+        router.get(app, 'character', 'showall', []);
         router.get(app, 'character', 'lores', [':id']);
         router.get(app, 'character', 'background', [':id']);
         router.get(app, 'character', 'trash', [':id']);

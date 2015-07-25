@@ -112,6 +112,19 @@ module.exports = {
             });
         }
     },
+    'showall': function (req, res, next) {
+            model.find({
+                "state": 'Active'
+            }, function (err, result) {
+                if (err) return next(new Error(err));
+
+                var out = {
+                    user: req.user,
+                    characters: result
+                };
+                    res.render(ViewTemplatePath + "/showAll", out);
+            });
+    },
     'showoldversion': function (req, res, next) {
         if (req.params.id) {
             model.find({
