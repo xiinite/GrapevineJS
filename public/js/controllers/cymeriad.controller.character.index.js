@@ -39,6 +39,12 @@ app.controller('cymeriad.controller.character.index', ['$scope', '$http', 'loadi
             if(!$scope.itemsPerPage || $scope.itemsPerPage === "null"){
                 $scope.itemsPerPage = 25;
             }
+            try{
+                $scope.selectedstatus = localStorage.getItem("statusselection");
+            }catch(ex){}
+            if(!$scope.selectedstatus || $scope.selectedstatus === "null"){
+                $scope.selectedstatus = 'Active';
+            }
             $http.get("/chronicle/all").then(function(resp){
                 root.chronicles = resp.data;
                 if(root.chronicles.length > 0){
@@ -93,7 +99,7 @@ app.controller('cymeriad.controller.character.index', ['$scope', '$http', 'loadi
         $scope.selected = {};
         if(ids.length > 0){
             loading.show();
-            $http.post("/character/delete", {ids: ids, chronicleid: $scope.selectedchronicle}).then(function(){
+            $http.post("/character/delete", {ids: ids, chronicleid: $scope.selectedchronicle.id}).then(function(){
                 $scope.init();
             });
         }
@@ -132,6 +138,7 @@ app.controller('cymeriad.controller.character.index', ['$scope', '$http', 'loadi
         try{
             localStorage.setItem("selectedchronicle", $scope.selectedchronicle.id);
             localStorage.setItem("itemsperpage", $scope.itemsPerPage);
+            localStorage.setItem("statusselection", $scope.selectedstatus);
         }catch(e){}
 
         // take care of the sorting order
