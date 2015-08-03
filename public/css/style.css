@@ -44,6 +44,9 @@ ul.typeahead {
     margin-top: 150px;
 }
 
+.uppercase {
+    text-transform: uppercase;
+}
 #logo {
     background: url(/img/logo-default.png) no-repeat center right;
     display: block;

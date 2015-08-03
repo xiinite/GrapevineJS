@@ -5,13 +5,11 @@
     <h1 class="page-header">{{ character.name }}</h1>
     <h3>Downtime for {{period.openFrom | date}}</h3>
     <div class="row" ng-repeat="(key, value) in downtime.actions">
-        <h4 class="col-sm-12">{{key}}</h4>
         <div class="col-sm-12">
             <table class="table table-striped" >
                 <thead>
                 <tr>
-                    <th></th>
-                    <th></th>
+                    <th colspan="2"><h4 class="uppercase">{{key}}</h4></th>
                 </tr>
                 </thead>
                 <tbody>

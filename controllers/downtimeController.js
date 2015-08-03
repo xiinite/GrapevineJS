@@ -6,6 +6,22 @@ var uuid = require('node-uuid');
 var ViewTemplatePath = 'downtime';
 var sec = require('../bin/securityhandler.js');
 
+var findDowntime = function(array, id){
+    var count = array.length;
+    while(count--){
+        if(array[count].downtimePeriod == id){
+            return array[count];
+        }
+    }
+}
+var findCharacter = function(array, id){
+    var count = array.length;
+    while(count--){
+        if(array[count].id == id){
+            return array[count];
+        }
+    }
+}
 module.exports = {
     'index': function (req, res) {
         var out = {user: req.user};
@@ -98,18 +114,31 @@ module.exports = {
     'submittedPeriods': function(req, res, next){
         characterModel.find({googleId: req.user.googleId, state: {$in: ["Active"]}}, function (err, result) {
             if (err) return next(new Error(err));
+            var characters = result;
             var characterids = result.map(function(item){
                 return item.id;
             });
             model.find({characterid: {$in: characterids}}, function(err, result){
                 if(err) return next(new Error(err));
                 if(result.length == 0) return;
+                var downtimes = result;
                 var ids = result.map(function(item){
                     return item.downtimePeriod;
                 });
+                var returnarray = [];
                 periodModel.find({id: {$in: ids}}, function(err, result){
                     if(err) return next(new Error(err));
-                    res.json(result);
+                    if(result.length == 0) return;
+                    var count = result.length;
+                    while(count--){
+                        var item = findDowntime(downtimes, result[count].id);
+                        if(item !== undefined){
+                            item._doc.period = result[count];
+                            item._doc.character = findCharacter(characters, item.characterid);
+                            returnarray.push(item);
+                        }
+                    }
+                    res.json(returnarray);
                 });
             });
         });
