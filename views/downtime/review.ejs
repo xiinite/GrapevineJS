@@ -2,7 +2,33 @@
 <%- partial('./scripts') %>
 <script type='text/javascript' charset="utf-8" src="/js/controllers/cymeriad.controller.downtime.review.js"></script>
 <div class="container" ng-app="cymeriad.app.downtime" ng-controller="cymeriad.controller.downtime.review" ng-init="init('<%= period %>')">
-    <div>
-        {{downtime}}
+    <h1 class="page-header">{{ character.name }}</h1>
+    <h3>Downtime for {{period.openFrom | date}}</h3>
+    <div class="row" ng-repeat="(key, value) in downtime.actions">
+        <h4 class="col-sm-12">{{key}}</h4>
+        <div class="col-sm-12">
+            <table class="table table-striped" >
+                <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Action</td><td>{{value.action}}</td>
+                </tr>
+                <tr ng-show="value.location">
+                    <td>Location</td><td>{{value.location}}</td>
+                </tr>
+                <tr ng-show="value.description">
+                    <td>Description</td><td>{{value.description}}</td>
+                </tr>
+                <tr ng-show="value.test">
+                    <td>Test</td><td>{{value.test}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

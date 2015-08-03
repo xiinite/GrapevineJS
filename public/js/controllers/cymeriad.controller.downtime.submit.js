@@ -134,6 +134,27 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loadi
         });
     };
 
+    $scope.calctotal = function (list) {
+        if (list === undefined) return "";
+        var count = 0;
+        $.each(list, function (index, item) {
+            if(item.val !== undefined){
+                count += item.val;
+            }else if(item.rating !== undefined){
+                count += item.rating;
+            }
+        });
+        return count;
+    };
+    $scope.calctotalcost = function (list) {
+        if (list === undefined) return "";
+        var count = 0;
+        $.each(list, function (index, item) {
+            count += item.cost;
+        });
+        return count;
+    };
+
     $scope.init = function(id) {
         loading.show();
         var root = $scope;

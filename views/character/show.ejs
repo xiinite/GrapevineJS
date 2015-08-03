@@ -26,25 +26,32 @@
             setTimeout(window.print, 500);
         };
 
-        $('.trait').click(function () {
-            if ($(this).find('del').length > 0) return;
+        $('.clickable').click(function () {
+
             var trait = $(this);
+            if(!trait.is("span")) return;
+
+            trait.text(function () {
+                return $(this).text().replace("O", $('<div></div>').html('&Oslash;').text());
+            });
+            /*
+            if ($(this).find('button').length > 0) return;
             var btnConfirm = $('<button class="btn btn-xs btn-warning pull-right">expend</button>');
             var btnCancel = $('<button class="btn btn-xs pull-right">cancel</button>');
-
-            if ($(this).find('button').length > 0) return;
             trait.append(btnCancel);
             trait.append(btnConfirm);
             btnConfirm.click(function () {
-                trait.addClass("expendedTrait").removeClass('trait');
                 trait.find('button').remove();
-                trait.html("<del>" + trait.html() + "</del>");
+                trait.text(function () {
+                    return $(this).text().replace("O", $('<div></div>').html('&Oslash;').text());
+                });
+                event.stopPropagation();
             });
 
             btnCancel.click(function () {
                 trait.find('button').remove();
                 event.stopPropagation();
-            });
+            });*/
         });
 
         $('.expandcollapse').click(function () {
@@ -90,6 +97,7 @@
         }
     });
 </script>
+<% var count = 0; %>
 <div id="content" class="container">
     <header class="page-header navbar navbar-default navbar-fixed-bottom hidden-print" role="banner">
         <nav class="collapse navbar-collapse tr-navbar-collapse " role="navigation">
@@ -228,20 +236,44 @@
                     <div class="col-md-12 voffset3">
                         <div class="col-md-4">
                             <div><b>Blood (max):</b> <%= character.bloodpool.current %> (<%= character.bloodpool.max %>)
+                                <span class="pull-right clickable">
+                                    <% count = character.bloodpool.current; while(count--){ %>O<%}%>
+                                </span>
+                                <span class="pull-right clickable">
+                                    <% count = character.bloodpool.max - character.bloodpool.current; while(count--){ %>&Oslash;<%}%>
+                                </span>
                             </div>
                             <div><b>Willpower (total):</b> <%= character.willpower.current %>
                                 (<%= character.willpower.max %>)
+                                <span class="pull-right clickable">
+                                    <% count = character.willpower.current; while(count--){ %>O<%}%>
+                                </span>
+                                <span class="pull-right clickable">
+                                    <% count = character.willpower.max - character.willpower.current; while(count--){ %>&Oslash;<%}%>
+                                </span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div><b>Morality Path:</b> <%= character.path.name %></div>
-                            <div><b>Morality Traits:</b> <%= character.path.rating %></div>
+                            <div><b>Morality Traits:</b> <%= character.path.rating %>
+                                <span class="pull-right clickable">
+                                    <% count = character.path.rating; while(count--){ %>O<%}%>
+                                </span></div>
                             <div><b>Aura:</b> <%= character.aura %></div>
                         </div>
                         <div class="col-md-4">
-                            <div><b><%= character.conscience.name %>:</b> <%= character.conscience.rating %></div>
-                            <div><b><%= character.selfcontrol.name %>:</b> <%= character.selfcontrol.rating %></div>
-                            <div><b><%= character.courage.name %>:</b> <%= character.courage.rating %></div>
+                            <div><b><%= character.conscience.name %>:</b> <%= character.conscience.rating %>
+                                <span class="pull-right clickable">
+                                    <% count = character.conscience.rating; while(count--){ %>O<%}%>
+                                </span></div>
+                            <div><b><%= character.selfcontrol.name %>:</b> <%= character.selfcontrol.rating %>
+                                <span class="pull-right clickable">
+                                    <% count = character.selfcontrol.rating; while(count--){ %>O<%}%>
+                                </span></div>
+                            <div><b><%= character.courage.name %>:</b> <%= character.courage.rating %>
+                                <span class="pull-right clickable">
+                                    <% count = character.courage.rating; while(count--){ %>O<%}%>
+                                </span></div>
                         </div>
                     </div>
                 </div>
@@ -270,6 +302,9 @@
                                     <% if(character.attributes.physical[i].val > 1){ %>
                                     (<%= character.attributes.physical[i].val %>)
                                     <% } %>
+                                    <span class="pull-right clickable">
+                                        <% count = character.attributes.physical[i].val; while(count--){ %>O<%}%>
+                                    </span>
                                 </li>
                                 <% } %>
                             </ul>
@@ -285,6 +320,9 @@
                                     <% if(character.attributes.social[i].val > 1){ %>
                                     (<%= character.attributes.social[i].val %>)
                                     <% } %>
+                                    <span class="pull-right clickable">
+                                        <% count = character.attributes.social[i].val; while(count--){ %>O<%}%>
+                                    </span>
                                 </li>
                                 <% } %>
                             </ul>
@@ -300,6 +338,9 @@
                                     <% if(character.attributes.mental[i].val > 1){ %>
                                     (<%= character.attributes.mental[i].val %>)
                                     <% } %>
+                                    <span class="pull-right clickable">
+                                        <% count = character.attributes.mental[i].val; while(count--){ %>O<%}%>
+                                    </span>
                                 </li>
                                 <% } %>
                             </ul>
@@ -319,6 +360,9 @@
                                     <% if(character.attributes.negativephysical[i].val > 1){ %>
                                     (<%= character.attributes.negativephysical[i].val %>)
                                     <% } %>
+                                    <span class="pull-right clickable">
+                                        <% count = character.attributes.negativephysical[i].val; while(count--){ %>O<%}%>
+                                    </span>
                                 </li>
                                 <% } %>
                             </ul>
@@ -334,6 +378,9 @@
                                     <% if(character.attributes.negativesocial[i].val > 1){ %>
                                     (<%= character.attributes.negativesocial[i].val %>)
                                     <% } %>
+                                    <span class="pull-right clickable">
+                                        <% count = character.attributes.negativesocial[i].val; while(count--){ %>O<%}%>
+                                    </span>
                                 </li>
                                 <% } %>
                             </ul>
@@ -349,6 +396,9 @@
                                     <% if(character.attributes.negativemental[i].val > 1){ %>
                                     (<%= character.attributes.negativemental[i].val %>)
                                     <% } %>
+                                    <span class="pull-right clickable">
+                                        <% count = character.attributes.negativemental[i].val; while(count--){ %>O<%}%>
+                                    </span>
                                 </li>
                                 <% } %>
                             </ul>
@@ -378,6 +428,9 @@
                                     <% if(character.abilities[i].note.length > 0) { %>
                                     ( <%= character.abilities[i].note %> )
                                     <% } %>
+                                    <span class="pull-right clickable">
+                                        <% count = character.abilities[i].rating; while(count--){ %>O<%}%>
+                                    </span>
                                 </li>
                                 <% } %>
                             </ul>
@@ -413,6 +466,9 @@
                                 <% for(var i = 0; i < character.backgrounds.length; i++) { %>
                                 <li class="list-group-item trait">
                                     <%= character.backgrounds[i].name + ": " + character.backgrounds[i].rating %>
+                                    <span class="pull-right clickable">
+                                        <% count = character.backgrounds[i].rating; while(count--){ %>O<%}%>
+                                    </span>
                                 </li>
                                 <% } %>
                             </ul>
@@ -423,6 +479,9 @@
                                 <% for(var i = 0; i < character.influences.length; i++) { %>
                                 <li class="list-group-item trait">
                                     <%= character.influences[i].name + ": " + character.influences[i].rating %>
+                                    <span class="pull-right clickable">
+                                        <% count = character.influences[i].rating; while(count--){ %>O<%}%>
+                                    </span>
                                 </li>
                                 <% } %>
                             </ul>
@@ -450,6 +509,9 @@
                                     <% if(character.status[i].rating > 1){ %>
                                     (<%= character.status[i].rating %>)
                                     <% } %>
+                                    <span class="pull-right clickable">
+                                        <% count = character.status[i].rating; while(count--){ %>O<%}%>
+                                    </span>
                                 </li>
                                 <% } %>
                             </ul>
@@ -484,6 +546,9 @@
                                 <% for(var hl in character.healthlevels) { %>
                                 <li class="list-group-item">
                                     <%= hl + " (" + character.healthlevels[hl] + ")" %>
+                                    <span class="pull-right clickable">
+                                        <% count = character.healthlevels[hl]; while(count--){ %>O<%}%>
+                                    </span>
                                 </li>
                                 <% } %>
                             </ul>
