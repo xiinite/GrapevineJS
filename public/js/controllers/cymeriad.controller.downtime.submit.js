@@ -238,24 +238,27 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loadi
                     root.period.openFrom = new Date(root.period.openFrom);
                     root.period.openTo = new Date(root.period.openTo);
                 }),
-                $http.get("/character/allByPlayer/").then(function (response) {
-                    root.characters = response.data;
-                    root.allcharacters = angular.copy(root.characters);
-                }),
                 $http.get("/downtime/submittedCharacters/" + id).then(function (response) {
                     root.submittedperiods = response.data
                 })]
-        ).then(function(){
-                for(var i = root.submittedperiods.length; i--;)
-                {
-                    var result = $.grep(root.characters, function(e){
-                        return e.id == root.submittedperiods[i].characterid;
+        ).then(
+            function(){
+                $http.get("/character/allByPlayer/" + root.period.chronicleId).then(function (response) {
+                    root.characters = response.data;
+                    root.allcharacters = angular.copy(root.characters);
+                }).then(
+                    function(){
+                        for(var i = root.submittedperiods.length; i--;)
+                        {
+                            var result = $.grep(root.characters, function(e){
+                                return e.id == root.submittedperiods[i].characterid;
+                            });
+                            if(result.length > 0){
+                                root.characters.splice($.inArray(result[0], root.characters),1);
+                            }
+                        }
+                        loading.hide()
                     });
-                    if(result.length > 0){
-                        root.characters.splice($.inArray(result[0], root.characters),1);
-                    }
-                }
-                loading.hide()
             });
     };
 }]);
