@@ -36,6 +36,7 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loadi
         $scope.actions[action] = {};
         $scope.actions[action].name = action;
         $scope.actions[action].action = act;
+        $scope.actions[action].target = undefined;
     };
 
     $scope.isDescriptionRequired = function(action){
@@ -73,6 +74,7 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loadi
             case "No action":
             case "Relax (no action)":
             case "Spend XP":
+            case "Meet other character":
                 return false;
         }
         return true;
@@ -85,10 +87,42 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loadi
             case "No action":
             case "Relax (no action)":
             case "Spend XP":
+            case "Meet other character":
                 return false;
         }
         if(action.test) return false;
         return true;
+    };
+
+    $scope.showCharacter = function(action){
+        if(action === undefined) return false;
+        switch(action.action){
+            case "Meet other character":
+            case "Assist":
+            case "Destroy":
+                return true;
+        }
+        return false;
+    };
+    $scope.isCharacterRequired = function(action){
+        if(action === undefined) return false;
+        switch(action.action){
+            case "Meet other character":
+            case "Assist":
+            case "Destroy":
+                return true;
+        }
+        return false;
+    };
+
+    $scope.getChar = function(val) {
+        if(val.length > 3){
+            return $http.get('/character/findbyname/' + val + "/" + $scope.character.chronicle.id, {}).then(function(response){
+                return response.data.map(function(item){
+                    return item.name;
+                });
+            });
+        }
     };
 
     $scope.findBackgroundValue = function(name){

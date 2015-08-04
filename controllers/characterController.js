@@ -86,6 +86,16 @@ module.exports = {
             res.json(result);
         })
     },
+    'findbyname': function(req, res, next){
+        if(req.params.chronicleid && req.params.name){
+            if(req.params.name.length > 3){
+                model.list({chronicle: req.params.chronicleid, name: { "$regex": req.params.name, "$options": "i" }}, function (err, result) {
+                    if (err) return next(new Error(err));
+                    res.json(result);
+                })
+            }
+        }
+    },
     'show': function (req, res, next) {
         if (req.params.id) {
             model.find({

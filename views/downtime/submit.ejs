@@ -100,6 +100,19 @@
                                     </span>
                                 </div>
 
+                                <div class="row" ng-show="showCharacter(actions.playerAction1)">
+                                    <span class="col-sm-3">Target character: </span>
+                                    <span class="col-sm-9">
+                                        <input type="text" ng-model="actions.playerAction1.target" placeholder="Character name" typeahead="char for char in getChar($viewValue)"
+                                               typeahead-min-length="4" ng-required="isCharacterRequired(actions.playerAction1)" typeahead-editable="true"
+                                               typeahead-loading="loadingCharacters" typeahead-no-results="noResults" class="form-control validation">
+                                        <i ng-show="loadingCharacters" class="glyphicon glyphicon-refresh"></i>
+                                        <div ng-show="noResults">
+                                            <i class="glyphicon glyphicon-remove"></i> No Results Found
+                                        </div>
+                                    </span>
+                                </div>
+
                                 <div class="row" ng-show="showTest(actions.playerAction1)">
                                     <span class="col-sm-3">Test: </span>
                                     <span class="col-sm-3"><span class="fa fa-cloud"></span> Rock
@@ -157,6 +170,19 @@
                                         <textarea class="form-control" rows="5" maxlength="1000"
                                                   ng-model="actions.playerAction2.description"
                                                   ng-required="isDescriptionRequired(actions.playerAction2)"></textarea>
+                                    </span>
+                                </div>
+
+                                <div class="row" ng-show="showCharacter(actions.playerAction2)">
+                                    <span class="col-sm-3">Target character: </span>
+                                    <span class="col-sm-9">
+                                        <input type="text" ng-model="actions.playerAction2.target" placeholder="Character name" typeahead="char for char in getChar($viewValue)"
+                                               typeahead-min-length="4" ng-required="isCharacterRequired(actions.playerAction2)" typeahead-editable="true"
+                                               typeahead-loading="loadingCharacters" typeahead-no-results="noResults" class="form-control validation">
+                                        <i ng-show="loadingCharacters" class="glyphicon glyphicon-refresh"></i>
+                                        <div ng-show="noResults">
+                                            <i class="glyphicon glyphicon-remove"></i> No Results Found
+                                        </div>
                                     </span>
                                 </div>
 
@@ -408,6 +434,19 @@
                                     </span>
                                 </div>
 
+                                <div class="row" ng-show="showCharacter(actions[influence])">
+                                    <span class="col-sm-3">Target character: </span>
+                                    <span class="col-sm-9">
+                                        <input type="text" ng-model="actions[influence].target" placeholder="Character name" typeahead="char for char in getChar($viewValue)"
+                                               typeahead-min-length="4" ng-required="isCharacterRequired(actions[influence])" typeahead-editable="true"
+                                               typeahead-loading="loadingCharacters" typeahead-no-results="noResults" class="form-control validation">
+                                        <i ng-show="loadingCharacters" class="glyphicon glyphicon-refresh"></i>
+                                        <div ng-show="noResults">
+                                            <i class="glyphicon glyphicon-remove"></i> No Results Found
+                                        </div>
+                                    </span>
+                                </div>
+
                                 <div class="row" ng-show="showTest(actions[influence])">
                                     <span class="col-sm-3">Test: </span>
                                     <span class="col-sm-3"><span class="fa fa-cloud"></span> Rock
@@ -462,6 +501,19 @@
                                     </span>
                                 </div>
 
+                                <div class="row" ng-show="showCharacter(actions[influence])">
+                                    <span class="col-sm-3">Target character: </span>
+                                    <span class="col-sm-9">
+                                        <input type="text" ng-model="actions[influence].target" placeholder="Character name" typeahead="char for char in getChar($viewValue)"
+                                               typeahead-min-length="4" ng-required="isCharacterRequired(actions[influence])" typeahead-editable="true"
+                                               typeahead-loading="loadingCharacters" typeahead-no-results="noResults" class="form-control validation">
+                                        <i ng-show="loadingCharacters" class="glyphicon glyphicon-refresh"></i>
+                                        <div ng-show="noResults">
+                                            <i class="glyphicon glyphicon-remove"></i> No Results Found
+                                        </div>
+                                    </span>
+                                </div>
+
                                 <div class="row" ng-show="showTest(actions[influence])">
                                     <span class="col-sm-3">Test: </span>
                                     <span class="col-sm-3"><span class="fa fa-cloud"></span> Rock
@@ -513,6 +565,19 @@
                                         <textarea class="form-control" rows="5" maxlength="1000"
                                                   ng-model="actions[influence].description"
                                                   ng-required="isDescriptionRequired(actions[influence])"></textarea>
+                                    </span>
+                                </div>
+
+                                <div class="row" ng-show="showCharacter(actions[influence])">
+                                    <span class="col-sm-3">Target character: </span>
+                                    <span class="col-sm-9">
+                                        <input type="text" ng-model="actions[influence].target" placeholder="Character name" typeahead="char for char in getChar($viewValue)"
+                                               typeahead-min-length="4" ng-required="isCharacterRequired(actions[influence])" typeahead-editable="true"
+                                               typeahead-loading="loadingCharacters" typeahead-no-results="noResults" class="form-control validation">
+                                        <i ng-show="loadingCharacters" class="glyphicon glyphicon-refresh"></i>
+                                        <div ng-show="noResults">
+                                            <i class="glyphicon glyphicon-remove"></i> No Results Found
+                                        </div>
                                     </span>
                                 </div>
 
