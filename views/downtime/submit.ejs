@@ -381,7 +381,46 @@
                             Dominion Influences
                         </div>
                         <div class="panel-body collapse in" id="collapseDominionInfluences">
+                            <div class="form-group" ng-repeat="influence in influences.dominion">
+                                <div class="col-sm-12 h4">
+                                    <span>{{influence}}</span>
+                                    <span>(rating {{findInfluenceValue(influence)}})</span>
+                                </div>
 
+                                <div class="row">
+                                    <span class="col-sm-3">{{influence}} action:</span>
+                                    <span class="col-sm-9">
+                                        <select class="form-control"
+                                                ng-options="action for action in influenceActions"
+                                                ng-change="clearAction(influence)"
+                                                ng-model="actions[influence].action">
+                                            <option style="display:none" value="" maxlength="1000" required>Select an action
+                                            </option>
+                                        </select>
+                                    </span>
+                                </div>
+                                <div class="row" ng-show="isDescriptionRequired(actions[influence])">
+                                    <span class="col-sm-3" ng-show="actions[influence]">Describe: </span>
+                                    <span class="col-sm-9">
+                                        <textarea class="form-control" rows="5" maxlength="1000"
+                                                  ng-model="actions[influence].description"
+                                                  ng-required="isDescriptionRequired(actions[influence])"></textarea>
+                                    </span>
+                                </div>
+
+                                <div class="row" ng-show="showTest(actions[influence])">
+                                    <span class="col-sm-3">Test: </span>
+                                    <span class="col-sm-3"><span class="fa fa-cloud"></span> Rock
+                                        <input type="radio" ng-model="actions[influence].test" value="rock"
+                                               ng-required="isTestRequired(actions[influence])"/></span>
+                                    <span class="col-sm-3"><span class="fa fa-file"></span> Paper
+                                        <input type="radio" ng-model="actions[influence].test" value="paper"
+                                               ng-required="isTestRequired(actions[influence])"/></span>
+                                    <span class="col-sm-3"><span class="fa fa-scissors"></span> Scissors
+                                        <input type="radio" ng-model="actions[influence].test" value="scissors"
+                                               ng-required="isTestRequired(actions[influence])"/></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -396,6 +435,46 @@
                         </div>
                         <div class="panel-body collapse in" id="collapseWealthInfluences">
 
+                            <div class="form-group" ng-repeat="influence in influences.wealth">
+                                <div class="col-sm-12 h4">
+                                    <span>{{influence}}</span>
+                                    <span>(rating {{findInfluenceValue(influence)}})</span>
+                                </div>
+
+                                <div class="row">
+                                    <span class="col-sm-3">{{influence}} action:</span>
+                                    <span class="col-sm-9">
+                                        <select class="form-control"
+                                                ng-options="action for action in influenceActions"
+                                                ng-change="clearAction(influence)"
+                                                ng-model="actions[influence].action">
+                                            <option style="display:none" value="" maxlength="1000" required>Select an action
+                                            </option>
+                                        </select>
+                                    </span>
+                                </div>
+                                <div class="row" ng-show="isDescriptionRequired(actions[influence])">
+                                    <span class="col-sm-3" ng-show="actions[influence]">Describe: </span>
+                                    <span class="col-sm-9">
+                                        <textarea class="form-control" rows="5" maxlength="1000"
+                                                  ng-model="actions[influence].description"
+                                                  ng-required="isDescriptionRequired(actions[influence])"></textarea>
+                                    </span>
+                                </div>
+
+                                <div class="row" ng-show="showTest(actions[influence])">
+                                    <span class="col-sm-3">Test: </span>
+                                    <span class="col-sm-3"><span class="fa fa-cloud"></span> Rock
+                                        <input type="radio" ng-model="actions[influence].test" value="rock"
+                                               ng-required="isTestRequired(actions[influence])"/></span>
+                                    <span class="col-sm-3"><span class="fa fa-file"></span> Paper
+                                        <input type="radio" ng-model="actions[influence].test" value="paper"
+                                               ng-required="isTestRequired(actions[influence])"/></span>
+                                    <span class="col-sm-3"><span class="fa fa-scissors"></span> Scissors
+                                        <input type="radio" ng-model="actions[influence].test" value="scissors"
+                                               ng-required="isTestRequired(actions[influence])"/></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -410,6 +489,46 @@
                         </div>
                         <div class="panel-body collapse in" id="collapsePublicInfluences">
 
+                            <div class="form-group" ng-repeat="influence in influences.public">
+                                <div class="col-sm-12 h4">
+                                    <span>{{influence}}</span>
+                                    <span>(rating {{findInfluenceValue(influence)}})</span>
+                                </div>
+
+                                <div class="row">
+                                    <span class="col-sm-3">{{influence}} action:</span>
+                                    <span class="col-sm-9">
+                                        <select class="form-control"
+                                                ng-options="action for action in influenceActions"
+                                                ng-change="clearAction(influence)"
+                                                ng-model="actions[influence].action">
+                                            <option style="display:none" value="" maxlength="1000" required>Select an action
+                                            </option>
+                                        </select>
+                                    </span>
+                                </div>
+                                <div class="row" ng-show="isDescriptionRequired(actions[influence])">
+                                    <span class="col-sm-3" ng-show="actions[influence]">Describe: </span>
+                                    <span class="col-sm-9">
+                                        <textarea class="form-control" rows="5" maxlength="1000"
+                                                  ng-model="actions[influence].description"
+                                                  ng-required="isDescriptionRequired(actions[influence])"></textarea>
+                                    </span>
+                                </div>
+
+                                <div class="row" ng-show="showTest(actions[influence])">
+                                    <span class="col-sm-3">Test: </span>
+                                    <span class="col-sm-3"><span class="fa fa-cloud"></span> Rock
+                                        <input type="radio" ng-model="actions[influence].test" value="rock"
+                                               ng-required="isTestRequired(actions[influence])"/></span>
+                                    <span class="col-sm-3"><span class="fa fa-file"></span> Paper
+                                        <input type="radio" ng-model="actions[influence].test" value="paper"
+                                               ng-required="isTestRequired(actions[influence])"/></span>
+                                    <span class="col-sm-3"><span class="fa fa-scissors"></span> Scissors
+                                        <input type="radio" ng-model="actions[influence].test" value="scissors"
+                                               ng-required="isTestRequired(actions[influence])"/></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

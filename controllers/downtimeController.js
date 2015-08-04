@@ -6,14 +6,16 @@ var uuid = require('node-uuid');
 var ViewTemplatePath = 'downtime';
 var sec = require('../bin/securityhandler.js');
 
-var findDowntime = function(array, id){
+var findDowntimes = function(array, id){
     var count = array.length;
+    var returnvalue = [];
     while(count--){
         if(array[count].downtimePeriod == id){
-            return array[count];
+            returnvalue.push(array[count]);
         }
     }
-}
+    return returnvalue;
+};
 var findCharacter = function(array, id){
     var count = array.length;
     while(count--){
@@ -21,7 +23,7 @@ var findCharacter = function(array, id){
             return array[count];
         }
     }
-}
+};
 module.exports = {
     'index': function (req, res) {
         var out = {user: req.user};
@@ -120,7 +122,7 @@ module.exports = {
             });
             model.find({characterid: {$in: characterids}}, function(err, result){
                 if(err) return next(new Error(err));
-                if(result.length == 0) return;
+                if(result.length == 0){res.json([]); return;}
                 var downtimes = result;
                 var ids = result.map(function(item){
                     return item.downtimePeriod;
@@ -128,14 +130,18 @@ module.exports = {
                 var returnarray = [];
                 periodModel.find({id: {$in: ids}}, function(err, result){
                     if(err) return next(new Error(err));
-                    if(result.length == 0) return;
+                    if(result.length == 0) {res.json([]); return;}
                     var count = result.length;
                     while(count--){
-                        var item = findDowntime(downtimes, result[count].id);
-                        if(item !== undefined){
-                            item._doc.period = result[count];
-                            item._doc.character = findCharacter(characters, item.characterid);
-                            returnarray.push(item);
+                        var items = findDowntimes(downtimes, result[count].id);
+                        var itemcount = items.length;
+                        while(itemcount--){
+                            var item = items[itemcount];
+                            if(item !== undefined){
+                                item._doc.period = result[count];
+                                item._doc.character = findCharacter(characters, item.characterid);
+                                returnarray.push(item);
+                            }
                         }
                     }
                     res.json(returnarray);

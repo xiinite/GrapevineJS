@@ -17,6 +17,7 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loadi
     $scope.retainerActions = [];
     $scope.locations = [];
     $scope.bloodgrounds = [];
+    $scope.influences = { "wealth": [], "dominion": [], "public": []};
 
     $scope.$watch(function(scope) { return scope.scharacter },
         function(selected) {
@@ -35,13 +36,16 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loadi
         $scope.actions[action] = {};
         $scope.actions[action].name = action;
         $scope.actions[action].action = act;
-    }
+    };
 
     $scope.isDescriptionRequired = function(action){
         if(action === undefined) return false;
         switch(action.action){
             case "No action":
             case "Relax (no action)":
+            case "Grow":
+            case "Defend":
+            case "Block":
                 return false;
         }
         return true;
@@ -95,6 +99,15 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loadi
             {
                 return result.length;
             }
+            return result[0].rating;
+        }
+        return 0;
+    };
+
+    $scope.findInfluenceValue = function(name){
+        if($scope.character === undefined) return 0;
+        var result = $.grep($scope.character.influences, function(e){ return e.name == name });
+        if(result.length > 0){
             return result[0].rating;
         }
         return 0;
@@ -182,6 +195,9 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loadi
                 }),
                 resources.bloodgrounds.get(function(data){
                     root.bloodgrounds = data;
+                }),
+                resources.influenceSpheres.get(function(data){
+                    root.influences = data;
                 }),
                 $http.get("/downtime/findPeriod/" + id).then(function (response) {
                     root.period = response.data[0];
