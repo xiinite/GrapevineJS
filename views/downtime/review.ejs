@@ -3,7 +3,19 @@
 <script type='text/javascript' charset="utf-8" src="/js/controllers/cymeriad.controller.downtime.review.js"></script>
 <div class="container" ng-app="cymeriad.app.downtime" ng-controller="cymeriad.controller.downtime.review" ng-init="init('<%= period %>')">
     <h1 class="page-header">{{ character.name }}</h1>
-    <h3>Downtime for {{period.openFrom | date}}</h3>
+    <h3>Downtime for {{period.openFrom | date}}</h3> <!-- Influences -->
+    <h4>Rating</h4>
+    <div class="row">
+        <div class="col-sm-12" ng-show="downtime.actions.previousSessionRating">
+            <div class="col-sm-3">Session rating: </div>
+            <div class="col-sm-9">
+                <star-rating ng-model="downtime.actions.previousSessionRating.rating" max="5" readonly="true"></star-rating>
+            </div>
+            <div class="col-sm-3">Note: </div>
+            <div class="col-sm-9">{{downtime.actions.previousSessionRating.description}}</div>
+        </div>
+    </div>
+
     <h4>Actions</h4>
     <div class="row" ng-repeat="(key, value) in downtime.actions" ng-if="key.indexOf('Action') > -1">
         <div class="col-sm-12">
@@ -39,7 +51,7 @@
 
     <!-- Influences -->
     <h4>Influences</h4>
-    <div class="row" ng-repeat="(key, value) in downtime.actions" ng-if="key.indexOf('Action') === -1">
+    <div class="row" ng-repeat="(key, value) in downtime.actions" ng-if="key.indexOf('Action') === -1 && key.indexOf('Rating') == -1">
         <div class="col-sm-12">
             <table class="table table-striped" >
                 <thead>

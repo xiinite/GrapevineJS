@@ -5,7 +5,7 @@
      ng-init="init('<%= period %>')">
     <h1 class="page-header">Downtime for {{period.openFrom | date}}</h1>
 
-    <!-- Character selection -->
+    <!-- CHARACTER SELECTION -->
     <div class="col-lg-12">
         <div ng-show="submittedperiods.length > 0" class="voffset">
             <div class="panel panel-info">
@@ -21,9 +21,11 @@
         </div>
     </div>
 
-    <!-- Downtime form -->
+    <!-- DOWNTIME FORM -->
     <div class="col-lg-6">
         <form name="downtimeForm" ng-submit="submit()" ng-show="characters.length > 0">
+
+            <!-- CHARACTER INFO -->
             <div class="row voffset">
                 <div class="col-lg-12">
                     <div class="panel panel-info">
@@ -46,6 +48,33 @@
                 </div>
             </div>
 
+            <!-- PREVIOUS SESSION RATING -->
+            <div class="row voffset" ng-hide="scharacter === undefined">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading clickable" data-toggle="collapse"
+                             data-target="#collapseRating">
+                            Rating of previous session:
+                        </div>
+                        <div class="panel-body collapse in" id="collapseRating">
+                            <div class="row">
+                                <span class="col-sm-3">Rating: </span>
+                                    <span class="col-sm-9">
+                                        <star-rating ng-model="actions.previousSessionRating.rating" max="5" readonly="false"></star-rating>
+                                    </span>
+                            </div>
+                            <div class="row">
+                                <span class="col-sm-3">Note: </span>
+                                    <span class="col-sm-9">
+                                    <textarea class="form-control" rows="5" maxlength="1000"
+                                              ng-model="actions.previousSessionRating.description"></textarea>
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- CHARACTER ACTIONS -->
             <div class="row voffset" ng-hide="scharacter === undefined">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
@@ -54,6 +83,7 @@
                             Personal actions
                         </div>
                         <div class="panel-body collapse in" id="collapsePersonalActions">
+                            <!-- PERSONAL ACTION 1 -->
                             <div class="col-sm-12 form-group">
                                 <div class="row">
                                     <span class="col-sm-3">Personal action 1:</span>
@@ -126,6 +156,8 @@
                                                ng-required="isTestRequired(actions.playerAction1)"/></span>
                                 </div>
                             </div>
+
+                            <!-- PERSONAL ACTION 2-->
                             <div class="col-sm-12 form-group">
                                 <div class="row">
                                     <span class="col-sm-3">Personal action 2:</span>
@@ -204,6 +236,8 @@
                 </div>
             </div>
 
+
+            <!-- RETAINER ACTIONS -->
             <div class="row voffset" ng-hide="findBackgroundValue('Retainers') == 0">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
@@ -303,6 +337,7 @@
                 </div>
             </div>
 
+            <!-- BACKGROUND ACTIONS -->
             <div class="row voffset"
                  ng-hide="findBackgroundValue('Allies') == 0 && findBackgroundValue('Contacts') == 0 && findBackgroundValue('Resources') == 0">
                 <div class="col-lg-12">
@@ -313,6 +348,7 @@
                         </div>
                         <div class="panel-body collapse in" id="collapseBackgroundActions">
 
+                            <!-- ALLY ACTION -->
                             <div class="form-group" ng-show="findBackgroundValue('Allies') > 0">
                                 <div class="col-sm-12 h4">
                                     <span>Allies </span>
@@ -380,6 +416,7 @@
                                     </div>
                             </div>
 
+                            <!-- CONTACTS ACTION -->
                             <div class="form-group" ng-show="findBackgroundValue('Contacts') > 0">
                                 <div class="col-sm-12 h4">
                                     <span>Contacts </span>
@@ -422,6 +459,7 @@
                                 </div>
                             </div>
 
+                            <!-- RESOURCE ACTION -->
                             <div class="form-group" ng-show="findBackgroundValue('Resources') > 0">
                                 <div class="col-sm-12 h4">
                                     <span>Resources </span>
@@ -481,6 +519,8 @@
                 </div>
             </div>
 
+            <!-- INFLUENCE ACTIONS -->
+            <!-- DOMINION ACTIONS -->
             <div class="row voffset" ng-show="scharacter !== undefined && hasAnyInfluences(influences.dominion)">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
@@ -560,6 +600,7 @@
                 </div>
             </div>
 
+            <!-- WEALTH ACTIONS -->
             <div class="row voffset" ng-show="scharacter !== undefined && hasAnyInfluences(influences.wealth)">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
@@ -640,6 +681,7 @@
                 </div>
             </div>
 
+            <!-- PUBLIC ACTIONS -->
             <div class="row voffset" ng-show="scharacter !== undefined && hasAnyInfluences(influences.public)">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
@@ -726,7 +768,7 @@
         </form>
     </div>
 
-    <!-- Character Summary -->
+    <!-- CHARACTER SUMMARY -->
     <div class="col-lg-6 hidden-md hidden-sm hidden-xs" ng-show="scharacter">
 
         <!-- Concept -->
@@ -1065,7 +1107,7 @@
         </div>
     </div>
 
-
+    <!-- MODAL TEMPLATE -->
     <script type="text/ng-template" id="modalTemplate.html">
         <div class="modal-header">
             <h3 class="modal-title">Error</h3>

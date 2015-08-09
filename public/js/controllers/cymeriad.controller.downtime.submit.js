@@ -287,7 +287,8 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', '$moda
                 $scope.targetbackgrounds = $scope.targetbackgrounds.concat(root.influences.wealth);
                 $scope.targetbackgrounds = $scope.targetbackgrounds.concat(root.influences.dominion);
                 $scope.targetbackgrounds = $scope.targetbackgrounds.concat(root.influences.public);
-
+                $scope.actions.previousSessionRating = {};
+                $scope.actions.previousSessionRating.rating = 3;
                 $http.get("/character/allByPlayer/" + root.period.chronicleId).then(function (response) {
                     root.characters = response.data;
                     root.allcharacters = angular.copy(root.characters);
