@@ -1,5 +1,5 @@
 "use strict";
-app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loading', '$q', 'resources', function ($scope, $http, loading, $q, resources) {
+app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', '$modal', 'loading', '$q', 'resources', function ($scope, $http, $modal, loading, $q, resources) {
     $scope.period = {};
     $scope.downtime = {};
     $scope.characters = [];
@@ -8,6 +8,7 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loadi
     $scope.scharacter = undefined;
     $scope.character = undefined;
     $scope.actions = {};
+    $scope.errormessage = "";
 
     $scope.allyActions = [];
     $scope.contactActions = [];
@@ -18,6 +19,7 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loadi
     $scope.locations = [];
     $scope.bloodgrounds = [];
     $scope.influences = { "wealth": [], "dominion": [], "public": []};
+    $scope.targetbackgrounds = ["Contacts", "Allies", "Resources"];
 
     $scope.$watch(function(scope) { return scope.scharacter },
         function(selected) {
@@ -59,6 +61,15 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loadi
         }
         return false;
     };
+    $scope.isTargetBackgroundRequired = function(action){
+        if(action === undefined) return false;
+        switch(action.action){
+            case "Assist":
+            case "Destroy":
+                return true;
+        }
+        return false;
+    }
     $scope.isBloodgroundRequired = function(action){
         if(action === undefined) return false;
         switch(action.action){
@@ -70,7 +81,7 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loadi
     $scope.showTest = function(action){
         if(action === undefined) return false;
         switch(action.action){
-            case "Assist a background":
+            case "Assist":
             case "No action":
             case "Relax (no action)":
             case "Spend XP":
@@ -83,7 +94,7 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loadi
         if(action === undefined) return false;
 
         switch(action.action){
-            case "Assist a background":
+            case "Assist":
             case "No action":
             case "Relax (no action)":
             case "Spend XP":
@@ -93,7 +104,6 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loadi
         if(action.test) return false;
         return true;
     };
-
     $scope.showCharacter = function(action){
         if(action === undefined) return false;
         switch(action.action){
@@ -114,7 +124,6 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loadi
         }
         return false;
     };
-
     $scope.getChar = function(val) {
         if(val.length > 3){
             return $http.get('/character/findbyname/' + val + "/" + $scope.character.chronicle.id, {}).then(function(response){
@@ -124,7 +133,6 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loadi
             });
         }
     };
-
     $scope.findBackgroundValue = function(name){
         if($scope.character === undefined) return 0;
         var result = $.grep($scope.character.backgrounds, function(e){ return e.name == name });
@@ -137,7 +145,6 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loadi
         }
         return 0;
     };
-
     $scope.findInfluenceValue = function(name){
         if($scope.character === undefined) return 0;
         var result = $.grep($scope.character.influences, function(e){ return e.name == name });
@@ -146,13 +153,26 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loadi
         }
         return 0;
     };
-
+    $scope.InfluenceGreaterThan = function(val){
+        return function(item){
+            return $scope.findInfluenceValue(item) > val;
+        }
+    };
+    $scope.hasAnyInfluences = function(influences){
+        var count = influences.length;
+        while(count--){
+            if($scope.findInfluenceValue(influences[count]) > 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    };
     $scope.getRetainers = function(){
         if($scope.character === undefined) return null;
         var result = $.grep($scope.character.backgrounds, function(e){ return e.name == 'Retainers' });
         return result;
     };
-
     $scope.findCharacter = function(id){
         var i = $scope.allcharacters.length;
         while(i > -1){
@@ -168,7 +188,28 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loadi
     };
 
     $scope.submit = function(){
-
+        for (var key in $scope.actions) {
+            if ($scope.actions.hasOwnProperty(key)) {
+                if($scope.isCharacterRequired($scope.actions[key])){
+                    if($scope.actions[key].target === undefined)
+                    {
+                        console.log(key + ": " + $scope.actions[key].target);
+                        $scope.errormessage = key + " does not have a valid character input(" + $scope.actions[key].target + ")";
+                        $modal.open({
+                            animation: true,
+                            templateUrl: 'modalTemplate.html',
+                            controller: 'ModalInstanceCtrl',
+                            resolve: {
+                                errormessage: function () {
+                                    return $scope.errormessage;
+                                }
+                            }
+                        });
+                        return false;
+                    }
+                }
+            }
+        }
         loading.show();
         $scope.downtime = {
             downtimePeriod: $scope.period.id,
@@ -243,6 +284,11 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loadi
                 })]
         ).then(
             function(){
+                $scope.targetbackgrounds = $scope.targetbackgrounds.concat(root.influences.wealth);
+                $scope.targetbackgrounds = $scope.targetbackgrounds.concat(root.influences.dominion);
+                $scope.targetbackgrounds = $scope.targetbackgrounds.concat(root.influences.public);
+                $scope.actions.previousSessionRating = {};
+                $scope.actions.previousSessionRating.rating = 3;
                 $http.get("/character/allByPlayer/" + root.period.chronicleId).then(function (response) {
                     root.characters = response.data;
                     root.allcharacters = angular.copy(root.characters);
@@ -262,3 +308,11 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', 'loadi
             });
     };
 }]);
+
+app.controller('ModalInstanceCtrl', function ($scope, $modalInstance, errormessage) {
+    $scope.errormessage = errormessage;
+
+    $scope.ok = function () {
+        $modalInstance.close();
+    };
+});

@@ -5,7 +5,7 @@
      ng-init="init('<%= period %>')">
     <h1 class="page-header">Downtime for {{period.openFrom | date}}</h1>
 
-    <!-- Character selection -->
+    <!-- CHARACTER SELECTION -->
     <div class="col-lg-12">
         <div ng-show="submittedperiods.length > 0" class="voffset">
             <div class="panel panel-info">
@@ -21,9 +21,11 @@
         </div>
     </div>
 
-    <!-- Downtime form -->
+    <!-- DOWNTIME FORM -->
     <div class="col-lg-6">
         <form name="downtimeForm" ng-submit="submit()" ng-show="characters.length > 0">
+
+            <!-- CHARACTER INFO -->
             <div class="row voffset">
                 <div class="col-lg-12">
                     <div class="panel panel-info">
@@ -46,6 +48,33 @@
                 </div>
             </div>
 
+            <!-- PREVIOUS SESSION RATING -->
+            <div class="row voffset" ng-hide="scharacter === undefined">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading clickable" data-toggle="collapse"
+                             data-target="#collapseRating">
+                            Rating of previous session:
+                        </div>
+                        <div class="panel-body collapse in" id="collapseRating">
+                            <div class="row">
+                                <span class="col-sm-3">Rating: </span>
+                                    <span class="col-sm-9">
+                                        <star-rating ng-model="actions.previousSessionRating.rating" max="5" readonly="false"></star-rating>
+                                    </span>
+                            </div>
+                            <div class="row">
+                                <span class="col-sm-3">Note: </span>
+                                    <span class="col-sm-9">
+                                    <textarea class="form-control" rows="5" maxlength="1000"
+                                              ng-model="actions.previousSessionRating.description"></textarea>
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- CHARACTER ACTIONS -->
             <div class="row voffset" ng-hide="scharacter === undefined">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
@@ -54,6 +83,7 @@
                             Personal actions
                         </div>
                         <div class="panel-body collapse in" id="collapsePersonalActions">
+                            <!-- PERSONAL ACTION 1 -->
                             <div class="col-sm-12 form-group">
                                 <div class="row">
                                     <span class="col-sm-3">Personal action 1:</span>
@@ -74,7 +104,7 @@
                                                 ng-options="location for location in locations"
                                                 ng-model="actions.playerAction1.location"
                                                 ng-required="isLocationRequired(actions.playerActions1)">
-                                            <option style="display:none" value="">Select a locations</option>
+                                            <option style="display:none" value="">Select a location</option>
                                         </select>
                                     </span>
                                 </div>
@@ -86,7 +116,7 @@
                                                 ng-options="location for location in bloodgrounds"
                                                 ng-model="actions.playerAction1.location"
                                                 ng-required="isBloodgroundRequired(actions.playerActions1)">
-                                            <option style="display:none" value="">Select a locations</option>
+                                            <option style="display:none" value="">Select a location</option>
                                         </select>
                                     </span>
                                 </div>
@@ -104,7 +134,7 @@
                                     <span class="col-sm-3">Target character: </span>
                                     <span class="col-sm-9">
                                         <input type="text" ng-model="actions.playerAction1.target" placeholder="Character name" typeahead="char for char in getChar($viewValue)"
-                                               typeahead-min-length="4" ng-required="isCharacterRequired(actions.playerAction1)" typeahead-editable="true"
+                                               typeahead-min-length="4" ng-required="isCharacterRequired(actions.playerAction1)" typeahead-editable="false"
                                                typeahead-loading="loadingCharacters" typeahead-no-results="noResults" class="form-control validation">
                                         <i ng-show="loadingCharacters" class="glyphicon glyphicon-refresh"></i>
                                         <div ng-show="noResults">
@@ -126,6 +156,8 @@
                                                ng-required="isTestRequired(actions.playerAction1)"/></span>
                                 </div>
                             </div>
+
+                            <!-- PERSONAL ACTION 2-->
                             <div class="col-sm-12 form-group">
                                 <div class="row">
                                     <span class="col-sm-3">Personal action 2:</span>
@@ -133,7 +165,7 @@
                                         <select class="form-control"
                                                 ng-options="action for action in playerActions"
                                                 ng-change="clearAction('playerAction2')"
-                                                ng-model="actions.playerAction2.action">
+                                                ng-model="actions.playerAction2.action" required>
                                             <option style="display:none" value="" maxlength="1000" required>Select an action
                                             </option>
                                         </select>
@@ -147,7 +179,7 @@
                                                 ng-options="location for location in locations"
                                                 ng-model="actions.playerAction2.location"
                                                 ng-required="isLocationRequired(actions.playerActions2)">
-                                            <option style="display:none" value="">Select a locations</option>
+                                            <option style="display:none" value="">Select a location</option>
                                         </select>
                                     </span>
                                 </div>
@@ -159,7 +191,7 @@
                                                 ng-options="location for location in bloodgrounds"
                                                 ng-model="actions.playerAction2.location"
                                                 ng-required="isBloodgroundRequired(actions.playerActions2)">
-                                            <option style="display:none" value="">Select a locations</option>
+                                            <option style="display:none" value="">Select a location</option>
                                         </select>
                                     </span>
                                 </div>
@@ -177,7 +209,7 @@
                                     <span class="col-sm-3">Target character: </span>
                                     <span class="col-sm-9">
                                         <input type="text" ng-model="actions.playerAction2.target" placeholder="Character name" typeahead="char for char in getChar($viewValue)"
-                                               typeahead-min-length="4" ng-required="isCharacterRequired(actions.playerAction2)" typeahead-editable="true"
+                                               typeahead-min-length="4" ng-required="isCharacterRequired(actions.playerAction2)" typeahead-editable="false"
                                                typeahead-loading="loadingCharacters" typeahead-no-results="noResults" class="form-control validation">
                                         <i ng-show="loadingCharacters" class="glyphicon glyphicon-refresh"></i>
                                         <div ng-show="noResults">
@@ -204,6 +236,8 @@
                 </div>
             </div>
 
+
+            <!-- RETAINER ACTIONS -->
             <div class="row voffset" ng-hide="findBackgroundValue('Retainers') == 0">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
@@ -225,7 +259,8 @@
                                                 <select class="form-control"
                                                         ng-options="action for action in retainerActions"
                                                         ng-change="clearAction('retainerAction' + $index)"
-                                                        ng-model="actions['retainerAction' + $index].action">
+                                                        ng-model="actions['retainerAction' + $index].action"
+                                                        required>
                                                     <option style="display:none" value="" maxlength="1000" required>Select
                                                         an action
                                                     </option>
@@ -240,7 +275,7 @@
                                                         ng-options="location for location in locations"
                                                         ng-model="actions['retainerAction' + $index].location"
                                                         ng-required="isLocationRequired(actions['retainerAction' + $index])">
-                                                    <option style="display:none" value="">Select a locations</option>
+                                                    <option style="display:none" value="">Select a location</option>
                                                 </select>
                                             </span>
                                         </div>
@@ -251,6 +286,31 @@
                                                 <textarea class="form-control" rows="5" maxlength="1000"
                                                           ng-model="actions['retainerAction' + $index].description"
                                                           ng-required="isDescriptionRequired(actions['retainerAction' + $index])"></textarea>
+                                            </span>
+                                        </div>
+
+                                        <div class="row" ng-show="isTargetBackgroundRequired(actions['retainerAction' + $index])">
+                                            <span class="col-sm-3">Target background:</span>
+                                            <span class="col-sm-9">
+                                                <select class="form-control"
+                                                        ng-options="background for background in targetbackgrounds"
+                                                        ng-model="actions['retainerAction' + $index].targetBackground"
+                                                        ng-required="isTargetBackgroundRequired(actions['retainerAction' + $index])">
+                                                    <option style="display:none" value="">Select a background</option>
+                                                </select>
+                                            </span>
+                                        </div>
+
+                                        <div class="row" ng-show="showCharacter(actions['retainerAction' + $index])">
+                                            <span class="col-sm-3">Target character: </span>
+                                            <span class="col-sm-9">
+                                                <input type="text" ng-model="actions['retainerAction' + $index].target" placeholder="Character name" typeahead="char for char in getChar($viewValue)"
+                                                       typeahead-min-length="4" ng-required="isCharacterRequired(actions['retainerAction' + $index])" typeahead-editable="false"
+                                                       typeahead-loading="loadingCharacters" typeahead-no-results="noResults" class="form-control validation">
+                                                <i ng-show="loadingCharacters" class="glyphicon glyphicon-refresh"></i>
+                                                <div ng-show="noResults">
+                                                    <i class="glyphicon glyphicon-remove"></i> No Results Found
+                                                </div>
                                             </span>
                                         </div>
 
@@ -277,6 +337,7 @@
                 </div>
             </div>
 
+            <!-- BACKGROUND ACTIONS -->
             <div class="row voffset"
                  ng-hide="findBackgroundValue('Allies') == 0 && findBackgroundValue('Contacts') == 0 && findBackgroundValue('Resources') == 0">
                 <div class="col-lg-12">
@@ -286,6 +347,8 @@
                             Background actions
                         </div>
                         <div class="panel-body collapse in" id="collapseBackgroundActions">
+
+                            <!-- ALLY ACTION -->
                             <div class="form-group" ng-show="findBackgroundValue('Allies') > 0">
                                 <div class="col-sm-12 h4">
                                     <span>Allies </span>
@@ -298,7 +361,8 @@
                                         <select class="form-control"
                                                 ng-options="action for action in allyActions"
                                                 ng-change="clearAction('allyAction')"
-                                                ng-model="actions.allyAction.action">
+                                                ng-model="actions.allyAction.action"
+                                                ng-required="findBackgroundValue('Allies') > 0">
                                             <option style="display:none" value="" maxlength="1000" required>Select an action
                                             </option>
                                         </select>
@@ -310,6 +374,31 @@
                                         <textarea class="form-control" rows="5" maxlength="1000"
                                                   ng-model="actions.allyAction.description"
                                                   ng-required="isDescriptionRequired(actions.allyAction)"></textarea>
+                                    </span>
+                                </div>
+
+                                <div class="row" ng-show="isTargetBackgroundRequired(actions.allyAction)">
+                                    <span class="col-sm-3">Target background:</span>
+                                            <span class="col-sm-9">
+                                                <select class="form-control"
+                                                        ng-options="background for background in targetbackgrounds"
+                                                        ng-model="actions.allyAction.targetBackground"
+                                                        ng-required="isTargetBackgroundRequired(actions.allyAction)">
+                                                    <option style="display:none" value="">Select a background</option>
+                                                </select>
+                                            </span>
+                                </div>
+
+                                <div class="row" ng-show="showCharacter(actions.allyAction)">
+                                    <span class="col-sm-3">Target character: </span>
+                                    <span class="col-sm-9">
+                                        <input type="text" ng-model="actions.allyAction.target" placeholder="Character name" typeahead="char for char in getChar($viewValue)"
+                                               typeahead-min-length="4" ng-required="isCharacterRequired(actions.allyAction)" typeahead-editable="false"
+                                               typeahead-loading="loadingCharacters" typeahead-no-results="noResults" class="form-control validation">
+                                        <i ng-show="loadingCharacters" class="glyphicon glyphicon-refresh"></i>
+                                        <div ng-show="noResults">
+                                            <i class="glyphicon glyphicon-remove"></i> No Results Found
+                                        </div>
                                     </span>
                                 </div>
 
@@ -327,6 +416,7 @@
                                     </div>
                             </div>
 
+                            <!-- CONTACTS ACTION -->
                             <div class="form-group" ng-show="findBackgroundValue('Contacts') > 0">
                                 <div class="col-sm-12 h4">
                                     <span>Contacts </span>
@@ -339,7 +429,8 @@
                                         <select class="form-control"
                                                 ng-options="action for action in contactActions"
                                                 ng-change="clearAction('contactAction')"
-                                                ng-model="actions.contactAction.action">
+                                                ng-model="actions.contactAction.action"
+                                                ng-required="findBackgroundValue('Contacts') > 0">
                                             <option style="display:none" value="" maxlength="1000" required>Select an action
                                             </option>
                                         </select>
@@ -367,6 +458,8 @@
                                                ng-required="isTestRequired(actions.contactAction)"/></span>
                                 </div>
                             </div>
+
+                            <!-- RESOURCE ACTION -->
                             <div class="form-group" ng-show="findBackgroundValue('Resources') > 0">
                                 <div class="col-sm-12 h4">
                                     <span>Resources </span>
@@ -379,12 +472,14 @@
                                         <select class="form-control"
                                                 ng-options="action for action in resourceActions"
                                                 ng-change="clearAction('resourceAction')"
-                                                ng-model="actions.resourceAction.action">
+                                                ng-model="actions.resourceAction.action"
+                                                ng-required="findBackgroundValue('Resources') > 0">
                                             <option style="display:none" value="" maxlength="1000" required>Select an action
                                             </option>
                                         </select>
                                     </span>
                                 </div>
+
                                 <div class="row" ng-show="isDescriptionRequired(actions.resourceAction)">
                                     <span class="col-sm-3" ng-show="actions.resourceAction">Describe: </span>
                                     <span class="col-sm-9">
@@ -393,13 +488,40 @@
                                                   ng-required="isDescriptionRequired(actions.resourceAction)"></textarea>
                                     </span>
                                 </div>
+
+                                <div class="row" ng-show="isTargetBackgroundRequired(actions.resourceAction)">
+                                    <span class="col-sm-3">Target background:</span>
+                                            <span class="col-sm-9">
+                                                <select class="form-control"
+                                                        ng-options="background for background in targetbackgrounds"
+                                                        ng-model="actions.resourceAction.targetBackground"
+                                                        ng-required="isTargetBackgroundRequired(actions.resourceAction)">
+                                                    <option style="display:none" value="">Select a background</option>
+                                                </select>
+                                            </span>
+                                </div>
+
+                                <div class="row" ng-show="showCharacter(actions.resourceAction)">
+                                    <span class="col-sm-3">Target character: </span>
+                                    <span class="col-sm-9">
+                                        <input type="text" ng-model="actions.resourceAction.target" placeholder="Character name" typeahead="char for char in getChar($viewValue)"
+                                               typeahead-min-length="4" ng-required="isCharacterRequired(actions.resourceAction)" typeahead-editable="false"
+                                               typeahead-loading="loadingCharacters" typeahead-no-results="noResults" class="form-control validation">
+                                        <i ng-show="loadingCharacters" class="glyphicon glyphicon-refresh"></i>
+                                        <div ng-show="noResults">
+                                            <i class="glyphicon glyphicon-remove"></i> No Results Found
+                                        </div>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row voffset" ng-hide="scharacter === undefined">
+            <!-- INFLUENCE ACTIONS -->
+            <!-- DOMINION ACTIONS -->
+            <div class="row voffset" ng-show="scharacter !== undefined && hasAnyInfluences(influences.dominion)">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading clickable" data-toggle="collapse"
@@ -407,7 +529,7 @@
                             Dominion Influences
                         </div>
                         <div class="panel-body collapse in" id="collapseDominionInfluences">
-                            <div class="form-group" ng-repeat="influence in influences.dominion">
+                            <div class="form-group" ng-repeat="influence in influences.dominion | filter: InfluenceGreaterThan(0)">
                                 <div class="col-sm-12 h4">
                                     <span>{{influence}}</span>
                                     <span>(rating {{findInfluenceValue(influence)}})</span>
@@ -419,7 +541,8 @@
                                         <select class="form-control"
                                                 ng-options="action for action in influenceActions"
                                                 ng-change="clearAction(influence)"
-                                                ng-model="actions[influence].action">
+                                                ng-model="actions[influence].action"
+                                                required>
                                             <option style="display:none" value="" maxlength="1000" required>Select an action
                                             </option>
                                         </select>
@@ -434,11 +557,23 @@
                                     </span>
                                 </div>
 
+                                <div class="row" ng-show="isTargetBackgroundRequired(actions[influence])">
+                                    <span class="col-sm-3">Target background:</span>
+                                            <span class="col-sm-9">
+                                                <select class="form-control"
+                                                        ng-options="background for background in targetbackgrounds"
+                                                        ng-model="actions[influence].targetBackground"
+                                                        ng-required="isTargetBackgroundRequired(actions[influence])">
+                                                    <option style="display:none" value="">Select a background</option>
+                                                </select>
+                                            </span>
+                                </div>
+
                                 <div class="row" ng-show="showCharacter(actions[influence])">
                                     <span class="col-sm-3">Target character: </span>
                                     <span class="col-sm-9">
                                         <input type="text" ng-model="actions[influence].target" placeholder="Character name" typeahead="char for char in getChar($viewValue)"
-                                               typeahead-min-length="4" ng-required="isCharacterRequired(actions[influence])" typeahead-editable="true"
+                                               typeahead-min-length="4" ng-required="isCharacterRequired(actions[influence])" typeahead-editable="false"
                                                typeahead-loading="loadingCharacters" typeahead-no-results="noResults" class="form-control validation">
                                         <i ng-show="loadingCharacters" class="glyphicon glyphicon-refresh"></i>
                                         <div ng-show="noResults">
@@ -465,7 +600,8 @@
                 </div>
             </div>
 
-            <div class="row voffset" ng-hide="scharacter === undefined">
+            <!-- WEALTH ACTIONS -->
+            <div class="row voffset" ng-show="scharacter !== undefined && hasAnyInfluences(influences.wealth)">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading clickable" data-toggle="collapse"
@@ -474,7 +610,7 @@
                         </div>
                         <div class="panel-body collapse in" id="collapseWealthInfluences">
 
-                            <div class="form-group" ng-repeat="influence in influences.wealth">
+                            <div class="form-group" ng-repeat="influence in influences.wealth | filter: InfluenceGreaterThan(0)">
                                 <div class="col-sm-12 h4">
                                     <span>{{influence}}</span>
                                     <span>(rating {{findInfluenceValue(influence)}})</span>
@@ -486,7 +622,8 @@
                                         <select class="form-control"
                                                 ng-options="action for action in influenceActions"
                                                 ng-change="clearAction(influence)"
-                                                ng-model="actions[influence].action">
+                                                ng-model="actions[influence].action"
+                                                required>
                                             <option style="display:none" value="" maxlength="1000" required>Select an action
                                             </option>
                                         </select>
@@ -501,11 +638,23 @@
                                     </span>
                                 </div>
 
+                                <div class="row" ng-show="isTargetBackgroundRequired(actions[influence])">
+                                    <span class="col-sm-3">Target background:</span>
+                                            <span class="col-sm-9">
+                                                <select class="form-control"
+                                                        ng-options="background for background in targetbackgrounds"
+                                                        ng-model="actions[influence].targetBackground"
+                                                        ng-required="isTargetBackgroundRequired(actions[influence])">
+                                                    <option style="display:none" value="">Select a background</option>
+                                                </select>
+                                            </span>
+                                </div>
+
                                 <div class="row" ng-show="showCharacter(actions[influence])">
                                     <span class="col-sm-3">Target character: </span>
                                     <span class="col-sm-9">
                                         <input type="text" ng-model="actions[influence].target" placeholder="Character name" typeahead="char for char in getChar($viewValue)"
-                                               typeahead-min-length="4" ng-required="isCharacterRequired(actions[influence])" typeahead-editable="true"
+                                               typeahead-min-length="4" ng-required="isCharacterRequired(actions[influence])" typeahead-editable="false"
                                                typeahead-loading="loadingCharacters" typeahead-no-results="noResults" class="form-control validation">
                                         <i ng-show="loadingCharacters" class="glyphicon glyphicon-refresh"></i>
                                         <div ng-show="noResults">
@@ -532,7 +681,8 @@
                 </div>
             </div>
 
-            <div class="row voffset" ng-hide="scharacter === undefined">
+            <!-- PUBLIC ACTIONS -->
+            <div class="row voffset" ng-show="scharacter !== undefined && hasAnyInfluences(influences.public)">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading clickable" data-toggle="collapse"
@@ -541,7 +691,7 @@
                         </div>
                         <div class="panel-body collapse in" id="collapsePublicInfluences">
 
-                            <div class="form-group" ng-repeat="influence in influences.public">
+                            <div class="form-group" ng-repeat="influence in influences.public | filter: InfluenceGreaterThan(0)">
                                 <div class="col-sm-12 h4">
                                     <span>{{influence}}</span>
                                     <span>(rating {{findInfluenceValue(influence)}})</span>
@@ -553,7 +703,8 @@
                                         <select class="form-control"
                                                 ng-options="action for action in influenceActions"
                                                 ng-change="clearAction(influence)"
-                                                ng-model="actions[influence].action">
+                                                ng-model="actions[influence].action"
+                                                required>
                                             <option style="display:none" value="" maxlength="1000" required>Select an action
                                             </option>
                                         </select>
@@ -568,11 +719,23 @@
                                     </span>
                                 </div>
 
+                                <div class="row" ng-show="isTargetBackgroundRequired(actions[influence])">
+                                    <span class="col-sm-3">Target background:</span>
+                                            <span class="col-sm-9">
+                                                <select class="form-control"
+                                                        ng-options="background for background in targetbackgrounds"
+                                                        ng-model="actions[influence].targetBackground"
+                                                        ng-required="isTargetBackgroundRequired(actions[influence])">
+                                                    <option style="display:none" value="">Select a background</option>
+                                                </select>
+                                            </span>
+                                </div>
+
                                 <div class="row" ng-show="showCharacter(actions[influence])">
                                     <span class="col-sm-3">Target character: </span>
                                     <span class="col-sm-9">
                                         <input type="text" ng-model="actions[influence].target" placeholder="Character name" typeahead="char for char in getChar($viewValue)"
-                                               typeahead-min-length="4" ng-required="isCharacterRequired(actions[influence])" typeahead-editable="true"
+                                               typeahead-min-length="4" ng-required="isCharacterRequired(actions[influence])" typeahead-editable="false"
                                                typeahead-loading="loadingCharacters" typeahead-no-results="noResults" class="form-control validation">
                                         <i ng-show="loadingCharacters" class="glyphicon glyphicon-refresh"></i>
                                         <div ng-show="noResults">
@@ -605,7 +768,7 @@
         </form>
     </div>
 
-    <!-- Character Summary -->
+    <!-- CHARACTER SUMMARY -->
     <div class="col-lg-6 hidden-md hidden-sm hidden-xs" ng-show="scharacter">
 
         <!-- Concept -->
@@ -943,4 +1106,17 @@
             </div>
         </div>
     </div>
+
+    <!-- MODAL TEMPLATE -->
+    <script type="text/ng-template" id="modalTemplate.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Error</h3>
+        </div>
+        <div class="modal-body">
+            {{errormessage}}
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+        </div>
+    </script>
 </div>
