@@ -2,7 +2,69 @@
 <%- partial('./scripts') %>
 <script type='text/javascript' charset="utf-8" src="/js/controllers/cymeriad.controller.downtime.review.js"></script>
 <div class="container" ng-app="cymeriad.app.downtime" ng-controller="cymeriad.controller.downtime.review" ng-init="init('<%= period %>')">
-    <div>
-        {{downtime}}
+    <h1 class="page-header">{{ character.name }}</h1>
+    <h3>Downtime for {{period.openFrom | date}}</h3>
+    <h4>Actions</h4>
+    <div class="row" ng-repeat="(key, value) in downtime.actions" ng-if="key.indexOf('Action') > -1">
+        <div class="col-sm-12">
+            <table class="table table-striped" >
+                <thead>
+                <tr>
+                    <th colspan="2">
+                        <h4 class="uppercase" ng-show="key.indexOf('player') === -1">{{key.substring(0, key.indexOf('Action')) + " - Rating " + findBackgroundValue(key.substring(0, key.indexOf('Action'))) }}</h4>
+                        <h4 class="uppercase" ng-hide="key.indexOf('player') === -1">{{key}}</h4>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="col-xs-3">Action</td><td>{{value.action}}</td>
+                </tr>
+                <tr ng-show="value.location">
+                    <td class="col-xs-3">Location</td><td>{{value.location}}</td>
+                </tr>
+                <tr ng-show="value.description">
+                    <td class="col-xs-3">Description</td><td>{{value.description}}</td>
+                </tr>
+                <tr ng-show="value.target">
+                    <td class="col-xs-3">Target</td><td>{{value.target}}</td>
+                </tr>
+                <tr ng-show="value.test">
+                    <td class="col-xs-3">Test</td><td>{{value.test}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Influences -->
+    <h4>Influences</h4>
+    <div class="row" ng-repeat="(key, value) in downtime.actions" ng-if="key.indexOf('Action') === -1">
+        <div class="col-sm-12">
+            <table class="table table-striped" >
+                <thead>
+                <tr>
+                    <th colspan="2"><h4 class="uppercase">{{key + " - Rating " + findInfluenceValue(key)}}</h4></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="col-xs-3">Action</td><td>{{value.action}}</td>
+                </tr>
+                <tr ng-show="value.location">
+                    <td class="col-xs-3">Location</td><td>{{value.location}}</td>
+                </tr>
+                <tr ng-show="value.description">
+                    <td class="col-xs-3">Description</td><td>{{value.description}}</td>
+                </tr>
+                <tr ng-show="value.target">
+                    <td class="col-xs-3">Target</td><td>{{value.target}}</td>
+                </tr>
+                <tr ng-show="value.test">
+                    <td class="col-xs-3">Test</td><td>{{value.test}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

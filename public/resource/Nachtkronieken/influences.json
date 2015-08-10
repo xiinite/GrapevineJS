@@ -1,0 +1,5 @@
+{
+  "wealth": ["High Society", "Industry", "Media", "Finance", "University"],
+  "dominion": ["Bureaucracy", "Police", "Legal", "Politics", "Underworld"],
+  "public": ["Church", "Occult", "Health", "Street", "Transportation"]
+}

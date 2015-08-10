@@ -27,7 +27,8 @@ module.exports = {
         router.get(app, 'character', 'wizard', [':id']);
         router.get(app, 'character', 'assignfreebies', [':id']);
         router.get(app, 'character', 'export', [":chronicleid", ":exporttype"]);
-        router.get(app, 'character', 'allByPlayer');
+        router.get(app, 'character', 'findbyname', [":name", ":chronicleid"]);
+        router.get(app, 'character', 'allByPlayer', [":chronicleid"]);
         router.post(app, 'character', 'import', [':chronicleId']);
         router.post(app, 'character', 'revert');
         router.post(app, 'character', 'submitconcept');

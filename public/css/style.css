@@ -44,6 +44,14 @@ ul.typeahead {
     margin-top: 150px;
 }
 
+.uppercase {
+    text-transform: uppercase;
+}
+/*.validation.ng-invalid {
+    border: 3px solid red;
+    color:white;
+}*/
+
 #logo {
     background: url(/img/logo-default.png) no-repeat center right;
     display: block;

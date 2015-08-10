@@ -8,7 +8,7 @@
   "dependencies": {
     "async": "*",
     "body-parser": "^1.10.2",
-    "bson": "^0.2.22",
+    "bson": "^0.4.8",
     "buffer-crc32": "*",
     "compression": "1.4.0",
     "connect-mongostore": "^0.1.4",
@@ -22,7 +22,7 @@
     "json2html": "0.0.8",
     "methods": "*",
     "mime": "*",
-    "mongodb": "*",
+    "mongodb": "^2.0.39",
     "mongoose": "^4.1.0",
     "morgan": "^1.5.1",
     "multer": "^0.1.7",

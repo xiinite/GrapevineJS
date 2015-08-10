@@ -60,7 +60,11 @@ function loadNext(collection, index, returnvalue, callback) {
             chronicleModel.find({
                 id: char.chronicle
             }, function (err, result) {
-                cb(err, result[0]);
+                if(result !== undefined && result.length > 0){
+                    cb(err, result[0]);
+                }else{
+                    cb(null, []);
+                }
             });
         }
     }, function (err, result) {
