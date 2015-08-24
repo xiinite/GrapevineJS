@@ -19,6 +19,7 @@ module.exports = {
         router.register(app, 'user');
 
         router.get(app, 'character', 'new', [':id']);
+        router.get(app, 'character', 'all', [':full']);
         router.get(app, 'character', 'showoldversion', [':id', ':version']);
         router.get(app, 'character', 'lores', [':id']);
         router.get(app, 'character', 'background', [':id']);
@@ -28,6 +29,7 @@ module.exports = {
         router.get(app, 'character', 'export', [":chronicleid", ":exporttype"]);
         router.get(app, 'character', 'findbyname', [":name", ":chronicleid"]);
         router.get(app, 'character', 'allByPlayer', [":chronicleid"]);
+        router.get(app, 'character', 'showbychronicle', [":chronicleid"]);
         router.post(app, 'character', 'import', [':chronicleId']);
         router.post(app, 'character', 'revert');
         router.post(app, 'character', 'submitconcept');
@@ -50,6 +52,8 @@ module.exports = {
         router.get(app, 'downtime', 'findPeriod', [':id']);
         router.get(app, 'downtime', 'submit', [':id']);
         router.get(app, 'downtime', 'review', [':id']);
+        router.get(app, 'downtime', 'handle', [':id']);
+        router.get(app, 'downtime', 'listbyperiod', [':id']);
         router.get(app, 'downtime', 'submittedCharacters', [':id']);
         router.post(app, 'downtime', 'savesubmission');
 

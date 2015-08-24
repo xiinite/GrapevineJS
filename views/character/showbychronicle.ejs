@@ -1,0 +1,480 @@
+<% layout("../layout.ejs") %>
+<div id="content" class="container">
+
+    <h1 class="page-header">
+        <div class='btn-toolbar pull-right hidden-print'>
+            <div class='btn-group'>
+                <button id="btnPrint" onclick="window.print();" type='button' class='btn btn-info'><span class="glyphicon glyphicon-print"></span>
+                    Print
+                </button>
+            </div>
+        </div>
+    </h1>
+
+    <% var character; %>
+    <% for(var charindex = 0; charindex < characters.length; charindex++) { %>
+    <% var count = 0; %>
+    <% character = characters[charindex]; %>
+    <h1 class="page-header"><%= character.name %>
+    </h1>
+
+    <div id='pnlAbout' class="panel panel-default">
+        <div class="panel-heading clickable"  data-target="#collapseAbout">
+            <h4 id="hdrAbout" class="panel-title">
+                About
+            </h4>
+        </div>
+        <div id="collapseAbout" class="panel-collapse ">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <div><b>Player:</b> <%= character.player.displayName %> <input type='hidden' id='playerid'
+                                                                                           value='<%= character.player.googleId %>'/>
+                            </div>
+                            <div><b>Chronicle:</b> <%= character.chronicle.name %></div>
+                            <div><b>Status:</b> <%= character.state %></div>
+                        </div>
+                        <div class="col-md-4">
+                            <div><b>Experience
+                                    Unspent:</b> <%= character.experience.unspent %></div>
+                            <div><b>Total experience earned:</b> <%= character.experience.total %></div>
+                        </div>
+                        <div class="col-md-4">
+                            <div><b>Created
+                                    on:</b> <%= character.created.getDate() + "/" + character.created.getMonth() + "/" + character.created.getFullYear() %>
+                            </div>
+                            <div><b>Last modified
+                                    on:</b> <%= character.modified.getDate() + "/" + character.modified.getMonth() + "/" + character.modified.getFullYear() %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 voffset3">
+                        <div class="col-md-4">
+                            <div><b>Clan:</b> <%= character.clan %></div>
+                            <div><b>Sect:</b> <%= character.sect %></div>
+                            <div><b>Coterie:</b> <%= character.coterie %></div>
+                        </div>
+                        <div class="col-md-4">
+                            <div><b>Generation:</b> <%= character.generation %></div>
+                            <div><b>Title:</b> <%= character.title %></div>
+                            <div><b>Sire:</b> <%= character.sire %></div>
+                        </div>
+                        <div class="col-md-4">
+                            <div><b>Nature:</b> <%= character.nature %></div>
+                            <div><b>Demeanor:</b> <%= character.demeanor %></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 voffset3">
+                        <div class="col-md-4">
+                            <div><b>Blood (max):</b> <%= character.bloodpool.current %> (<%= character.bloodpool.max %>)
+                                <span class="pull-right clickable">
+                                    <% count = character.bloodpool.current; while(count--){ %>O<%}%>
+                                </span>
+                                <span class="pull-right clickable">
+                                    <% count = character.bloodpool.max - character.bloodpool.current; while(count--){ %>&Oslash;<%}%>
+                                </span>
+                            </div>
+                            <div><b>Willpower (total):</b> <%= character.willpower.current %>
+                                (<%= character.willpower.max %>)
+                                <span class="pull-right clickable">
+                                    <% count = character.willpower.current; while(count--){ %>O<%}%>
+                                </span>
+                                <span class="pull-right clickable">
+                                    <% count = character.willpower.max - character.willpower.current; while(count--){ %>&Oslash;<%}%>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div><b>Morality Path:</b> <%= character.path.name %></div>
+                            <div><b>Morality Traits:</b> <%= character.path.rating %>
+                                <span class="pull-right clickable">
+                                    <% count = character.path.rating; while(count--){ %>O<%}%>
+                                </span></div>
+                            <div><b>Aura:</b> <%= character.aura %></div>
+                        </div>
+                        <div class="col-md-4">
+                            <div><b><%= character.conscience.name %>:</b> <%= character.conscience.rating %>
+                                <span class="pull-right clickable">
+                                    <% count = character.conscience.rating; while(count--){ %>O<%}%>
+                                </span></div>
+                            <div><b><%= character.selfcontrol.name %>:</b> <%= character.selfcontrol.rating %>
+                                <span class="pull-right clickable">
+                                    <% count = character.selfcontrol.rating; while(count--){ %>O<%}%>
+                                </span></div>
+                            <div><b><%= character.courage.name %>:</b> <%= character.courage.rating %>
+                                <span class="pull-right clickable">
+                                    <% count = character.courage.rating; while(count--){ %>O<%}%>
+                                </span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id='pnlAttributes' class="panel panel-default">
+        <div class="panel-heading clickable"  data-target="#collapseAttributes">
+            <h4 id="hdrAttributes" class="panel-title">
+                Attributes
+            </h4>
+        </div>
+        <div id="collapseAttributes" class="panel">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= calctotal(character.attributes.physical) %> Physical
+                                    Traits
+                                </li>
+                                <% for(var i = 0; i < character.attributes.physical.length; i++) { %>
+                                <li class="list-group-item trait clearfix">
+                                    <%= character.attributes.physical[i].name %>
+                                    <% if(character.attributes.physical[i].val > 1){ %>
+                                    (<%= character.attributes.physical[i].val %>)
+                                    <% } %>
+                                    <span class="pull-right clickable">
+                                        <% count = character.attributes.physical[i].val; while(count--){ %>O<%}%>
+                                    </span>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= calctotal(character.attributes.social) %> Social
+                                    Traits
+                                </li>
+                                <% for(var i = 0; i < character.attributes.social.length; i++) { %>
+                                <li class="list-group-item trait clearfix">
+                                    <%= character.attributes.social[i].name %>
+                                    <% if(character.attributes.social[i].val > 1){ %>
+                                    (<%= character.attributes.social[i].val %>)
+                                    <% } %>
+                                    <span class="pull-right clickable">
+                                        <% count = character.attributes.social[i].val; while(count--){ %>O<%}%>
+                                    </span>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= calctotal(character.attributes.mental) %> Mental
+                                    Traits
+                                </li>
+                                <% for(var i = 0; i < character.attributes.mental.length; i++) { %>
+                                <li class="list-group-item trait clearfix">
+                                    <%= character.attributes.mental[i].name %>
+                                    <% if(character.attributes.mental[i].val > 1){ %>
+                                    (<%= character.attributes.mental[i].val %>)
+                                    <% } %>
+                                    <span class="pull-right clickable">
+                                        <% count = character.attributes.mental[i].val; while(count--){ %>O<%}%>
+                                    </span>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= calctotal(character.attributes.negativephysical) %>
+                                    Negative Physical Traits
+                                </li>
+                                <% for(var i = 0; i < character.attributes.negativephysical.length; i++) { %>
+                                <li class="list-group-item">
+                                    <%= character.attributes.negativephysical[i].name %>
+                                    <% if(character.attributes.negativephysical[i].val > 1){ %>
+                                    (<%= character.attributes.negativephysical[i].val %>)
+                                    <% } %>
+                                    <span class="pull-right clickable">
+                                        <% count = character.attributes.negativephysical[i].val; while(count--){ %>O<%}%>
+                                    </span>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= calctotal(character.attributes.negativesocial) %>
+                                    Negative Social Traits
+                                </li>
+                                <% for(var i = 0; i < character.attributes.negativesocial.length; i++) { %>
+                                <li class="list-group-item">
+                                    <%= character.attributes.negativesocial[i].name %>
+                                    <% if(character.attributes.negativesocial[i].val > 1){ %>
+                                    (<%= character.attributes.negativesocial[i].val %>)
+                                    <% } %>
+                                    <span class="pull-right clickable">
+                                        <% count = character.attributes.negativesocial[i].val; while(count--){ %>O<%}%>
+                                    </span>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= calctotal(character.attributes.negativemental) %>
+                                    Negative Mental Traits
+                                </li>
+                                <% for(var i = 0; i < character.attributes.negativemental.length; i++) { %>
+                                <li class="list-group-item">
+                                    <%= character.attributes.negativemental[i].name %>
+                                    <% if(character.attributes.negativemental[i].val > 1){ %>
+                                    (<%= character.attributes.negativemental[i].val %>)
+                                    <% } %>
+                                    <span class="pull-right clickable">
+                                        <% count = character.attributes.negativemental[i].val; while(count--){ %>O<%}%>
+                                    </span>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id='pnlAdvantages' class="panel panel-default">
+        <div class="panel-heading clickable"  data-target="#collapseAdvantages">
+            <h4 id="hdrAdvantages" class="panel-title">
+                Advantages
+            </h4>
+        </div>
+        <div id="collapseAdvantages" class="panel">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= calctotal(character.abilities) %> Abilities</li>
+                                <% for(var i = 0; i < character.abilities.length; i++) { %>
+                                <li class="list-group-item clearfix">
+                                    <%= character.abilities[i].name + ": " + character.abilities[i].rating %>
+                                    <% if(character.abilities[i].note.length > 0) { %>
+                                    ( <%= character.abilities[i].note %> )
+                                    <% } %>
+                                    <span class="pull-right clickable">
+                                        <% count = character.abilities[i].rating; while(count--){ %>O<%}%>
+                                    </span>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.disciplines.length %> Disciplines</li>
+                                <% for(var i = 0; i < character.disciplines.length; i++) { %>
+                                <li class="list-group-item clearfix">
+                                    <%= character.disciplines[i].path + ": " + character.disciplines[i].name + " (" + character.disciplines[i].level + ")" %>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.rituals.length %> Rituals</li>
+                                <% for(var i = 0; i < character.rituals.length; i++) { %>
+                                <li class="list-group-item">
+                                    <%= character.rituals[i].name + " (" + character.rituals[i].level + ")" %>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= calctotal(character.backgrounds) %> Backgrounds</li>
+                                <% for(var i = 0; i < character.backgrounds.length; i++) { %>
+                                <li class="list-group-item trait clearfix">
+                                    <%= character.backgrounds[i].name + ": " + character.backgrounds[i].rating %>
+                                    <span class="pull-right clickable">
+                                        <% count = character.backgrounds[i].rating; while(count--){ %>O<%}%>
+                                    </span>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= calctotal(character.influences) %> Influences</li>
+                                <% for(var i = 0; i < character.influences.length; i++) { %>
+                                <li class="list-group-item trait clearfix">
+                                    <%= character.influences[i].name + ": " + character.influences[i].rating %>
+                                    <span class="pull-right clickable">
+                                        <% count = character.influences[i].rating; while(count--){ %>O<%}%>
+                                    </span>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.misc.length %> Miscelaneous Traits</li>
+                                <% for(var i = 0; i < character.misc.length; i++) { %>
+                                <li class="list-group-item clearfix">
+                                    <%= character.misc[i].name %>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= calctotal(character.status) %> Status</li>
+                                <% for(var i = 0; i < character.status.length; i++) { %>
+                                <li class="list-group-item clearfix">
+                                    <%= character.status[i].name %>
+                                    <% if(character.status[i].rating > 1){ %>
+                                    (<%= character.status[i].rating %>)
+                                    <% } %>
+                                    <span class="pull-right clickable">
+                                        <% count = character.status[i].rating; while(count--){ %>O<%}%>
+                                    </span>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= calctotalcost(character.merits) %> Merits</li>
+                                <% for(var i = 0; i < character.merits.length; i++) { %>
+                                <li class="list-group-item trait clearfix">
+                                    <%= character.merits[i].name + " (" + character.merits[i].cost + ")" %>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= calctotalcost(character.flaws) %> Flaws</li>
+                                <% for(var i = 0; i < character.flaws.length; i++) { %>
+                                <li class="list-group-item clearfix">
+                                    <%= character.flaws[i].name + " (" + character.flaws[i].cost + ")" %>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active">Health Levels</li>
+                                <% for(var hl in character.healthlevels) { %>
+                                <li class="list-group-item clearfix">
+                                    <%= hl + " (" + character.healthlevels[hl] + ")" %>
+                                    <span class="pull-right clickable">
+                                        <% count = character.healthlevels[hl]; while(count--){ %>O<%}%>
+                                    </span>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.derangements.length %> Derangements</li>
+                                <% for(var i = 0; i < character.derangements.length; i++) { %>
+                                <li class="list-group-item clearfix">
+                                    <%= character.derangements[i].name %>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.bloodbonds.length %> Blood Bonds</li>
+                                <% for(var i = 0; i < character.bloodbonds.length; i++) { %>
+                                <li class="list-group-item clearfix">
+                                    <%= character.bloodbonds[i].name %>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-12">
+                            <ul class="list-group">
+                                <li class="list-group-item active"><%= character.equipment.length %> Equipment</li>
+                                <% for(var i = 0; i < character.equipment.length; i++) { %>
+                                <li class="list-group-item clearfix">
+                                    <%= character.equipment[i].name %>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <% if(character.notes.length !== 0) { %>
+    <div id='pnlNotes' class="panel panel-default ">
+        <div class="panel-heading clickable"  data-target="#collapseNotes">
+            <h4 id="hdrNotes" class="panel-title">
+                Notes
+            </h4>
+        </div>
+        <div id="collapseNotes" class="panel">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="list-group">
+                            <% for(var i = 0; i < character.notes.length; i++) { %>
+                            <li class="list-group-item clearfix">
+                                <%= character.notes[i].value %>
+                            </li>
+                            <% } %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
+    <div id='pnlExperience' class="panel panel-default hidden-print">
+        <div class="panel-heading clickable"  data-target="#collapseExperience">
+            <h4 id="hdrExperience" class="panel-title">
+                Experience History
+            </h4>
+        </div>
+        <div id="collapseExperience" class="panel">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="list-group">
+                            <% for(var i = 0; i < character.experiencehistory.length; i++) { %>
+                            <li class="list-group-item clearfix">
+                                <%= (new Date(character.experiencehistory[i].date).getMonth() + 1) + "/" + new Date(character.experiencehistory[i].date).getFullYear() + " Experience: " + character.experiencehistory[i].change + ", Reason: " + character.experiencehistory[i].reason %>
+                            </li>
+                            <% } %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="pagebreak"></div>
+<% } %>
+</div>

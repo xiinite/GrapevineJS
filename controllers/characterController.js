@@ -68,16 +68,30 @@ module.exports = {
             {
                 chronicle: {"$in": chronicleIds}
             };
-            model.list(where, function (err, result) {
-                if (err) return next(new Error(err));
-                res.json(result);
-            })
+            if(req.params.full === 'full'){
+                model.find(where, function (err, result) {
+                    if (err) return next(new Error(err));
+                    res.json(result);
+                })
+            }else{
+                model.list(where, function (err, result) {
+                    if (err) return next(new Error(err));
+                    res.json(result);
+                })
+            }
         }
         else {
-            model.list({}, function (err, result) {
-                if (err) return next(new Error(err));
-                res.json(result);
-            });
+            if(req.params.full === 'full'){
+                model.find({}, function (err, result) {
+                    if (err) return next(new Error(err));
+                    res.json(result);
+                })
+            }else{
+                model.list({}, function (err, result) {
+                    if (err) return next(new Error(err));
+                    res.json(result);
+                })
+            }
         }
     },
     'allByPlayer': function(req, res, next){
@@ -91,6 +105,20 @@ module.exports = {
                 if (err) return next(new Error(err));
                 res.json(result);
             });
+        }
+    },
+    'showbychronicle': function(req, res, next) {
+        if (req.params.chronicleid) {
+            model.find({chronicle: req.params.chronicleid}, function (err, result) {
+                if (err) return next(new Error(err));
+
+                out = {
+                    user: req.user,
+                    characters: result
+                };
+                res.render(ViewTemplatePath + "/showbychronicle", out);
+            });
+
         }
     },
     'findbyname': function(req, res, next){

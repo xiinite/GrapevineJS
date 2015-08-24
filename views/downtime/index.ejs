@@ -11,6 +11,7 @@
                 <ul class="list-group">
                     <li ng-repeat="dt in downtimeperiods | orderBy : 'openFrom'" class="list-group-item">
                         {{findChronicleName(dt.chronicleId)}}: {{dt.openFrom | date : 'dd-MM-yyyy'}} - {{dt.openTo | date : 'dd-MM-yyyy'}}
+                        <a class="btn btn-sm btn-primary pull-right" ng-href="{{'/downtime/handle/' + dt.id}}"><span class="glyphicon glyphicon-cog"></span></a>
                         <a class="btn btn-sm btn-default pull-right" ng-href="{{'/downtime/edit/' + dt.id}}"><span class="glyphicon glyphicon-pencil"></span></a>
                         <button class="btn btn-sm btn-default pull-right" ng-confirm-click="Are you sure?" ng-click="delete(dt.id)"><span class="glyphicon glyphicon-trash"></span></button>
                     </li>

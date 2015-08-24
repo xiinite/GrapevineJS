@@ -184,5 +184,16 @@ module.exports = {
             if(err) return next(new Error(err));
             res.json("ok");
         });
+    },
+    'handle': function(req, res){
+
+        var out = {user: req.user, period: req.params.id};
+        res.render(ViewTemplatePath + "/handle", out);
+    },
+    'listbyperiod': function(req, res, next) {
+        model.find({downtimePeriod: req.params.id}, function(err, result){
+            if(err) return next(new Error(err));
+            res.json(result);
+        });
     }
 };

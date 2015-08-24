@@ -1,0 +1,92 @@
+<%- layout("../layout.ejs") %>
+<%- partial('./scripts') %>
+<script type='text/javascript' charset="utf-8" src="/js/controllers/cymeriad.controller.downtime.handle.js"></script>
+<div class="container" ng-app="cymeriad.app.downtime" ng-controller="cymeriad.controller.downtime.handle" ng-init="init('<%= period %>')">
+    <div class="col-lg-12">
+        <button class="btn" ng-click="previous()">Previous</button>
+        <button class="btn pull-right" ng-click="next()">Next</button>
+    </div>
+    <div class="col-lg-12" ng-repeat="downtime in downtimes" >
+        <div class="row" ng-show="isActive(downtime)" ng-class="getDirection()" ng-swipe-left="next()" ng-swipe-right="previous()">
+                <div class="col-lg-12">
+                        <h1 class="page-header">{{ findCharacter(downtime.characterid).name }}</h1>
+                    <h3>Downtime for {{period.openFrom | date}}</h3> <!-- Influences -->
+                    <h4>Rating</h4>
+                    <div class="row">
+                        <div class="col-sm-12" ng-show="downtime.actions.previousSessionRating">
+                            <div class="col-sm-3">Session rating: </div>
+                            <div class="col-sm-9">
+                                <star-rating ng-model="downtime.actions.previousSessionRating.rating" max="5" readonly="true"></star-rating>
+                            </div>
+                            <div class="col-sm-3">Note: </div>
+                            <div class="col-sm-9">{{downtime.actions.previousSessionRating.description}}</div>
+                        </div>
+                    </div>
+
+                    <h4>Actions</h4>
+                    <div class="row" ng-repeat="(key, value) in downtime.actions" ng-if="key.indexOf('Action') > -1">
+                        <div class="col-sm-12">
+                            <table class="table table-striped" >
+                                <thead>
+                                <tr>
+                                    <th colspan="2">
+                                        <h4 class="uppercase" ng-show="key.indexOf('player') === -1">{{key.substring(0, key.indexOf('Action')) + " - Rating " + findBackgroundValue(findCharacter(downtime.characterid), key.substring(0, key.indexOf('Action'))) }}</h4>
+                                        <h4 class="uppercase" ng-hide="key.indexOf('player') === -1">{{key}}</h4>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="col-xs-3">Action</td><td>{{value.action}}</td>
+                                </tr>
+                                <tr ng-show="value.location">
+                                    <td class="col-xs-3">Location</td><td>{{value.location}}</td>
+                                </tr>
+                                <tr ng-show="value.description">
+                                    <td class="col-xs-3">Description</td><td>{{value.description}}</td>
+                                </tr>
+                                <tr ng-show="value.target">
+                                    <td class="col-xs-3">Target</td><td>{{value.target}}</td>
+                                </tr>
+                                <tr ng-show="value.test">
+                                    <td class="col-xs-3">Test</td><td>{{value.test}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Influences -->
+                    <h4>Influences</h4>
+                    <div class="row" ng-repeat="(key, value) in downtime.actions" ng-if="key.indexOf('Action') === -1 && key.indexOf('Rating') == -1">
+                        <div class="col-sm-12">
+                            <table class="table table-striped" >
+                                <thead>
+                                <tr>
+                                    <th colspan="2"><h4 class="uppercase">{{key + " - Rating " + findInfluenceValue(findCharacter(downtime.characterid),key)}}</h4></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="col-xs-3">Action</td><td>{{value.action}}</td>
+                                </tr>
+                                <tr ng-show="value.location">
+                                    <td class="col-xs-3">Location</td><td>{{value.location}}</td>
+                                </tr>
+                                <tr ng-show="value.description">
+                                    <td class="col-xs-3">Description</td><td>{{value.description}}</td>
+                                </tr>
+                                <tr ng-show="value.target">
+                                    <td class="col-xs-3">Target</td><td>{{value.target}}</td>
+                                </tr>
+                                <tr ng-show="value.test">
+                                    <td class="col-xs-3">Test</td><td>{{value.test}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
