@@ -240,7 +240,7 @@
                                     <% count = character.bloodpool.current; while(count--){ %>O<%}%>
                                 </span>
                                 <span class="pull-right clickable">
-                                    <% count = character.bloodpool.max - character.bloodpool.current; while(count--){ %>&Oslash;<%}%>
+                                    <% count = Math.max(character.bloodpool.max - character.bloodpool.current, 1); while(count--){ %>&Oslash;<%}%>
                                 </span>
                             </div>
                             <div><b>Willpower (total):</b> <%= character.willpower.current %>
@@ -249,7 +249,7 @@
                                     <% count = character.willpower.current; while(count--){ %>O<%}%>
                                 </span>
                                 <span class="pull-right clickable">
-                                    <% count = character.willpower.max - character.willpower.current; while(count--){ %>&Oslash;<%}%>
+                                    <% count = Math.max(character.willpower.max - character.willpower.current, 1); while(count--){ %>&Oslash;<%}%>
                                 </span>
                             </div>
                         </div>
@@ -466,6 +466,9 @@
                                 <% for(var i = 0; i < character.backgrounds.length; i++) { %>
                                 <li class="list-group-item trait">
                                     <%= character.backgrounds[i].name + ": " + character.backgrounds[i].rating %>
+                                    <% if(character.backgrounds[i].note.length > 0) { %>
+                                    ( <%= character.backgrounds[i].note %> )
+                                    <% } %>
                                     <span class="pull-right clickable">
                                         <% count = character.backgrounds[i].rating; while(count--){ %>O<%}%>
                                     </span>
@@ -479,6 +482,9 @@
                                 <% for(var i = 0; i < character.influences.length; i++) { %>
                                 <li class="list-group-item trait">
                                     <%= character.influences[i].name + ": " + character.influences[i].rating %>
+                                    <% if(character.influences[i].note.length > 0) { %>
+                                    ( <%= character.influences[i].note %> )
+                                    <% } %>
                                     <span class="pull-right clickable">
                                         <% count = character.influences[i].rating; while(count--){ %>O<%}%>
                                     </span>

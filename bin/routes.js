@@ -57,6 +57,7 @@ module.exports = {
         router.get(app, 'downtime', 'listbyperiod', [':id']);
         router.get(app, 'downtime', 'submittedCharacters', [':id']);
         router.post(app, 'downtime', 'savesubmission');
+        router.post(app, 'downtime', 'updatesubmission');
 
         router.get(app, 'gametype', 'new');
 

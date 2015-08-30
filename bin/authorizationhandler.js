@@ -55,7 +55,7 @@ passport.use(new GoogleStrategy({
 ));
 
 //FACEBOOK STRATEGY
-/*
+
 passport.use(new FacebookStrategy({
         clientID: config.facebook.FACEBOOK_CLIENT_ID,
         clientSecret: config.facebook.FACEBOOK_CLIENT_SECRET,
@@ -79,7 +79,7 @@ passport.use(new FacebookStrategy({
             });
         });
     }
-));*/
+));
 
 //Drupal - Nachtkronieken
 /*passport.use(new OAuth2Strategy({
@@ -182,9 +182,8 @@ module.exports = {
         app.get('/auth/facebook', passport.authenticate('facebook'));
 
         app.get('/auth/facebook/callback',
-            passport.authenticate('drupal', {
-                successRedirect: '/',
-                failureRedirect: '/login'
+            passport.authenticate('facebook', {
+                failureRedirect: '/login', session: true
             }));
 
         app.get('/auth/nachtkronieken', passport.authenticate('oauth2', { scope: 'profile openid email cymeriad_clients', state: "new"}));

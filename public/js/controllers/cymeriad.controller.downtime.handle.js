@@ -14,17 +14,52 @@ app.controller('cymeriad.controller.downtime.handle', ['$scope', '$http', 'loadi
         }
     };
 
+    $scope.findAssists = function(downtime, bg){
+        var i = $scope.downtimes.length;
+        var character = $scope.findCharacter(downtime.characterid);
+        if(character === undefined) return false;
+        var ac = downtime.actions[bg];
+        var assists = [];
+        while(i--){
+            var dt = $scope.downtimes[i];
+            for(var a in dt.actions){
+                var action = dt.actions[a];
+                if(action.targetBackground === ac.name && action.target !== undefined && action.targetBackground !== undefined){
+                    if( action.target === character.name){
+                        var assister = $scope.findCharacter(dt.characterid);
+                        action.assister = assister.name;
+                        action.characterid = dt.characterid;
+                        assists.push(action)
+                    }
+                }
+            }
+        }
+        if(assists.length > 0){
+            return assists;
+        }
+    };
+
     $scope.findBackgroundValue = function(character, name){
         if(character === undefined) return 0;
+        var retainer = false;
         if(name === 'ally') name = 'Allies';
         if(name === 'contact') name = 'Contacts';
         if(name === 'resource') name = 'Resources';
-        var result = $.grep(character.backgrounds, function(e){ return e.name == name });
-        if(result.length > 0){
-            if(name === "Retainers")
-            {
-                return result.length;
+        if(name.indexOf('retainer') > -1) retainer = true;
+        var result = [];
+        if(retainer) {
+            var index = parseInt(name.replace('retainer', ''));
+            var all = $.grep(character.backgrounds, function(e){ return e.name == 'Retainers' });
+            if(all[index].note){
+                return all[index].note + ': ' + all[index].rating;
+            }else{
+                return all[index].rating;
             }
+        }else{
+            result = $.grep(character.backgrounds, function(e){ return e.name == name });
+        }
+        if(result.length > 0){
+
             return result[0].rating;
         }
         return 0;
@@ -72,27 +107,33 @@ app.controller('cymeriad.controller.downtime.handle', ['$scope', '$http', 'loadi
         else{
             return "slide-right";
         }
-    }
+    };
+
+    $scope.save = function(){
+
+        loading.show();
+        $http.post("/downtime/updatesubmission", {downtimes: $scope.downtimes}).then(function(response){
+
+            loading.hide();
+        });
+    };
 
     $scope.init = function(id) {
         loading.show();
         var root = $scope;
         $q.all([
+            $http.get("/character/all/full").then(function (response) {
+                root.characters = response.data;
+            }),
             $http.get("/downtime/listbyperiod/" + id).then(function (response) {
                 root.downtimes = response.data;
                 root.active = root.downtimes[0].id
+            }),
+            $http.get("/downtime/findPeriod/" + id).then(function (response) {
+                root.period = response.data[0];
             })
         ]).then(function(){
-            $q.all([
-                $http.get("/character/all/full").then(function (response) {
-                    root.characters = response.data;
-                }),
-                $http.get("/downtime/findPeriod/" + id).then(function (response) {
-                    root.period = response.data[0];
-                })
-            ]).then(function(){
-                loading.hide();
-            });
+            loading.hide();
         });
     };
 }]);

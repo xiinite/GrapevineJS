@@ -73,7 +73,7 @@ module.exports = {
             var userId = req.user.googleId;
             where =
             {
-                admins: {$in: [userId]}
+                admins: userId
             };
             chronicleModel.find(where, function (err, result) {
                 if(err) return next(new Error(err));
@@ -82,7 +82,7 @@ module.exports = {
                 });
                 where =
                 {
-                    chronicleid: {$in: [userId]}
+                    chronicleId: {$in: chronicleIds}
                 };
                 periodModel.find(where, function (err, result) {
                     if(err) return next(new Error(err));
@@ -184,6 +184,18 @@ module.exports = {
             if(err) return next(new Error(err));
             res.json("ok");
         });
+    },
+    'updatesubmission': function(req, res, next){
+        var downtimes = req.body.downtimes;
+        var i = downtimes.length;
+        while(i--){
+            var dt = downtimes[i];
+            delete dt._id;
+            model.update(dt.id, dt, function(err){
+                if(err) return next(new Error(err));
+            });
+        }
+        res.json("ok");
     },
     'handle': function(req, res){
 
