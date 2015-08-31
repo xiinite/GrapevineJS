@@ -1,10 +1,5 @@
 <% layout("../layout.ejs") %>
-<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.confirmClick.js"></script>
-<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.readMore.js"></script>
-<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.JSON.js"></script>
-<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.services.js"></script>
-<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.propertyFilter.js"></script>
-<script type="text/javascript" charset="utf-8" src="/js/applications/cymeriad.app.character.js"></script>
+<%- partial('./scripts') %>
 <script type="text/javascript" src="/js/controllers/cymeriad.controller.character.wizard.js"></script>
 <div class="container" ng-app="cymeriad.app.character" ng-controller="cymeriad.controller.character.wizard" ng-init="init('<%= characterid %>')">
     <a id="top"></a>
@@ -1260,7 +1255,7 @@
                                  ng-hide="clanAdvChoiceMade">
                                 <div class="col-lg-9">
                                     <select class="form-control"
-                                            ng-options="attr for attr in ['Finance', 'Political', 'High society']"
+                                            ng-options="attr for attr in ['Finance', 'Political', 'High Society']"
                                             ng-model="sinfluence">
                                         <option style="display:none" value="">Select one</option>
                                     </select>
@@ -1492,7 +1487,7 @@
                                  ng-hide="clanAdvChoiceMade">
                                 <div class="col-lg-9">
                                     <select class="form-control"
-                                            ng-options="attr for attr in ['High society', 'Performance']"
+                                            ng-options="attr for attr in ['High Society', 'Performance']"
                                             ng-model="sinfluence">
                                         <option style="display:none" value="">Select one</option>
                                     </select>

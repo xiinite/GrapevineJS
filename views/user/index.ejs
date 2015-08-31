@@ -17,6 +17,7 @@
                 <thead>
                 <tr>
                     <th class="name" custom-sort order="'name'" sort="sort">Name&nbsp;</th>
+                    <th class="provider" custom-sort order="'provider'" sort="sort">provider&nbsp;</th>
                 </tr>
                 </thead>
                 <tfoot>
@@ -45,6 +46,7 @@
                 <tbody>
                 <tr ng-repeat="item in pagedItems[currentPage] | orderBy:sort.sortingOrder:sort.reverse">
                     <td class="clickable" ng-click="openItem(item.googleId)">{{item.displayName}}</td>
+                    <td class="clickable" ng-click="openItem(item.googleId)">{{item.provider}}</td>
                 </tr>
                 </tbody>
             </table>

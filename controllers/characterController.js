@@ -109,7 +109,7 @@ module.exports = {
     },
     'showbychronicle': function(req, res, next) {
         if (req.params.chronicleid) {
-            model.find({chronicle: req.params.chronicleid}, function (err, result) {
+            model.find({chronicle: req.params.chronicleid, state: 'Active'}, function (err, result) {
                 if (err) return next(new Error(err));
 
                 out = {
@@ -130,6 +130,12 @@ module.exports = {
                 })
             }
         }
+    },
+    'influences': function(req, res){
+        var out = {
+            user: req.user
+        };
+        res.render(ViewTemplatePath + "/influences", out);
     },
     'show': function (req, res, next) {
         if (req.params.id) {

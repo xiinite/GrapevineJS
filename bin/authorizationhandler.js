@@ -56,7 +56,7 @@ passport.use(new GoogleStrategy({
 
 //FACEBOOK STRATEGY
 
-passport.use(new FacebookStrategy({
+/*passport.use(new FacebookStrategy({
         clientID: config.facebook.FACEBOOK_CLIENT_ID,
         clientSecret: config.facebook.FACEBOOK_CLIENT_SECRET,
         callbackURL: config.facebook.FACEBOOK_RETURN_URL
@@ -79,10 +79,10 @@ passport.use(new FacebookStrategy({
             });
         });
     }
-));
+));*/
 
 //Drupal - Nachtkronieken
-/*passport.use(new OAuth2Strategy({
+passport.use(new OAuth2Strategy({
         authorizationURL: 'http://www.nachtkronieken.com/oauth2/authorize',
         tokenURL: 'http://www.nachtkronieken.com/oauth2/token',
         clientID: config.drupal.DRUPAL_CLIENT_ID,
@@ -118,7 +118,7 @@ passport.use(new FacebookStrategy({
             });
         });
     }
-));*/
+));
 /**
  * serializeUser
  * @param {Object} user

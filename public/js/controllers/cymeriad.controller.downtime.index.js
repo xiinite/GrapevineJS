@@ -48,7 +48,13 @@ app.controller('cymeriad.controller.downtime.index', ['$scope', '$http', 'loadin
                 root.submittedperiods = response.data;
             })]
         ).then(function(){
-                loading.hide();
+
+                $http.get("/chronicle/listByPlayer").then(function (response) {
+                    root.chronicles = root.chronicles.concat(response.data);
+                }).then(function(){
+
+                    loading.hide();
+                });
             });
 
     }

@@ -1,10 +1,5 @@
 <% layout("../layout.ejs") %>
-<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.confirmClick.js"></script>
-<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.readMore.js"></script>
-<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.JSON.js"></script>
-<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.services.js"></script>
-<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.propertyFilter.js"></script>
-<script type="text/javascript" charset="utf-8" src="/js/applications/cymeriad.app.character.js"></script>
+<%- partial('./scripts') %>
 <script type="text/javascript" src="/js/controllers/cymeriad.controller.character.concept.js"></script>
 <div class="container" ng-app="cymeriad.app.character" ng-controller="cymeriad.controller.character.concept" ng-init="init()">
     <h1 class="page-header hidden-xs hidden-sm">New concept</h1>

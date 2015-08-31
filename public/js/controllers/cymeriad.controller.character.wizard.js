@@ -88,7 +88,7 @@ app.controller('cymeriad.controller.character.wizard', ['$scope', '$http', 'load
         if (value.length === undefined) return;
         if (value.length == 0) return;
 
-        if(value == "High society"){
+        if(value == "High Society"){
             var result = $.grep($scope.character.influences, function (e) {
                 return e.name == value;
             });
