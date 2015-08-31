@@ -137,6 +137,12 @@ module.exports = {
         };
         res.render(ViewTemplatePath + "/influences", out);
     },
+    'status': function(req, res){
+        var out = {
+            user: req.user
+        };
+        res.render(ViewTemplatePath + "/status", out);
+    },
     'show': function (req, res, next) {
         if (req.params.id) {
             model.find({

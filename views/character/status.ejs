@@ -1,0 +1,66 @@
+<%- layout("../layout.ejs") %>
+<%- partial('./scripts') %>
+<script type="text/javascript" src="/js/controllers/cymeriad.controller.character.status.js"></script>
+<div class="container" ng-app="cymeriad.app.character" ng-controller="cymeriad.controller.character.status" ng-init="init()">
+    <div ng-repeat="c in chronicles">
+        <div class="row">
+            <div class="col-md-12 hidden-print">
+                <h3 class="bg-primary clickable text-center text-capitalize" ng-click="isCollapsed = !isCollapsed">{{c.name}}</h3>
+            </div>
+            <div class="row" collapse="isCollapsed">
+                <div class="col-md-12 col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3>Positions</h3>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Title</th>
+                                    <th>Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="char in c.characters | orderBy: 'title'" ng-if="char.title !== ''">
+                                    <td class="col-xs-8">{{char.name}}</td>
+                                    <td class="col-xs-3">{{char.title}}</td>
+                                    <td class="col-xs-3">{{char.status.length}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3>Status list</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-4 col-xs-12" ng-repeat-start="char in c.characters">
+                                    <div class="col-sm-12"><b>{{char.name}}</b>: {{char.status.length}}</div>
+                                    <div class="col-sm-2"></div>
+                                    <div class="col-sm-10">
+                                        <table class="table table-striped table-bordered" ng-show="char.status.length">
+                                            <tr ng-repeat="s in char.status">
+                                                <td class="col-xs-8">{{s.name}}</td>
+                                                <td class="col-xs-3">{{s.statustype}}</td>
+                                                <td class="col-xs-1">{{s.rating}}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="clearfix pbafter" ng-if="$index%3==2"></div>
+                                <div ng-repeat-end=""></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

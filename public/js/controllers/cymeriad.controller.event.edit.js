@@ -27,7 +27,9 @@ app.controller('cymeriad.controller.event.edit', ['$scope', '$http', 'loading', 
 
     $scope.addChar = function(char){
         if($scope.event.characters === undefined) $scope.event.characters = [];
-        $scope.event.characters.push(char);
+        $scope.event.characters.push(
+            {name: char.name, id: char.id, googleId: char.googleId, chronicle: char.chronicle.id}
+        );
     };
 
     $scope.removeChar = function(item){
