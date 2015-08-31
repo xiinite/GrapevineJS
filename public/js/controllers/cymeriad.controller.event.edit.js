@@ -1,5 +1,5 @@
 "use strict";
-app.controller('cymeriad.controller.event.edit', ['$scope', '$http', 'loading', '$filter', function ($scope, $http, loading, $filter) {
+app.controller('cymeriad.controller.event.edit', ['$scope', '$http', 'loading', '$filter', 'ngToast', function ($scope, $http, loading, $filter, ngToast) {
     $scope.event = {};
     $scope.chronicles = [];
     $scope.characters = [];
@@ -37,19 +37,40 @@ app.controller('cymeriad.controller.event.edit', ['$scope', '$http', 'loading', 
     };
 
     $scope.save = function(){
+        var saving = ngToast.create({
+            className: 'info',
+            content: 'Saving...',
+            timeout: 2000
+        });
         $http.post("/event/update", {event: $scope.event}).then(function(response){
             if(response.data === "ok")
             {
+                ngToast.dismiss(saving);
+                ngToast.create({
+                    className: 'success',
+                    content: 'Saved!',
+                    timeout: 2000
+                });
                 $scope.init($scope.event.id);
             }
             else{
-                alert(response.data);
+                ngToast.dismiss(saving);
+                ngToast.create({
+                    className: 'error',
+                    content: 'Error!' + response.data,
+                    timeout: 2000
+                });
             }
         });
     };
 
     $scope.awardXP = function(){
         var root = $scope;
+        var saving = ngToast.create({
+            className: 'info',
+            content: 'Saving...',
+            timeout: 2000
+        });
         var charIds = $scope.event.characters.map(function(item){return item.id});
         $http.post("/character/awardxp", {ids: charIds, amount: $scope.xpamount}).then(function(response){
             if(response.data === "ok")

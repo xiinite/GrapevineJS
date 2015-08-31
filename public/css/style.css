@@ -108,7 +108,7 @@ textarea.vertical{
     resize: vertical;
 }
 #veil {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     height:100%;
@@ -217,6 +217,10 @@ textarea.vertical{
 
 .step {
     clear: none;
+}
+
+.ng-toast {
+    left: 0;
 }
 @media print {
     body {

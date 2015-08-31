@@ -1,5 +1,5 @@
 "use strict";
-app.controller('cymeriad.controller.downtime.handle', ['$scope', '$http', 'loading', '$q', function ($scope, $http, loading, $q) {
+app.controller('cymeriad.controller.downtime.handle', ['$scope', '$http', 'loading', '$q', 'ngToast', function ($scope, $http, loading, $q, ngToast) {
     $scope.downtimes = [];
     $scope.characters = {};
     $scope.period = {};
@@ -110,11 +110,18 @@ app.controller('cymeriad.controller.downtime.handle', ['$scope', '$http', 'loadi
     };
 
     $scope.save = function(){
-
-        loading.show();
+        var saving = ngToast.create({
+            className: 'info',
+            content: 'Saving...',
+            timeout: 2000
+        });
         $http.post("/downtime/updatesubmission", {downtimes: $scope.downtimes}).then(function(response){
-
-            loading.hide();
+            ngToast.dismiss(saving);
+            ngToast.create({
+                className: 'success',
+                content: 'Saved!',
+                timeout: 2000
+            });
         });
     };
 

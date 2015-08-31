@@ -5,6 +5,6 @@ angular.module('cymeriad.services', [])
             $('#veil').show();
         };
         this.hide = function () {
-            $('#veil').fadeOut(200);
+            $('#veil').fadeOut(50);
         };
     });
