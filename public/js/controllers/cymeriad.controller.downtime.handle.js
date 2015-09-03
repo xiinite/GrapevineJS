@@ -129,7 +129,7 @@ app.controller('cymeriad.controller.downtime.handle', ['$scope', '$http', 'loadi
         loading.show();
         var root = $scope;
         $q.all([
-            $http.get("/character/all/full").then(function (response) {
+            $http.post("/character/all", {fields: 'id name influences backgrounds'}).then(function (response) {
                 root.characters = response.data;
             }),
             $http.get("/downtime/listbyperiod/" + id).then(function (response) {
