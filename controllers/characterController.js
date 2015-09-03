@@ -73,6 +73,11 @@ module.exports = {
                     if (err) return next(new Error(err));
                     res.json(result);
                 })
+            }else if (req.body.fields) {
+                model.findFields(where, req.body.fields, function (err, result) {
+                    if (err) return next(new Error(err));
+                    res.json(result);
+                })
             }else{
                 model.list(where, function (err, result) {
                     if (err) return next(new Error(err));
@@ -86,7 +91,13 @@ module.exports = {
                     if (err) return next(new Error(err));
                     res.json(result);
                 })
-            }else{
+            }else if (req.body.fields) {
+                model.findFields({}, req.body.fields, function (err, result) {
+                    if (err) return next(new Error(err));
+                    res.json(result);
+                })
+            }
+            else{
                 model.list({}, function (err, result) {
                     if (err) return next(new Error(err));
                     res.json(result);

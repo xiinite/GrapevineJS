@@ -3,6 +3,7 @@
 <script type="text/javascript" src="/js/controllers/cymeriad.controller.character.edit.js"></script>
 <div id="content" class="container" ng-app="cymeriad.app.character" ng-controller="cymeriad.controller.character.edit" ng-init="init('<%= characterid %>')"
      ng-form="characterForm">
+    <toast></toast>
     <h1 class="page-header">{{character.name}}
         <div class='btn-toolbar pull-right hidden-print'>
             <button type='button' class='btn btn-info' ng-click="save()"><span class="glyphicon glyphicon-save"></span>

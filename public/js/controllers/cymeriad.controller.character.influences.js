@@ -28,7 +28,7 @@ app.controller('cymeriad.controller.character.influences', ['$scope', '$http', '
     $scope.init = function (id) {
         loading.show();
         var root = $scope;
-        $http.get("/character/all/full").then(function (response) {
+        $http.post("/character/all", {fields: 'id name influences chronicle state'}).then(function (response) {
             root.characters = response.data;
             var i = root.characters.length;
             while(i--) {

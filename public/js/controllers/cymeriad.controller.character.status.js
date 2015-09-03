@@ -106,7 +106,7 @@ app.controller('cymeriad.controller.character.status', ['$scope', '$http', 'load
     $scope.init = function () {
         loading.show();
         var root = $scope;
-        $http.get("/character/all/full").then(function (response) {
+        $http.post("/character/all", {fields: 'id name title status chronicle state'}).then(function (response) {
             var characters = response.data;
             $scope.chronicles = [];
             var i = characters.length;

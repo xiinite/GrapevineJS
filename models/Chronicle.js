@@ -51,21 +51,21 @@ function loadNext(collection, index, returnvalue, callback) {
         administrators: function (cb) {
             userModel.find({
                 googleId: {"$in": c.admins}
-            }, function (err, result) {
+            }, 'googleId displayName emails provider', function (err, result) {
                 cb(err, result);
             });
         },
         characters: function (cb) {
             charModel.find({
                 chronicle: c.id
-            }, function (err, result) {
+            }, 'id name chronicle googleId state', function (err, result) {
                 cb(err, result);
             });
         },
         playerDocs: function (cb){
             userModel.find({
                 googleId: {"$in": c.players}
-            }, function (err, result) {
+            }, 'googleId displayName emails provider', function (err, result) {
                 cb(err, result);
             });
         }

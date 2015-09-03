@@ -18,11 +18,21 @@ module.exports = {
             loadNext(result, 0, aggregated, callback);
         });
     },
+    'findFields': function (where, fields, callback) {
+        var q = model.find(where);
+        q.select(fields);
+        q.exec(function (err, result) {
+            var aggregated = [];
+            loadNext(result, 0, aggregated, callback);
+        });
+    },
     findPlain: function(where, callback){
         model.find(where, callback);
     },
     'list': function(where, callback){
-        model.find(where, 'id name chronicle googleId state', callback);
+        var q = model.find(where);
+        q.select('id name chronicle googleId state');
+        q.exec(callback);
     },
     'clear': function (callback) {
         model.find().remove(callback);
@@ -50,22 +60,30 @@ function loadNext(collection, index, returnvalue, callback) {
 
     async.parallel({
         player: function (cb) {
-            userModel.find({
-                googleId: char.googleId
-            }, function (err, result) {
-                cb(err, result[0]);
-            });
+            if(char.googleId){
+                userModel.find({
+                    googleId: char.googleId
+                }, function (err, result) {
+                    cb(err, result[0]);
+                });
+            }else{
+                cb(null, []);
+            }
         },
         chronicle: function (cb) {
-            chronicleModel.find({
-                id: char.chronicle
-            }, function (err, result) {
-                if(result !== undefined && result.length > 0){
-                    cb(err, result[0]);
-                }else{
-                    cb(null, []);
-                }
-            });
+            if(char.chronicle){
+                chronicleModel.find({
+                    id: char.chronicle
+                }, function (err, result) {
+                    if(result !== undefined && result.length > 0){
+                        cb(err, result[0]);
+                    }else{
+                        cb(null, []);
+                    }
+                });
+            }else{
+                cb(null, []);
+            }
         }
     }, function (err, result) {
         if (result.player) {

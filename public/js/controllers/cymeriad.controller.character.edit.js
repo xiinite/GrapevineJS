@@ -1,5 +1,5 @@
 "use strict";
-app.controller('cymeriad.controller.character.edit', ['$scope', '$window', '$http', 'loading', 'resources', '$filter', function ($scope, $window, $http, loading, resources, $filter) {
+app.controller('cymeriad.controller.character.edit', ['$scope', '$window', '$http', 'loading', 'resources', '$filter', 'ngToast', function ($scope, $window, $http, loading, resources, $filter, ngToast) {
     $scope.log = function (event) {
         console.log(event);
     };
@@ -373,6 +373,11 @@ app.controller('cymeriad.controller.character.edit', ['$scope', '$window', '$htt
 
     $scope.save = function(){
         try{
+            var saving = ngToast.create({
+                className: 'info',
+                content: 'Saving...',
+                timeout: 2000
+            });
             var fields = {};
             $(".ng-dirty").each(function(index, item){
                 if($(item).data("field") !== undefined){
@@ -388,7 +393,14 @@ app.controller('cymeriad.controller.character.edit', ['$scope', '$window', '$htt
                 fields[item.key] = item.value;
             });
             $http.post("/character/update", {id: $scope.character.id, fields: fields}).then(function(){
-                $scope.init($scope.character.id);
+                $scope.loadCharacter($scope.character.id, function(){
+                    ngToast.dismiss(saving);
+                    ngToast.create({
+                        className: 'success',
+                        content: 'Saved!',
+                        timeout: 2000
+                    });
+                });
             });
             $scope.editId = 0;
             $scope.dirtylists = [];
@@ -410,8 +422,44 @@ app.controller('cymeriad.controller.character.edit', ['$scope', '$window', '$htt
     };
 
     $scope.revert = function(date){
+        var saving = ngToast.create({
+            className: 'info',
+            content: 'Reverting...',
+            timeout: 2000
+        });
         $http.post("/character/revert", {id: $scope.character.id, date: date}).then(function () {
-            $scope.init($scope.character.id);
+            $scope.loadCharacter($scope.character.id, function(){
+                ngToast.dismiss(saving);
+                ngToast.create({
+                    className: 'success',
+                    content: 'Reverted!',
+                    timeout: 2000
+                });
+            });
+        });
+    };
+
+    $scope.loadCharacter = function(id, callback){
+        var root = $scope;
+        $http.get("/character/find/" + id).then(function (response) {
+            root.character = response.data;
+            root.character.experience.unspent = parseInt(root.character.experience.unspent);
+            root.character.experience.total = parseInt(root.character.experience.total);
+            if(root.chronicle === null)
+            {
+                root.chronicle = root.character.chronicle;
+                $http.get("/chronicle/find/" + root.chronicle.id).then(function (response) {
+                    $scope.players = response.data.playerDocs;
+                    $scope.characterForm.$setPristine();
+                    loading.hide();
+                    if(callback) callback();
+                });
+            }
+            else
+            {
+                $scope.characterForm.$setPristine();
+                if(callback) callback();
+            }
         });
     };
 
@@ -479,24 +527,6 @@ app.controller('cymeriad.controller.character.edit', ['$scope', '$window', '$htt
                 root.social = data;
             });
         }
-        $http.get("/character/find/" + id).then(function (response) {
-            root.character = response.data;
-            root.character.experience.unspent = parseInt(root.character.experience.unspent);
-            root.character.experience.total = parseInt(root.character.experience.total);
-            if(root.chronicle === null)
-            {
-                root.chronicle = root.character.chronicle;
-                $http.get("/chronicle/find/" + root.chronicle.id).then(function (response) {
-                    $scope.players = response.data.playerDocs;
-                    $scope.characterForm.$setPristine();
-                    loading.hide();
-                });
-            }
-            else
-            {
-                $scope.characterForm.$setPristine();
-                loading.hide();
-            }
-        });
+        root.loadCharacter(id);
     };
 }]);

@@ -107,7 +107,7 @@ app.controller('cymeriad.controller.character.index', ['$scope', '$http', 'loadi
 
     $scope.openItem = function(itemid)
     {
-        location = "/character/show/" + itemid;
+        window.open("/character/show/" + itemid);
     };
 
     var searchMatch = function (haystack, needle) {
