@@ -89,14 +89,17 @@
                                 <div class="col-lg-12">
                                     <div class="form-group pull-right">
                                         <input type="text" class="input-md" ng-model="search" placeholder="filter..."/>
+                                        <button type="button" class="btn btn-primary" ng-model="editable" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+                                            Edit
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-4 col-xs-12" ng-repeat-start="char in c.characters | filter: search">
                                     <div class="col-sm-12"><b>{{char.name}}</b>: {{char.status.length}}
-                                        <button class="btn badge btn-default hidden-print pull-right" ng-click="addStatus(char)">status+</button>
-                                        <button class="btn badge btn-default hidden-print pull-right" ng-click="updateTitle(char)">title</button>
+                                        <button ng-show="editable" class="btn badge btn-default hidden-print pull-right" ng-click="addStatus(char)">status+</button>
+                                        <button ng-show="editable" class="btn badge btn-default hidden-print pull-right" ng-click="updateTitle(char)">title</button>
                                     </div>
                                     <div class="col-sm-2"></div>
                                     <div class="col-sm-10">
@@ -105,7 +108,7 @@
                                                 <td class="col-xs-6">{{s.name}}</td>
                                                 <td class="col-xs-3">{{s.statustype}}</td>
                                                 <td class="col-xs-1">{{s.rating}}</td>
-                                                <td class="col-xs-2 hidden-print">
+                                                <td class="col-xs-2 hidden-print" ng-show="editable">
                                                     <button class="btn btn-default badge" ng-click="removeStatus(char, s)">-</button>
                                                 </td>
                                             </tr>

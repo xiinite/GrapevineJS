@@ -6,7 +6,7 @@ app.controller('cymeriad.controller.character.index', ['$scope', '$http', 'loadi
     };
     $scope.selectedAll = false;
     $scope.loaded = false;
-    $scope.gap = 5;
+    $scope.gap = 10;
     $scope.itemsPerPage = 25;
 
     $scope.filteredItems = [];
