@@ -230,7 +230,7 @@ textarea.vertical{
         letter-spacing: 0.2px;
         font: 10px Arial, Helvetica, "Lucida Grande", serif;
         color: #000;
-        margin: 20px 0 0 25px;
+        margin: 20px 25px 20px 25px;
     }
 
     @page {

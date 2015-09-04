@@ -1,230 +1,257 @@
 <%- layout("../layout.ejs") %>
 <%- partial('./scripts') %>
 <script type='text/javascript' charset="utf-8" src="/js/controllers/cymeriad.controller.downtime.handle.js"></script>
-<div class="container" ng-app="cymeriad.app.downtime" ng-controller="cymeriad.controller.downtime.handle"
+
+<div class="container-fluid" ng-app="cymeriad.app.downtime" ng-controller="cymeriad.controller.downtime.handle"
      ng-init="init('<%= period %>')">
     <toast></toast>
-    <div class="col-lg-12">
-        <div class="col-lg-1">
-            <button class="btn btn-default" ng-click="previous()">Previous</button>
-        </div>
-        <div class="col-lg-4">
-        </div>
-        <div class="col-lg-1">
-            <button class="btn btn-primary" ng-click="save()">Save</button>
-        </div>
-        <div class="col-lg-5">
-        </div>
-        <div class="col-lg-1">
-            <button class="btn btn-default" ng-click="next()">Next</button>
-        </div>
+    <div class="hidden-sm hidden-xs hidden-md col-lg-3" id="sidebar" role="navigation">
+
+            <ul class="nav nav-pills nav-stacked">
+                <li ng-class="{active: isActive(downtime)}" ng-repeat="downtime in downtimes">
+                    <a class="clickable" ng-click="setActive(downtime.id)">
+                        {{findCharacter(downtime.characterid).name}}
+                        -
+                        {{findCharacter(downtime.characterid).player.displayName}}
+                    </a>
+                </li>
+            </ul>
+
     </div>
-    <div class="col-lg-12" ng-repeat="downtime in downtimes">
-        <div class="row" ng-show="isActive(downtime)" ng-class="getDirection()" ng-swipe-left="next()"
-             ng-swipe-right="previous()">
-            <div class="col-lg-12">
-                <h1 class="page-header">{{ findCharacter(downtime.characterid).name }}
+    <div class="col-lg-9 col-md-12">
+        <div class="col-lg-12">
+            <div class="col-xs-1">
+                <button class="btn btn-default btn-block" ng-click="previous()">Previous</button>
+            </div>
+            <div class="col-xs-4">
+            </div>
+            <div class="col-xs-1 text-nowrap">
+                {{findIndex(active) +1}} / {{downtimes.length}}
+            </div>
+            <div class="col-xs-1">
+                <button class="btn btn-primary btn-block" ng-click="save()">Save</button>
+            </div>
+            <div class="col-xs-4">
+            </div>
+            <div class="col-xs-1">
+                <button class="btn btn-default btn-block" ng-click="next()">Next</button>
+            </div>
+        </div>
+        <div class="col-lg-12" ng-repeat="downtime in downtimes">
+            <div class="row" ng-show="isActive(downtime)" ng-class="getDirection()" ng-swipe-left="previous()"
+                 ng-swipe-right="next()">
+                <div class="col-lg-12">
+                    <h1 class="page-header">
+                        {{ findCharacter(downtime.characterid).name }}
+                        -
+                        {{findCharacter(downtime.characterid).player.displayName}}
+                    </h1>
                     <a class="btn btn-default pull-right badge" target="_blank"
                        ng-href="/character/edit/{{downtime.characterid}}">Edit character</a>
-                </h1>
 
-                <h3>Downtime for {{period.openFrom | date}}</h3> <!-- Influences -->
-                <h4>Rating</h4>
+                    <h3>Downtime for {{period.openFrom | date}}</h3> <!-- Influences -->
+                    <h4>Rating</h4>
 
-                <div class="row">
-                    <div class="col-sm-12" ng-show="downtime.actions.previousSessionRating">
-                        <div class="col-sm-3">Session rating:</div>
-                        <div class="col-sm-9">
-                            <star-rating ng-model="downtime.actions.previousSessionRating.rating" max="5"
-                                         readonly="true"></star-rating>
+                    <div class="row">
+                        <div class="col-sm-12" ng-show="downtime.actions.previousSessionRating">
+                            <div class="col-sm-3">Session rating:</div>
+                            <div class="col-sm-9">
+                                <star-rating ng-model="downtime.actions.previousSessionRating.rating" max="5"
+                                             readonly="true"></star-rating>
+                            </div>
+                            <div class="col-sm-3">Note:</div>
+                            <div class="col-sm-9">{{downtime.actions.previousSessionRating.description}}</div>
                         </div>
-                        <div class="col-sm-3">Note:</div>
-                        <div class="col-sm-9">{{downtime.actions.previousSessionRating.description}}</div>
                     </div>
-                </div>
 
-                <h4>Actions</h4>
+                    <h4>Actions</h4>
 
-                <div class="row" ng-repeat="(key, value) in downtime.actions"
-                     ng-if="key.indexOf('Action') > -1 && value.action !== 'Assist'">
-                    <div class="col-sm-12">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th colspan="2">
-                                    <h4 class="uppercase" ng-show="key.indexOf('player') === -1">{{key.replace('Action',
-                                        '') + " - Rating " +
-                                        findBackgroundValue(findCharacter(downtime.characterid), key.replace('Action',
-                                        '')) }}</h4>
-                                    <h4 class="uppercase" ng-hide="key.indexOf('player') === -1">{{key}}</h4>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td class="col-xs-3">Action</td>
-                                <td>{{value.action}}</td>
-                            </tr>
-                            <tr ng-show="value.location">
-                                <td class="col-xs-3">Location</td>
-                                <td>{{value.location}}</td>
-                            </tr>
-                            <tr ng-show="value.description">
-                                <td class="col-xs-3">Description</td>
-                                <td>{{value.description}}</td>
-                            </tr>
-                            <tr ng-show="value.target">
-                                <td class="col-xs-3">Target</td>
-                                <td>{{value.target}}</td>
-                            </tr>
-                            <tr ng-show="value.test">
-                                <td class="col-xs-3">Test</td>
-                                <td>{{value.test}}</td>
-                            </tr>
-                            <tr ng-repeat="ac in findAssists(downtime, key)">
-                                <td>Assisted by</td>
-                                <td>{{ac.assister}}: {{ac.name.replace('Action', '')}} (
+                    <div class="row" ng-repeat="(key, value) in downtime.actions"
+                         ng-if="key.indexOf('Action') > -1 && value.action !== 'Assist'">
+                        <div class="col-sm-12">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th colspan="2">
+                                        <h4 class="uppercase" ng-show="key.indexOf('player') === -1">
+                                            {{key.replace('Action',
+                                            '') + " - Rating " +
+                                            findBackgroundValue(findCharacter(downtime.characterid),
+                                            key.replace('Action',
+                                            '')) }}</h4>
+                                        <h4 class="uppercase" ng-hide="key.indexOf('player') === -1">{{key}}</h4>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="col-xs-3">Action</td>
+                                    <td>{{value.action}}</td>
+                                </tr>
+                                <tr ng-show="value.location">
+                                    <td class="col-xs-3">Location</td>
+                                    <td>{{value.location}}</td>
+                                </tr>
+                                <tr ng-show="value.description">
+                                    <td class="col-xs-3">Description</td>
+                                    <td>{{value.description}}</td>
+                                </tr>
+                                <tr ng-show="value.target">
+                                    <td class="col-xs-3">Target</td>
+                                    <td>{{value.target}}</td>
+                                </tr>
+                                <tr ng-show="value.test">
+                                    <td class="col-xs-3">Test</td>
+                                    <td>{{value.test}}</td>
+                                </tr>
+                                <tr ng-repeat="ac in findAssists(downtime, key)">
+                                    <td>Assisted by</td>
+                                    <td>{{ac.assister}}: {{ac.name.replace('Action', '')}} (
                                     <span ng-show="ac.name.indexOf('Action') > -1">
                                         {{findBackgroundValue(findCharacter(ac.characterid), ac.name.replace('Action', ''))}}
                                     </span>
                                     <span ng-show="ac.name.indexOf('Action') === -1">
                                         {{findInfluenceValue(findCharacter(ac.characterid),ac.name)}}
                                     </span>
-                                    )
-                                    <a class="btn btn-default pull-right badge" target="_blank"
-                                       ng-href="/character/show/{{ac.characterid}}">View character</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Response:</td>
-                                <td>
+                                        )
+                                        <a class="btn btn-default pull-right badge" target="_blank"
+                                           ng-href="/character/show/{{ac.characterid}}">View character</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Response:</td>
+                                    <td>
                                     <textarea class="form-control" rows="5"
                                               ng-model="value.response">
                                     </textarea>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Influences -->
-                <h4>Influences</h4>
+                    <!-- Influences -->
+                    <h4>Influences</h4>
 
-                <div class="row" ng-repeat="(key, value) in downtime.actions"
-                     ng-if="key.indexOf('Action') === -1 && key.indexOf('Rating') == -1 && value.action !== 'Assist'">
-                    <div class="col-sm-12">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th colspan="2"><h4 class="uppercase">{{key + " - Rating " +
-                                        findInfluenceValue(findCharacter(downtime.characterid),key)}}</h4></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td class="col-xs-3">Action</td>
-                                <td>{{value.action}}</td>
-                            </tr>
-                            <tr ng-show="value.location">
-                                <td class="col-xs-3">Location</td>
-                                <td>{{value.location}}</td>
-                            </tr>
-                            <tr ng-show="value.description">
-                                <td class="col-xs-3">Description</td>
-                                <td>{{value.description}}</td>
-                            </tr>
-                            <tr ng-show="value.target">
-                                <td class="col-xs-3">Target</td>
-                                <td>{{value.target}}</td>
-                            </tr>
-                            <tr ng-show="value.test">
-                                <td class="col-xs-3">Test</td>
-                                <td>{{value.test}}</td>
-                            </tr>
-                            <tr ng-repeat="ac in findAssists(downtime, key)">
-                                <td>Assisted by</td>
-                                <td>{{ac.assister}}: {{ac.name.replace('Action', '')}} (
+                    <div class="row" ng-repeat="(key, value) in downtime.actions"
+                         ng-if="key.indexOf('Action') === -1 && key.indexOf('Rating') == -1 && value.action !== 'Assist'">
+                        <div class="col-sm-12">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th colspan="2"><h4 class="uppercase">{{key + " - Rating " +
+                                            findInfluenceValue(findCharacter(downtime.characterid),key)}}</h4></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="col-xs-3">Action</td>
+                                    <td>{{value.action}}</td>
+                                </tr>
+                                <tr ng-show="value.location">
+                                    <td class="col-xs-3">Location</td>
+                                    <td>{{value.location}}</td>
+                                </tr>
+                                <tr ng-show="value.description">
+                                    <td class="col-xs-3">Description</td>
+                                    <td>{{value.description}}</td>
+                                </tr>
+                                <tr ng-show="value.target">
+                                    <td class="col-xs-3">Target</td>
+                                    <td>{{value.target}}</td>
+                                </tr>
+                                <tr ng-show="value.test">
+                                    <td class="col-xs-3">Test</td>
+                                    <td>{{value.test}}</td>
+                                </tr>
+                                <tr ng-repeat="ac in findAssists(downtime, key)">
+                                    <td>Assisted by</td>
+                                    <td>{{ac.assister}}: {{ac.name.replace('Action', '')}} (
                                     <span ng-show="ac.name.indexOf('Action') > -1">
                                         {{findBackgroundValue(findCharacter(ac.characterid), ac.name.replace('Action', ''))}}
                                     </span>
                                     <span ng-show="ac.name.indexOf('Action') === -1">
                                         {{findInfluenceValue(findCharacter(ac.characterid),ac.name)}}
                                     </span>
-                                    )
-                                    <a class="btn btn-default pull-right badge" target="_blank"
-                                       ng-href="/character/show/{{ac.characterid}}">View character</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Response:</td>
-                                <td>
+                                        )
+                                        <a class="btn btn-default pull-right badge" target="_blank"
+                                           ng-href="/character/show/{{ac.characterid}}">View character</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Response:</td>
+                                    <td>
                                     <textarea class="form-control" rows="5"
                                               ng-model="value.response">
                                     </textarea>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Assists -->
-                <h4>Assists</h4>
+                    <!-- Assists -->
+                    <h4>Assists</h4>
 
-                <div class="row" ng-repeat="(key, value) in downtime.actions"
-                     ng-if="key.indexOf('Action') > -1 && value.action === 'Assist'">
-                    <div class="col-sm-12">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th colspan="2">
-                                    <h4 class="uppercase" ng-show="key.indexOf('player') === -1">{{key.replace('Action',
-                                        '') + " - Rating " +
-                                        findBackgroundValue(findCharacter(downtime.characterid), key.replace('Action',
-                                        '')) }}</h4>
-                                    <h4 class="uppercase" ng-hide="key.indexOf('player') === -1">{{key}}</h4>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td class="col-xs-3">Action</td>
-                                <td>{{value.action}} {{value.targetBackground}}: {{value.target}}</td>
-                            </tr>
-                            <tr ng-show="value.description">
-                                <td class="col-xs-3">Description</td>
-                                <td>{{value.description}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div class="row" ng-repeat="(key, value) in downtime.actions"
+                         ng-if="key.indexOf('Action') > -1 && value.action === 'Assist'">
+                        <div class="col-sm-12">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th colspan="2">
+                                        <h4 class="uppercase" ng-show="key.indexOf('player') === -1">
+                                            {{key.replace('Action',
+                                            '') + " - Rating " +
+                                            findBackgroundValue(findCharacter(downtime.characterid),
+                                            key.replace('Action',
+                                            '')) }}</h4>
+                                        <h4 class="uppercase" ng-hide="key.indexOf('player') === -1">{{key}}</h4>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="col-xs-3">Action</td>
+                                    <td>{{value.action}} {{value.targetBackground}}: {{value.target}}</td>
+                                </tr>
+                                <tr ng-show="value.description">
+                                    <td class="col-xs-3">Description</td>
+                                    <td>{{value.description}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
 
-                <div class="row" ng-repeat="(key, value) in downtime.actions"
-                     ng-if="key.indexOf('Action') == -1 && value.action === 'Assist'">
-                    <div class="col-sm-12">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th colspan="2"><h4 class="uppercase">{{key + " - Rating " +
-                                        findInfluenceValue(findCharacter(downtime.characterid),key)}}</h4></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td class="col-xs-3">Action</td>
-                                <td>{{value.action}} {{value.targetBackground}}: {{value.target}}</td>
-                            </tr>
-                            <tr ng-show="value.description">
-                                <td class="col-xs-3">Description</td>
-                                <td>{{value.description}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div class="row" ng-repeat="(key, value) in downtime.actions"
+                         ng-if="key.indexOf('Action') == -1 && value.action === 'Assist'">
+                        <div class="col-sm-12">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th colspan="2"><h4 class="uppercase">{{key + " - Rating " +
+                                            findInfluenceValue(findCharacter(downtime.characterid),key)}}</h4></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="col-xs-3">Action</td>
+                                    <td>{{value.action}} {{value.targetBackground}}: {{value.target}}</td>
+                                </tr>
+                                <tr ng-show="value.description">
+                                    <td class="col-xs-3">Description</td>
+                                    <td>{{value.description}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </div>

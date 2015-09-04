@@ -93,6 +93,10 @@ app.controller('cymeriad.controller.downtime.handle', ['$scope', '$http', 'loadi
         $scope.active = $scope.downtimes[i - 1].id;
     };
 
+    $scope.setActive = function(id){
+        $scope.active = id;
+    }
+
     $scope.findIndex = function(id){
         var i = $scope.downtimes.length;
         while(i--){
@@ -129,7 +133,7 @@ app.controller('cymeriad.controller.downtime.handle', ['$scope', '$http', 'loadi
         loading.show();
         var root = $scope;
         $q.all([
-            $http.post("/character/all", {fields: 'id name influences backgrounds'}).then(function (response) {
+            $http.post("/character/all", {fields: 'id name influences backgrounds player googleId'}).then(function (response) {
                 root.characters = response.data;
             }),
             $http.get("/downtime/listbyperiod/" + id).then(function (response) {
