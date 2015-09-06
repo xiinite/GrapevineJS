@@ -102,7 +102,10 @@ app.controller('cymeriad.controller.downtime.visualise', ['$scope', '$rootScope'
     };
 
     $scope.reset = function(){
+        $scope.mapData = [];
+        $scope.edgeData = [];
         cy.reset();
+        $scope.visualiseData();
     }
 
     $scope.getClanShape = function(clan){
@@ -221,7 +224,14 @@ app.controller('cymeriad.controller.downtime.visualise', ['$scope', '$rootScope'
         // sample just passes the object's ID then output it to the console and to an alert
         console.debug(value);
 
-        $scope.selectedDowntime = $scope.findObj(value).data;
+        var obj = $scope.findObj(value);
+        $scope.selectedDowntime = obj.data;
+        if(obj.source){
+            var dt = $scope.findObj(obj.source);
+            if(dt){
+                $scope.selectedDowntime.source = $scope.findCharacter(dt.data.characterid).name;
+            }
+        }
         $scope.$apply();
     };
 
