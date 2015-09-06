@@ -5,11 +5,19 @@ app.controller('cymeriad.controller.downtime.visualise', ['$scope', '$rootScope'
     $scope.period = {};
     $scope.active;
     $scope.selectedDowntime = null;
+    $scope.filterText = "";
 
+    $scope.layoutTypes = ['circle', 'cola'];
+    $scope.layoutType = 'circle';
     $scope.mapData = [];
     $scope.edgeData = [];
     // data types/groups object - used Cytoscape's shapes just to make it more clear
     $scope.objTypes = ['ellipse','triangle','rectangle','roundrectangle','pentagon','octagon','hexagon','heptagon','star'];
+
+    $scope.$watch('layoutType', function(newValue, oldValue) {
+        if (newValue){
+        }
+    }, true);
 
     $scope.findCharacter = function(id){
         var i = $scope.characters.length;
@@ -144,10 +152,20 @@ app.controller('cymeriad.controller.downtime.visualise', ['$scope', '$rootScope'
 
     $scope.visualiseData = function(){
         var i = $scope.downtimes.length;
+        var addedChars = [];
         while(i--){
             var dt = $scope.downtimes[i];
             var char = $scope.findCharacter(dt.characterid);
-            $scope.addObj(char.name, $scope.getClanShape(char.clan), dt);
+            var add = false;
+            if($scope.filterText.length > 0){
+                if(char.name.toLowerCase().indexOf($scope.filterText.toLowerCase()) > -1) add = true;
+            }else{
+                add= true;
+            }
+            if(add){
+                addedChars.push(char.id);
+                $scope.addObj(char.name, $scope.getClanShape(char.clan), dt);
+            }
         }
 
         i = $scope.downtimes.length;
@@ -155,7 +173,7 @@ app.controller('cymeriad.controller.downtime.visualise', ['$scope', '$rootScope'
             var dt = $scope.downtimes[i];
             for (var index in dt.actions) {
                 var action = dt.actions[index];
-                if (action.target) {
+                if (action.target && addedChars.indexOf(dt.characterid) > -1) {
                     var from =  $scope.findCharacter(dt.characterid).name;
                     if(!$scope.findEdge(action.target)){
                         var c = $scope.findCharacterByName(action.target);
@@ -169,6 +187,7 @@ app.controller('cymeriad.controller.downtime.visualise', ['$scope', '$rootScope'
                 }
             }
         }
+
         $rootScope.$broadcast('appChanged');
     };
 

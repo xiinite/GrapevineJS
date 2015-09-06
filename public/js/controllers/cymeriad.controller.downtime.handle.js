@@ -14,6 +14,26 @@ app.controller('cymeriad.controller.downtime.handle', ['$scope', '$http', 'loadi
         }
     };
 
+    $scope.hasAssists = function(dt){
+        for(var a in dt.actions){
+            var action = dt.actions[a];
+            if(action.action == 'Assist'){
+                return true;
+            }
+        }
+        return false;
+    };
+
+    $scope.hasInfluences = function(dt){
+        for(var a in dt.actions){
+            var action = dt.actions[a];
+            if(action.name.indexOf('Action') === -1 && action.name.indexOf('Rating') == -1 && action.action !== 'Assist'){
+                return true;
+            }
+        }
+        return false;
+    };
+
     $scope.findAssists = function(downtime, bg){
         var i = $scope.downtimes.length;
         var character = $scope.findCharacter(downtime.characterid);
@@ -24,7 +44,7 @@ app.controller('cymeriad.controller.downtime.handle', ['$scope', '$http', 'loadi
             var dt = $scope.downtimes[i];
             for(var a in dt.actions){
                 var action = dt.actions[a];
-                if(action.targetBackground === ac.name && action.target !== undefined && action.targetBackground !== undefined){
+                if(action.targetBackground === ac.name && action.action === 'Assist' && action.target !== undefined && action.targetBackground !== undefined){
                     if( action.target === character.name){
                         var assister = $scope.findCharacter(dt.characterid);
                         action.assister = assister.name;
@@ -36,6 +56,33 @@ app.controller('cymeriad.controller.downtime.handle', ['$scope', '$http', 'loadi
         }
         if(assists.length > 0){
             return assists;
+        }
+    };
+
+    $scope.findTargets = function(downtime){
+        var i = $scope.downtimes.length;
+        var character = $scope.findCharacter(downtime.characterid);
+        if(character === undefined) return false;
+        var targets = [];
+        while(i--){
+            var dt = $scope.downtimes[i];
+            if(dt.characterid != downtime.characterid)
+            {
+                for(var a in dt.actions){
+                    var action = dt.actions[a];
+                    if(action.target !== undefined){
+                        if( action.target === character.name){
+                            var char = $scope.findCharacter(dt.characterid);
+                            action.char = char.name;
+                            action.characterid = dt.characterid;
+                            targets.push(action)
+                        }
+                    }
+                }
+            }
+        }
+        if(targets.length > 0){
+            return targets;
         }
     };
 

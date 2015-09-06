@@ -1,14 +1,21 @@
 <%- layout("../layout.ejs") %>
 <%- partial('./scripts') %>
 <script type='text/javascript' charset="utf-8" src="/js/cytoscape.min.js"></script>
+<script src="/js/Cola.js"></script>
 <script type='text/javascript' charset="utf-8" src="/js/modules/cytoscapeDirective.js"></script>
 <script type='text/javascript' charset="utf-8" src="/js/controllers/cymeriad.controller.downtime.visualise.js"></script>
 
 <div class="container-fluid" ng-app="cymeriad.app.downtime" ng-controller="cymeriad.controller.downtime.visualise"
      ng-init="init('<%= period %>')">
     <div class="col-lg-9">
-        <cytoscape cy-data="mapData" cy-edges="edgeData" cy-click="doClick(value)"></cytoscape>
-        <button class="btn btn-primary" ng-click="reset()">Reset</button>
+        <cytoscape cy-laytype="layoutType" cy-data="mapData" cy-edges="edgeData" cy-click="doClick(value)"></cytoscape>
+        <button ng-click="reset()">Reset</button>
+
+        <select ng-model="layoutType"
+                ng-options="t for t in layoutTypes">
+        </select>
+        <!--<label>Filter:&nbsp;</label></lable><input type="text" ng-model="filterText"></input>
+        <button ng-click="reset()">Filter</button>-->
     </div>
     <div class="col-lg-3">
         <div ng-hide="selectedDowntime !== null">
@@ -23,8 +30,7 @@
                 <thead>
                 <tr>
                     <th colspan="2">
-                        <h4 class="uppercase" ng-show="selectedDowntime.name.indexOf('player') === -1">{{selectedDowntime.name.toLowerCase().substring(0, selectedDowntime.name.toLowerCase().indexOf('action')) }}</h4>
-                        <h4 class="uppercase" ng-hide="selectedDowntime.name.indexOf('player') === -1">{{selectedDowntime.name}}</h4>
+                        <h4 class="uppercase">{{selectedDowntime.name}}</h4>
                     </th>
                 </tr>
                 </thead>

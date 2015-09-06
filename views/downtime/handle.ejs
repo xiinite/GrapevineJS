@@ -50,7 +50,7 @@
                        ng-href="/character/edit/{{downtime.characterid}}">Edit character</a>
 
                     <h3>Downtime for {{period.openFrom | date}}</h3> <!-- Influences -->
-                    <h4>Rating</h4>
+                    <h2>Rating</h2>
 
                     <div class="row">
                         <div class="col-sm-12" ng-show="downtime.actions.previousSessionRating">
@@ -63,7 +63,7 @@
                         </div>
                     </div>
 
-                    <h4>Actions</h4>
+                    <h2>Actions</h2>
 
                     <div class="row" ng-repeat="(key, value) in downtime.actions"
                          ng-if="key.indexOf('Action') > -1 && value.action !== 'Assist'">
@@ -131,7 +131,7 @@
                     </div>
 
                     <!-- Influences -->
-                    <h4>Influences</h4>
+                    <h2 ng-show="hasInfluences(downtime)">Influences</h2>
 
                     <div class="row" ng-repeat="(key, value) in downtime.actions"
                          ng-if="key.indexOf('Action') === -1 && key.indexOf('Rating') == -1 && value.action !== 'Assist'">
@@ -192,7 +192,7 @@
                     </div>
 
                     <!-- Assists -->
-                    <h4>Assists</h4>
+                    <h2 ng-show="hasAssists(downtime)">Assists</h2>
 
                     <div class="row" ng-repeat="(key, value) in downtime.actions"
                          ng-if="key.indexOf('Action') > -1 && value.action === 'Assist'">
@@ -224,7 +224,6 @@
                             </table>
                         </div>
                     </div>
-
                     <div class="row" ng-repeat="(key, value) in downtime.actions"
                          ng-if="key.indexOf('Action') == -1 && value.action === 'Assist'">
                         <div class="col-sm-12">
@@ -243,6 +242,32 @@
                                 <tr ng-show="value.description">
                                     <td class="col-xs-3">Description</td>
                                     <td>{{value.description}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Targetted by -->
+                    <h2 ng-show="findTargets(downtime).length > 0">Targetted by</h2>
+                    <div class="row" ng-repeat="action in findTargets(downtime)">
+                        <div class="col-sm-12">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th colspan="2">
+                                        <h4>{{action.char}}: {{action.name}}</h4>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="col-xs-3">Action</td>
+                                    <td>{{action.action}}<span ng-show="action.targetBackground">: {{action.targetBackground}}</span></td>
+                                </tr>
+                                <tr ng-show="value.description">
+                                    <td class="col-xs-3">Description</td>
+                                    <td>{{action.description}}</td>
                                 </tr>
                                 </tbody>
                             </table>
