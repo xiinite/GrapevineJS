@@ -1,0 +1,129 @@
+<%- layout("../layout.ejs") %>
+<%- partial('./scripts') %>
+<script type='text/javascript' charset="utf-8" src="/js/cytoscape.min.js"></script>
+<script type='text/javascript' charset="utf-8" src="/js/modules/cytoscapeDirective.js"></script>
+<script type='text/javascript' charset="utf-8" src="/js/controllers/cymeriad.controller.downtime.visualise.js"></script>
+
+<div class="container-fluid" ng-app="cymeriad.app.downtime" ng-controller="cymeriad.controller.downtime.visualise"
+     ng-init="init('<%= period %>')">
+    <div class="col-lg-9">
+        <cytoscape cy-data="mapData" cy-edges="edgeData" cy-click="doClick(value)"></cytoscape>
+        <button class="btn btn-primary" ng-click="reset()">Reset</button>
+    </div>
+    <div class="col-lg-3">
+        <div ng-hide="selectedDowntime !== null">
+            <h2>No downtime selected</h2>
+        </div>
+        <div ng-show="selectedDowntime !== null && selectedDowntime.actions === undefined && selectedDowntime.action === undefined">
+            <h2>Selected character did not submit a downtime.</h2>
+        </div>
+        <div ng-show="selectedDowntime.action !== undefined">
+            <table class="table table-striped" >
+                <thead>
+                <tr>
+                    <th colspan="2">
+                        <h4 class="uppercase" ng-show="selectedDowntime.name.indexOf('player') === -1">{{selectedDowntime.name.toLowerCase().substring(0, selectedDowntime.name.toLowerCase().indexOf('action')) }}</h4>
+                        <h4 class="uppercase" ng-hide="selectedDowntime.name.indexOf('player') === -1">{{selectedDowntime.name}}</h4>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="col-xs-3">Action</td><td>{{selectedDowntime.action}}</td>
+                </tr>
+                <tr ng-show="selectedDowntime.location">
+                    <td class="col-xs-3">Location</td><td>{{selectedDowntime.location}}</td>
+                </tr>
+                <tr ng-show="selectedDowntime.description">
+                    <td class="col-xs-3">Description</td><td>{{selectedDowntime.description}}</td>
+                </tr>
+                <tr ng-show="selectedDowntime.target">
+                    <td class="col-xs-3">Target</td><td>{{selectedDowntime.target}}</td>
+                </tr>
+                <tr ng-show="selectedDowntime.targetBackground">
+                    <td class="col-xs-3">Target</td><td>{{selectedDowntime.targetBackground}}</td>
+                </tr>
+                <tr ng-show="selectedDowntime.test">
+                    <td class="col-xs-3">Test</td><td>{{selectedDowntime.test}}</td>
+                </tr>
+                <tr ng-show="selectedDowntime.response">
+                    <th class="col-xs-3">Response</th><th>{{selectedDowntime.response}}</th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div ng-hide="selectedDowntime === null || selectedDowntime.actions === undefined">
+            <h1 class="page-header">{{ findCharacter(selectedDowntime.characterid).name }}</h1>
+
+            <h4>Actions</h4>
+            <div class="row" ng-repeat="(key, value) in selectedDowntime.actions" ng-if="key.indexOf('Action') > -1">
+                <div class="col-sm-12">
+                    <table class="table table-striped" >
+                        <thead>
+                        <tr>
+                            <th colspan="2">
+                                <h4 class="uppercase" ng-show="key.indexOf('player') === -1">{{key.substring(0, key.indexOf('Action')) + " - Rating " + findBackgroundValue(findCharacter(selectedDowntime.characterid), key.substring(0, key.indexOf('Action'))) }}</h4>
+                                <h4 class="uppercase" ng-hide="key.indexOf('player') === -1">{{key}}</h4>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="col-xs-3">Action</td><td>{{value.action}}</td>
+                        </tr>
+                        <tr ng-show="value.location">
+                            <td class="col-xs-3">Location</td><td>{{value.location}}</td>
+                        </tr>
+                        <tr ng-show="value.description">
+                            <td class="col-xs-3">Description</td><td>{{value.description}}</td>
+                        </tr>
+                        <tr ng-show="value.target">
+                            <td class="col-xs-3">Target</td><td>{{value.target}}</td>
+                        </tr>
+                        <tr ng-show="value.test">
+                            <td class="col-xs-3">Test</td><td>{{value.test}}</td>
+                        </tr>
+                        <tr ng-show="value.response">
+                            <th class="col-xs-3">Response</th><th>{{value.response}}</th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Influences -->
+            <h4>Influences</h4>
+            <div class="row" ng-repeat="(key, value) in selectedDowntime.actions" ng-if="key.indexOf('Action') === -1 && key.indexOf('Rating') == -1">
+                <div class="col-sm-12">
+                    <table class="table table-striped" >
+                        <thead>
+                        <tr>
+                            <th colspan="2"><h4 class="uppercase">{{key + " - Rating " + findInfluenceValue(findCharacter(selectedDowntime.characterid), key)}}</h4></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="col-xs-3">Action</td><td>{{value.action}}</td>
+                        </tr>
+                        <tr ng-show="value.location">
+                            <td class="col-xs-3">Location</td><td>{{value.location}}</td>
+                        </tr>
+                        <tr ng-show="value.description">
+                            <td class="col-xs-3">Description</td><td>{{value.description}}</td>
+                        </tr>
+                        <tr ng-show="value.target">
+                            <td class="col-xs-3">Target</td><td>{{value.target}}</td>
+                        </tr>
+                        <tr ng-show="value.test">
+                            <td class="col-xs-3">Test</td><td>{{value.test}}</td>
+                        </tr>
+                        <tr ng-show="value.response">
+                            <th class="col-xs-3">Response</th><th>{{value.response}}</th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

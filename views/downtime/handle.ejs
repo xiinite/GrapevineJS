@@ -56,8 +56,7 @@
                         <div class="col-sm-12" ng-show="downtime.actions.previousSessionRating">
                             <div class="col-sm-3">Session rating:</div>
                             <div class="col-sm-9">
-                                <star-rating ng-model="downtime.actions.previousSessionRating.rating" max="5"
-                                             readonly="true"></star-rating>
+                                <rating ng-model="downtime.actions.previousSessionRating.rating" max="5" readonly="true" ></rating>
                             </div>
                             <div class="col-sm-3">Note:</div>
                             <div class="col-sm-9">{{downtime.actions.previousSessionRating.description}}</div>
