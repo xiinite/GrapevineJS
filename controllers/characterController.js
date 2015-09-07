@@ -64,9 +64,19 @@ module.exports = {
             for (var i = 0; i < req.user.chronicles.length; i++) {
                 chronicleIds.push(req.user.chronicles[i].id)
             }
-            where =
+            var where = {};
+            if(req.body.where){
+                where = req.body.where;
+            }
+            if(req.body.chronicle)
             {
-                chronicle: {"$in": chronicleIds}
+                if(chronicleIds.indexOf(req.body.chronicle) == -1){
+                    delete where.chronicle;
+                    where.chronicle = {"$in": chronicleIds}
+                }
+            }else
+            {
+                where.chronicle = {"$in": chronicleIds}
             };
             if(req.params.full === 'full'){
                 model.find(where, function (err, result) {
@@ -86,19 +96,23 @@ module.exports = {
             }
         }
         else {
+            var where = {};
+            if(req.body.where){
+                where = req.body.where;
+            }
             if(req.params.full === 'full'){
-                model.find({}, function (err, result) {
+                model.find(where, function (err, result) {
                     if (err) return next(new Error(err));
                     res.json(result);
                 })
             }else if (req.body.fields) {
-                model.findFields({}, req.body.fields, function (err, result) {
+                model.findFields(where, req.body.fields, function (err, result) {
                     if (err) return next(new Error(err));
                     res.json(result);
                 })
             }
             else{
-                model.list({}, function (err, result) {
+                model.list(where, function (err, result) {
                     if (err) return next(new Error(err));
                     res.json(result);
                 })
@@ -153,6 +167,25 @@ module.exports = {
             user: req.user
         };
         res.render(ViewTemplatePath + "/status", out);
+    },
+    'socialbonds': function(req, res){
+        var out = {
+            user: req.user
+        };
+        res.render(ViewTemplatePath + "/socialbonds", out);
+    },
+    'visualise': function (req, res, next) {
+        if (req.params.id) {
+            cmodel.find({"id": req.params.id}, function (err, result) {
+                var user = req.user || {displayName: "Anonymous"};
+                var out = {user: user, chronicle: req.params.id};
+                if (!sec.checkAdmin(req, next, result[0].id)) {
+                    return;
+                }
+                if(err) return next(new Error(err));
+                res.render(ViewTemplatePath + "/visualise", out);
+            });
+        }
     },
     'show': function (req, res, next) {
         if (req.params.id) {

@@ -260,6 +260,10 @@ textarea.vertical{
     .pbafter{
         page-break-after: auto;
     }
+    .nav-tabs{
+        display: none;
+    }
+
     .page-header {
         padding: 0;
         margin-top: 0;

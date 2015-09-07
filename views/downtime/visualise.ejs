@@ -8,11 +8,17 @@
 <div class="container-fluid" ng-app="cymeriad.app.downtime" ng-controller="cymeriad.controller.downtime.visualise"
      ng-init="init('<%= period %>')">
     <div class="col-lg-9">
-        <cytoscape cy-laytype="layoutType" cy-data="mapData" cy-edges="edgeData" cy-click="doClick(value)"></cytoscape>
+        <cytoscape cy-laytype="layoutType" cy-showlabels="showLabels" cy-data="mapData" cy-edges="edgeData" cy-click="doClick(value)"></cytoscape>
         <button ng-click="reset()">Reset</button>
 
         <select ng-model="layoutType"
                 ng-options="t for t in layoutTypes">
+        </select>
+
+        Labels:
+        <select ng-model="showLabels">
+            <option value="yes">yes</option>
+            <option value="no" selected="selected">no</option>
         </select>
         <!--<label>Filter:&nbsp;</label></lable><input type="text" ng-model="filterText"></input>
         <button ng-click="reset()">Filter</button>-->

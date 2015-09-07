@@ -4,7 +4,6 @@ app.controller('cymeriad.controller.character.influences', ['$scope', '$http', '
         console.log(event);
     };
 
-    $scope.characters = [];
     $scope.chronicles = [];
 
     $scope.findChronicle = function(id){
@@ -25,22 +24,21 @@ app.controller('cymeriad.controller.character.influences', ['$scope', '$http', '
         return false;
     };
 
-    $scope.init = function (id) {
+    $scope.loadContent = function (id) {
+        var chronicle = $scope.findChronicle(id);
+        if(!chronicle) return;
+        if(chronicle.loaded == true) return;
         loading.show();
         var root = $scope;
-        $http.post("/character/all", {fields: 'id name influences chronicle state'}).then(function (response) {
+        $http.post("/character/all", {where: {chronicle: id}, fields: 'id name influences state'}).then(function (response) {
             root.characters = response.data;
             var i = root.characters.length;
             while(i--) {
                 var char = root.characters[i];
-                if (char.chronicle.name === undefined) continue;
                 if (char.state !== 'Active') continue;
-                var chronicle = $scope.findChronicle(char.chronicle.id);
-                if (!chronicle) {
-                    $scope.chronicles.push({id: char.chronicle.id, name: char.chronicle.name, influences: []});
-                    chronicle = $scope.findChronicle(char.chronicle.id);
+                if(chronicle.influences === undefined){
+                    chronicle.influences = [];
                 }
-
                 var j = char.influences.length;
                 while (j--) {
                     var influenceName = char.influences[j].name;
@@ -79,8 +77,17 @@ app.controller('cymeriad.controller.character.influences', ['$scope', '$http', '
                     return 0;
                 });
             }
-            root.chronicles.sort();
+            chronicle.loaded = true;
+            loading.hide();
+        });
+    };
 
+    $scope.init = function () {
+        loading.show();
+        var root = $scope;
+        $http.get("/chronicle/list").then(function (response) {
+            root.chronicles = response.data;
+            root.chronicles.sort();
 
             loading.hide();
         });

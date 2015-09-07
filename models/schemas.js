@@ -14,6 +14,7 @@ var misc = new Schema({name: String, note: String, rating: Number});
 var derangement = new Schema({name: String, note: String, rating: Number});
 
 var bloodbond = new Schema({level: String, character: String, note: String});
+var boon = new Schema({level: String, character: String, note: String});
 
 var merit = new Schema({name: String, cost: Number});
 var flaw = new Schema({name: String, cost: Number});
@@ -104,7 +105,8 @@ module.exports = {
         notes: {type: [note]},
         experiencehistory: {type: [xphistory]},
         modificationhistory: {type: Array},
-        freetraits: {type: Number}
+        freetraits: {type: Number},
+        boons : {type: [boon]}
     }),
     'Chronicle': mongoose.model('chronicle', {
         id: {type: String},

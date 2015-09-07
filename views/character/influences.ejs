@@ -2,12 +2,9 @@
 <%- partial('./scripts') %>
 <script type="text/javascript" src="/js/controllers/cymeriad.controller.character.influences.js"></script>
 <div class="container" ng-app="cymeriad.app.character" ng-controller="cymeriad.controller.character.influences" ng-init="init()">
-    <div class="col-lg-12">
-        <div class="panel panel-default" ng-repeat="c in chronicles">
-            <div class="panel panel-heading">
-                <h3>Chronicle: {{c.name}}</h3>
-            </div>
-            <div class="panel panel-body">
+    <tabset>
+        <tab ng-repeat="c in chronicles" heading="{{c.name}}" select="loadContent(c.id)" active="c.active" disabled="c.disabled">
+            <div class="col-lg-12">
                 <div ng-show="c.influences.length === 0">
                     No influences
                 </div>
@@ -32,6 +29,6 @@
                 <div class="clearfix pbafter" ng-if="$index%4==3"></div>
                 <div ng-repeat-end=""></div>
             </div>
-        </div>
-    </div>
+        </tab>
+    </tabset>
 </div>

@@ -21,6 +21,8 @@ module.exports = {
         router.get(app, 'character', 'new', [':id']);
         router.get(app, 'character', 'influences');
         router.get(app, 'character', 'status');
+        router.get(app, 'character', 'visualise', [':id']);
+        router.get(app, 'character', 'socialbonds');
         router.get(app, 'character', 'all', [':full']);
         router.get(app, 'character', 'showoldversion', [':id', ':version']);
         router.get(app, 'character', 'showall', []);

@@ -38,7 +38,8 @@ app.controller('cymeriad.controller.character.status', ['$scope', '$http', 'load
             $scope.update($scope.schar.id, { title: $scope.schar.title });
         }, function () {
         });
-    }
+    };
+
     $scope.addStatus = function (char) {
         $scope.schar = char;
 
@@ -98,26 +99,25 @@ app.controller('cymeriad.controller.character.status', ['$scope', '$http', 'load
                 timeout: 2000
             });
         });
-    }
+    };
 
     $scope.toggleAnimation = function () {
         $scope.animationsEnabled = !$scope.animationsEnabled;
     };
-    $scope.init = function () {
+
+    $scope.loadContent = function (id) {
+        var chronicle = $scope.findChronicle(id);
+        if(!chronicle) return;
+        if(chronicle.loaded == true) return;
         loading.show();
-        var root = $scope;
-        $http.post("/character/all", {fields: 'id name title status chronicle state'}).then(function (response) {
+        $http.post("/character/all", { where: {chronicle: id, status: {$in: ["Approved", "Active"]}},fields: 'id name title status state'}).then(function (response) {
             var characters = response.data;
-            $scope.chronicles = [];
             var i = characters.length;
             while(i--) {
                 var char = characters[i];
-                if (char.chronicle.name === undefined) continue;
                 if (char.state !== 'Active') continue;
-                var chronicle = $scope.findChronicle(char.chronicle.id);
-                if (!chronicle) {
-                    $scope.chronicles.push({id: char.chronicle.id, name: char.chronicle.name, characters: []});
-                    chronicle = $scope.findChronicle(char.chronicle.id);
+                if(!chronicle.characters){
+                    chronicle.characters = [];
                 }
                 chronicle.characters.push({
                     name: char.name,
@@ -141,9 +141,17 @@ app.controller('cymeriad.controller.character.status', ['$scope', '$http', 'load
                     }
                 });
             }
+            chronicle.loaded = true;
+            loading.hide();
+        });
+    };
 
+    $scope.init = function () {
+        loading.show();
+        var root = $scope;
+        $http.get("/chronicle/list").then(function (response) {
+            root.chronicles = response.data;
             root.chronicles.sort();
-
 
             loading.hide();
         });

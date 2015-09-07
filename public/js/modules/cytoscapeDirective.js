@@ -9,6 +9,7 @@ app.directive('cytoscape', function($rootScope) {
             cyData: '=',
             cyEdges: '=',
             cyLaytype: '=',
+            cyShowlabels: '=',
             // controller function to be triggered when clicking on a node
             cyClick:'&'
         },
@@ -27,6 +28,11 @@ app.directive('cytoscape', function($rootScope) {
             };
 
             scope.$watch('cyLaytype', function(newValue, oldValue) {
+                if (newValue)
+                    scope.doCy();
+            });
+
+            scope.$watch('cyShowlabels', function(newValue, oldValue) {
                 if (newValue)
                     scope.doCy();
             });
@@ -50,8 +56,18 @@ app.directive('cytoscape', function($rootScope) {
                     var eTarget = scope.cyEdges[i].target;
                     // get edge id
                     var eId = scope.cyEdges[i].id;
-                    var eLabel = scope.cyEdges[i].label;
+
+                    var eLabel = "";
+                    if(scope.cyShowlabels === 'yes'){
+                        eLabel = scope.cyEdges[i].label;
+                    }
                     var eColor = scope.cyEdges[i].color;
+                    var eDouble = "";
+                    if(scope.cyEdges[i].double === true){
+                        eDouble = "triangle";
+                    }else{
+                        eDouble = "circle";
+                    }
                     // build the edge object
                     var edgeObj = {
                         data:{
@@ -59,7 +75,8 @@ app.directive('cytoscape', function($rootScope) {
                         label: eLabel,
                         source:eSource,
                         target:eTarget,
-                        typeColor: eColor
+                        typeColor: eColor,
+                        srcicon: eDouble
                         }
                     };
                     // adding the edge object to the edges array
@@ -129,7 +146,7 @@ app.directive('cytoscape', function($rootScope) {
                         .css({
                             'width': '10',
                             'target-arrow-shape': 'triangle',
-                            'source-arrow-shape': 'circle',
+                            'source-arrow-shape': 'data(srcicon)',
                             'content': 'data(label)',
                             'text-valign': 'center',
                             'line-color': 'data(typeColor)',

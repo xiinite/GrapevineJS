@@ -1,0 +1,88 @@
+<%- layout("../layout.ejs") %>
+<%- partial('./scripts') %>
+<script type='text/javascript' charset="utf-8" src="/js/cytoscape.min.js"></script>
+<script src="/js/Cola.js"></script>
+<script type='text/javascript' charset="utf-8" src="/js/modules/cytoscapeDirective.js"></script>
+<script type='text/javascript' charset="utf-8" src="/js/controllers/cymeriad.controller.character.visualise.js"></script>
+
+<div class="container-fluid" ng-app="cymeriad.app.character" ng-controller="cymeriad.controller.character.visualise"
+     ng-init="init('<%= chronicle %>')">
+    <div class="col-lg-9">
+        <cytoscape cy-laytype="layoutType" cy-showlabels="showLabels" cy-data="mapData" cy-edges="edgeData" cy-click="doClick(value)"></cytoscape>
+        <button ng-click="reset()">Reset</button>
+
+        Layout:
+        <select ng-model="layoutType"
+                ng-options="t for t in layoutTypes">
+        </select>
+
+        Labels:
+        <select ng-model="showLabels">
+            <option value="yes">yes</option>
+            <option value="no" selected="selected">no</option>
+        </select>
+
+        Show bonds (filter):
+        <select ng-model="cyOptions.showBonds" ng-change="update()">
+            <option value="yes">yes</option>
+            <option value="no" selected="selected">no</option>
+        </select>
+
+        Show boons (filter):
+        <select ng-model="cyOptions.showBoons" ng-change="update()">
+            <option value="yes">yes</option>
+            <option value="no" selected="selected">no</option>
+        </select>
+
+        Show coterie (filter):
+        <select ng-model="cyOptions.showCoterie" ng-change="update()">
+            <option value="yes">yes</option>
+            <option value="no" selected="selected">no</option>
+        </select>
+
+
+    </div>
+    <div class="col-lg-3" ng-show="selectedCharacter">
+        <h3>{{selectedCharacter.name}}</h3>
+        <div class="row" ng-show="selectedCharacter.coterie">
+            <b>Coterie: </b> {{selectedCharacter.coterie}}
+        </div>
+        <div class="row">
+            <table class="table table-striped table-bordered" ng-show="selectedCharacter.bloodbonds.length">
+                <tr>
+                    <th>Bond</th>
+                    <th>Character</th>
+                    <th>Note</th>
+                    <th class="hidden-print" ng-show="editable"></th>
+                </tr>
+                <tr ng-repeat="s in selectedCharacter.bloodbonds">
+                    <td class="col-xs-6">{{s.level}}</td>
+                    <td class="col-xs-3">{{s.character}}</td>
+                    <td class="col-xs-1">{{s.note}}</td>
+                    <td class="col-xs-2 hidden-print" ng-show="editable">
+                        <button class="btn btn-default badge" ng-click="incrementBond(char, s)">+</button>
+                        <button class="btn btn-default badge" ng-click="removeBond(char, s)">-</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="row">
+            <table class="table table-striped table-bordered" ng-show="selectedCharacter.boons.length">
+                <tr>
+                    <th>Boon</th>
+                    <th>Character</th>
+                    <th>Note</th>
+                    <th class="hidden-print" ng-show="editable"></th>
+                </tr>
+                <tr ng-repeat="s in selectedCharacter.boons">
+                    <td class="col-xs-6">{{s.level}}</td>
+                    <td class="col-xs-3">{{s.character}}</td>
+                    <td class="col-xs-1">{{s.note}}</td>
+                    <td class="col-xs-2 hidden-print" ng-show="editable">
+                        <button class="btn btn-default badge" ng-click="removeBoon(char, s)">-</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
