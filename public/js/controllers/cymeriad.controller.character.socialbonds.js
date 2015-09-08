@@ -97,9 +97,9 @@ app.controller('cymeriad.controller.character.socialbonds', ['$scope', '$http', 
             }
         });
 
-        modalInstance.result.then(function (bond) {
+        modalInstance.result.then(function (boon) {
             if($scope.schar.boons === undefined) $scope.schar.boons = [];
-            $scope.schar.boons.push(bond);
+            $scope.schar.boons.push(boon);
 
             modalInstance.close();
             $scope.update($scope.schar.id, { boons: $scope.schar.boons });
@@ -220,9 +220,9 @@ app.controller('bondModalCrtl', function ($scope, $modalInstance, model) {
 app.controller('boonModalCrtl', function ($scope, $modalInstance, model) {
     $scope.char = model.char;
     $scope.chronicle = model.chronicle;
-    $scope.boon = { level: '1', character: '', note: '' };
+    $scope.boon = { level: 'trivial', character: '', note: '' };
     $scope.ok = function () {
-        $modalInstance.close($scope.bond);
+        $modalInstance.close($scope.boon);
     };
 
     $scope.cancel = function () {

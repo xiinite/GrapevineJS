@@ -574,7 +574,11 @@
                                 <li class="list-group-item active"><%= character.bloodbonds.length %> Blood Bonds</li>
                                 <% for(var i = 0; i < character.bloodbonds.length; i++) { %>
                                 <li class="list-group-item">
-                                    <%= character.bloodbonds[i].name %>
+                                    <%= character.bloodbonds[i].character %> 
+                                    (<%= character.bloodbonds[i].level %>)
+									<% if(character.bloodbonds[i].note){ %>
+										- <%=character.bloodbonds[i].note %>
+									<% } %>
                                 </li>
                                 <% } %>
                             </ul>
@@ -583,7 +587,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="col-md-12">
+                        <div class="col-md-8">
                             <ul class="list-group">
                                 <li class="list-group-item active"><%= character.equipment.length %> Equipment</li>
                                 <% for(var i = 0; i < character.equipment.length; i++) { %>
@@ -591,6 +595,24 @@
                                     <%= character.equipment[i].name %>
                                 </li>
                                 <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-group">
+								<% if(character.boons) { %>
+									<li class="list-group-item active"><%= character.boons.length %> Boons</li>
+									<% for(var i = 0; i < character.boons.length; i++) { %>
+									<li class="list-group-item">
+										<%= character.bloodbonds[i].character %> 
+										(<%= character.bloodbonds[i].level %>)
+										<% if(character.bloodbonds[i].note){ %>
+											- <%=character.bloodbonds[i].note %>
+										<% } %>
+									</li>
+									<% } %>
+								<% }else{ %>
+								<li class="list-group-item active">0 Boons</li>
+								<% } %>
                             </ul>
                         </div>
                     </div>
