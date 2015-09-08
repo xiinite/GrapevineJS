@@ -8,7 +8,7 @@ app.controller('cymeriad.controller.downtime.visualise', ['$scope', '$rootScope'
     $scope.filterText = "";
 
     $scope.showLabels = 'no';
-    $scope.layoutTypes = ['circle', 'cola'];
+    $scope.layoutTypes = ['circle', 'grid', 'concentric', 'breadthfirst', 'cola', 'dagre'];
     $scope.layoutType = 'circle';
     $scope.mapData = [];
     $scope.edgeData = [];

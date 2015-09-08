@@ -13,7 +13,7 @@ app.controller('cymeriad.controller.character.visualise', ['$scope', '$rootScope
     $scope.needsUpdate = false;
     $scope.showLabels = 'no';
     $scope.selectedCharacter = null;
-    $scope.layoutTypes = ['circle', 'cola'];
+    $scope.layoutTypes = ['circle', 'grid', 'concentric', 'breadthfirst', 'cola', 'dagre'];
     $scope.layoutType = 'cola';
     $scope.mapData = [];
     $scope.edgeData = [];

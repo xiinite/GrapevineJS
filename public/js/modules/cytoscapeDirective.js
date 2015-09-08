@@ -111,22 +111,65 @@ app.directive('cytoscape', function($rootScope) {
                 // check Cytoscapes site for much more data, options, designs etc
                 // http://cytoscape.github.io/cytoscape.js/
                 // here are just some basic options
+
                 var _layout;
-                if(scope.cyLaytype == 'cola'){
-                    _layout = {
-                        name: 'cola',
-                        edgeLength: 250
-                    };
+                switch(scope.cyLaytype){
+                    case 'cola':
+                        _layout = {
+                            name: 'cola',
+                            edgeLength: 250
+                        };
+                        break;
+                    case 'grid':
+                        _layout = {
+                            name: 'grid',
+                            fit: true, // whether to fit the viewport to the graph
+                            ready: undefined, // callback on layoutready
+                            stop: undefined, // callback on layoutstop
+                            padding: 30, // the padding on fit
+                            avoidOverlap: true
+                        };
+
+                        break;
+                    case 'concentric':
+                        _layout = {
+                            name: 'concentric',
+                            fit: true, // whether to fit the viewport to the graph
+                            ready: undefined, // callback on layoutready
+                            stop: undefined, // callback on layoutstop
+                            padding: 30, // the padding on fit
+                            avoidOverlap: true
+                        };
+
+                        break;
+                    case 'breadthfirst':
+                        _layout = {
+                            name: 'breadthfirst',
+                            fit: true, // whether to fit the viewport to the graph
+                            ready: undefined, // callback on layoutready
+                            stop: undefined, // callback on layoutstop
+                            padding: 30, // the padding on fit
+                            avoidOverlap: true
+                        };
+
+                        break;
+                    case 'dagre':
+                        _layout = {
+                            name: 'dagre'
+                        };
+
+                        break;
+                    default:
+                        _layout = {
+                            name: 'circle',
+                            fit: true, // whether to fit the viewport to the graph
+                            ready: undefined, // callback on layoutready
+                            stop: undefined, // callback on layoutstop
+                            padding: 5 // the padding on fit
+                        };
+                        break;
                 }
-                else{
-                    _layout = {
-                        name: 'circle',
-                        fit: true, // whether to fit the viewport to the graph
-                        ready: undefined, // callback on layoutready
-                        stop: undefined, // callback on layoutstop
-                        padding: 5 // the padding on fit
-                    };
-                }
+
                 $('#cy').cytoscape({
                     layout: _layout,
                     style: cytoscape.stylesheet()
