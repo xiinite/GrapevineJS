@@ -84,7 +84,7 @@ app.controller('cymeriad.controller.character.visualise', ['$scope', '$rootScope
         $scope.mapData = [];
         $scope.edgeData = [];
         $scope.visualiseData();
-    }
+    };
 
     $scope.getClanShape = function(clan){
         var type = "";

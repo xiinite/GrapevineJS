@@ -1,12 +1,18 @@
 "use strict";
-app.controller('cymeriad.controller.downtime.visualise', ['$scope', '$rootScope', '$http', 'loading', '$q', 'ngToast', '$modal', function ($scope, $rootScope, $http, loading, $q, ngToast, $modal) {
+app.controller('cymeriad.controller.downtime.visualise', ['$scope', '$rootScope', '$http', 'loading', '$q', 'ngToast', '$modal', '$timeout',
+    function ($scope, $rootScope, $http, loading, $q, ngToast, $modal, $timeout) {
     $scope.downtimes = [];
     $scope.characters = {};
     $scope.period = {};
     $scope.active;
     $scope.selectedDowntime = null;
     $scope.filterText = "";
+    $scope.cyoptions = {
+        selfreferences: 'yes',
+        showempty: 'no'
+    };
 
+    $scope.needsUpdate = false;
     $scope.showLabels = 'no';
     $scope.layoutTypes = ['circle', 'grid', 'concentric', 'breadthfirst', 'cola', 'dagre'];
     $scope.layoutType = 'circle';
@@ -19,6 +25,23 @@ app.controller('cymeriad.controller.downtime.visualise', ['$scope', '$rootScope'
         if (newValue){
         }
     }, true);
+
+    function postDigest(callback){
+        var unregister = $rootScope.$watch(function(){
+            unregister();
+            $timeout(function(){
+                callback();
+                postDigest(callback);
+            },0,false);
+        });
+    }
+
+    postDigest(function(){
+        if($scope.needsUpdate){
+            $rootScope.$broadcast('appChanged');
+            $scope.needsUpdate = false;
+        }
+    });
 
     $scope.findCharacter = function(id){
         var i = $scope.characters.length;
@@ -115,7 +138,13 @@ app.controller('cymeriad.controller.downtime.visualise', ['$scope', '$rootScope'
         $scope.edgeData = [];
         cy.reset();
         $scope.visualiseData();
-    }
+    };
+
+    $scope.update = function(){
+        $scope.mapData = [];
+        $scope.edgeData = [];
+        $scope.visualiseData();
+    };
 
     $scope.getClanShape = function(clan){
         var type = "";
@@ -174,22 +203,33 @@ app.controller('cymeriad.controller.downtime.visualise', ['$scope', '$rootScope'
             var dt = $scope.downtimes[i];
             for (var index in dt.actions) {
                 var action = dt.actions[index];
-                if (action.target && addedChars.indexOf(dt.characterid) > -1) {
-                    var from =  $scope.findCharacter(dt.characterid).name;
-                    if(!$scope.findEdge(action.target)){
-                        var c = $scope.findCharacterByName(action.target);
-                        if(c){
-                            $scope.addObj(c.name, $scope.getClanShape(c.clan), {});
+                var from =  $scope.findCharacter(dt.characterid).name;
+                if(!($scope.cyoptions.selfreferences === 'no' && action.target === from)){
+                    if (action.target && addedChars.indexOf(dt.characterid) > -1) {
+                        if(!$scope.findMapData(action.target)){
+                            var c = $scope.findCharacterByName(action.target);
+                            if(c){
+                                $scope.addObj(c.name, $scope.getClanShape(c.clan), {});
+                            }
                         }
+                        var label = action.action;
+                        var color = $scope.getActionColor(action.action);
+                        $scope.addEdge(from, action.target, label, color, action);
                     }
-                    var label = action.action;
-                    var color = $scope.getActionColor(action.action);
-                    $scope.addEdge(from, action.target, label, color, action);
                 }
             }
         }
 
-        $rootScope.$broadcast('appChanged');
+        if($scope.cyoptions.showempty === 'no'){
+            var i = $scope.mapData.length;
+            while(i--){
+                if(!$scope.findEdge($scope.mapData[i].id)){
+                    $scope.mapData.splice(i, 1);
+                }
+
+            }
+        }
+        $scope.needsUpdate = true;
     };
 
     $scope.addObj = function(name, type, dt){
@@ -205,8 +245,8 @@ app.controller('cymeriad.controller.downtime.visualise', ['$scope', '$rootScope'
 
     $scope.addEdge = function(fromName, toName, label, color, action){
         // collecting the data from the form
-        var from = $scope.findEdge(fromName);
-        var to = $scope.findEdge(toName);
+        var from = $scope.findMapData(fromName);
+        var to = $scope.findMapData(toName);
         if(to){
             var edge1 = from.id;
             var edge2 = to.id;
@@ -218,11 +258,18 @@ app.controller('cymeriad.controller.downtime.visualise', ['$scope', '$rootScope'
         }
     };
 
-    $scope.findEdge = function(name) {
+    $scope.findMapData = function(name) {
         var i = $scope.mapData.length;
         while(i--){
-            var edge = $scope.mapData[i];
-            if(edge.name == name) return edge;
+            var mapData = $scope.mapData[i];
+            if(mapData.name == name) return mapData;
+        }
+    };
+    $scope.findEdge = function(id) {
+        var i = $scope.edgeData.length;
+        while(i--){
+            var edge = $scope.edgeData[i];
+            if(edge.source == id || edge.target == id) return edge;
         }
     };
 

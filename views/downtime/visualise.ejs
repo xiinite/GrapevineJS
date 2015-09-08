@@ -21,6 +21,19 @@
             <option value="yes">yes</option>
             <option value="no" selected="selected">no</option>
         </select>
+
+        Self references:
+        <select ng-model="cyoptions.selfreferences" ng-change="update()">
+            <option value="yes" selected="selected">yes</option>
+            <option value="no">no</option>
+        </select>
+
+        Chars without links:
+        <select ng-model="cyoptions.showempty" ng-change="update()">
+            <option value="yes">yes</option>
+            <option value="no" selected="selected">no</option>
+        </select>
+
         <!--<label>Filter:&nbsp;</label></lable><input type="text" ng-model="filterText"></input>
         <button ng-click="reset()">Filter</button>-->
     </div>
