@@ -237,12 +237,11 @@ textarea.vertical{
         letter-spacing: 0.2px;
         font: 10px Arial, Helvetica, "Lucida Grande", serif;
         color: #000;
-        margin: 20px 25px 20px 25px;
     }
 
     @page {
         size: auto;   /* auto is the current printer page size */
-        margin: 0;  /* this affects the margin in the printer settings */
+        margin: 10mm 15mm 10mm 15mm;  /* this affects the margin in the printer settings */
     }
 
     .row {
@@ -259,6 +258,9 @@ textarea.vertical{
     }
     .pbafter{
         page-break-after: auto;
+    }
+    .printblock{
+        page-break-inside: avoid;
     }
     .nav-tabs{
         display: none;
@@ -283,6 +285,13 @@ textarea.vertical{
 
     .table > thead > tr > th, .table > thead > tr > td {
         border: 0;
+    }
+
+    .smallrows>tbody>tr{
+        line-height: 5mm;
+    }
+    .smallrows>tbody>tr>td,.smallrows>tbody>tr>th{
+        padding: 0;
     }
 
     .list-group {
