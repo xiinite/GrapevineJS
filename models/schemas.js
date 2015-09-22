@@ -143,7 +143,8 @@ module.exports = {
         downtimePeriod: {type: String},
         characterid: {type: String},
         actions: {type: Mixed},
-        response: {type: Mixed}
+        response: {type: Mixed},
+        handled: {type: Boolean}
     }),
     'Event': mongoose.model('event', {
         id: {unique: true, type: String},

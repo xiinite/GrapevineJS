@@ -8,35 +8,156 @@
     <div class="hidden-sm hidden-xs hidden-md col-lg-3" id="sidebar" role="navigation">
 
             <ul class="nav nav-pills nav-stacked">
+                <li ng-class="{active: isActive(-2)}">
+                    <a class="clickable" ng-click="setActive(-2)">
+                        Destroys
+                    </a>
+                </li>
                 <li ng-class="{active: isActive(downtime)}" ng-repeat="downtime in downtimes">
                     <a class="clickable" ng-click="setActive(downtime.id)">
                         {{findCharacter(downtime.characterid).name}}
                         -
                         {{findCharacter(downtime.characterid).player.displayName}}
+                        <div class="badge pull-right" ng-show="downtime.handled">
+                            <span class="fa fa-check"></span>
+                        </div>
+                    </a>
+                </li>
+                <li ng-class="{active: isActive(-3)}">
+                    <a class="clickable" ng-click="setActive(-3)">
+                        Grows
                     </a>
                 </li>
             </ul>
 
     </div>
     <div class="col-lg-9 col-md-12">
-        <div class="col-lg-12">
-            <div class="col-xs-1">
-                <button class="btn btn-default btn-block" ng-click="previous()">Previous</button>
-            </div>
-            <div class="col-xs-4">
-            </div>
-            <div class="col-xs-1 text-nowrap">
-                {{findIndex(active) +1}} / {{downtimes.length}}
-            </div>
-            <div class="col-xs-1">
-                <button class="btn btn-primary btn-block" ng-click="save()">Save</button>
-            </div>
-            <div class="col-xs-4">
-            </div>
-            <div class="col-xs-1">
-                <button class="btn btn-default btn-block" ng-click="next()">Next</button>
+        <!-- NAVIGATION BUTTONS -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-md-3 col-lg-1">
+                    <button class="btn btn-default btn-block" ng-click="previous()">Previous</button>
+                </div>
+                <div class="hidden-md col-lg-4">
+                </div>
+                <div class="col-md-3 col-lg-1 text-nowrap">
+                    {{findIndex(active) +1}} / {{downtimes.length}}
+                </div>
+                <div class="col-md-3 col-lg-1">
+                    <button class="btn btn-primary btn-block" ng-click="save()">Save</button>
+                </div>
+                <div class="hidden-md col-lg-4">
+                </div>
+                <div class="col-md-3 col-lg-1">
+                    <button class="btn btn-default btn-block" ng-click="next()">Next</button>
+                </div>
             </div>
         </div>
+
+        <!-- AUTORESOLVABLE DESTROY-->
+        <div class="col-lg-12">
+            <div class="row" ng-show="isActive(-2)" ng-class="getDirection()" ng-swipe-left="previous()"
+                 ng-swipe-right="next()">
+                <h1>Destroys:</h1>
+                <div ng-repeat="action in flatten(downtimes)" ng-if="action.action === 'Destroy'">
+                    <div >
+                        <div class="row">
+
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th colspan="2">
+                                        <h4 class="uppercase">{{findCharacter(findDowntime(action.dt).characterid).name}} -
+                                            {{findCharacter(findDowntime(action.dt).characterid).player.displayName}}</h4>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="col-xs-3">Influence</td>
+                                    <td><span>{{action.name}} - Rating {{findInfluenceValue(findCharacter(findDowntime(action.dt).characterid),action.name)}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3">Action</td>
+                                    <td ng-show="action.action === 'Destroy'"><span class="label-as-badge label-danger">{{action.action}}</span></td>
+                                    <td ng-show="action.action === 'Grow'"><span class="label-as-badge label-success">{{action.action}}</span></td>
+                                </tr>
+                                <tr ng-show="action.location">
+                                    <td class="col-xs-3">Location</td>
+                                    <td>{{action.location}}</td>
+                                </tr>
+                                <tr ng-show="action.description">
+                                    <td class="col-xs-3">Description</td>
+                                    <td>{{action.description}}</td>
+                                </tr>
+                                <tr ng-show="action.target">
+                                    <td class="col-xs-3">Target</td>
+                                    <td>
+                                        {{action.target}}
+                                    </td>
+                                </tr>
+                                <tr ng-show="action.targetBackground">
+                                    <td class="col-xs-3">Target</td>
+                                    <td>
+                                        {{action.targetBackground}} - Rating
+                                        {{findInfluenceValue(findCharacterByName(action.target),action.targetBackground)}}
+                                        <span class="label-as-badge label-danger" ng-show="isDefending(findCharacterByName(action.target), action.targetBackground)">
+                                            defending: {{isDefending(findCharacterByName(action.target), action.targetBackground)}}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr ng-show="action.order">
+                                    <td class="col-xs-3">Order</td>
+                                    <td>{{action.order}}</td>
+                                </tr>
+                                <tr ng-show="action.test">
+                                    <td class="col-xs-3">Test</td>
+                                    <td>{{action.test}}</td>
+                                </tr>
+                                <tr ng-repeat="ac in findAssists(action.dt, action.name)">
+                                    <td>Assisted by</td>
+                                    <td>{{ac.assister}}: {{ac.name.replace('Action', '')}} (
+                                    <span ng-show="ac.name.indexOf('Action') > -1">
+                                        {{findBackgroundValue(findCharacter(ac.characterid), ac.name.replace('Action', ''))}}
+                                    </span>
+                                    <span ng-show="ac.name.indexOf('Action') === -1">
+                                        {{findInfluenceValue(findCharacter(ac.characterid),ac.name)}}
+                                    </span>
+                                        )
+                                        <a class="btn btn-default pull-right badge" target="_blank"
+                                           ng-href="/character/show/{{ac.characterid}}">View character</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3">Outcome:</td>
+                                    <td>
+                                        <md-radio-group ng-model="action.outcome" >
+                                            <md-radio-button ng-disabled="action.handled" value="success" class="md-primary">Success</md-radio-button>
+                                            <md-radio-button ng-disabled="action.handled" value="fail">Fail</md-radio-button>
+                                        </md-radio-group>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Response <small>(optional)</small>:</td>
+                                    <td>
+                                    <textarea class="form-control" rows="5"
+                                              ng-model="action.response">
+                                    </textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <button class="btn btn-primary" ng-disabled="!action.outcome || action.handled" ng-click="updateSave(action)">Save and update</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- DOWNTIMES -->
         <div class="col-lg-12" ng-repeat="downtime in downtimes">
             <div class="row" ng-show="isActive(downtime)" ng-class="getDirection()" ng-swipe-left="previous()"
                  ng-swipe-right="next()">
@@ -50,6 +171,11 @@
                        ng-href="/character/edit/{{downtime.characterid}}">Edit character</a>
 
                     <h3>Downtime for {{period.openFrom | date}}</h3> <!-- Influences -->
+
+                    <md-checkbox ng-disabled="false" md-no-ink aria-label="Handled" ng-model="downtime.handled">
+                        Handled
+                    </md-checkbox>
+
                     <h2>Rating</h2>
 
                     <div class="row">
@@ -58,8 +184,14 @@
                             <div class="col-sm-9">
                                 <rating ng-model="downtime.actions.previousSessionRating.rating" max="5" readonly="true" ></rating>
                             </div>
-                            <div class="col-sm-3">Note:</div>
-                            <div class="col-sm-9">{{downtime.actions.previousSessionRating.description}}</div>
+                            <div class="col-sm-3" ng-show="downtime.actions.previousSessionRating.description">Note:</div>
+                            <div class="col-sm-9" ng-show="downtime.actions.previousSessionRating.description">{{downtime.actions.previousSessionRating.description}}</div>
+                            <div class="col-sm-3">Feedback:</div>
+                            <div class="col-sm-9">
+                                <textarea class="form-control" rows="5"
+                                          ng-model="downtime.actions.previousSessionRating.response">
+                                </textarea>
+                            </div>
                         </div>
                     </div>
 
@@ -99,6 +231,10 @@
                                     <td class="col-xs-3">Target</td>
                                     <td>{{value.target}}</td>
                                 </tr>
+                                <tr ng-show="value.order">
+                                    <td class="col-xs-3">Order</td>
+                                    <td>{{value.order}}</td>
+                                </tr>
                                 <tr ng-show="value.test">
                                     <td class="col-xs-3">Test</td>
                                     <td>{{value.test}}</td>
@@ -134,7 +270,7 @@
                     <h2 ng-show="hasInfluences(downtime)">Influences</h2>
 
                     <div class="row" ng-repeat="(key, value) in downtime.actions"
-                         ng-if="key.indexOf('Action') === -1 && key.indexOf('Rating') == -1 && value.action !== 'Assist'">
+                         ng-if="key.indexOf('Action') === -1 && key.indexOf('Rating') == -1 && value.action !== 'Assist'&& value.action !== 'Grow'&& value.action !== 'Destroy'">
                         <div class="col-sm-12">
                             <table class="table table-striped">
                                 <thead>
@@ -159,6 +295,10 @@
                                 <tr ng-show="value.target">
                                     <td class="col-xs-3">Target</td>
                                     <td>{{value.target}}</td>
+                                </tr>
+                                <tr ng-show="value.order">
+                                    <td class="col-xs-3">Order</td>
+                                    <td>{{value.order}}</td>
                                 </tr>
                                 <tr ng-show="value.test">
                                     <td class="col-xs-3">Test</td>
@@ -192,10 +332,10 @@
                     </div>
 
                     <!-- Assists -->
-                    <h2 ng-show="hasAssists(downtime)">Assists</h2>
+                    <h2 ng-show="hasAssists(downtime)">Assists, grows and destroys</h2>
 
                     <div class="row" ng-repeat="(key, value) in downtime.actions"
-                         ng-if="key.indexOf('Action') > -1 && value.action === 'Assist'">
+                         ng-if="key.indexOf('Action') > -1 && (value.action === 'Assist' || value.action === 'Grow' || value.action === 'Destroy')">
                         <div class="col-sm-12">
                             <table class="table table-striped">
                                 <thead>
@@ -225,7 +365,7 @@
                         </div>
                     </div>
                     <div class="row" ng-repeat="(key, value) in downtime.actions"
-                         ng-if="key.indexOf('Action') == -1 && value.action === 'Assist'">
+                         ng-if="key.indexOf('Action') == -1 && (value.action === 'Assist' || value.action === 'Grow' || value.action === 'Destroy')">
                         <div class="col-sm-12">
                             <table class="table table-striped">
                                 <thead>
@@ -277,5 +417,103 @@
             </div>
         </div>
 
+        <!-- AUTORESOLVABLE GROW-->
+        <div class="col-lg-12">
+            <div class="row" ng-show="isActive(-3)" ng-class="getDirection()" ng-swipe-left="previous()"
+                 ng-swipe-right="next()">
+                <h1>Grows:</h1>
+                <div ng-repeat="action in flatten(downtimes)" ng-if="action.action === 'Grow'">
+                    <div >
+                        <div class="row">
+
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th colspan="2">
+                                        <h4 class="uppercase">{{findCharacter(findDowntime(action.dt).characterid).name}} -
+                                            {{findCharacter(findDowntime(action.dt).characterid).player.displayName}}</h4>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="col-xs-3">Influence</td>
+                                    <td><span>{{action.name}} - Rating {{findInfluenceValue(findCharacter(findDowntime(action.dt).characterid),action.name)}}</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3">Action</td>
+                                    <td ng-show="action.action === 'Destroy'"><span class="label-as-badge label-danger">{{action.action}}</span></td>
+                                    <td ng-show="action.action === 'Grow'"><span class="label-as-badge label-success">{{action.action}}</span></td>
+                                </tr>
+                                <tr ng-show="action.location">
+                                    <td class="col-xs-3">Location</td>
+                                    <td>{{action.location}}</td>
+                                </tr>
+                                <tr ng-show="action.description">
+                                    <td class="col-xs-3">Description</td>
+                                    <td>{{action.description}}</td>
+                                </tr>
+                                <tr ng-show="action.target">
+                                    <td class="col-xs-3">Target</td>
+                                    <td>{{action.target}}</td>
+                                </tr>
+                                <tr ng-show="action.targetBackground">
+                                    <td class="col-xs-3">Target</td>
+                                    <td>
+                                        {{action.targetBackground}} - Rating
+                                        {{findInfluenceValue(findCharacterByName(action.target),action.targetBackground)}}
+                                    </td>
+                                </tr>
+                                <tr ng-show="action.order">
+                                    <td class="col-xs-3">Order</td>
+                                    <td>{{action.order}}</td>
+                                </tr>
+                                <tr ng-show="action.test">
+                                    <td class="col-xs-3">Test</td>
+                                    <td>{{action.test}}</td>
+                                </tr>
+                                <tr ng-repeat="ac in findAssists(action.dt, action.name)">
+                                    <td>Assisted by</td>
+                                    <td>{{ac.assister}}: {{ac.name.replace('Action', '')}} (
+                                    <span ng-show="ac.name.indexOf('Action') > -1">
+                                        {{findBackgroundValue(findCharacter(ac.characterid), ac.name.replace('Action', ''))}}
+                                    </span>
+                                    <span ng-show="ac.name.indexOf('Action') === -1">
+                                        {{findInfluenceValue(findCharacter(ac.characterid),ac.name)}}
+                                    </span>
+                                        )
+                                        <a class="btn btn-default pull-right badge" target="_blank"
+                                           ng-href="/character/show/{{ac.characterid}}">View character</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-xs-3">Outcome:</td>
+                                    <td>
+                                        <md-radio-group ng-model="action.outcome" >
+                                            <md-radio-button ng-disabled="action.handled" value="success" class="md-primary">Success</md-radio-button>
+                                            <md-radio-button ng-disabled="action.handled" value="fail">Fail</md-radio-button>
+                                        </md-radio-group>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Response <small>(optional)</small>:</td>
+                                    <td>
+                                    <textarea class="form-control" rows="5"
+                                              ng-model="action.response">
+                                    </textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <button class="btn btn-primary" ng-disabled="!action.outcome || action.handled" ng-click="updateSave(action)">Save and update</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

@@ -603,10 +603,10 @@
 									<li class="list-group-item active"><%= character.boons.length %> Boons</li>
 									<% for(var i = 0; i < character.boons.length; i++) { %>
 									<li class="list-group-item">
-										<%= character.bloodbonds[i].character %> 
-										(<%= character.bloodbonds[i].level %>)
-										<% if(character.bloodbonds[i].note){ %>
-											- <%=character.bloodbonds[i].note %>
+										<%= character.boons[i].character %>
+										(<%= character.boons[i].level %>)
+										<% if(character.boons[i].note){ %>
+											- <%=character.boons[i].note %>
 										<% } %>
 									</li>
 									<% } %>

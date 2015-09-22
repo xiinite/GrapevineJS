@@ -49,6 +49,7 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', '$moda
             case "Grow":
             case "Defend":
             case "Block":
+            case "Destroy":
                 return false;
         }
         return true;
@@ -66,10 +67,19 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', '$moda
         switch(action.action){
             case "Assist":
             case "Destroy":
+            case "Grow":
                 return true;
         }
         return false;
-    }
+    };
+    $scope.isOrderRequired = function(action){
+        if(action === undefined) return false;
+        switch(action.action){
+            case "Grow":
+                return true;
+        }
+        return false;
+    };
     $scope.isBloodgroundRequired = function(action){
         if(action === undefined) return false;
         switch(action.action){
@@ -110,6 +120,7 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', '$moda
             case "Meet other character":
             case "Assist":
             case "Destroy":
+            case "Grow":
                 return true;
         }
         return false;
@@ -120,6 +131,7 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', '$moda
             case "Meet other character":
             case "Assist":
             case "Destroy":
+            case "Grow":
                 return true;
         }
         return false;

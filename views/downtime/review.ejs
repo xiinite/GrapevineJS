@@ -13,6 +13,8 @@
             </div>
             <div class="col-sm-3">Note: </div>
             <div class="col-sm-9">{{downtime.actions.previousSessionRating.description}}</div>
+            <div class="col-sm-3">Storyteller feedback: </div>
+            <div class="col-sm-9">{{downtime.actions.previousSessionRating.response}}</div>
         </div>
     </div>
 
@@ -40,6 +42,9 @@
                 </tr>
                 <tr ng-show="value.target">
                     <td class="col-xs-3">Target</td><td>{{value.target}}</td>
+                </tr>
+                <tr ng-show="value.order">
+                    <td class="col-xs-3">Order</td><td>{{value.order}}</td>
                 </tr>
                 <tr ng-show="value.test">
                     <td class="col-xs-3">Test</td><td>{{value.test}}</td>
@@ -74,6 +79,9 @@
                 </tr>
                 <tr ng-show="value.target">
                     <td class="col-xs-3">Target</td><td>{{value.target}}</td>
+                </tr>
+                <tr ng-show="value.order">
+                    <td class="col-xs-3">Order</td><td>{{value.order}}</td>
                 </tr>
                 <tr ng-show="value.test">
                     <td class="col-xs-3">Test</td><td>{{value.test}}</td>

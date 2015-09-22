@@ -7,6 +7,21 @@
     background-color: white;
 }
 
+.modal-dialog
+{
+    z-index: 10000;
+}
+
+#footer{
+    background-color: inherit;
+    background: inherit;
+}
+
+.label-as-badge {
+    border-radius: 1em;
+    padding: 2px 5px 2px 5px;
+}
+
 ul.typeahead {
     position: absolute;
 }

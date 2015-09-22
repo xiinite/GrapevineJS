@@ -582,6 +582,12 @@
                                         </div>
                                     </span>
                                 </div>
+                                <div class="row" ng-show="isOrderRequired(actions[influence])">
+                                    <span class="col-sm-3">Execution order: </span>
+                                    <span class="col-sm-9">
+                                        <input type="number" ng-model="actions[influence].order" placeholder="Order"  class="form-control validation">
+                                    </span>
+                                </div>
 
                                 <div class="row" ng-show="showTest(actions[influence])">
                                     <span class="col-sm-3">Test: </span>
