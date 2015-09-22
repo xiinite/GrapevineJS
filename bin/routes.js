@@ -37,6 +37,7 @@ module.exports = {
         router.get(app, 'character', 'allByPlayer', [":chronicleid"]);
         router.get(app, 'character', 'showbychronicle', [":chronicleid"]);
         router.post(app, 'character', 'all');
+        router.post(app, 'character', 'all', [':full']);
         router.post(app, 'character', 'import', [':chronicleId']);
         router.post(app, 'character', 'revert');
         router.post(app, 'character', 'submitconcept');

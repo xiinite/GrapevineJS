@@ -64,7 +64,6 @@ module.exports = {
             for (var i = 0; i < req.user.chronicles.length; i++) {
                 chronicleIds.push(req.user.chronicles[i].id)
             }
-            var where = {};
             if(req.body.where){
                 where = req.body.where;
             }
@@ -77,7 +76,7 @@ module.exports = {
             }else
             {
                 where.chronicle = {"$in": chronicleIds}
-            };
+            }
             if(req.params.full === 'full'){
                 model.find(where, function (err, result) {
                     if (err) return next(new Error(err));
@@ -134,16 +133,11 @@ module.exports = {
     },
     'showbychronicle': function(req, res, next) {
         if (req.params.chronicleid) {
-            model.find({chronicle: req.params.chronicleid, state: 'Active'}, function (err, result) {
-                if (err) return next(new Error(err));
-
                 out = {
-                    user: req.user,
-                    characters: result
+                    chronicleid: req.params.chronicleid,
+                    user: req.user
                 };
                 res.render(ViewTemplatePath + "/showbychronicle", out);
-            });
-
         }
     },
     'findbyname': function(req, res, next){
