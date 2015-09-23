@@ -14,7 +14,7 @@
             <nav class="navbar hidden-xs" role="navigation">
                 <ul class="nav nav-pills nav-stacked">
                     <% for(var i = 0; i < lores.length; i++){%>
-                    <li role="presentation"<%if(i==0){%>class="active"<%}%>><a href="#<%= lores[i].tabname %>" aria-controls="<%= lores[i].tabname %>" role="tab" data-toggle="tab"><%= lores[i].name %></a></li>
+                    <li role="presentation"<%if(i==0){%>class="active"<%}%>><a href="#<%= lores[i].tabname.split(' ').join('_') %>" aria-controls="<%= lores[i].tabname.split(' ').join('_') %>" role="tab" data-toggle="tab"><%= lores[i].name %></a></li>
                     <% }%>
                 </ul>
             </nav>
@@ -22,7 +22,7 @@
 
                 <ul class="nav nav-tabs" aria-labelledby="dropdownMenu1">
                     <% for(var i = 0; i < lores.length; i++){%>
-                    <li class="dropdown" role="presentation"<%if(i==0){%>class="active"<%}%>><a href="#<%= lores[i].tabname %>" aria-controls="<%= lores[i].tabname %>" role="tab" data-toggle="tab"><%= lores[i].name %></a></li>
+                    <li class="dropdown" role="presentation"<%if(i==0){%>class="active"<%}%>><a href="#<%= lores[i].tabname.split(' ').join('_') %>" aria-controls="<%= lores[i].tabname.split(' ').join('_') %>" role="tab" data-toggle="tab"><%= lores[i].name %></a></li>
                     <% }%>
                 </ul>
 
@@ -32,7 +32,7 @@
         <div class="col-lg-10 col-xs-8">
             <div class="tab-content">
                 <% for(var i = 0; i < lores.length; i++){%>
-                <div role="tabpanel" class="tab-pane <%if(i==0){%>active<%}%>" id="<%= lores[i].tabname %>"><%- lores[i].html %></div>
+                <div role="tabpanel" class="tab-pane <%if(i==0){%>active<%}%>" id="<%= lores[i].tabname.split(' ').join('_') %>"><%- lores[i].html %></div>
                 <% }%>
             </div>
         </div>
