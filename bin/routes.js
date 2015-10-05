@@ -48,17 +48,22 @@ module.exports = {
         router.post(app, 'character', 'approvefinal');
         router.post(app, 'character', 'awardxp');
 
+        router.get(app, 'chronicle', 'editmap', [':id']);
+        router.get(app, 'chronicle', 'showmap', [':id']);
+        router.get(app, 'chronicle', 'getmap', [':id']);
         router.post(app, 'chronicle', 'insert');
         router.post(app, 'chronicle', 'addadmin');
         router.post(app, 'chronicle', 'removeadmin');
         router.post(app, 'chronicle', 'addplayer');
         router.post(app, 'chronicle', 'removeplayer');
+        router.post(app, 'chronicle', 'updatemap');
 
         router.get(app, 'downtime', 'allPeriods');
         router.get(app, 'downtime', 'openPeriods');
         router.get(app, 'downtime', 'submittedPeriods');
         router.get(app, 'downtime', 'findPeriod', [':id']);
         router.get(app, 'downtime', 'submit', [':id']);
+        router.get(app, 'downtime', 'modify', [':id']);
         router.get(app, 'downtime', 'review', [':id']);
         router.get(app, 'downtime', 'handle', [':id']);
         router.get(app, 'downtime', 'visualise', [':id']);

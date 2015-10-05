@@ -12,6 +12,8 @@
     z-index: 10000;
 }
 
+.angular-google-map-container { height: 800px; }
+
 #footer{
     background-color: inherit;
     background: inherit;

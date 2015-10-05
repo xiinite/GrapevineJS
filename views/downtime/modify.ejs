@@ -1,25 +1,9 @@
 <%- layout("../layout.ejs") %>
 <%- partial('./scripts') %>
-<script type='text/javascript' charset="utf-8" src="/js/controllers/cymeriad.controller.downtime.submit.js"></script>
-<div class="container" ng-app="cymeriad.app.downtime" ng-controller="cymeriad.controller.downtime.submit"
+<script type='text/javascript' charset="utf-8" src="/js/controllers/cymeriad.controller.downtime.modify.js"></script>
+<div class="container" ng-app="cymeriad.app.downtime" ng-controller="cymeriad.controller.downtime.modify"
      ng-init="init('<%= period %>')">
     <h1 class="page-header">Downtime for {{period.openFrom | date}}</h1>
-
-    <!-- CHARACTER SELECTION -->
-    <div class="col-lg-12">
-        <div ng-show="submittedperiods.length > 0" class="voffset">
-            <div class="panel panel-info">
-                <div class="panel-heading">Submitted downtimes</div>
-                <div class="panel-body">
-                    <div class="row" ng-repeat="period in submittedperiods">
-                        <div class="col-lg-12">
-                            <a ng-href="/downtime/review/{{period.id}}">{{findCharacter(period.characterid)}}</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- DOWNTIME FORM -->
     <div class="col-lg-6">
@@ -36,8 +20,8 @@
                             <div class="col-lg-12">
                                 <div ng-hide="characters.length == 0" class="col-lg-12">
                                     <select class="form-control"
-                                            ng-change="search()"
-                                            ng-options="c as c.name for c in characters"
+                                            ng-change="selectDowntime()"
+                                            ng-options="c as c.name for c in submittedperiodscharacters"
                                             ng-model="scharacter" required>
                                         <option style="display:none" value="">Select a character</option>
                                     </select>
@@ -784,7 +768,7 @@
             </div>
 
             <div class="row">
-                <input type="submit" class="btn btn-lg btn-primary pull-right" value="Submit"></input>
+                <button ng-click="save()" class="btn btn-lg btn-primary pull-right">Save</button>
             </div>
         </form>
     </div>

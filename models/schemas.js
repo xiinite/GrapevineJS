@@ -155,13 +155,18 @@ module.exports = {
         characters: {type: Array},
         xpawarded: {type: Boolean}
     }),
-    'Gametype': mongoose.model('gametype',
-        {
-            id: {unique: true, type: String},
-            parentid: {type: String},
-            parent: {type: Mixed},
-            name: {type: String},
-            description: {type: String},
-            code: {type: String}
-        })
+    'Gametype': mongoose.model('gametype', {
+        id: {unique: true, type: String},
+        parentid: {type: String},
+        parent: {type: Mixed},
+        name: {type: String},
+        description: {type: String},
+        code: {type: String}
+    }),
+    'Map': mongoose.model('map', {
+        id: {unique: true, type: String},
+        chronicle: {type: String},
+        config: {type: Mixed},
+        nodes: {type: Mixed}
+    })
 };

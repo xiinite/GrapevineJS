@@ -1,4 +1,5 @@
 var model = require('../models/Chronicle.js');
+var mapmodel = require('../models/Map.js');
 var uuid = require('node-uuid');
 var sec = require('../bin/securityhandler.js');
 
@@ -207,5 +208,73 @@ module.exports = {
             if(err) return next(new Error(err));
             if (!err)res.json(result);
         });
+    },
+    'editmap': function(req, res, next){
+        if (req.params.id) {
+            model.find({"id": req.params.id}, function (err, result) {
+                var user = req.user || {displayName: "Anonymous"};
+                var out = {user: user, chronicleid: req.params.id};
+                if (!sec.checkAdmin(req, next, result[0].id)) {
+                    return;
+                }
+                if(err) return next(new Error(err));
+
+                mapmodel.find({"chronicle": req.params.id}, function (err, result) {
+                    if(result.length > 0){
+                        out.mapid = result[0].id;
+                        res.render(ViewTemplatePath + "/editmap", out);
+                    }else{
+                        var mapid = uuid.v4();
+                        var map = {
+                            id: mapid,
+                            chronicle: req.params.id,
+                            config: {},
+                            nodes: {}
+                        };
+                        mapmodel.insert(map, function (err) {
+                            if(err) return next(new Error(err));
+                            out.mapid = mapid;
+                            res.render(ViewTemplatePath + "/editmap", out);
+                        })
+                    }
+                });
+            });
+        }
+    },
+    'showmap': function(req, res){
+        if (req.params.id) {
+            var out = {user: req.user, chronicleid: req.params.id};
+            res.render(ViewTemplatePath + "/showmap", out);
+        }
+    },
+    'getmap': function(req, res, next){
+        if (req.params.id) {
+            mapmodel.find({"id": req.params.id}, function (err, result) {
+                if(err) return next(new Error(err));
+                if(result.length > 0){
+                    res.json(result[0]);
+                }
+            });
+        }
+    },
+    'updatemap': function(req, res, next){
+        if (req.body.id) {
+            mapmodel.find({"id": req.body.id}, function (err, result) {
+                if (!sec.checkAdmin(req, next, result[0].id)) {
+                    return;
+                }
+                if(err) return next(new Error(err));
+                var config = req.body.config;
+                var nodes = req.body.nodes;
+                var updateValues = {
+                    config: config,
+                    nodes: nodes
+                };
+                mapmodel.update(req.body.id, updateValues, function (err) {
+                    if(err) return next(new Error(err));
+                    res.json("ok");
+                });
+            });
+        }
     }
 };

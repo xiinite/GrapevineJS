@@ -472,7 +472,7 @@
                                     <td class="col-xs-3">Test</td>
                                     <td>{{action.test}}</td>
                                 </tr>
-                                <tr ng-repeat="ac in findAssists(action.dt, action.name)">
+                                <tr ng-repeat="ac in findAssists(findDowntime(action.dt), action.name)">
                                     <td>Assisted by</td>
                                     <td>{{ac.assister}}: {{ac.name.replace('Action', '')}} (
                                     <span ng-show="ac.name.indexOf('Action') > -1">

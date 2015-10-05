@@ -1,9 +1,5 @@
 <% layout("../layout.ejs") %>
-<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.confirmClick.js"></script>
-<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.readMore.js"></script>
-<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.services.js"></script>
-<script type="text/javascript" charset="utf-8" src="/js/modules/cymeriad.propertyFilter.js"></script>
-<script type="text/javascript" charset="utf-8" src="/js/applications/cymeriad.app.chronicle.js"></script>
+<%- partial('./scripts') %>
 <script type="text/javascript" src="/js/controllers/cymeriad.controller.chronicle.index.js"></script>
 
 <div class="container" ng-app="cymeriad.app.chronicle" ng-controller="cymeriad.controller.chronicle.index">

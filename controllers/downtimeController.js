@@ -202,6 +202,11 @@ module.exports = {
         var out = {user: req.user, period: req.params.id};
         res.render(ViewTemplatePath + "/handle", out);
     },
+    'modify': function(req, res){
+
+        var out = {user: req.user, period: req.params.id};
+        res.render(ViewTemplatePath + "/modify", out);
+    },
     'visualise': function(req, res){
 
         var out = {user: req.user, period: req.params.id};
