@@ -27,8 +27,34 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
                             return;
                     }
                 }
+            }, function (response){
+                ngToast.create({
+                    className: 'danger',
+                    content: 'Failed to retrieve data from random.org',
+                    timeout: 2000
+                });
+                console.log("Failed random.org request response:")
+                console.log(response);
             });        
     };
+    
+    $scope.getResultClass = function(action){
+        if(!action.testresult) return "";
+        switch(action.testresult){
+            case "rock":
+                if(action.test === "paper") return "danger";
+                if(action.test === "scissors") return "success";
+                return "warning";
+            case "paper":
+                if(action.test === "scissors") return "danger";
+                if(action.test === "rock") return "success";
+                return "warning";
+            case "scissors":
+                if(action.test === "rock") return "danger";
+                if(action.test === "paper") return "success";
+                return "warning";
+        }
+    }
     
     $scope.getTestresultIconClass = function(testresult){
         if(testresult === "loading"){

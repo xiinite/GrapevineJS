@@ -110,7 +110,7 @@
                                     <td class="col-xs-3">Order</td>
                                     <td>{{action.order}}</td>
                                 </tr>
-                                <tr ng-show="action.test">
+                                <tr ng-show="action.test" ng-class="getResultClass(action)">
                                     <td class="col-xs-3">Test</td>
                                     <td>
                                         Player: 
@@ -250,7 +250,7 @@
                                     <td class="col-xs-3">Order</td>
                                     <td>{{value.order}}</td>
                                 </tr>
-                                <tr ng-show="value.test">
+                                <tr ng-show="value.test" ng-class="getResultClass(value)">
                                     <td class="col-xs-3">Test</td>
                                     <td>
                                         Player: 
@@ -329,7 +329,7 @@
                                     <td class="col-xs-3">Order</td>
                                     <td>{{value.order}}</td>
                                 </tr>
-                                <tr ng-show="value.test">
+                                <tr ng-show="value.test" ng-class="getResultClass(value)">
                                     <td class="col-xs-3">Test</td>
                                     <td>
                                         Player: 
@@ -511,7 +511,7 @@
                                     <td class="col-xs-3">Order</td>
                                     <td>{{action.order}}</td>
                                 </tr>
-                                <tr ng-show="action.test">
+                                <tr ng-show="action.test" ng-class="getResultClass(action)">
                                     <td class="col-xs-3">Test</td>
                                     <td>
                                         Player: 
