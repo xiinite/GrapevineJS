@@ -112,7 +112,22 @@
                                 </tr>
                                 <tr ng-show="action.test">
                                     <td class="col-xs-3">Test</td>
-                                    <td>{{action.test}}</td>
+                                    <td>
+                                        Player: 
+                                        <span ng-class="getTestresultIconClass(action.test)"></span>
+                                        {{action.test}}
+                                        <div>
+                                            <span ng-show='!action.testresult'>
+                                                <button class='btn btn-default' ng-click='getRandomRPC(action)'>{{'Get Random'}}</button>
+                                            </span>
+                                            <span ng-show='action.testresult'>
+                                                Server: 
+                                                <span ng-show='action.testresult' ng-class="getTestresultIconClass(action.testresult)"></span>
+                                                <span ng-show='action.testresult'>{{action.testresult}}</span>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    
                                 </tr>
                                 <tr ng-repeat="ac in findAssists(action.dt, action.name)">
                                     <td>Assisted by</td>
@@ -237,7 +252,21 @@
                                 </tr>
                                 <tr ng-show="value.test">
                                     <td class="col-xs-3">Test</td>
-                                    <td>{{value.test}}</td>
+                                    <td>
+                                        Player: 
+                                        <span ng-class="getTestresultIconClass(value.test)"></span>
+                                        {{value.test}}
+                                        <div>
+                                            <span ng-show='!value.testresult'>
+                                                <button class='btn btn-default' ng-click='getRandomRPC(value)'>{{'Get Random'}}</button>
+                                            </span>
+                                            <span ng-show='value.testresult'>
+                                                Server: 
+                                                <span ng-show='value.testresult' ng-class="getTestresultIconClass(value.testresult)"></span>
+                                                <span ng-show='value.testresult'>{{value.testresult}}</span>
+                                            </span>
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr ng-repeat="ac in findAssists(downtime, key)">
                                     <td>Assisted by</td>
@@ -302,7 +331,21 @@
                                 </tr>
                                 <tr ng-show="value.test">
                                     <td class="col-xs-3">Test</td>
-                                    <td>{{value.test}}</td>
+                                    <td>
+                                        Player: 
+                                        <span ng-class="getTestresultIconClass(value.test)"></span>
+                                        {{value.test}}
+                                        <div>
+                                            <span ng-show='!value.testresult'>
+                                                <button class='btn btn-default' ng-click='getRandomRPC(value)'>{{'Get Random'}}</button>
+                                            </span>
+                                            <span ng-show='value.testresult'>
+                                                Server: 
+                                                <span ng-show='value.testresult' ng-class="getTestresultIconClass(value.testresult)"></span>
+                                                <span ng-show='value.testresult'>{{value.testresult}}</span>
+                                            </span>
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr ng-repeat="ac in findAssists(downtime, key)">
                                     <td>Assisted by</td>
@@ -470,7 +513,21 @@
                                 </tr>
                                 <tr ng-show="action.test">
                                     <td class="col-xs-3">Test</td>
-                                    <td>{{action.test}}</td>
+                                    <td>
+                                        Player: 
+                                        <span ng-class="getTestresultIconClass(action.test)"></span>
+                                        {{action.test}}
+                                        <div>
+                                            <span ng-show='!action.testresult'>
+                                                <button class='btn btn-default' ng-click='getRandomRPC(action)'>{{'Get Random'}}</button>
+                                            </span>
+                                            <span ng-show='action.testresult'>
+                                                Server: 
+                                                <span ng-show='action.testresult' ng-class="getTestresultIconClass(action.testresult)"></span>
+                                                <span ng-show='action.testresult'>{{action.testresult}}</span>
+                                            </span>
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr ng-repeat="ac in findAssists(findDowntime(action.dt), action.name)">
                                     <td>Assisted by</td>

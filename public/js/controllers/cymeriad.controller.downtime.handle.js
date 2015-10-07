@@ -1,10 +1,44 @@
 "use strict";
-app.controller('cymeriad.controller.downtime.handle', ['$scope', '$http', 'loading', '$q', 'ngToast', function ($scope, $http, loading, $q, ngToast) {
+app.controller('cymeriad.controller.downtime.handle', ['$scope', '$http', 'loading', '$q', 'ngToast', 'truerandom', '$timeout', 
+function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
     $scope.downtimes = [];
     $scope.characters = {};
     $scope.period = {};
     $scope.active;
 
+    $scope.getRandomRPC = function(action){
+            action.testresult = "loading";
+                    
+            truerandom.getRand(1, 1, 3).then(function (data) {
+                console.log(data.data.result.random.data[0]);
+                if(data.data.result.random.data.length > 0){
+                    switch(data.data.result.random.data[0]){
+                        case 1:
+                            $timeout(function(){action.testresult = "rock";});
+                            
+                            return;
+                        case 2:
+                            $timeout(function(){action.testresult = "paper";});
+                            //action.testresult = "paper";
+                            return;
+                        case 3:
+                            $timeout(function(){action.testresult = "scissors";});
+                            //action.testresult = "scissors";
+                            return;
+                    }
+                }
+            });        
+    };
+    
+    $scope.getTestresultIconClass = function(testresult){
+        if(testresult === "loading"){
+            return "fa fa-circle-o-notch fa-spin";
+        }
+        else{
+            return 'fa fa-hand-' + testresult + '-o';
+        }
+    }
+    
     $scope.findCharacter = function(id){
         var i = $scope.characters.length;
         while(i--){
