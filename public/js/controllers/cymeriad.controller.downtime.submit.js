@@ -58,6 +58,10 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', '$moda
         if(action === undefined) return false;
         switch(action.action){
             case "Patrol":
+            case "Research":
+            case "Ritual":
+            case "Meet other character":
+            case "Other":
                 return true;
         }
         return false;

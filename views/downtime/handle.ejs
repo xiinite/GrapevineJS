@@ -56,7 +56,7 @@
 
         <!-- AUTORESOLVABLE DESTROY-->
         <div class="col-lg-12">
-            <div class="row" ng-show="isActive(-2)" ng-class="getDirection()" ng-swipe-left="previous()"
+            <div class="row" ng-show="isActive(-2)" ng-class="getDirection()" ng-swipe-disable-mouse ng-swipe-left="previous()"
                  ng-swipe-right="next()">
                 <h1>Destroys:</h1>
                 <div ng-repeat="action in flatten(downtimes)" ng-if="action.action === 'Destroy'">
@@ -86,6 +86,10 @@
                                     <td class="col-xs-3">Location</td>
                                     <td>{{action.location}}</td>
                                 </tr>
+                                <tr ng-show="action.location">
+                                    <td class="col-xs-3">Other players active here:</td>
+                                    <td>{{getPlayersInLocation(action.dt.characterid, action.location)}}</td>
+                                </tr>
                                 <tr ng-show="action.description">
                                     <td class="col-xs-3">Description</td>
                                     <td>{{action.description}}</td>
@@ -113,21 +117,53 @@
                                 <tr ng-show="action.test" ng-class="getResultClass(action)">
                                     <td class="col-xs-3">Test</td>
                                     <td>
-                                        Player: 
-                                        <span ng-class="getTestresultIconClass(action.test)"></span>
-                                        {{action.test}}
-                                        <div>
-                                            <span ng-show='!action.testresult'>
-                                                <button class='btn btn-default' ng-click='getRandomRPC(action)'>{{'Get Random'}}</button>
-                                            </span>
-                                            <span ng-show='action.testresult'>
+                                        <div class="col-xs12 col-md-6" >
+                                            <div>
+                                                Player: 
+                                                <span ng-class="getTestresultIconClass(action.test)"></span>
+                                                {{action.test}}
+                                            </div>
+                                            <div ng-show='action.testresult'>
                                                 Server: 
                                                 <span ng-show='action.testresult' ng-class="getTestresultIconClass(action.testresult)"></span>
                                                 <span ng-show='action.testresult'>{{action.testresult}}</span>
-                                            </span>
+                                            </div>
                                         </div>
+                                        <div class="col-xs-12 col-md-3">
+                                            <dl>
+                                                <dt>Pick a server result</dt>
+                                                <dd>
+                                                    <label class="clickable">
+                                                        <input type="radio" ng-model="action.testresult" value="rock">
+                                                        <span class="fa fa-hand-rock-o"> rock</span>
+                                                    </label>
+                                                </dd>
+                                                <dd>
+                                                    <label class="clickable">
+                                                        <input type="radio" ng-model="action.testresult" value="paper">
+                                                        <span class="fa fa-hand-paper-o"> paper</span>
+                                                    </label>
+                                                </dd>
+                                                <dd>
+                                                    <label class="clickable">
+                                                        <input type="radio" ng-model="action.testresult" value="scissors">
+                                                        <span class="fa fa-hand-scissors-o"> scissors</span>
+                                                    </label>
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                        <div class="col-xs-12 col-md-3">
+                                            <button class='btn btn-default' ng-click='getRandomRPC(action)'>Get Random</button>
+                                        <div>
                                     </td>
-                                    
+                                </tr>
+                                <tr ng-show="showTotalTraits(action)">
+                                    <td>
+                                        Total traits: 
+                                    </td>
+                                    <td>
+                                        <span>{{getTotalTraits(action, action.dt)}}</span>
+                                    </td>
                                 </tr>
                                 <tr ng-repeat="ac in findAssists(action.dt, action.name)">
                                     <td>Assisted by</td>
@@ -174,7 +210,7 @@
         </div>
         <!-- DOWNTIMES -->
         <div class="col-lg-12" ng-repeat="downtime in downtimes">
-            <div class="row" ng-show="isActive(downtime)" ng-class="getDirection()" ng-swipe-left="previous()"
+            <div class="row" ng-show="isActive(downtime)" ng-class="getDirection()" ng-swipe-disable-mouse ng-swipe-left="previous()"
                  ng-swipe-right="next()">
                 <div class="col-lg-12">
                     <h1 class="page-header">
@@ -238,6 +274,10 @@
                                     <td class="col-xs-3">Location</td>
                                     <td>{{value.location}}</td>
                                 </tr>
+                                <tr ng-show="value.location">
+                                    <td class="col-xs-3">Other players active here:</td>
+                                    <td>{{getPlayersInLocation(downtime.characterid, value.location)}}</td>
+                                </tr>
                                 <tr ng-show="value.description">
                                     <td class="col-xs-3">Description</td>
                                     <td>{{value.description}}</td>
@@ -253,19 +293,52 @@
                                 <tr ng-show="value.test" ng-class="getResultClass(value)">
                                     <td class="col-xs-3">Test</td>
                                     <td>
-                                        Player: 
-                                        <span ng-class="getTestresultIconClass(value.test)"></span>
-                                        {{value.test}}
-                                        <div>
-                                            <span ng-show='!value.testresult'>
-                                                <button class='btn btn-default' ng-click='getRandomRPC(value)'>{{'Get Random'}}</button>
-                                            </span>
-                                            <span ng-show='value.testresult'>
+                                        <div class="col-xs12 col-md-6" >
+                                            <div>
+                                                Player: 
+                                                <span ng-class="getTestresultIconClass(value.test)"></span>
+                                                {{value.test}}
+                                            </div>
+                                            <div ng-show='value.testresult'>
                                                 Server: 
                                                 <span ng-show='value.testresult' ng-class="getTestresultIconClass(value.testresult)"></span>
                                                 <span ng-show='value.testresult'>{{value.testresult}}</span>
-                                            </span>
+                                            </div>
                                         </div>
+                                        <div class="col-xs-12 col-md-3">
+                                            <dl>
+                                                <dt>Pick a server result</dt>
+                                                <dd>
+                                                    <label class="clickable">
+                                                        <input type="radio" ng-model="value.testresult" value="rock">
+                                                        <span class="fa fa-hand-rock-o"> rock</span>
+                                                    </label>
+                                                </dd>
+                                                <dd>
+                                                    <label class="clickable">
+                                                        <input type="radio" ng-model="value.testresult" value="paper">
+                                                        <span class="fa fa-hand-paper-o"> paper</span>
+                                                    </label>
+                                                </dd>
+                                                <dd>
+                                                    <label class="clickable">
+                                                        <input type="radio" ng-model="value.testresult" value="scissors">
+                                                        <span class="fa fa-hand-scissors-o"> scissors</span>
+                                                    </label>
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                        <div class="col-xs-12 col-md-3">
+                                            <button class='btn btn-default' ng-click='getRandomRPC(value)'>Get Random</button>
+                                        <div>
+                                    </td>
+                                </tr>
+                                <tr ng-show="showTotalTraits(value)">
+                                    <td>
+                                        Total traits: 
+                                    </td>
+                                    <td>
+                                        <span>{{getTotalTraits(value, downtime)}}</span>
                                     </td>
                                 </tr>
                                 <tr ng-repeat="ac in findAssists(downtime, key)">
@@ -317,6 +390,10 @@
                                     <td class="col-xs-3">Location</td>
                                     <td>{{value.location}}</td>
                                 </tr>
+                                <tr ng-show="value.location">
+                                    <td class="col-xs-3">Other players active here:</td>
+                                    <td>{{getPlayersInLocation(downtime.characterid, value.location)}}</td>
+                                </tr>
                                 <tr ng-show="value.description">
                                     <td class="col-xs-3">Description</td>
                                     <td>{{value.description}}</td>
@@ -332,19 +409,52 @@
                                 <tr ng-show="value.test" ng-class="getResultClass(value)">
                                     <td class="col-xs-3">Test</td>
                                     <td>
-                                        Player: 
-                                        <span ng-class="getTestresultIconClass(value.test)"></span>
-                                        {{value.test}}
-                                        <div>
-                                            <span ng-show='!value.testresult'>
-                                                <button class='btn btn-default' ng-click='getRandomRPC(value)'>{{'Get Random'}}</button>
-                                            </span>
-                                            <span ng-show='value.testresult'>
+                                        <div class="col-xs12 col-md-6" >
+                                            <div>
+                                                Player: 
+                                                <span ng-class="getTestresultIconClass(value.test)"></span>
+                                                {{value.test}}
+                                            </div>
+                                            <div ng-show='value.testresult'>
                                                 Server: 
                                                 <span ng-show='value.testresult' ng-class="getTestresultIconClass(value.testresult)"></span>
                                                 <span ng-show='value.testresult'>{{value.testresult}}</span>
-                                            </span>
+                                            </div>
                                         </div>
+                                        <div class="col-xs-12 col-md-3">
+                                            <dl>
+                                                <dt>Pick a server result</dt>
+                                                <dd>
+                                                    <label class="clickable">
+                                                        <input type="radio" ng-model="value.testresult" value="rock">
+                                                        <span class="fa fa-hand-rock-o"> rock</span>
+                                                    </label>
+                                                </dd>
+                                                <dd>
+                                                    <label class="clickable">
+                                                        <input type="radio" ng-model="value.testresult" value="paper">
+                                                        <span class="fa fa-hand-paper-o"> paper</span>
+                                                    </label>
+                                                </dd>
+                                                <dd>
+                                                    <label class="clickable">
+                                                        <input type="radio" ng-model="value.testresult" value="scissors">
+                                                        <span class="fa fa-hand-scissors-o"> scissors</span>
+                                                    </label>
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                        <div class="col-xs-12 col-md-3">
+                                            <button class='btn btn-default' ng-click='getRandomRPC(value)'>Get Random</button>
+                                        <div>
+                                    </td>
+                                </tr>
+                                <tr ng-show="showTotalTraits(value)">
+                                    <td>
+                                        Total traits: 
+                                    </td>
+                                    <td>
+                                        <span>{{getTotalTraits(value, downtime)}}</span>
                                     </td>
                                 </tr>
                                 <tr ng-repeat="ac in findAssists(downtime, key)">
@@ -462,7 +572,7 @@
 
         <!-- AUTORESOLVABLE GROW-->
         <div class="col-lg-12">
-            <div class="row" ng-show="isActive(-3)" ng-class="getDirection()" ng-swipe-left="previous()"
+            <div class="row" ng-show="isActive(-3)" ng-class="getDirection()" ng-swipe-disable-mouse ng-swipe-left="previous()"
                  ng-swipe-right="next()">
                 <h1>Grows:</h1>
                 <div ng-repeat="action in flatten(downtimes)" ng-if="action.action === 'Grow'">
@@ -492,6 +602,10 @@
                                     <td class="col-xs-3">Location</td>
                                     <td>{{action.location}}</td>
                                 </tr>
+                                <tr ng-show="action.location">
+                                    <td class="col-xs-3">Other players active here:</td>
+                                    <td>{{getPlayersInLocation(action.dt.characterid, action.location)}}</td>
+                                </tr>
                                 <tr ng-show="action.description">
                                     <td class="col-xs-3">Description</td>
                                     <td>{{action.description}}</td>
@@ -514,19 +628,52 @@
                                 <tr ng-show="action.test" ng-class="getResultClass(action)">
                                     <td class="col-xs-3">Test</td>
                                     <td>
-                                        Player: 
-                                        <span ng-class="getTestresultIconClass(action.test)"></span>
-                                        {{action.test}}
-                                        <div>
-                                            <span ng-show='!action.testresult'>
-                                                <button class='btn btn-default' ng-click='getRandomRPC(action)'>{{'Get Random'}}</button>
-                                            </span>
-                                            <span ng-show='action.testresult'>
+                                        <div class="col-xs12 col-md-6" >
+                                            <div>
+                                                Player: 
+                                                <span ng-class="getTestresultIconClass(action.test)"></span>
+                                                {{action.test}}
+                                            </div>
+                                            <div ng-show='action.testresult'>
                                                 Server: 
                                                 <span ng-show='action.testresult' ng-class="getTestresultIconClass(action.testresult)"></span>
                                                 <span ng-show='action.testresult'>{{action.testresult}}</span>
-                                            </span>
+                                            </div>
                                         </div>
+                                        <div class="col-xs-12 col-md-3">
+                                            <dl>
+                                                <dt>Pick a server result</dt>
+                                                <dd>
+                                                    <label class="clickable">
+                                                        <input type="radio" ng-model="action.testresult" value="rock">
+                                                        <span class="fa fa-hand-rock-o"> rock</span>
+                                                    </label>
+                                                </dd>
+                                                <dd>
+                                                    <label class="clickable">
+                                                        <input type="radio" ng-model="action.testresult" value="paper">
+                                                        <span class="fa fa-hand-paper-o"> paper</span>
+                                                    </label>
+                                                </dd>
+                                                <dd>
+                                                    <label class="clickable">
+                                                        <input type="radio" ng-model="action.testresult" value="scissors">
+                                                        <span class="fa fa-hand-scissors-o"> scissors</span>
+                                                    </label>
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                        <div class="col-xs-12 col-md-3">
+                                            <button class='btn btn-default' ng-click='getRandomRPC(action)'>Get Random</button>
+                                        <div>
+                                    </td>
+                                </tr>
+                                <tr ng-show="showTotalTraits(action)">
+                                    <td>
+                                        Total traits: 
+                                    </td>
+                                    <td>
+                                        <span>{{getTotalTraits(action, action.dt)}}</span>
                                     </td>
                                 </tr>
                                 <tr ng-repeat="ac in findAssists(findDowntime(action.dt), action.name)">

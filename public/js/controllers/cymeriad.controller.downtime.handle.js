@@ -42,18 +42,74 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
         if(!action.testresult) return "";
         switch(action.testresult){
             case "rock":
-                if(action.test === "paper") return "danger";
-                if(action.test === "scissors") return "success";
+                if(action.test === "paper") return "success";
+                if(action.test === "scissors") return "danger";
                 return "warning";
             case "paper":
-                if(action.test === "scissors") return "danger";
-                if(action.test === "rock") return "success";
+                if(action.test === "scissors") return "success";
+                if(action.test === "rock") return "danger";
                 return "warning";
             case "scissors":
-                if(action.test === "rock") return "danger";
-                if(action.test === "paper") return "success";
+                if(action.test === "rock") return "success";
+                if(action.test === "paper") return "danger";
                 return "warning";
         }
+    }
+    $scope.showTotalTraits = function(action){
+        if(action.name.indexOf("playerAction") > -1) return false;
+        return true;
+    }    
+    $scope.getTotalTraits = function(action, downtime){
+        if(downtime === undefined) return "?";
+        if(action.name.indexOf("playerAction") > -1) return "?";
+        var assists = $scope.findAssists(downtime, action.name);
+                        
+        var total = 0;
+        if(action.name.indexOf("Action") > -1){
+            total = $scope.findBackgroundValueNumeric($scope.findCharacter(downtime.characterid), action.name.replace('Action',''))
+        }else{
+            total = $scope.findInfluenceValue($scope.findCharacter(downtime.characterid),action.name);
+        }  
+            
+        if(assists){
+            var i = assists.length;
+            
+            while(i--){
+                var ac = assists[i];
+                var acval = 0;
+                if(ac.name.indexOf('Action') > -1){
+                    acval = $scope.findBackgroundValueNumeric($scope.findCharacter(ac.characterid), ac.name.replace('Action', ''))
+                }else{
+                    acval = $scope.findInfluenceValue($scope.findCharacter(ac.characterid),ac.name)
+                }
+                total += acval;
+            }
+        }
+        return total;
+    }
+    
+    $scope.getPlayersInLocation = function(characterid, location){
+        var character = $scope.findCharacter(characterid);
+        if(character === undefined) return false;
+        
+        var i = $scope.downtimes.length;
+        var players = "";
+        while(i--){
+            var dt = $scope.downtimes[i];
+            if(dt.characterid == characterid) continue;
+            for(var a in dt.actions){
+                var action = dt.actions[a];
+                if(action.location == location){
+                    var char = $scope.findCharacter(dt.characterid);
+                    if(players.indexOf(char.name) === -1){
+                        players = players + char.name + ", ";
+                    }
+                }
+            }
+        }
+        
+        if(players.length === 0) return "None";
+        return players;
     }
     
     $scope.getTestresultIconClass = function(testresult){
@@ -226,6 +282,28 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
         return 0;
     };
 
+    $scope.findBackgroundValueNumeric = function(character, name){
+        if(character === undefined) return 0;
+        var retainer = false;
+        if(name === 'ally') name = 'Allies';
+        if(name === 'contact') name = 'Contacts';
+        if(name === 'resource') name = 'Resources';
+        if(name.indexOf('retainer') > -1) retainer = true;
+        var result = [];
+        if(retainer) {
+            var index = parseInt(name.replace('retainer', ''));
+            var all = $.grep(character.backgrounds, function(e){ return e.name == 'Retainers' });
+            return all[index].rating;
+        }else{
+            result = $.grep(character.backgrounds, function(e){ return e.name == name });
+        }
+        if(result.length > 0){
+
+            return result[0].rating;
+        }
+        return 0;
+    };
+    
     $scope.findInfluenceValue = function(character, name){
         if(character === undefined) return 0;
         var result = $.grep(character.influences, function(e){ return e.name == name });
