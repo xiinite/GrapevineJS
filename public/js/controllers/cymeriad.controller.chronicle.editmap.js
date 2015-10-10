@@ -51,42 +51,10 @@ app.controller('cymeriad.controller.chronicle.editmap', ['$scope', '$http', 'loa
                 if(map){
                     map.setZoom($scope.map.zoom);
                     map.panTo({lat: $scope.map.center.latitude, lng: $scope.map.center.longitude});
-                }
 
-                if($scope.shapes.getShapes){
-
-                    var shapes = $scope.shapes.getShapes();
-                    var i = shapes.length;
+                    var i = $scope.map.markers.length;
                     while(i--){
-                        var position = {};
-                        var offset = {};
-                        var s = shapes[i];
-                        if(s.type == 'marker')
-                        {
-                            position = s.getPosition();
-                            offset = new google.maps.Size(-25, 0);
-                        }
-                        var labelOptions = {
-                            content: "New Label",
-                            boxStyle: {
-                                textAlign: "center",
-                                fontSize: "12pt",
-                                width: "50px",
-                                color: "#000000"
-                            },
-                            disableAutoPan: true,
-                            pixelOffset: offset,
-                            position: position,
-                            closeBoxURL: "",
-                            isHidden: false,
-                            pane: "mapPane",
-                            enableEventPropagation: true
-                        };
-
-                        var shapeLabel = new InfoBox(labelOptions);
-                        shapeLabel.open(map);
-                        $scope.selectedShape.labelText = "New Label";
-                        $scope.selectedShape.label = shapeLabel;
+                        var marker = $scope.map.markers[i];
                     }
                     $scope.update = false;
                 }
@@ -220,6 +188,13 @@ app.controller('cymeriad.controller.chronicle.editmap', ['$scope', '$http', 'loa
         });
     };
 
+    $scope.findMarker = function(id){
+        var i = $scope.map.markers.length;
+        while(i--){
+            if($scope.map.markers[i].id === id) return $scope.map.markers[i];
+        }
+    };
+
     $scope.init = function (id, mapid) {
 
         $scope.mapid = mapid;
@@ -238,15 +213,29 @@ app.controller('cymeriad.controller.chronicle.editmap', ['$scope', '$http', 'loa
                         //$scope.map.ltlg = new google.maps.GLatLng($scope.map.center.latitude,$scope.map.center.longitude);
                         $scope.update = true;
                     }
-                    if(nodes.shapes){
-                        var i = nodes.shapes.length;
-                        while(i--){
-                            var s = nodes.shapes[i];
-                            if(s.type == 'marker'){
-                                $scope.map.markers.push({
-                                    id: s.id,
-                                    coords: {latitude: s.position.A, longitude: s.position.F}
-                                });
+                    if(nodes){
+                        if(nodes.shapes){
+                            var i = nodes.shapes.length;
+                            while(i--){
+                                var s = nodes.shapes[i];
+                                if(s.type == 'marker'){
+                                    $scope.map.markers.push({
+                                        id: s.id,
+                                        coords: {latitude: s.position.A, longitude: s.position.F},
+                                        opts: {labelContent: 'a label', labelStyle: {opacity: 1, textAlign: "center", fontSize: "12pt", width: "50px", color: "#000000"}},
+                                        labeltext: s.label,
+                                        color: s.color,
+                                        events: {
+                                            click: function(e){
+                                                var m = findMarker(this.idKey);
+                                                $scope.selectedShape = m;
+                                                $scope.selectedColor = m.color;
+                                                $scope.selectedLabelContent = m.opts.labelContent;
+                                            }
+                                        }
+                                    });
+
+                                }
                             }
                         }
                     }

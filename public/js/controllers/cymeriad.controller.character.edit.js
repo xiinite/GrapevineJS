@@ -41,6 +41,7 @@ app.controller('cymeriad.controller.character.edit', ['$scope', '$window', '$htt
     $scope.sects = [];
     $scope.social = [];
     $scope.ssocial = {};
+    $scope.snote = "";
 
     $scope.sbloodbond = {};
 
@@ -94,7 +95,7 @@ app.controller('cymeriad.controller.character.edit', ['$scope', '$window', '$htt
             $scope.setItemDirty("conscience", $scope.character.conscience);
             $scope.setItemDirty("selfcontrol", $scope.character.selfcontrol);
         }
-    }
+    };
 
     $scope.addTrait = function(value, list, select){
         if(value.length === undefined) return;
@@ -127,15 +128,34 @@ app.controller('cymeriad.controller.character.edit', ['$scope', '$window', '$htt
         $scope.setItemDirty("attributes." + select, list);
     };
 
+    $scope.addNote = function(value){
+        if(value.length === undefined) return;
+        $scope.character.notes.push({note: value});
+        $scope.character.notes = orderBy($scope.character.notes, 'note', false);
+
+        $scope.setItemDirty("notes", $scope.character.notes);
+    };
+
+    $scope.removeNote = function(value){
+        var result = $.grep($scope.character.notes, function(e){ return e.name == value; });
+        var attr = result[0];
+        $scope.character.notes.splice($.inArray(attr, $scope.character.notes),1);
+
+        $scope.setItemDirty("notes", $scope.character.notes);
+    };
+
     $scope.addAdvantage = function(value, notevalue, list, listname, select){
         if(value.length === undefined) return;
         var result = $.grep(list, function(e){ return e.name == value; });
         var multitrack = false;
         if(angular.element(event.currentTarget).hasClass('btn-sm'))
         {
-            $scope[listname].filter(function(element, index, array){
-                if(element.name == value && element.multitrack){ multitrack = true; }
-            });
+            if($scope[listname])
+            {
+                $scope[listname].filter(function(element, index, array){
+                    if(element.name == value && element.multitrack){ multitrack = true; }
+                });
+            }
         }
         if(result.length === 0) {
             list.push({name: value, note: notevalue, rating: 1});

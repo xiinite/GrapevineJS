@@ -99,6 +99,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-12 voffset3">
+                        <div class="col-md-4">
+                            <div><b>Haven:</b> <%= character.haven %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -396,7 +404,7 @@
                         <ul class="list-group">
                             <% for(var i = 0; i < character.notes.length; i++) { %>
                             <li class="list-group-item">
-                                <%= character.notes[i].value %>
+                                <%= character.notes[i].note %>
                             </li>
                             <% } %>
                         </ul>

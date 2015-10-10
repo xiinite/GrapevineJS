@@ -196,6 +196,18 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-12 voffset3">
+                        <div class="col-md-4">
+                            <div class="form-group row">
+                                <label class="col-md-6"><b>Haven:</b></label>
+                                <input type="text" class="col-md-6 nopadding" ng-model="character.haven"
+                                       data-field="haven"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -810,6 +822,28 @@
                                 </select>
                             </div>
                             <button ng-click="addAdvantage(sequipment, '', character.equipment, 'equiptment', 'equipment')"
+                                    class="btn btn-default btn-sm pull-right">Add
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <ul class="list-group">
+                            <li class="list-group-item active">Notes
+                            </li>
+                            <li ng-repeat="m in character.notes" class="list-group-item">
+                                {{ m.note }}
+                                <button ng-click="removeNote(m)"
+                                        class="btn btn-xs pull-right"><span
+                                            class="glyphicon glyphicon-minus"></span></button>
+                            </li>
+                        </ul>
+                        <div class="row voffset3">
+                            <div class="col-md-9">
+                                <input type='text' id="slc-note" class="form-control"
+                                       placeholder="Add note"
+                                       ng-model="snote"/>
+                            </div>
+                            <button ng-click="addNote(snote)"
                                     class="btn btn-default btn-sm pull-right">Add
                             </button>
                         </div>

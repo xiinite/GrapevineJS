@@ -17,7 +17,8 @@
                 <ui-gmap-search-box template="searchbox.template" events="searchbox.events"></ui-gmap-search-box>
                 <ui-gmap-drawing-manager control="drawingManagerControl" events="drawevents" shapes="shapes">
                 </ui-gmap-drawing-manager>
-                <ui-gmap-marker ng-repeat="m in map.markers" coords="m.coords" idkey="m.id"></ui-gmap-marker>
+                <ui-gmap-marker ng-repeat="m in map.markers" options="m.opts" coords="m.coords" events="m.events" idkey="m.id">
+                </ui-gmap-marker>
             </ui-gmap-google-map>
         </div>
 

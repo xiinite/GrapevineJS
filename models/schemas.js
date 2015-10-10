@@ -75,6 +75,7 @@ module.exports = {
             rating: Number
         },
         aura: {type: Number},
+        haven: {type: String},
         attributes: {
             physical: [attr],
             tphysical: Number,
