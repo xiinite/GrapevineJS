@@ -30,9 +30,9 @@ app.use(sess(
         secret: 'cymeriadsecret',
         resave: false,
         saveUninitialized: false,
-        cookie: {secure: false, maxAge: 1000*60*60*24},
-        maxAge: new Date(Date.now() + 1000*60*60*24),
-        expires : new Date(Date.now() + 1000*60*60*24),
+        cookie: {secure: false, maxAge: 1000*60*60*24*365},
+        maxAge: new Date(Date.now() + 1000*60*60*24*365),
+        expires : new Date(Date.now() + 1000*60*60*24*365),
         store: new MongoStore({'db': 'sessions', mongooseConnection: mongoose.connection})
     }
 ));
