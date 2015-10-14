@@ -218,7 +218,7 @@ module.exports = {
                     return;
                 }
                 if(err) return next(new Error(err));
-
+                out.chronicleName = result[0].name;
                 mapmodel.find({"chronicle": req.params.id}, function (err, result) {
                     if(result.length > 0){
                         out.mapid = result[0].id;
@@ -244,7 +244,14 @@ module.exports = {
     'showmap': function(req, res){
         if (req.params.id) {
             var out = {user: req.user, chronicleid: req.params.id};
-            res.render(ViewTemplatePath + "/showmap", out);
+            mapmodel.find({"chronicle": req.params.id}, function (err, result) {
+                if(result.length > 0){
+                    out.mapid = result[0].id;
+                    res.render(ViewTemplatePath + "/showmap", out);
+                }else{
+                    res.render(ViewTemplatePath + "/nomap", out);
+                }
+            });
         }
     },
     'getmap': function(req, res, next){

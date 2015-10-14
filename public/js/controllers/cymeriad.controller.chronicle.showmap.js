@@ -6,7 +6,7 @@ app.config(function(uiGmapGoogleMapApiProvider) {
         libraries: 'drawing,places,weather,geometry,visualization'
     });
 });
-app.controller('cymeriad.controller.chronicle.editmap', ['$scope', '$http', 'loading', 'ngToast', function ($scope, $http, loading, ngToast) {
+app.controller('cymeriad.controller.chronicle.showmap', ['$scope', '$http', 'loading', 'ngToast', function ($scope, $http, loading, ngToast) {
     var events = {
         places_changed: function (searchBox) {
             var places = searchBox.getPlaces();
@@ -61,35 +61,6 @@ app.controller('cymeriad.controller.chronicle.editmap', ['$scope', '$http', 'loa
 
                 $scope.$apply();
             }
-        }
-    };
-    $scope.drawevents = {
-        overlaycomplete: function(manager, e) {
-            var map = $scope.gmap.getGMap();
-            var lastShape = $scope.shapes.getLastShape();
-            lastShape.color = "#FFFFFF";
-
-            var shapes = $scope.shapes.getShapes();
-            var i = shapes.length;
-            while(i--){
-                shapes[i].set('strokeColor', "#000000")
-            }
-            lastShape.set('strokeColor', '#FFFFFF');
-            var position = {};
-            var offset = {};
-            if(lastShape.type === 'marker'){
-                position = lastShape.getPosition();
-                addMarker(Date.now(), {latitude: lastShape.position.A, longitude: lastShape.position.F}, 'New Label', "#FFFFFF");
-            }else{
-                /*var bounds = new google.maps.LatLngBounds();
-                for (i = 0; i < lastShape.getPath().getArray().length; i++) {
-                    bounds.extend(lastShape.getPath().getArray()[i]);
-                }
-                position = bounds.getCenter();*/
-                addPolygon(Date.now(), lastShape.getPath().getArray(), 'New Label', '#FFFFFF');
-            }
-            lastShape.setMap(null);
-
         }
     };
 
@@ -176,79 +147,6 @@ app.controller('cymeriad.controller.chronicle.editmap', ['$scope', '$http', 'loa
         while(i--){
             if($scope.map.polygons[i].path === obj.path) return $scope.map.polygons[i];
         }
-    };
-
-    $scope.setLabel = function(){
-        $scope.selectedShape.opts.labelContent = ($scope.selectedLabelContent);
-        $scope.selectedShape.labeltext =($scope.selectedLabelContent);
-    };
-    $scope.setColor = function(){
-        $scope.selectedShape.color = $scope.selectedColor;
-        if($scope.selectedShape.type === 'polygon'){
-            $scope.selectedShape.stroke.color = $scope.selectedColor;
-            $scope.selectedShape.fill.color = $scope.selectedColor;
-        }
-    };
-
-    $scope.deleteShape = function(){
-        if(!$scope.selectedShape) return;
-        if($scope.selectedShape.type === 'marker'){
-            $scope.map.markers.splice($scope.map.markers.indexOf($scope.selectedShape), 1);
-        }else if($scope.selectedShape.type === 'polygon'){
-            $scope.map.polygons.splice($scope.map.polygons.indexOf($scope.selectedShape), 1);
-        }
-
-        $scope.selectedShape = null;
-        $scope.selectedColor = "#FFFFFF";
-        $scope.selectedLabelContent = "";
-    };
-
-    $scope.save = function(){
-        var saving = ngToast.create({
-            className: 'info',
-            content: 'Saving...',
-            timeout: 2000
-        });
-
-        var config = {
-          latitude: $scope.map.center.latitude,
-          longitude: $scope.map.center.longitude,
-          zoom: $scope.map.zoom
-        };
-
-        var nodes = {shapes: []};
-        var i = $scope.map.markers.length;
-        while(i--){
-            var s = $scope.map.markers[i];
-            nodes.shapes.push({
-                id: s.id,
-                position: s.coords,
-                label: s.labeltext,
-                color: s.color,
-                type: s.type
-            });
-        }
-
-        i = $scope.map.polygons.length;
-        while(i--){
-            var s = $scope.map.polygons[i];
-            nodes.shapes.push({
-                id: s.id,
-                path: s.path,
-                label: s.labeltext,
-                color: s.color,
-                type: s.type
-            });
-        }
-
-        $http.post("/chronicle/updatemap", {id: $scope.mapid, nodes: nodes, config: config}).then(function(){
-            ngToast.dismiss(saving);
-            ngToast.create({
-                className: 'success',
-                content: 'Saved!',
-                timeout: 2000
-            });
-        });
     };
 
     $scope.init = function (id, mapid) {

@@ -1,5 +1,39 @@
 <%- layout("../layout.ejs") %>
 <%- partial('./scripts') %>
-<div class="container">
-    <h1>Show Map</h1>
+<script type="text/javascript" src="/js/controllers/cymeriad.controller.chronicle.showmap.js"></script>
+<div id="content" class="container-fluid" ng-app="cymeriad.app.chronicle" ng-controller="cymeriad.controller.chronicle.showmap" data-ng-init="init('<%= chronicleid %>', '<%= mapid %>')">
+    <script type="text/ng-template" id="searchbox.tpl.html">
+        <input type="text" placeholder="Lookup location">
+    </script>
+    <div class="row voffset1">
+        <div class="col-lg-9">
+            <ui-gmap-google-map control="gmap" center='map.center' events="mapevents" zoom='map.zoom' bounds="map.bounds">
+                <ui-gmap-search-box template="searchbox.template" events="searchbox.events"></ui-gmap-search-box>
+                <ui-gmap-marker ng-repeat="m in map.markers" options="m.opts" coords="m.coords" events="m.events" idkey="m.id">
+                </ui-gmap-marker>
+                <ui-gmap-polygon static="true" ng-repeat="p in map.polygons track by p.id" path="p.path" idKey="p.id" stroke="p.stroke" visible="p.visible"
+                                 geodesic="p.geodesic" fill="p.fill" fit="false" editable="p.editable" draggable="p.draggable"
+                                 options="p.opts" events="p.events"></ui-gmap-polygon>
+            </ui-gmap-google-map>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="row">
+                <div class="panel panel-primary" ng-show="map.polygons.length > 0">
+                    <div class="panel-body panel">
+                        <ul class="list-group">
+                            <li class="list-group-item list-group-item-heading">Areas</li>
+                            <li class="list-group-item clickable" ng-repeat="p in map.polygons" ng-click="selectPolygon(p)">
+                                <span ng-show="p === selectedShape" class="fa fa-chevron-right"></span>
+                                <svg width="20" height="20">
+                                    <rect width="300" height="100" ng-style="{'fill': p.color}" style="stroke-width:3;stroke:rgb(0,0,0)" />
+                                </svg>
+                                {{p.labeltext}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
