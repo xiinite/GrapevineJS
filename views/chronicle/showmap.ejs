@@ -3,7 +3,7 @@
 <script type="text/javascript" src="/js/controllers/cymeriad.controller.chronicle.showmap.js"></script>
 <div id="content" class="container-fluid" ng-app="cymeriad.app.chronicle" ng-controller="cymeriad.controller.chronicle.showmap" data-ng-init="init('<%= chronicleid %>', '<%= mapid %>')">
     <script type="text/ng-template" id="searchbox.tpl.html">
-        <input type="text" placeholder="Lookup location">
+        <input type="text" width="250px" placeholder="Lookup location">
     </script>
     <div class="row voffset1">
         <div class="col-lg-9">
@@ -23,7 +23,7 @@
                     <div class="panel-body panel">
                         <ul class="list-group">
                             <li class="list-group-item list-group-item-heading">Areas</li>
-                            <li class="list-group-item clickable" ng-repeat="p in map.polygons" ng-click="selectPolygon(p)">
+                            <li class="list-group-item clickable" ng-repeat="p in map.polygons | orderBy:'labeltext'" ng-click="selectPolygon(p)">
                                 <span ng-show="p === selectedShape" class="fa fa-chevron-right"></span>
                                 <svg width="20" height="20">
                                     <rect width="300" height="100" ng-style="{'fill': p.color}" style="stroke-width:3;stroke:rgb(0,0,0)" />
