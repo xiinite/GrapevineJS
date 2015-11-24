@@ -26,7 +26,7 @@ module.exports = {
     'update': function(req, res, next){
         if (req.body.event.id) {
             model.find({"id": req.body.event.id}, function (err, result) {
-                if (!sec.checkAdmin(req, next, result[0].id)) {
+                if (!sec.checkAdmin(req, next, result[0].chronicleid)) {
                     return;
                 }
                 if(err) return next(new Error(err));
@@ -68,7 +68,7 @@ module.exports = {
             model.find({id: {$in: req.body.ids}}, function(err, result){
                 if (err) return next(new Error(err));
                 for(var i =0; i<result.length; i++){
-                    if (!sec.checkAdmin(req, next, result[i])) {
+                    if (!sec.checkAdmin(req, next, result[i].chronicleid)) {
                         return;
                     }
 

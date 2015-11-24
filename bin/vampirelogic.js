@@ -224,7 +224,7 @@ module.exports = {
                 influence.rating++;
                 if (influence.rating > 5) influence.rating == 5;
             } else {
-                character.influence.push({name: name, note: "", rating: 1});
+                character.influences.push({name: name, note: "", rating: 1});
             }
         };
         var addBackground = function (name) {

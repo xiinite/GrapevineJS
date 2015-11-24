@@ -33,13 +33,14 @@ app.controller('cymeriad.controller.chronicle.showmap', ['$scope', '$http', 'loa
     $scope.gmap= {};
     $scope.mapid = '';
     $scope.chronicle = {};
-    $scope.map = { center: { latitude: 0, longitude: 0 }, zoom: 1, markers: [], polygons: []};
+    $scope.map = { center: { latitude: 0, longitude: 0 }, zoom: 1, markers: [], polygons: [], windows: []};
     $scope.searchbox = { template:'searchbox.tpl.html', events:events};
     $scope.lastObj = {};
     $scope.drawingManagerControl = {};
     $scope.shapes = {};
     $scope.selectedShape = null;
     $scope.selectedLabelContent = {};
+    $scope.highlitedGroup = null;
     $scope.selectedColor = '#FF0000';
     $scope.$watch('selectedColor', function(val) {});
     $scope.update = false;
@@ -80,6 +81,7 @@ app.controller('cymeriad.controller.chronicle.showmap', ['$scope', '$http', 'loa
                         $scope.selectedShape = m;
                         $scope.selectedColor = null;
                         $scope.selectedLabelContent = m.opts.labelContent;
+                        $scope.highlitedGroup = null;
                     }
                 }
             });
@@ -88,13 +90,32 @@ app.controller('cymeriad.controller.chronicle.showmap', ['$scope', '$http', 'loa
         }
     };
 
-    var addPolygon = function(id, path, label, color){
+    var calcCenter = function(path){
+        var x1 =path[0].latitude, x2 =path[0].latitude, y1 =path[0].longitude, y2 = path[0].longitude;
+        for (var i = 0; i < path.length; i++) {
+            x1 = Math.min(x1, path[i].latitude);
+            x2 = Math.max(x2, path[i].latitude);
+            y1 = Math.min(y1, path[i].longitude);
+            y2 = Math.max(y2, path[i].longitude);
+        }
+
+        var center = {};
+        center.latitude = x1 + ((x2 - x1) / 2);
+        center.longitude = y1 + ((y2 - y1) / 2);
+        return center;
+    };
+
+    var addPolygon = function(id, path, label, color, group){
         try{
+            if(!group) group = "";
+
+            var center = calcCenter(path);
             $scope.map.polygons.push({
                 id: id,
                 path: path,
                 type: 'polygon',
                 color: color,
+                group: group,
                 labeltext: label,
                 stroke: {
                     color: color,
@@ -109,6 +130,8 @@ app.controller('cymeriad.controller.chronicle.showmap', ['$scope', '$http', 'loa
                     opacity: 0.25
                 },
                 opts: {labelContent: label, labelStyle: {opacity: 1, textAlign: "center", fontSize: "12pt", width: "50px", color: "#000000"}},
+                windowOpts: {visible: false},
+                windowCoords: center,
                 events: {
                     click: function(gPolygon, event, obj){
                         $scope.selectPolygon(obj);
@@ -124,15 +147,44 @@ app.controller('cymeriad.controller.chronicle.showmap', ['$scope', '$http', 'loa
         var m = $scope.findPolygon(polygon);
         setOpacities();
         $scope.selectedShape = m;
+        $scope.selectedShape.windowOpts.visible = true;
         $scope.selectedShape.fill.opacity = 0.8;
+        $scope.selectedShape.stroke.color = '#000';
+        $scope.selectedShape.stroke.weight = 4;
         $scope.selectedColor = m.color;
         $scope.selectedLabelContent = m.labeltext;
+        $scope.highlitedGroup = null;
+    };
+
+    $scope.closeClick = function(polygon) {
+        polygon.windowOpts.visible = false;
+    };
+
+    $scope.highlightGroup = function(group){
+        setOpacities();
+        $scope.selectedShape = null;
+        $scope.selectedColor = null;
+        $scope.selectedLabelContent = null;
+        $scope.selectedGroup = null;
+        $scope.highlitedGroup = group;
+
+        var i = $scope.map.polygons.length;
+        while(i--){
+            if($scope.map.polygons[i].group === group){
+                $scope.map.polygons[i].fill.opacity = 0.8;
+                $scope.map.polygons[i].stroke.color = '#000';
+                $scope.map.polygons[i].stroke.weight = 4;
+            }
+        }
     };
 
     var setOpacities = function(){
         var i = $scope.map.polygons.length;
         while(i--){
+            $scope.map.polygons[i].stroke.color = $scope.map.polygons[i].color;
             $scope.map.polygons[i].fill.opacity = 0.25;
+            $scope.map.polygons[i].stroke.weight = 2;
+            $scope.map.polygons[i].windowOpts.visible = false;
         }
     };
 
@@ -179,7 +231,7 @@ app.controller('cymeriad.controller.chronicle.showmap', ['$scope', '$http', 'loa
                                         if(s.path[pi].A !== undefined && s.path[pi].F !== undefined)
                                             s.path[pi] = {latitude: s.path[pi].A, longitude: s.path[pi].F};
                                     }
-                                    addPolygon(s.id, s.path, s.label, s.color);
+                                    addPolygon(s.id, s.path, s.label, s.color, s.group);
                                 }
                             }
                         }
