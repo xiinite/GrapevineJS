@@ -256,6 +256,10 @@ textarea.vertical{
         color: #000;
     }
 
+    li {
+        min-height: 12px;
+    }
+
     @page {
         size: auto;   /* auto is the current printer page size */
         margin: 10mm 15mm 10mm 15mm;  /* this affects the margin in the printer settings */
