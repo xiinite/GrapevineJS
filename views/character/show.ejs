@@ -240,7 +240,7 @@
                                     <% count = character.bloodpool.current; while(count--){ %>O<%}%>
                                 </span>
                                 <span class="pull-right clickable">
-                                    <% count = Math.max(character.bloodpool.max - character.bloodpool.current, 1); while(count--){ %>&Oslash;<%}%>
+                                    <% count = Math.max(character.bloodpool.max - character.bloodpool.current, 0); while(count--){ %>&Oslash;<%}%>
                                 </span>
                             </div>
                             <div><b>Willpower (total):</b> <%= character.willpower.current %>
@@ -249,7 +249,7 @@
                                     <% count = character.willpower.current; while(count--){ %>O<%}%>
                                 </span>
                                 <span class="pull-right clickable">
-                                    <% count = Math.max(character.willpower.max - character.willpower.current, 1); while(count--){ %>&Oslash;<%}%>
+                                    <% count = Math.max(character.willpower.max - character.willpower.current, 0); while(count--){ %>&Oslash;<%}%>
                                 </span>
                             </div>
                         </div>
@@ -582,7 +582,7 @@
                                 <li class="list-group-item active"><%= character.bloodbonds.length %> Blood Bonds</li>
                                 <% for(var i = 0; i < character.bloodbonds.length; i++) { %>
                                 <li class="list-group-item">
-                                    <%= character.bloodbonds[i].character %> 
+                                    <%= character.bloodbonds[i].character %>
                                     (<%= character.bloodbonds[i].level %>)
 									<% if(character.bloodbonds[i].note){ %>
 										- <%=character.bloodbonds[i].note %>
