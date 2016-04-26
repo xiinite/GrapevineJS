@@ -150,7 +150,7 @@ module.exports = {
         });
     },
     'submittedCharacters': function(req, res, next){
-        characterModel.find({googleId: req.user.googleId, state: {$in: ["Active"]}}, function (err, result) {
+        characterModel.find({googleId: req.user.googleId}, function (err, result) {
             if (err) return next(new Error(err));
             var characterids = result.map(function(item){
                 return item.id;

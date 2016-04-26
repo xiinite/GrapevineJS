@@ -18,6 +18,7 @@ app.controller('cymeriad.controller.event.edit', ['$scope', '$http', 'loading', 
     };
 
     $scope.addAttendee = function(){
+        if(findPlayer($scope.attendee.selected.googleId)) return;
         $scope.event.players.push($scope.attendee.selected);
     };
 
@@ -27,15 +28,30 @@ app.controller('cymeriad.controller.event.edit', ['$scope', '$http', 'loading', 
 
     $scope.addChar = function(char){
         if($scope.event.characters === undefined) $scope.event.characters = [];
+        if(findChar(char.name)) return;
         $scope.event.characters.push(
             {name: char.name, id: char.id, googleId: char.googleId, chronicle: char.chronicle.id}
         );
+        $scope.save();
     };
 
     $scope.removeChar = function(item){
-        $scope.event.characters.splice($.inArray(item, $scope.event.characters),1)
+        $scope.event.characters.splice($.inArray(item, $scope.event.characters),1);
+        $scope.save();
     };
 
+    var findChar = function(name){
+        var i = $scope.event.characters.length;
+        while(i--){
+            if($scope.event.characters[i].name == name) return $scope.event.characters[i];
+        }
+    };
+    var findPlayer = function(googleId){
+        var i = $scope.event.players.length;
+        while(i--){
+            if($scope.event.players[i].googleId == googleId) return $scope.event.players[i];
+        }
+    };
     $scope.save = function(){
         var saving = ngToast.create({
             className: 'info',
@@ -51,7 +67,7 @@ app.controller('cymeriad.controller.event.edit', ['$scope', '$http', 'loading', 
                     content: 'Saved!',
                     timeout: 2000
                 });
-                $scope.init($scope.event.id);
+                //$scope.init($scope.event.id);
             }
             else{
                 ngToast.dismiss(saving);

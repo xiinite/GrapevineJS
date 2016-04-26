@@ -57,7 +57,8 @@ module.exports = {
                     user: req.user,
                     event: event
                 };
-                return res.render(ViewTemplatePath + "/edit", out);
+                return res.redirect('/event/edit/' + event.id);
+                //return res.render(ViewTemplatePath + "/edit", out);
             });
         }else{
             return next(new Error("forbidden"));
