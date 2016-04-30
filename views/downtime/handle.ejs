@@ -110,6 +110,20 @@
                                         </span>
                                     </td>
                                 </tr>
+                                <tr ng-repeat="ac in findAssistsByPlayer(action.targetBackground, action.target)">
+                                    <td>Assisted by</td>
+                                    <td>{{ac.assister}}: {{ac.name.replace('Action', '')}} (
+                                    <span ng-show="ac.name.indexOf('Action') > -1">
+                                        {{findBackgroundValue(findCharacter(ac.characterid), ac.name.replace('Action', ''))}}
+                                    </span>
+                                    <span ng-show="ac.name.indexOf('Action') === -1">
+                                        {{findInfluenceValue(findCharacter(ac.characterid),ac.name)}}
+                                    </span>
+                                        )
+                                        <a class="btn btn-default pull-right badge" target="_blank"
+                                           ng-href="/character/show/{{ac.characterid}}">View character</a>
+                                    </td>
+                                </tr>
                                 <tr ng-show="action.order">
                                     <td class="col-xs-3">Order</td>
                                     <td>{{action.order}}</td>
@@ -162,10 +176,10 @@
                                         Total traits: 
                                     </td>
                                     <td>
-                                        <span>{{getTotalTraits(action, action.dt)}}</span>
+                                        <span>{{action.totalValue}}</span>
                                     </td>
                                 </tr>
-                                <tr ng-repeat="ac in findAssists(action.dt, action.name)">
+                                <tr ng-repeat="ac in findAssists(findDowntime(action.dt), action.name)">
                                     <td>Assisted by</td>
                                     <td>{{ac.assister}}: {{ac.name.replace('Action', '')}} (
                                     <span ng-show="ac.name.indexOf('Action') > -1">
@@ -673,7 +687,7 @@
                                         Total traits: 
                                     </td>
                                     <td>
-                                        <span>{{getTotalTraits(action, action.dt)}}</span>
+                                        <span>{{action.totalValue}}</span>
                                     </td>
                                 </tr>
                                 <tr ng-repeat="ac in findAssists(findDowntime(action.dt), action.name)">

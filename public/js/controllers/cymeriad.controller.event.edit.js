@@ -12,6 +12,24 @@ app.controller('cymeriad.controller.event.edit', ['$scope', '$http', 'loading', 
         return false
     };
 
+    $scope.renderStatus = function(status){
+        var i = status.length;
+        var abiding = 0;
+        var fleeting = 0;
+        while(i--){
+            var s = status[i];
+            if(s.statustype == "fleeting"){
+                fleeting++;
+            }
+            if(s.statustype == "abiding"){
+                if(s.name != "Acknowledged"){
+                    abiding++;
+                }
+            }
+        }
+        return "Sf: " + fleeting + ", Sa: " + abiding;
+    };
+
     $scope.updateSelectedChronicle = function(){
         $scope.players = $filter('filter')($scope.chronicles, $scope.event.chronicleid)[0].playerDocs;
         $scope.characters = $filter('filter')($scope.chronicles, $scope.event.chronicleid)[0].characters;
@@ -30,7 +48,12 @@ app.controller('cymeriad.controller.event.edit', ['$scope', '$http', 'loading', 
         if($scope.event.characters === undefined) $scope.event.characters = [];
         if(findChar(char.name)) return;
         $scope.event.characters.push(
-            {name: char.name, id: char.id, googleId: char.googleId, chronicle: char.chronicle.id}
+            {
+                name: char.name, id: char.id,
+                googleId: char.googleId,
+                chronicle: char.chronicle.id,
+                willpower: char.willpower, status: char.status
+            }
         );
         $scope.save();
     };
@@ -116,3 +139,18 @@ app.controller('cymeriad.controller.event.edit', ['$scope', '$http', 'loading', 
 
     };
 }]);
+
+app.directive('tooltip', function(){
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs){
+            $(element).hover(function(){
+                // on mouseenter
+                $(element).tooltip('show');
+            }, function(){
+                // on mouseleave
+                $(element).tooltip('hide');
+            });
+        }
+    };
+});

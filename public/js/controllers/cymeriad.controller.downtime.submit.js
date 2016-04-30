@@ -115,8 +115,8 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', '$moda
             case "Meet other character":
                 return false;
         }
-        if(action.test) return false;
-        return true;
+        return !action.test;
+
     };
     $scope.showCharacter = function(action){
         if(action === undefined) return false;

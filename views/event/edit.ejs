@@ -92,10 +92,10 @@
             <div class="row">
                 <ul class="list-group">
                     <li class="list-group-item list-group-item-heading">
-                        Attending characters
+                        Attending characters (Willpower, Status Fleeting, Status Abiding)
                     </li>
                     <li class="list-group-item" ng-repeat="c in event.characters | orderBy : 'name'">
-                        {{c.name}}
+                        {{c.name}} (WP:{{c.willpower.current}}, {{renderStatus(c.status)}})
                         <button ng-click="removeChar(c)" class="btn btn-xs pull-right"><span
                                     class="glyphicon glyphicon-minus"></span></button>
                     </li>

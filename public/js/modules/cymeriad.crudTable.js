@@ -104,7 +104,7 @@ angular.module('cymeriad.crudTable', ['cymeriad.services']).directive('crudtable
                 $scope.init = function () {
                     $scope.itemtype = $attrs.table;
                     $scope.columns = $attrs.columns.split('|');
-                    $scope.sort = $attrs.sort;
+                    $scope.sort.sortingOrder = $attrs.sort;
                     loading.show();
                     var root = $scope;
                     if($attrs.data === undefined)

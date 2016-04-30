@@ -56,9 +56,9 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
         }
     }
     $scope.showTotalTraits = function(action){
-        if(action.name.indexOf("playerAction") > -1) return false;
-        return true;
-    }    
+        return action.name.indexOf("playerAction") <= -1;
+
+    };
     $scope.getTotalTraits = function(action, downtime){
         if(downtime === undefined) return "?";
         if(action.name.indexOf("playerAction") > -1) return "?";
@@ -208,6 +208,34 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
         var character = $scope.findCharacter(downtime.characterid);
         if(character === undefined) return false;
         var ac = downtime.actions[bg];
+        var assists = [];
+        while(i--){
+            var dt = $scope.downtimes[i];
+            for(var a in dt.actions){
+                var action = dt.actions[a];
+                if(action.targetBackground === ac.name && action.action === 'Assist' && action.target !== undefined && action.targetBackground !== undefined){
+                    if( action.target === character.name){
+                        var assister = $scope.findCharacter(dt.characterid);
+                        action.assister = assister.name;
+                        action.characterid = dt.characterid;
+                        assists.push(action)
+                    }
+                }
+            }
+        }
+        if(assists.length > 0){
+            return assists;
+        }
+    };
+
+    $scope.findAssistsByPlayer = function(bgname, charname){
+        var character = $scope.findCharacterByName(charname);
+        if(character === undefined) return false;
+        var dt = $scope.findDowntimeByCharacter(character.id);
+        if(dt === undefined) return false;
+
+        var i = $scope.downtimes.length;
+        var ac = dt.actions[bgname];
         var assists = [];
         while(i--){
             var dt = $scope.downtimes[i];
@@ -385,6 +413,8 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
                     var ac = downtimes[i].actions[prop];
                     if(ac){
                         ac.dt = (downtimes[i])._id;
+                        ac.name = prop;
+                        ac.totalValue = $scope.getTotalTraits(ac, downtimes[i]);
                         arr.push(ac);
                     }
                 }
