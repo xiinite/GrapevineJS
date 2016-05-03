@@ -133,12 +133,12 @@
                                     <td>
                                         <div class="col-xs12 col-md-6" >
                                             <div>
-                                                Player: 
+                                                Player:
                                                 <span ng-class="getTestresultIconClass(action.test)"></span>
                                                 {{action.test}}
                                             </div>
                                             <div ng-show='action.testresult'>
-                                                Server: 
+                                                Server:
                                                 <span ng-show='action.testresult' ng-class="getTestresultIconClass(action.testresult)"></span>
                                                 <span ng-show='action.testresult'>{{action.testresult}}</span>
                                             </div>
@@ -173,7 +173,7 @@
                                 </tr>
                                 <tr ng-show="showTotalTraits(action)">
                                     <td>
-                                        Total traits: 
+                                        Total traits:
                                     </td>
                                     <td>
                                         <span>{{action.totalValue}}</span>
@@ -260,6 +260,21 @@
                         </div>
                     </div>
 
+                    <h2>XP Spending</h2>
+
+                    <div class="row">
+                        <div class="col-sm-12" ng-show="downtime.actions.xp">
+                            <div class="col-sm-3" ng-show="downtime.actions.xp">Description:</div>
+                            <div class="col-sm-9" ng-show="downtime.actions.xp">{{downtime.actions.xp.description}}</div>
+                            <div class="col-sm-3">Feedback:</div>
+                            <div class="col-sm-9">
+                                <textarea class="form-control" rows="5"
+                                          ng-model="downtime.actions.xp.response">
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+
                     <h2>Actions</h2>
 
                     <div class="row" ng-repeat="(key, value) in downtime.actions"
@@ -292,6 +307,10 @@
                                     <td class="col-xs-3">Other players active here:</td>
                                     <td>{{getPlayersInLocation(downtime.characterid, value.location)}}</td>
                                 </tr>
+                                <tr ng-show="value.feedingtype">
+                                    <td class="col-xs-3">Feeding Type (humanity/harvest/doom)</td>
+                                    <td>{{value.feedingtype.type}} ({{value.feedingtype.humanity}}/{{value.feedingtype.harvest}}/{{value.feedingtype.doom}})</td>
+                                </tr>
                                 <tr ng-show="value.description">
                                     <td class="col-xs-3">Description</td>
                                     <td>{{value.description}}</td>
@@ -309,12 +328,12 @@
                                     <td>
                                         <div class="col-xs12 col-md-6" >
                                             <div>
-                                                Player: 
+                                                Player:
                                                 <span ng-class="getTestresultIconClass(value.test)"></span>
                                                 {{value.test}}
                                             </div>
                                             <div ng-show='value.testresult'>
-                                                Server: 
+                                                Server:
                                                 <span ng-show='value.testresult' ng-class="getTestresultIconClass(value.testresult)"></span>
                                                 <span ng-show='value.testresult'>{{value.testresult}}</span>
                                             </div>
@@ -349,7 +368,7 @@
                                 </tr>
                                 <tr ng-show="showTotalTraits(value)">
                                     <td>
-                                        Total traits: 
+                                        Total traits:
                                     </td>
                                     <td>
                                         <span>{{getTotalTraits(value, downtime)}}</span>
@@ -425,12 +444,12 @@
                                     <td>
                                         <div class="col-xs12 col-md-6" >
                                             <div>
-                                                Player: 
+                                                Player:
                                                 <span ng-class="getTestresultIconClass(value.test)"></span>
                                                 {{value.test}}
                                             </div>
                                             <div ng-show='value.testresult'>
-                                                Server: 
+                                                Server:
                                                 <span ng-show='value.testresult' ng-class="getTestresultIconClass(value.testresult)"></span>
                                                 <span ng-show='value.testresult'>{{value.testresult}}</span>
                                             </div>
@@ -465,7 +484,7 @@
                                 </tr>
                                 <tr ng-show="showTotalTraits(value)">
                                     <td>
-                                        Total traits: 
+                                        Total traits:
                                     </td>
                                     <td>
                                         <span>{{getTotalTraits(value, downtime)}}</span>
@@ -644,12 +663,12 @@
                                     <td>
                                         <div class="col-xs12 col-md-6" >
                                             <div>
-                                                Player: 
+                                                Player:
                                                 <span ng-class="getTestresultIconClass(action.test)"></span>
                                                 {{action.test}}
                                             </div>
                                             <div ng-show='action.testresult'>
-                                                Server: 
+                                                Server:
                                                 <span ng-show='action.testresult' ng-class="getTestresultIconClass(action.testresult)"></span>
                                                 <span ng-show='action.testresult'>{{action.testresult}}</span>
                                             </div>
@@ -684,7 +703,7 @@
                                 </tr>
                                 <tr ng-show="showTotalTraits(action)">
                                     <td>
-                                        Total traits: 
+                                        Total traits:
                                     </td>
                                     <td>
                                         <span>{{action.totalValue}}</span>

@@ -18,6 +18,16 @@
         </div>
     </div>
 
+    <h4>XP Spending</h4>
+    <div class="row">
+        <div class="col-sm-12" ng-show="downtime.actions.xp">
+            <div class="col-sm-3">Description: </div>
+            <div class="col-sm-9">{{downtime.actions.xp.description}}</div>
+            <div class="col-sm-3">Storyteller feedback: </div>
+            <div class="col-sm-9">{{downtime.actions.xp.response}}</div>
+        </div>
+    </div>
+
     <h4>Actions</h4>
     <div class="row" ng-repeat="(key, value) in downtime.actions" ng-if="key.indexOf('Action') > -1">
         <div class="col-sm-12">
@@ -36,6 +46,9 @@
                 </tr>
                 <tr ng-show="value.location">
                     <td class="col-xs-3">Location</td><td>{{value.location}}</td>
+                </tr>
+                <tr ng-show="value.feedingtype">
+                    <td class="col-xs-3">Feeding type</td><td>{{value.feedingtype.type}} ({{value.feedingtype.humanity}}/{{value.feedingtype.harvest}}/{{value.feedingtype.doom}})</td>
                 </tr>
                 <tr ng-show="value.description">
                     <td class="col-xs-3">Description</td><td>{{value.description}}</td>

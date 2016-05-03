@@ -18,6 +18,7 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', '$moda
     $scope.retainerActions = [];
     $scope.locations = [];
     $scope.bloodgrounds = [];
+    $scope.feedingtypes = [];
     $scope.influences = { "wealth": [], "dominion": [], "public": []};
     $scope.targetbackgrounds = ["Contacts", "Allies", "Resources"];
 
@@ -290,6 +291,9 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', '$moda
                 resources.influenceSpheres.get(function(data){
                     root.influences = data;
                 }),
+                resources.feedingtypes.get(function(data){
+                    root.feedingtypes = data;
+                }),
                 $http.get("/downtime/findPeriod/" + id).then(function (response) {
                     root.period = response.data[0];
                     root.period.openFrom = new Date(root.period.openFrom);
@@ -305,6 +309,7 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', '$moda
                 $scope.targetbackgrounds = $scope.targetbackgrounds.concat(root.influences.public);
                 $scope.actions.previousSessionRating = {};
                 $scope.actions.previousSessionRating.rating = 3;
+                $scope.actions.xp = {};
                 $http.get("/character/allByPlayer/" + root.period.chronicleId).then(function (response) {
                     root.characters = response.data;
                     root.allcharacters = angular.copy(root.characters);

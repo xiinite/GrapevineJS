@@ -85,6 +85,9 @@ angular.module('cymeriad.resources', ['ngResource', 'ngRoute', 'ngTouch', 'ngSan
             }),
             influenceSpheres: $resource('/resource/Nachtkronieken/influences.json', {}, {
                 get: {method: 'GET', params: {}, isArray: false}
+            }),
+            feedingtypes: $resource('/resource/Nachtkronieken/FeedingTypes.json', {}, {
+                get: {method: 'GET', params: {}, isArray: true}
             })
         }
     });

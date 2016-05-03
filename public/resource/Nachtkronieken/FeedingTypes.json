@@ -1,0 +1,32 @@
+[
+  {
+    "type": "Animals",
+    "humanity": "0",
+    "harvest": "-3",
+    "doom": "-2"
+  },
+  {
+    "type": "Gently",
+    "humanity": "0",
+    "harvest": "-1",
+    "doom": "-1"
+  },
+  {
+    "type": "Normal",
+    "humanity": "4",
+    "harvest": "0",
+    "doom": "0"
+  },
+  {
+    "type": "Rough",
+    "humanity": "3",
+    "harvest": "1",
+    "doom": "1"
+  },
+  {
+    "type": "Brutal",
+    "humanity": "2",
+    "harvest": "3",
+    "doom": "3"
+  }
+]
