@@ -1,31 +1,122 @@
 [
-  "Regentschap Sint-Niklaas",
-  "Regentschap Mechelen",
-  "Regentschap Turnhout",
-  "Berchem",
-  "Borgerhout",
-  "Brederode",
-  "Dam",
-  "De Haven",
-  "Deurne",
-  "Diamant",
-  "Eilandje",
-  "Ekeren",
-  "Hoboken",
-  "Kiel",
-  "Linkeroever",
-  "Luchtbal",
-  "Merksem",
-  "Merode",
-  "Oude Stad",
-  "Park",
-  "Quartier Latin",
-  "Schipperskwartier",
-  "Seefhoek",
-  "Sint-Andries",
-  "Sint-Jan",
-  "Wilrijk",
-  "Zuid",
-  "Zurenborg",
-  "Other"
+  {
+    "name": "Aalst",
+    "harvest": "3",
+    "doom": "2"
+  },
+  {
+    "name": "Antwerpen",
+    "harvest": "5",
+    "doom": "2"
+  },
+  {
+    "name": "Brugge",
+    "harvest": "4",
+    "doom": "3"
+  },
+  {
+    "name": "Brussel",
+    "harvest": "5",
+    "doom": "4"
+  },
+  {
+    "name": "Dendermonde",
+    "harvest": "2",
+    "doom": "3"
+  },
+  {
+    "name": "Diksmuide",
+    "harvest": "1",
+    "doom": "1"
+  },
+  {
+    "name": "Eeklo",
+    "harvest": "2",
+    "doom": "1"
+  },
+  {
+    "name": "Gent",
+    "harvest": "5",
+    "doom": "4"
+  },
+  {
+    "name": "Hasselt",
+    "harvest": "4",
+    "doom": "2"
+  },
+  {
+    "name": "Ieper",
+    "harvest": "2",
+    "doom": "2"
+  },
+  {
+    "name": "Kortrijk",
+    "harvest": "2",
+    "doom": "3"
+  },
+  {
+    "name": "Leuven",
+    "harvest": "5",
+    "doom": "1"
+  },
+  {
+    "name": "Maaseik",
+    "harvest": "1",
+    "doom": "1"
+  },
+  {
+    "name": "Mechelen",
+    "harvest": "4",
+    "doom": "4"
+  },
+  {
+    "name": "Oostende",
+    "harvest": "3",
+    "doom": "3"
+  },
+  {
+    "name": "Oudenaarde",
+    "harvest": "2",
+    "doom": "2"
+  },
+  {
+    "name": "Roeselare",
+    "harvest": "1",
+    "doom": "2"
+  },
+  {
+    "name": "Sint-Niklaas",
+    "harvest": "3",
+    "doom": "1"
+  },
+
+  {
+    "name": "Tielt",
+    "harvest": "2",
+    "doom": "1"
+  },
+
+  {
+    "name": "Tongeren",
+    "harvest": "3",
+    "doom": "4"
+  },
+
+  {
+    "name": "Turnhout",
+    "harvest": "5",
+    "doom": "5"
+  },
+
+  {
+    "name": "Veurne",
+    "harvest": "1",
+    "doom": "1"
+  },
+
+  {
+    "name": "Vilvoorde",
+    "harvest": "4",
+    "doom": "4"
+  }
 ]

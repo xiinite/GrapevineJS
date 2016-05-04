@@ -1,5 +1,5 @@
 "use strict";
-app.controller('cymeriad.controller.downtime.handle', ['$scope', '$http', 'loading', '$q', 'ngToast', 'truerandom', '$timeout', 
+app.controller('cymeriad.controller.downtime.handle', ['$scope', '$http', 'loading', '$q', 'ngToast', 'truerandom', '$timeout',
 function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
     $scope.downtimes = [];
     $scope.characters = {};
@@ -8,14 +8,14 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
 
     $scope.getRandomRPC = function(action){
             action.testresult = "loading";
-                    
+
             truerandom.getRand(1, 1, 3).then(function (data) {
                 console.log(data.data.result.random.data[0]);
                 if(data.data.result.random.data.length > 0){
                     switch(data.data.result.random.data[0]){
                         case 1:
                             $timeout(function(){action.testresult = "rock";});
-                            
+
                             return;
                         case 2:
                             $timeout(function(){action.testresult = "paper";});
@@ -35,9 +35,9 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
                 });
                 console.log("Failed random.org request response:")
                 console.log(response);
-            });        
+            });
     };
-    
+
     $scope.getResultClass = function(action){
         if(!action.testresult) return "";
         switch(action.testresult){
@@ -63,17 +63,17 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
         if(downtime === undefined) return "?";
         if(action.name.indexOf("playerAction") > -1) return "?";
         var assists = $scope.findAssists(downtime, action.name);
-                        
+
         var total = 0;
         if(action.name.indexOf("Action") > -1){
             total = $scope.findBackgroundValueNumeric($scope.findCharacter(downtime.characterid), action.name.replace('Action',''))
         }else{
             total = $scope.findInfluenceValue($scope.findCharacter(downtime.characterid),action.name);
-        }  
-            
+        }
+
         if(assists){
             var i = assists.length;
-            
+
             while(i--){
                 var ac = assists[i];
                 var acval = 0;
@@ -87,11 +87,11 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
         }
         return total;
     }
-    
+
     $scope.getPlayersInLocation = function(characterid, location){
         var character = $scope.findCharacter(characterid);
         if(character === undefined) return false;
-        
+
         var i = $scope.downtimes.length;
         var players = "";
         while(i--){
@@ -102,16 +102,16 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
                 if(action.location == location){
                     var char = $scope.findCharacter(dt.characterid);
                     if(players.indexOf(char.name) === -1){
-                        players = players + char.name + ", ";
+                        players = players + char.name + "(" + action.action + "), ";
                     }
                 }
             }
         }
-        
+
         if(players.length === 0) return "None";
         return players;
     }
-    
+
     $scope.getTestresultIconClass = function(testresult){
         if(testresult === "loading"){
             return "fa fa-circle-o-notch fa-spin";
@@ -120,7 +120,7 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
             return 'fa fa-hand-' + testresult + '-o';
         }
     }
-    
+
     $scope.findCharacter = function(id){
         var i = $scope.characters.length;
         while(i--){
@@ -331,7 +331,7 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
         }
         return 0;
     };
-    
+
     $scope.findInfluenceValue = function(character, name){
         if(character === undefined) return 0;
         var result = $.grep(character.influences, function(e){ return e.name == name });

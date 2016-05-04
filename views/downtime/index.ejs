@@ -44,7 +44,7 @@
             </div>
             <div class="panel-body">
                 <ul class="list-group">
-                    <li ng-repeat="dt in submittedperiods | orderBy : 'openFrom'" class="list-group-item">
+                    <li ng-repeat="dt in submittedperiods | orderBy : 'period.openFrom'" class="list-group-item">
                         <b>{{findChronicleName(dt.period.chronicleId)}}</b>, {{dt.character.name}}: {{dt.period.openFrom | date : 'dd-MM-yyyy'}} - {{dt.period.openTo | date : 'dd-MM-yyyy'}}
                         <a class="btn btn-sm btn-default pull-right" ng-href="{{'/downtime/review/' + dt.id}}"><span class="glyphicon glyphicon-search"></span></a>
                     </li>

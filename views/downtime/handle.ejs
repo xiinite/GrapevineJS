@@ -299,9 +299,13 @@
                                     <td class="col-xs-3">Action</td>
                                     <td>{{value.action}}</td>
                                 </tr>
-                                <tr ng-show="value.location">
+                                <tr ng-show="value.location && !value.feedingtype">
                                     <td class="col-xs-3">Location</td>
                                     <td>{{value.location}}</td>
+                                </tr>
+                                <tr ng-show="value.location && value.feedingtype">
+                                    <td class="col-xs-3">Location</td>
+                                    <td>{{value.location.name}} (harvest: {{value.location.harvest}}, doom: {{value.location.doom}})</td>
                                 </tr>
                                 <tr ng-show="value.location">
                                     <td class="col-xs-3">Other players active here:</td>
@@ -309,7 +313,7 @@
                                 </tr>
                                 <tr ng-show="value.feedingtype">
                                     <td class="col-xs-3">Feeding Type (humanity/harvest/doom)</td>
-                                    <td>{{value.feedingtype.type}} ({{value.feedingtype.humanity}}/{{value.feedingtype.harvest}}/{{value.feedingtype.doom}})</td>
+                                    <td>{{value.feedingtype.type}} (humanity: {{value.feedingtype.humanity}}, harvest: {{value.feedingtype.harvest}}, doom: {{value.feedingtype.doom}})</td>
                                 </tr>
                                 <tr ng-show="value.description">
                                     <td class="col-xs-3">Description</td>

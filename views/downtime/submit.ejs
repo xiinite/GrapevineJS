@@ -135,7 +135,7 @@
                                     <span class="col-sm-3">Location:</span>
                                     <span class="col-sm-9">
                                         <select class="form-control"
-                                                ng-options="location for location in bloodgrounds"
+                                                ng-options="location as location.name + ' (harvest: ' + location.harvest + ', doom: ' + location.doom + ')' for location in bloodgrounds"
                                                 ng-model="actions.playerAction1.location"
                                                 ng-required="isBloodgroundRequired(actions.playerActions1)">
                                             <option style="display:none" value="">Select a location</option>
@@ -147,7 +147,7 @@
                                     <span class="col-sm-3">Feeding Type:</span>
                                     <span class="col-sm-9">
                                         <select class="form-control"
-                                                ng-options="t as t.type for t in feedingtypes"
+                                                ng-options="t as t.type + ' (harvest: ' + t.harvest + ', doom: ' + t.doom + ')' for t in feedingtypes"
                                                 ng-model="actions.playerAction1.feedingtype"
                                                 ng-required="isBloodgroundRequired(actions.playerActions1)">
                                             <option style="display:none" value="">Select feeding type</option>
@@ -222,7 +222,7 @@
                                     <span class="col-sm-3">Bloodground:</span>
                                     <span class="col-sm-9">
                                         <select class="form-control"
-                                                ng-options="location for location in bloodgrounds"
+                                                ng-options="location as location.name + ' (harvest: ' + location.harvest + ', doom: ' + location.doom + ')' for location in bloodgrounds"
                                                 ng-model="actions.playerAction2.location"
                                                 ng-required="isBloodgroundRequired(actions.playerActions2)">
                                             <option style="display:none" value="">Select a location</option>
@@ -230,11 +230,11 @@
                                     </span>
                                 </div>
 
-                                <div class="row" ng-show="isBloodgroundRequired(actions.playerActions2)">
+                                <div class="row" ng-show="isBloodgroundRequired(actions.playerAction2)">
                                     <span class="col-sm-3">Feeding Type:</span>
                                     <span class="col-sm-9">
                                         <select class="form-control"
-                                                ng-options="t as t.type for t in feedingtypes"
+                                                ng-options="t as t.type + ' (harvest: ' + t.harvest + ', doom: ' + t.doom + ')' for t in feedingtypes"
                                                 ng-model="actions.playerAction2.feedingtype"
                                                 ng-required="isBloodgroundRequired(actions.playerActions2)">
                                             <option style="display:none" value="">Select feeding type</option>
