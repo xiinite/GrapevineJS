@@ -643,20 +643,35 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
           type: 'ok',
           css: {color: "blue"}
         }
-        var result = $scope.bagofdoom[getRandom(1, $scope.bagofdoom.length) - 1];
+        var rnd = getRandom(1, $scope.bagofdoom.length) - 1;
+        var result = $scope.bagofdoom[rnd];
+        $scope.bagofdoom.splice(rnd, 1);
         switch(result){
           case 1:
+            trait.type = "ok";
             trait.css = {color: "red"};
             break;
           case 2:
-            trait.css = {color: "blue"};
+            trait.type = "minor event";
+            trait.css = {color: "darkblue"};
             break;
           case 3:
+            trait.type = "major event";
+            trait.css = {color: "lightblue"};
+            break;
+          case 4:
+            trait.type = "death level";
             trait.css = {color: "white"};
+            break;
+          case 5:
+            trait.type = "worst case";
+            trait.css = {color: "hotpink"};
             break;
         }
         action.doomtraits.push(trait);
+
       }
+      fillbag();
       return;
     }
 
@@ -666,17 +681,25 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
 
     $scope.parseInt = parseInt;
     var fillbag = function(){
-      var i = 100;
+      var i = 80;
       while(i--){
         $scope.bagofdoom.push(1);
       }
-      i = 20;
+      i = 10;
       while(i--){
         $scope.bagofdoom.push(2);
       }
-      i = 2;
+      i = 7;
       while(i--){
         $scope.bagofdoom.push(3);
+      }
+      i = 2;
+      while(i--){
+        $scope.bagofdoom.push(4);
+      }
+      i = 1;
+      while(i--){
+        $scope.bagofdoom.push(5);
       }
     }
     $scope.bagofdoom = [];

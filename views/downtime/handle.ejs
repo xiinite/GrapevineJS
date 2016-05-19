@@ -335,7 +335,7 @@
                                   <td class="col-xs-3">Draw doom</td>
                                   <td>
                                       <button class="btn btn-default" ng-click="drawDoom(value, parseInt(value.location.doom) + parseInt(value.feedingtype.doom) + getTotalFeeders(downtime.characterid, value.location.name))">Draw</button>
-                                      <br /><span class="glyphicon glyphicon glyphicon-record" ng-style="trait.css" ng-repeat="trait in value.doomtraits"></span>
+                                      <br /><span class="glyphicon glyphicon glyphicon-record" ng-attr-title="{{trait.type}}" ng-style="trait.css" ng-repeat="trait in value.doomtraits"></span>
                                   </td>
                                 </tr>
                                 <tr ng-show="value.description && (value.action !== 'No action' || value.action !== 'Relax')">
