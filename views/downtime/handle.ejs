@@ -8,8 +8,8 @@
     <div class="hidden-sm hidden-xs hidden-md col-lg-3" id="sidebar" role="navigation">
 
             <ul class="nav nav-pills nav-stacked">
-                <li ng-class="{active: isActive(-2)}">
-                    <a class="clickable" ng-click="setActive(-2)">
+                <li ng-class="{active: isActive('destroys')}" ng-show="hasDestroys()">
+                    <a class="clickable" ng-click="setActive('destroys')">
                         Destroys
                     </a>
                 </li>
@@ -23,9 +23,14 @@
                         </div>
                     </a>
                 </li>
-                <li ng-class="{active: isActive(-3)}">
-                    <a class="clickable" ng-click="setActive(-3)">
+                <li ng-class="{active: isActive('grows')}" ng-show="hasGrows()">
+                    <a class="clickable" ng-click="setActive('grows')">
                         Grows
+                    </a>
+                </li>
+                <li ng-class="{active: isActive('feedings')}">
+                    <a class="clickable" ng-click="setActive('feedings')">
+                        Feeding report
                     </a>
                 </li>
             </ul>
@@ -56,18 +61,18 @@
 
         <!-- AUTORESOLVABLE DESTROY-->
         <div class="col-lg-12">
-            <div class="row" ng-show="isActive(-2)" ng-class="getDirection()" ng-swipe-disable-mouse ng-swipe-left="previous()"
+            <div class="row" ng-show="isActive('destroys')" ng-class="getDirection()" ng-swipe-disable-mouse ng-swipe-left="previous()"
                  ng-swipe-right="next()">
                 <h1>Destroys:</h1>
                 <div ng-repeat="action in flatten(downtimes)" ng-if="action.action === 'Destroy'">
-                    <div >
+                    <div>
                         <div class="row">
 
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
                                     <th colspan="2">
-                                        <h4 class="uppercase">{{findCharacter(findDowntime(action.dt).characterid).name}} -
+                                        <h4 class="uppercase">{{action.charactername}} -
                                             {{findCharacter(findDowntime(action.dt).characterid).player.displayName}}</h4>
                                     </th>
                                 </tr>
@@ -111,7 +116,7 @@
                                     </td>
                                 </tr>
                                 <tr ng-repeat="ac in findAssistsByPlayer(action.targetBackground, action.target)">
-                                    <td>Assisted by</td>
+                                    <td>Pooled with</td>
                                     <td>{{ac.assister}}: {{ac.name.replace('Action', '')}} (
                                     <span ng-show="ac.name.indexOf('Action') > -1">
                                         {{findBackgroundValue(findCharacter(ac.characterid), ac.name.replace('Action', ''))}}
@@ -206,6 +211,7 @@
                                     <td>Response <small>(optional)</small>:</td>
                                     <td>
                                     <textarea class="form-control" rows="5"
+                                              ng-model-options="{ updateOn: 'blur' }"
                                               ng-model="action.response">
                                     </textarea>
                                     </td>
@@ -254,21 +260,23 @@
                             <div class="col-sm-3">Feedback:</div>
                             <div class="col-sm-9">
                                 <textarea class="form-control" rows="5"
+                                          ng-model-options="{ updateOn: 'blur' }"
                                           ng-model="downtime.actions.previousSessionRating.response">
                                 </textarea>
                             </div>
                         </div>
                     </div>
 
-                    <h2>XP Spending</h2>
+                    <h2 ng-show="downtime.actions.xp">XP Spending</h2>
 
-                    <div class="row">
-                        <div class="col-sm-12" ng-show="downtime.actions.xp">
+                    <div class="row" ng-show="downtime.actions.xp">
+                        <div class="col-sm-12">
                             <div class="col-sm-3" ng-show="downtime.actions.xp">Description:</div>
                             <div class="col-sm-9" ng-show="downtime.actions.xp">{{downtime.actions.xp.description}}</div>
                             <div class="col-sm-3">Feedback:</div>
                             <div class="col-sm-9">
                                 <textarea class="form-control" rows="5"
+                                          ng-model-options="{ updateOn: 'blur' }"
                                           ng-model="downtime.actions.xp.response">
                                 </textarea>
                             </div>
@@ -278,7 +286,7 @@
                     <h2>Actions</h2>
 
                     <div class="row" ng-repeat="(key, value) in downtime.actions"
-                         ng-if="key.indexOf('Action') > -1 && value.action !== 'Assist'">
+                         ng-if="key.indexOf('Action') > -1 && value.action !== 'Assist' && key !== 'xp'">
                         <div class="col-sm-12">
                             <table class="table table-striped">
                                 <thead>
@@ -315,7 +323,22 @@
                                     <td class="col-xs-3">Feeding Type (humanity/harvest/doom)</td>
                                     <td>{{value.feedingtype.type}} (humanity: {{value.feedingtype.humanity}}, harvest: {{value.feedingtype.harvest}}, doom: {{value.feedingtype.doom}})</td>
                                 </tr>
-                                <tr ng-show="value.description">
+                                <tr ng-show="value.feedingtype">
+                                  <td class="col-xs-3">Total Doom</td>
+                                  <td>{{parseInt(value.location.doom) + parseInt(value.feedingtype.doom) + getTotalFeeders(downtime.characterid, value.location.name)}}
+                                    ({{value.location.doom}}
+                                    + {{value.feedingtype.doom}}
+                                    + {{getTotalFeeders(downtime.characterid, value.location.name)}})
+                                  </td>
+                                </tr>
+                                <tr ng-show="value.feedingtype">
+                                  <td class="col-xs-3">Draw doom</td>
+                                  <td>
+                                      <button class="btn btn-default" ng-click="drawDoom(value, parseInt(value.location.doom) + parseInt(value.feedingtype.doom) + getTotalFeeders(downtime.characterid, value.location.name))">Draw</button>
+                                      <br /><span class="glyphicon glyphicon glyphicon-record" ng-style="trait.css" ng-repeat="trait in value.doomtraits"></span>
+                                  </td>
+                                </tr>
+                                <tr ng-show="value.description && (value.action !== 'No action' || value.action !== 'Relax')">
                                     <td class="col-xs-3">Description</td>
                                     <td>{{value.description}}</td>
                                 </tr>
@@ -392,10 +415,11 @@
                                            ng-href="/character/show/{{ac.characterid}}">View character</a>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr ng-show="value.action !== 'No action' && value.action !== 'Relax (no action)'">
                                     <td>Response:</td>
                                     <td>
                                     <textarea class="form-control" rows="5"
+                                              ng-model-options="{ updateOn: 'blur' }"
                                               ng-model="value.response">
                                     </textarea>
                                     </td>
@@ -409,7 +433,7 @@
                     <h2 ng-show="hasInfluences(downtime)">Influences</h2>
 
                     <div class="row" ng-repeat="(key, value) in downtime.actions"
-                         ng-if="key.indexOf('Action') === -1 && key.indexOf('Rating') == -1 && value.action !== 'Assist'&& value.action !== 'Grow'&& value.action !== 'Destroy'">
+                         ng-if="key.indexOf('Action') === -1 && key !== 'xp' && key.indexOf('Rating') == -1 && value.action !== 'Assist'&& value.action !== 'Grow'&& value.action !== 'Destroy'">
                         <div class="col-sm-12">
                             <table class="table table-striped">
                                 <thead>
@@ -431,7 +455,7 @@
                                     <td class="col-xs-3">Other players active here:</td>
                                     <td>{{getPlayersInLocation(downtime.characterid, value.location)}}</td>
                                 </tr>
-                                <tr ng-show="value.description">
+                                <tr ng-show="value.description && value.action !== 'No action'">
                                     <td class="col-xs-3">Description</td>
                                     <td>{{value.description}}</td>
                                 </tr>
@@ -508,10 +532,11 @@
                                            ng-href="/character/show/{{ac.characterid}}">View character</a>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr ng-show="value.action !== 'No action'">
                                     <td>Response:</td>
                                     <td>
                                     <textarea class="form-control" rows="5"
+                                              ng-model-options="{ updateOn: 'blur' }"
                                               ng-model="value.response">
                                     </textarea>
                                     </td>
@@ -609,7 +634,7 @@
 
         <!-- AUTORESOLVABLE GROW-->
         <div class="col-lg-12">
-            <div class="row" ng-show="isActive(-3)" ng-class="getDirection()" ng-swipe-disable-mouse ng-swipe-left="previous()"
+            <div class="row" ng-show="isActive('grows')" ng-class="getDirection()" ng-swipe-disable-mouse ng-swipe-left="previous()"
                  ng-swipe-right="next()">
                 <h1>Grows:</h1>
                 <div ng-repeat="action in flatten(downtimes)" ng-if="action.action === 'Grow'">
@@ -620,7 +645,7 @@
                                 <thead>
                                 <tr>
                                     <th colspan="2">
-                                        <h4 class="uppercase">{{findCharacter(findDowntime(action.dt).characterid).name}} -
+                                        <h4 class="uppercase">{{action.charactername}} -
                                             {{findCharacter(findDowntime(action.dt).characterid).player.displayName}}</h4>
                                     </th>
                                 </tr>
@@ -740,6 +765,7 @@
                                     <td>Response <small>(optional)</small>:</td>
                                     <td>
                                     <textarea class="form-control" rows="5"
+                                              ng-model-options="{ updateOn: 'blur' }"
                                               ng-model="action.response">
                                     </textarea>
                                     </td>
@@ -755,6 +781,33 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- RAPPORT FEEDING -->
+        <div class="col-lg-12">
+              <div class="row" ng-show="isActive('feedings')" ng-class="getDirection()" ng-swipe-disable-mouse ng-swipe-left="previous()"
+                   ng-swipe-right="next()">
+                  <h1>Feeding:</h1>
+                  <table class="table table-striped">
+                    <tr>
+                      <th>Name</th>
+                      <th>Location</th>
+                      <th>Type</th>
+                      <th>Doom</th>
+                      <th>Harvest</th>
+                    </tr>
+                    <tr ng-repeat="action in flatten(downtimes) | orderBy: 'charactername'" ng-if="action.action === 'Feed'">
+                      <td>{{action.charactername}}</td>
+                      <td>{{action.location.name}}</td>
+                      <td>{{action.feedingtype.type}}</td>
+                      <td>{{parseInt(action.location.doom) + parseInt(action.feedingtype.doom) + getTotalFeeders(findDowntime(action.dt).characterid, action.location.name)}}
+                        ({{action.location.doom}}
+                        + {{action.feedingtype.doom}}
+                        + {{getTotalFeeders(findDowntime(action.dt).characterid, action.location.name)}})</td>
+                      <td>{{parseInt(action.location.harvest) + parseInt(action.feedingtype.harvest)}} ({{action.location.harvest}} + {{action.feedingtype.harvest}})</td>
+                    </tr>
+                  </table>
+              </div>
         </div>
     </div>
 </div>

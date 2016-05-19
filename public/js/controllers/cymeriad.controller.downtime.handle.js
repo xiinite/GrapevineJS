@@ -4,7 +4,7 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
     $scope.downtimes = [];
     $scope.characters = {};
     $scope.period = {};
-    $scope.active;
+    $scope.active = {};
 
     $scope.getRandomRPC = function(action){
             action.testresult = "loading";
@@ -91,7 +91,13 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
     $scope.getPlayersInLocation = function(characterid, location){
         var character = $scope.findCharacter(characterid);
         if(character === undefined) return false;
-
+        if(location === undefined) return false;
+        var loc = "";
+        if(location.name !== undefined){
+          loc = loc.name;
+        }else{
+          loc = location;
+        }
         var i = $scope.downtimes.length;
         var players = "";
         while(i--){
@@ -99,7 +105,8 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
             if(dt.characterid == characterid) continue;
             for(var a in dt.actions){
                 var action = dt.actions[a];
-                if(action.location == location){
+                if(action.location === undefined) continue;
+                if(action.location === loc || action.location.name === loc){
                     var char = $scope.findCharacter(dt.characterid);
                     if(players.indexOf(char.name) === -1){
                         players = players + char.name + "(" + action.action + "), ";
@@ -342,50 +349,75 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
     };
 
     $scope.isActive = function(downtime){
-        if(downtime === -2) return $scope.active === -2;
-        if(downtime === -3) return $scope.active === -3;
-        return downtime.id === $scope.active;
+        if(downtime === 'destroys') return $scope.active.current === downtime;
+        if(downtime === 'grows') return $scope.active.current === downtime;
+        if(downtime === 'feedings') return $scope.active.current === downtime;
+        return downtime.id === $scope.active.current;
     };
 
     $scope.next = function(){
         $scope.direction = 'right';
-        if($scope.active === -2){
-            $scope.active = $scope.downtimes[0].id;
+        if($scope.active.current === 'destroys'){
+            $scope.active.current = $scope.downtimes[0].id;
             return ;
         }
-        if($scope.active === -3){
-            $scope.active = -2;
+        if($scope.active.current === 'grows'){
+            $scope.active.current = 'feedings';
             return ;
         }
-        var i = $scope.findIndex($scope.active);
+        if($scope.active.current === 'feedings'){
+            if($scope.hasDestroys()){
+                $scope.active.current = 'destroys';
+            }else{
+                $scope.active.current = $scope.downtimes[0].id;
+            }
+            return ;
+        }
+        var i = $scope.findIndex($scope.active.current);
         if(i + 1 == $scope.downtimes.length) {
-            $scope.active = -3;
+            if($scope.hasGrows()){
+                $scope.active.current = 'grows';
+            }else{
+                $scope.active.current = 'feedings';
+            }
             return;
         }
-        $scope.active = $scope.downtimes[i + 1].id;
+        $scope.active.current = $scope.downtimes[i + 1].id;
     };
 
     $scope.previous = function(){
 
         $scope.direction = 'left';
-        if($scope.active === -2){
-            $scope.active = -3;
+        if($scope.active.current === 'destroys'){
+            $scope.active.current = 'feedings';
             return ;
         }
-        if($scope.active === -3){
-            $scope.active = $scope.downtimes[$scope.downtimes.length - 1].id;
+        if($scope.active.current === 'feedings'){
+          if($scope.hasGrows()){
+              $scope.active.current = 'grows';
+          }else{
+              $scope.active.current = $scope.downtimes[$scope.downtimes.length - 1].id;
+          }
             return ;
         }
-        var i = $scope.findIndex($scope.active);
+        if($scope.active.current === 'grows'){
+            $scope.active.current = $scope.downtimes[$scope.downtimes.length - 1].id;
+            return ;
+        }
+        var i = $scope.findIndex($scope.active.current);
         if(i == 0){
-            $scope.active = -2;
+            if($scope.hasDestroys()){
+                $scope.active.current = 'destroys';
+            }else{
+                $scope.active.current = 'feedings';
+            }
             return;
         }
-        $scope.active = $scope.downtimes[i - 1].id;
+        $scope.active.current = $scope.downtimes[i - 1].id;
     };
 
     $scope.setActive = function(id){
-        $scope.active = id;
+        $scope.active.current = id;
     }
 
     $scope.findIndex = function(id){
@@ -416,12 +448,18 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
                         ac.name = prop;
                         ac.totalValue = $scope.getTotalTraits(ac, downtimes[i]);
                         arr.push(ac);
+                        var char = $scope.findCharacter(downtimes[i].characterid);
+                        if(char !== undefined){
+                            ac.charactername = char.name
+                        }else{
+                            ac.charactername = "";
+                        }
                     }
                 }
             }
         }
 
-        return arr.sort(function(a,b){
+        return arr;/*.sort(function(a,b){
             if(a.action === b.action){
                 if(a.target == b.target){
                     if(a.targetBackground == b.targetBackground){
@@ -434,7 +472,7 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
                 }
             }
             return (a.action == 'Grow' ? -1 : 1);
-        });
+        });*/
     };
 
     $scope.updateSave = function(action){
@@ -543,8 +581,104 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
                     return 1;
                 return 0;
             });
-            root.active = -2;
+            if($scope.hasDestroys()){
+              root.active.current = 'destroys';
+            }else if($scope.downtimes.length > 0){
+              root.active.current = $scope.downtimes[0].id;
+            }else{
+              root.active.current = 0;
+            }
+            fillbag();
             loading.hide();
         });
     };
+
+    $scope.hasDestroys = function() {
+      if($scope.downtimes === undefined) return false;
+      if($scope.downtimes.length === 0) return false;
+      return $scope.flatten($scope.downtimes).some(function(element,index,array){
+        if(element === undefined) return false;
+        return element.action === 'Destroy';
+      });
+    };
+
+    $scope.hasGrows = function() {
+      if($scope.downtimes === undefined) return false;
+      if($scope.downtimes.length === 0) return false;
+      return $scope.flatten($scope.downtimes).some(function(element,index,array){
+        if(element === undefined) return false;
+        return element.action === 'Grow';
+      });
+    };
+
+    $scope.feedinglocation = [];
+    $scope.getTotalFeeders = function(charid, location){
+        if($scope.feedinglocation[location] === undefined){
+            $scope.feedinglocation[location] = 0;
+            var val = 0;
+            if($scope.downtimes === undefined) return val;
+            if($scope.downtimes.length === 0) return val;
+            var downtimes = $scope.flatten($scope.downtimes);
+            var i = downtimes.length;
+            val = 1;
+            while(i--){
+              var action = downtimes[i];
+              if(action.action === "Feed" && action.location.name === location){
+                var playerid = $scope.findDowntime(action.dt).characterid;
+                if(charid !== playerid){
+                  val++;
+                }
+              }
+            }
+            $scope.feedinglocation[location] = val;
+        }
+
+        return $scope.feedinglocation[location];
+    }
+
+    $scope.drawDoom = function(action, amount){
+      action.doomtraits = [];
+      while(amount--){
+        var trait = {
+          type: 'ok',
+          css: {color: "blue"}
+        }
+        var result = $scope.bagofdoom[getRandom(1, $scope.bagofdoom.length) - 1];
+        switch(result){
+          case 1:
+            trait.css = {color: "red"};
+            break;
+          case 2:
+            trait.css = {color: "blue"};
+            break;
+          case 3:
+            trait.css = {color: "white"};
+            break;
+        }
+        action.doomtraits.push(trait);
+      }
+      return;
+    }
+
+    var getRandom = function(min, max){
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    $scope.parseInt = parseInt;
+    var fillbag = function(){
+      var i = 100;
+      while(i--){
+        $scope.bagofdoom.push(1);
+      }
+      i = 20;
+      while(i--){
+        $scope.bagofdoom.push(2);
+      }
+      i = 2;
+      while(i--){
+        $scope.bagofdoom.push(3);
+      }
+    }
+    $scope.bagofdoom = [];
+
 }]);
