@@ -58,7 +58,7 @@ function loadNext(collection, index, returnvalue, callback) {
         characters: function (cb) {
             charModel.find({
                 chronicle: c.id
-            }, 'id name chronicle googleId state status willpower', function (err, result) {
+            }, 'id name chronicle clan googleId state status willpower backgrounds flaws merits bloodpool', function (err, result) {
                 cb(err, result);
             });
         },

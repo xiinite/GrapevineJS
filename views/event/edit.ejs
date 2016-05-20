@@ -43,6 +43,19 @@
                     <input class="form-control" ng-model="event.date" type="date" />
                 </div>
             </div>
+            <div class="row voffset1">
+                <div class="col-md-6 col-xs-4">
+                    <label class="control-label">Downtimes:</label>
+                </div>
+                <div class="col-md-6 col-xs-8">
+                    <select class="form-control"
+                            ng-change="updateSelectedDowntime()"
+                            ng-options="downtime as downtime.openFrom + ' - ' + downtime.openTo for downtime in downtimes | orderBy:'-openFrom'"
+                            ng-model="event.selectedDowntime">
+                        <option style="display:none" value="">Select a downtime</option>
+                    </select>
+                </div>
+            </div>
 
             <div class="row voffset1">
                 <div class="col-md-12">
@@ -92,10 +105,10 @@
             <div class="row">
                 <ul class="list-group">
                     <li class="list-group-item list-group-item-heading">
-                        Attending characters (Willpower, Status Fleeting, Status Abiding)
+                        Attending characters (Blood, Willpower, Status Fleeting, Status Abiding)
                     </li>
                     <li class="list-group-item" ng-repeat="c in event.characters | orderBy : 'name'">
-                        {{c.name}} (WP:{{c.willpower.current}}, {{renderStatus(c.status)}})
+                        {{c.name}} (B: {{findFeedingValue(c.name)}},WP:{{c.willpower.current}}, {{renderStatus(c.status)}})
                         <button ng-click="removeChar(c)" class="btn btn-xs pull-right"><span
                                     class="glyphicon glyphicon-minus"></span></button>
                     </li>
@@ -104,6 +117,22 @@
         </div>
         <div class="col-sm-12 voffset3">
             <button class="btn btn-primary" ng-hide="event.xpawarded" data-toggle="modal" data-target="#advXpModal">Award XP</button>
+        </div>
+        <div class="col-sm-12 voffset3">
+          <table class="table table-striped">
+            <tr>
+              <th>Name</th>
+              <th>Location</th>
+              <th>Type</th>
+              <th>Harvest</th>
+            </tr>
+            <tr ng-repeat="action in feedingactions | orderBy: 'charactername'">
+              <td>{{action.charactername}}</td>
+              <td>{{action.location.name}}</td>
+              <td>{{action.feedingtype.type}}</td>
+              <td>{{parseInt(action.location.harvest) + parseInt(action.feedingtype.harvest)}} ({{action.location.harvest}} + {{action.feedingtype.harvest}})</td>
+            </tr>
+          </table>
         </div>
     </div>
     <div id="advXpModal" class="modal fade">
