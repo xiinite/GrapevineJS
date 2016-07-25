@@ -159,6 +159,7 @@
                 <tr>
                     <th width="10px"><input type="checkbox" ng-model="selectedAll" ng-click="checkAll()" /></th>
                     <th class="name" custom-sort order="'name'" sort="sort">Name&nbsp;</th>
+                    <th class="clan" custom-sort order="'clan'" sort="sort">Clan&nbsp;</th>
                     <th class="player" custom-sort order="'player'">Player&nbsp;</th>
                     <th width="20px"></th>
                 </tr>
@@ -190,6 +191,7 @@
                 <tr ng-repeat="item in pagedItems[currentPage] | orderBy:sort.sortingOrder:sort.reverse">
                     <td><input type="checkbox" ng-model="selected[item.id]"></td>
                     <td class="clickable" ng-click="openItem(item.id)">{{item.name}}</td>
+                    <td class="clickable" ng-click="openItem(item.id)">{{item.clan}}</td>
                     <td>{{item.googleId | findPlayer : selectedchronicle.playerDocs}}</td>
                     <td class="clickable"><a class="btn btn-xs btn-primary" target="_blank" ng-href="character/edit/{{item.id}}"><span class="fa fa-edit">&nbsp</span></a></td>
                 </tr>
