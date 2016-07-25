@@ -31,7 +31,7 @@ module.exports = {
     },
     'list': function(where, callback){
         var q = model.find(where);
-        q.select('id name chronicle googleId state');
+        q.select('id name chronicle clan googleId state');
         q.exec(callback);
     },
     'clear': function (callback) {
