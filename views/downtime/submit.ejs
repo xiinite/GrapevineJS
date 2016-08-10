@@ -22,7 +22,7 @@
     </div>
 
     <!-- DOWNTIME FORM -->
-    <div class="col-lg-6">
+    <div class="col-lg-6" ng-hide="spendingXp">
         <form name="downtimeForm" ng-submit="submit()" ng-show="characters.length > 0">
 
             <!-- CHARACTER INFO -->
@@ -84,8 +84,11 @@
                             Spend XP (max: {{character.experience.unspent}}):
                         </div>
                         <div class="panel-body collapse in" id="collapseXP">
+                          <div class="row" ng-hide="true">
+                                <button class="btn btn-default" ng-click="spendXP()">Spend XP</button>
+                          </div>
                             <div class="row">
-                                <span class="col-sm-3">Description: </span>
+                                <span class="col-sm-3">Remarks: </span>
                                     <span class="col-sm-9">
                                     <textarea class="form-control" rows="5" maxlength="1000"
                                               ng-model="actions.xp.description"></textarea>
@@ -835,7 +838,7 @@
     </div>
 
     <!-- CHARACTER SUMMARY -->
-    <div class="col-lg-6 hidden-md hidden-sm hidden-xs" ng-show="scharacter">
+    <div class="col-lg-6" ng-show="scharacter">
 
         <!-- Concept -->
         <div class="panel panel-info">
@@ -888,6 +891,43 @@
             </div>
         </div>
 
+        <!-- Concept -->
+        <div class="panel panel-info" ng-show="spendingXp">
+            <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseCharSummary">
+                Spending XP
+            </div>
+            <div class="panel-body collapse in" id="collapseCharSummary">
+                <div class="col-lg-12">
+                    <div class="row">
+                      <div class="col-lg-6"><b>XP unspent: </b></div>
+                      <div class="col-lg-6"><b>{{character.experience.unspent}}</b></div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-6"><b>XP total: </b></div>
+                      <div class="col-lg-6"><b>{{character.experience.total}}</b></div>
+                    </div>
+                    <div class="row">
+                      <button class="btn btn-primary" ng-click="finishSpendingXP()">Finish spending XP</button>
+                    </div>
+                    <div class="row">
+                      <ul class="list-group">
+                        <li class="list-group-item active">Trait cost</li>
+                        <li class="list-group-item">Attribute: 1 XP</li>
+                        <li class="list-group-item">Ability: 1 XP</li>
+                        <li class="list-group-item">Discipline, basic: 3 XP</li>
+                        <li class="list-group-item">Discipline, intermediate: 6 XP</li>
+                        <li class="list-group-item">Discipline, advanced: 9 XP</li>
+                        <li class="list-group-item">Willpower: 3 XP</li>
+                        <li class="list-group-item">Morality: 2 XP</li>
+                        <li class="list-group-item">Virtue: 3 XP</li>
+                        <li class="list-group-item">Discipline, out of clan: Unsupported. Write in remarks on Downtime form.</li>
+                        <li class="list-group-item">Other: Unsupported. Write in remarks on Downtime form.</li>
+                      </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Attributes -->
         <div class="panel panel-default">
             <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapseCharAttributes">
@@ -908,6 +948,29 @@
                                             </span>
                             </li>
                         </ul>
+                        <div>
+                          <ul class="list-group">
+                            <li class="list-group-item list-group-item-success" ng-repeat="trait in actions.xp.buy['attributes.physical']">
+                              {{ trait.name }}
+                              <span ng-show="trait.val > 1">
+                                  ({{ trait.val }})
+                              </span>
+                              <button class="btn btn-xs btn-default pull-right" ng-click="removeTrait(trait, 'attributes.physical')">-</button>
+                            </li>
+                          </ul>
+                          <div class="row voffset3" ng-show="spendingXp && character.experience.unspent > 0">
+                              <div class="col-md-9">
+                                  <select id="slc-physical" class="form-control"
+                                          ng-options="attr.name as attr.name + '    (' + attr.source + ')' group by attr.category for attr in physical"
+                                          ng-model="sphysical">
+                                      <option style="display:none" value="">Select a trait</option>
+                                  </select>
+                              </div>
+                              <button ng-click="addTrait(sphysical, 'attributes.physical', 1)"
+                                      class="btn btn-default btn-sm pull-right">Add
+                              </button>
+                          </div>
+                        </div>
                     </div>
                     <div class="col-lg-4">
                         <ul class="list-group">
@@ -922,6 +985,29 @@
                                             </span>
                             </li>
                         </ul>
+                        <div>
+                          <ul class="list-group">
+                            <li class="list-group-item list-group-item-success" ng-repeat="trait in actions.xp.buy['attributes.social']">
+                              {{ trait.name }}
+                              <span ng-show="trait.val > 1">
+                                  ({{ trait.val }})
+                              </span>
+                              <button class="btn btn-xs btn-default pull-right" ng-click="removeTrait(trait, 'attributes.social')">-</button>
+                            </li>
+                          </ul>
+                          <div class="row voffset3" ng-show="spendingXp && character.experience.unspent > 0">
+                              <div class="col-md-9">
+                                  <select id="slc-social" class="form-control"
+                                          ng-options="attr.name as attr.name + '    (' + attr.source + ')' group by attr.category for attr in social"
+                                          ng-model="ssocial">
+                                      <option style="display:none" value="">Select a trait</option>
+                                  </select>
+                              </div>
+                              <button ng-click="addTrait(ssocial, 'attributes.social', 1)"
+                                      class="btn btn-default btn-sm pull-right">Add
+                              </button>
+                          </div>
+                        </div>
                     </div>
                     <div class="col-lg-4">
                         <ul class="list-group">
@@ -936,6 +1022,30 @@
                                             </span>
                             </li>
                         </ul>
+
+                        <div>
+                          <ul class="list-group">
+                            <li class="list-group-item list-group-item-success" ng-repeat="trait in actions.xp.buy['attributes.mental']">
+                              {{ trait.name }}
+                              <span ng-show="trait.val > 1">
+                                  ({{ trait.val }})
+                              </span>
+                              <button class="btn btn-xs btn-default pull-right" ng-click="removeTrait(trait, 'attributes.mental')">-</button>
+                            </li>
+                          </ul>
+                          <div class="row voffset3" ng-show="spendingXp && character.experience.unspent > 0">
+                              <div class="col-md-9">
+                                  <select id="slc-mental" class="form-control"
+                                          ng-options="attr.name as attr.name + '    (' + attr.source + ')' group by attr.category for attr in mental"
+                                          ng-model="smental">
+                                      <option style="display:none" value="">Select a trait</option>
+                                  </select>
+                              </div>
+                              <button ng-click="addTrait(smental, 'attributes.mental', 1)"
+                                      class="btn btn-default btn-sm pull-right">Add
+                              </button>
+                          </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
@@ -1008,6 +1118,29 @@
                                     </span>
                             </li>
                         </ul>
+                        <div>
+                          <ul class="list-group">
+                            <li class="list-group-item list-group-item-success" ng-repeat="trait in actions.xp.buy['abilities']">
+                              {{ trait.name }}
+                              <span ng-show="trait.val > 1">
+                                  ({{ trait.val }})
+                              </span>
+                              <button class="btn btn-xs btn-default pull-right" ng-click="removeTrait(trait, 'abilities')">-</button>
+                            </li>
+                          </ul>
+                          <div class="row voffset3" ng-show="spendingXp && character.experience.unspent > 0">
+                              <div class="col-md-9">
+                                  <select id="slc-abilities" class="form-control"
+                                          ng-options="attr.name as attr.name + '    (' + attr.source + ')' group by attr.category for attr in abilities"
+                                          ng-model="sability">
+                                      <option style="display:none" value="">Select a trait</option>
+                                  </select>
+                              </div>
+                              <button ng-click="addTrait(sability, 'abilities', 1)"
+                                      class="btn btn-default btn-sm pull-right">Add
+                              </button>
+                          </div>
+                        </div>
                     </div>
                     <div class="col-lg-4">
                         <ul class="list-group">
@@ -1019,6 +1152,26 @@
                                 {{t.path}}: {{ t.name }} ({{t.level}})
                             </li>
                         </ul>
+                        <div>
+                          <ul class="list-group">
+                            <li class="list-group-item list-group-item-success" ng-repeat="trait in actions.xp.buy['disciplines']">
+                              {{ trait.name.path }}: {{trait.name.name}} ({{trait.name.level}})
+                              <button class="btn btn-xs btn-default pull-right" ng-click="removeTrait(trait, 'disciplines')">-</button>
+                            </li>
+                          </ul>
+                          <div class="row voffset3" ng-show="spendingXp && character.experience.unspent > 0">
+                              <div class="col-md-9">
+                                  <select id="slc-disciplines" class="form-control"
+                                      ng-options="attr as attr.path + ': ' + attr.name for attr in disciplines | isClanDiscipline: [character.clan, clandisciplines, character.disciplines]"
+                                          ng-model="sdiscipline">
+                                      <option style="display:none" value="">Select a trait</option>
+                                  </select>
+                              </div>
+                              <button ng-click="addTrait(sdiscipline, 'disciplines', 3)"
+                                      class="btn btn-default btn-sm pull-right">Add
+                              </button>
+                          </div>
+                        </div>
                     </div>
                     <div class="col-lg-4">
                         <ul class="list-group">

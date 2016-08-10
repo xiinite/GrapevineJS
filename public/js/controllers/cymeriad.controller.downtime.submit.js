@@ -21,6 +21,19 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', '$moda
     $scope.feedingtypes = [];
     $scope.influences = { "wealth": [], "dominion": [], "public": []};
     $scope.targetbackgrounds = ["Contacts", "Allies", "Resources"];
+    $scope.spendingXp = false;
+
+    $scope.physical = [];
+    $scope.sphysical = {};
+    $scope.mental = [];
+    $scope.smental = {};
+    $scope.ssocial = [];
+    $scope.social = {};
+    $scope.abilities = [];
+    $scope.sability = {};
+    $scope.disciplines = [];
+    $scope.sdiscipline = {};
+    $scope.clandisciplines = [];
 
     $scope.$watch(function(scope) { return scope.scharacter },
         function(selected) {
@@ -33,6 +46,45 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', '$moda
             });
         }
     );
+
+    //XP Spending
+    $scope.spendXP = function(){
+      $scope.spendingXp = true;
+    }
+
+    $scope.finishSpendingXP = function(){
+      $scope.spendingXp = false;
+    }
+
+    $scope.addTrait = function(trait, collection, cost){
+      if(!$scope.actions.xp.buy) $scope.actions.xp.buy = [];
+      if(!$scope.actions.xp.buy[collection]) $scope.actions.xp.buy[collection] = [];
+      var list = $scope.actions.xp.buy[collection];
+
+      var result = $.grep(list, function(e){ return e.name == trait; });
+      if(result.length === 0) {
+          list.push({name: trait, val: 1, cost: cost});
+      }else{
+          result[0].val++;
+      }
+
+      $scope.character.experience.unspent -= cost;
+    }
+
+    $scope.removeTrait = function(trait, collection){
+      var list = $scope.actions.xp.buy[collection];
+      var result = $.grep(list, function(e){ return e.name == trait.name; });
+      var attr = result[0];
+
+      if(attr.val == 1){
+          list.splice($.inArray(attr, list),1);
+      }else{
+          attr.val--;
+      }
+
+      $scope.character.experience.unspent += trait.cost;
+    }
+    //END XP Spending
 
     $scope.clearAction = function(action){
         var act = $scope.actions[action].action;
@@ -264,6 +316,24 @@ app.controller('cymeriad.controller.downtime.submit', ['$scope', '$http', '$moda
         loading.show();
         var root = $scope;
         $q.all([
+                resources.clandisciplines.get(function (data) {
+                    root.clandisciplines = data;
+                }),
+                resources.disciplines.get(function(data){
+                    root.disciplines = data;
+                }),
+                resources.abilities.get(function(data){
+                    root.abilities = data;
+                }),
+                resources.physical.get(function(data){
+                    root.physical = data;
+                }),
+                resources.mental.get(function(data){
+                    root.mental = data;
+                }),
+                resources.social.get(function(data){
+                    root.social = data;
+                }),
                 resources.allyActions.get(function(data){
                     root.allyActions = data;
                 }),
@@ -335,5 +405,69 @@ app.controller('ModalInstanceCtrl', function ($scope, $modalInstance, errormessa
 
     $scope.ok = function () {
         $modalInstance.close();
+    };
+});
+
+app.filter('isClanDiscipline', function () {
+
+    return function (items, filter) {
+        var contains = function(a, obj) {
+            var i = a.length;
+            while (i--) {
+                if (a[i].path === obj.path && a[i].name === obj.name) {
+                    return true;
+                }
+            }
+            return false;
+        };
+        var containspath = function(a, obj) {
+            var i = a.length;
+            while (i--) {
+                if(a[i].path === undefined){
+                    if ( obj.path.indexOf(a[i]) > -1 ) {
+                        return true;
+                    }
+                }else{
+                    if (a[i].path === obj.path) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        };
+
+        var clan;
+        var clandisciplines;
+        var currentdisciplines;
+        if(filter !== undefined){
+            clan = filter[0];
+            clandisciplines = filter[1];
+            currentdisciplines = filter[2];
+        }
+        var clanDiscs = [];
+        var clanFound = false;
+        for (var i = 0; i < clandisciplines.length; i++) {
+            if(clandisciplines[i].clan == clan){
+                clanFound = true;
+                for(var j = 0; j< clandisciplines[i].disciplines.length; j++){
+                    clanDiscs.push(clandisciplines[i].disciplines[j]);
+                }
+            }
+        }
+        var arrayToReturn = [];
+        for (var i = 0; i < items.length; i++) {
+            if (clanFound == false) {
+                if(items[i].level == 'basic'){
+                    arrayToReturn.push(items[i]);
+                }
+            } else{
+                if(items[i].level == 'basic' && containspath(clanDiscs, items[i]) && !contains(currentdisciplines, items[i]) && !containspath(arrayToReturn, items[i])){
+                    //
+                    arrayToReturn.push(items[i]);
+                }
+            }
+        }
+
+        return arrayToReturn;
     };
 });
