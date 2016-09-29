@@ -101,13 +101,13 @@ passport.use(new OAuth2Strategy({
                     profile.id = uuid.v4();
                     model.insert(profile, function (err, user) {
 
-                        cmodel.find({"name": "Nachtkronieken"}, function (err, result) {
+                        cmodel.find({"email": "nachtkronieken@gmail.com"}, function (err, result) {
                             if(err) return next(new Error(err));
                             if(result.length == 0) return;
-                            if (result[0].players.indexOf(user.id) == -1) {
-                                result[0].players.push(user.id);
+                            if (result[0].players.indexOf(profile.googleId) == -1) {
+                                result[0].players.push(profile.googleId);
                             }
-                            cmodel.update(result[0].id, {'players': result[0].players}, function (err) {
+                            cmodel.update(result[0].id, {players: result[0].players}, function (err) {
                                 return done(null, user);
                             });
                         });

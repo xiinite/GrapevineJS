@@ -1,6 +1,9 @@
 <% layout("../layout.ejs") %>
 <script type='text/javascript'>
     $(document).ready(function () {
+        $('#btnDelete').click(function(){
+            $.post('../delete', {id: '<%= profile.googleId %>'});
+        });
         $('#btnPromote').click(function () {
             var originalMessage = $('#btnPromote').html();
 
@@ -61,6 +64,10 @@
                                 <button class='btn btn-warning btn-block' id='btnPromote'>Promote to SuperAdmin</button>
                             </div>
                             <% } %>
+
+                            <div>
+                                <button class='btn btn-warning btn-block' id='btnDelete'>Delete</button>
+                            </div>
                         </div>
                         <% } %>
                     </div>

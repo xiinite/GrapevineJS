@@ -27,6 +27,9 @@ module.exports = {
     },
     'update': function (itemid, update, callback) {
         model.update({'googleId': itemid}, update, {multi: false}, callback);
+    },
+    'remove': function(where, callback){
+        model.remove(where, callback);
     }
 };
 

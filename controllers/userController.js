@@ -87,6 +87,17 @@ module.exports = {
             }
         });
     },
+    'delete': function (req, res, next) {
+        if (!sec.checkSU(req, next)) {
+            return;
+        }
+        if (req.body.id) {
+            model.remove({googleId: req.body.id}, function (err) {
+                if (err) return next(new Error(err));
+                res.json("ok");
+            });
+        }
+    },
     'populate': function (req, res, next) {
         if (!sec.checkSU(req, next)) {
             return;
