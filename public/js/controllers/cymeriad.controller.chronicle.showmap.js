@@ -1,8 +1,8 @@
 "use strict";
 app.config(function(uiGmapGoogleMapApiProvider) {
     uiGmapGoogleMapApiProvider.configure({
-        //    key: 'your api key',
-        v: '3.20', //defaults to latest 3.X anyhow
+        key: 'AIzaSyDikVRuax7kvuhRCjzb6clReS7927eU2jY',
+        v: '3.24', //defaults to latest 3.X anyhow
         libraries: 'drawing,places,weather,geometry,visualization'
     });
 });
@@ -57,6 +57,7 @@ app.controller('cymeriad.controller.chronicle.showmap', ['$scope', '$http', 'loa
                     while(i--){
                         var marker = $scope.map.markers[i];
                     }
+
                     $scope.update = false;
                 }
 
@@ -230,6 +231,8 @@ app.controller('cymeriad.controller.chronicle.showmap', ['$scope', '$http', 'loa
                                     while(pi--){
                                         if(s.path[pi].A !== undefined && s.path[pi].F !== undefined)
                                             s.path[pi] = {latitude: s.path[pi].A, longitude: s.path[pi].F};
+                                        if(s.path[pi].lat !== undefined && s.path[pi].lng !== undefined)
+                                            s.path[pi] = {latitude: s.path[pi].lat, longitude: s.path[pi].lng};
                                     }
                                     addPolygon(s.id, s.path, s.label, s.color, s.group);
                                 }

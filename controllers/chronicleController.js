@@ -267,7 +267,7 @@ module.exports = {
     'updatemap': function(req, res, next){
         if (req.body.id) {
             mapmodel.find({"id": req.body.id}, function (err, result) {
-                if (!sec.checkAdmin(req, next, result[0].id)) {
+                if (!sec.checkAdmin(req, next, result[0].chronicle)) {
                     return;
                 }
                 if(err) return next(new Error(err));

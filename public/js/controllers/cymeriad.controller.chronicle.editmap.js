@@ -1,8 +1,8 @@
 "use strict";
 app.config(function(uiGmapGoogleMapApiProvider) {
     uiGmapGoogleMapApiProvider.configure({
-        //    key: 'your api key',
-        v: '3.20', //defaults to latest 3.X anyhow
+        key: 'AIzaSyDikVRuax7kvuhRCjzb6clReS7927eU2jY',
+        v: '3.24', //defaults to latest 3.X anyhow
         libraries: 'drawing,places,weather,geometry,visualization'
     });
 });
@@ -33,6 +33,7 @@ app.controller('cymeriad.controller.chronicle.editmap', ['$scope', '$http', 'loa
     $scope.gmap= {};
     $scope.mapid = '';
     $scope.chronicle = {};
+    $scope.cid = '';
     $scope.map = { center: { latitude: 0, longitude: 0 }, zoom: 1, markers: [], polygons: []};
     $scope.searchbox = { template:'searchbox.tpl.html', events:events};
     $scope.lastObj = {};
@@ -54,6 +55,20 @@ app.controller('cymeriad.controller.chronicle.editmap', ['$scope', '$http', 'loa
                     map.setZoom($scope.map.zoom);
                     map.panTo({lat: $scope.map.center.latitude, lng: $scope.map.center.longitude});
 
+                    var layer = new google.maps.FusionTablesLayer({
+                        query: {
+                            select: '\'col2>>0\'',
+                            from: '1DTPoutko0rTNM_HtF6T3AOWLxiG3_d-1ML3KpTg'
+                        },styles: [{
+                            polygonOptions: {
+                                strokeColor: '#0000FF',
+                                strokeWeight: 0.7,
+                                fillColor: "#000000",
+                                fillOpacity: 0.1
+                            }
+                        }]
+                    });
+                    layer.setMap(map);
                     var i = $scope.map.markers.length;
                     while(i--){
                         var marker = $scope.map.markers[i];
@@ -310,6 +325,7 @@ app.controller('cymeriad.controller.chronicle.editmap', ['$scope', '$http', 'loa
 
     $scope.init = function (id, mapid) {
         $scope.mapid = mapid;
+        $scope.cid = id;
         loading.show();
         var root = $scope;
         $http.get("/chronicle/find/" + id).then(function(response) {
@@ -335,8 +351,13 @@ app.controller('cymeriad.controller.chronicle.editmap', ['$scope', '$http', 'loa
                                 }else if (s.type == 'polygon'){
                                     var pi = s.path.length;
                                     while(pi--){
-                                        if(s.path[pi].A !== undefined && s.path[pi].F !== undefined)
-                                            s.path[pi] = {latitude: s.path[pi].A, longitude: s.path[pi].F};
+                                        if(s.path[pi] != null){
+
+                                            if(s.path[pi].A !== undefined && s.path[pi].F !== undefined)
+                                                s.path[pi] = {latitude: s.path[pi].A, longitude: s.path[pi].F};
+                                            if(s.path[pi].lat !== undefined && s.path[pi].lng !== undefined)
+                                                s.path[pi] = {latitude: s.path[pi].lat, longitude: s.path[pi].lng};
+                                        }
                                     }
                                     addPolygon(s.id, s.path, s.label, s.color, s.group);
                                 }

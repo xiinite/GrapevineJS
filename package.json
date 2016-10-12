@@ -19,6 +19,8 @@
     "escape-html": "*",
     "express": "^5.0.0-alpha.1",
     "express-session": "*",
+    "fs": "0.0.1-security",
+    "https": "^1.0.0",
     "json2html": "0.0.8",
     "methods": "*",
     "mime": "*",
