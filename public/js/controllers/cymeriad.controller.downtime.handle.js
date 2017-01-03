@@ -575,6 +575,7 @@ function ($scope, $http, loading, $q, ngToast, truerandom, $timeout) {
             })
         ]).then(function(){
             root.downtimes.sort(function(a,b){
+                if(!$scope.findCharacter(a.characterid)) return 0;
                 if ($scope.findCharacter(a.characterid).name < $scope.findCharacter(b.characterid).name)
                     return -1;
                 if ($scope.findCharacter(a.characterid).name > $scope.findCharacter(b.characterid).name)

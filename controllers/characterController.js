@@ -168,6 +168,12 @@ module.exports = {
         };
         res.render(ViewTemplatePath + "/harpyreport", out);
     },
+    'harpies': function(req, res){
+        var out = {
+            user: req.user
+        };
+        res.render(ViewTemplatePath + "/harpies", out);
+    },
     'socialbonds': function(req, res){
         var out = {
             user: req.user

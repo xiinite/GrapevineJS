@@ -6,6 +6,19 @@ var home = express.Router();
 home.get('/', homeController.home);
 home.get('/login', homeController.login);
 
+home.get('/.well-known/acme-challenge/2j1h_BUX-Lx4rSwAH_q_Z8oNTv0YiqYgJZumaSE-Shc', function(req, res, next){
+    res.write('2j1h_BUX-Lx4rSwAH_q_Z8oNTv0YiqYgJZumaSE-Shc.jtcmn4N0uiJbxbvV10ZcrSQerzVpGJtmPb4ruUUF2Vs');
+    res.end();
+});
+home.get('/.well-known/acme-challenge/2tanuh72FdFb56LbtKxu5ZMnaRn8UH9GydXUuRasa9c', function(req, res, next){
+    res.write('2tanuh72FdFb56LbtKxu5ZMnaRn8UH9GydXUuRasa9c.jtcmn4N0uiJbxbvV10ZcrSQerzVpGJtmPb4ruUUF2Vs');
+    res.end();
+});
+home.get('/.well-known/acme-challenge/ExULRuqeNsjt5LPd5WU1XWpfIc_BrjZsfqr_ApJEtuE', function(req, res, next){
+    res.write('ExULRuqeNsjt5LPd5WU1XWpfIc_BrjZsfqr_ApJEtuE.jtcmn4N0uiJbxbvV10ZcrSQerzVpGJtmPb4ruUUF2Vs');
+    res.end();
+});
+
 module.exports = {
     'config': function (app) {
         app.use('/', home);
@@ -22,6 +35,7 @@ module.exports = {
         router.get(app, 'character', 'influences');
         router.get(app, 'character', 'status');
         router.get(app, 'character', 'harpyreport');
+        router.get(app, 'character', 'harpies');
         router.get(app, 'character', 'visualise', [':id']);
         router.get(app, 'character', 'socialbonds');
         router.get(app, 'character', 'all', [':full']);
@@ -77,5 +91,10 @@ module.exports = {
         router.get(app, 'user', 'toggleSuperAdmin', [':id']);
         router.post(app, 'user', 'updateStylesheet');
         router.post(app, 'user', 'updateEmail');
+
+        for (var i = 0, len = config.staticText.length; i < len; i++) {
+            var route = config.staticText[i];
+            router.staticText(app, route.path, route.text);
+        }
     }
 };

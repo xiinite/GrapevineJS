@@ -61,5 +61,11 @@ module.exports = {
     },
     home: function(app){
 
+    },
+    staticText: function (app, path, text){
+        app.get('/' + path, function(req, res, next){
+            res.write(text);
+            res.end();
+        });
     }
 };
