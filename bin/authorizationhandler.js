@@ -199,12 +199,25 @@ module.exports = {
             res.redirect('/login');
         });
 
+
+        var findStatic = function(arr, path){
+            var i = arr.length;
+            while(i--){
+                if('/' + arr[i].path === path) return true;
+            }
+            return false;
+        };
         app.all('*', function (req, res, next) {
             var path = url.parse(req.url).pathname;
-            if (path === '/login')
+            if (path === '/login'){
                 next();
-            else
+            }
+            else if(config.staticText && findStatic(config.staticText, path)){
+                next();
+            }
+            else{
                 ensureAuthenticated(req, res, next);
+            }
         });
         return function (req, res, next) {
             init(req, res, function () {
