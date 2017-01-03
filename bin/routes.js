@@ -2,6 +2,7 @@ var express = require('express');
 var router = require('../bin/routehandler.js');
 var homeController = require('../controllers/homeController.js');
 var home = express.Router();
+var config = require('../config/configuration.js');
 
 home.get('/', homeController.home);
 home.get('/login', homeController.login);
